@@ -27,22 +27,28 @@
         {% include '_patient_demographics.html' %}
 
         <div class="card mt-3">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Patient History</h5>
+            <div class="card-header d-flex justify-content-between align-items-center" id="headingPatientHistory">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapsePatientHistory" aria-expanded="true" aria-controls="collapsePatientHistory">
+                        Patient History
+                    </button>
+                </h5>
                 <a href="{{ url_for('patient.edit_patient_history', patient_id=patient.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
             </div>
-            <div class="card-body">
-                <p><strong>Past Medical History:</strong> {{ patient.pmh or 'N/A' }}</p>
-                <p><strong>Past Surgical History:</strong> {{ patient.psh or 'N/A' }}</p>
-                <p><strong>Family History:</strong> {{ patient.family_history or 'N/A' }}</p>
-                <p><strong>Medications:</strong> {{ patient.medications or 'N/A' }}</p>
-                <p><strong>Allergies:</strong> {{ patient.allergies or 'N/A' }}</p>
-                <hr>
-                <h6>Social History</h6>
-                <p><strong>Smoker:</strong> {{ 'Yes' if patient.smoker else 'No' }}</p>
-                <p><strong>Smoking Details:</strong> {{ patient.smoker_details or 'N/A' }}</p>
-                <p><strong>Alcohol Use:</strong> {{ 'Yes' if patient.alcohol else 'No' }}</p>
-                <p><strong>Alcohol Use Details:</strong> {{ patient.alcohol_details or 'N/A' }}</p>
+            <div id="collapsePatientHistory" class="collapse show" aria-labelledby="headingPatientHistory">
+                <div class="card-body">
+                    <p><strong>Past Medical History:</strong> {{ patient.pmh or 'N/A' }}</p>
+                    <p><strong>Past Surgical History:</strong> {{ patient.psh or 'N/A' }}</p>
+                    <p><strong>Family History:</strong> {{ patient.family_history or 'N/A' }}</p>
+                    <p><strong>Medications:</strong> {{ patient.medications or 'N/A' }}</p>
+                    <p><strong>Allergies:</strong> {{ patient.allergies or 'N/A' }}</p>
+                    <hr>
+                    <h6>Social History</h6>
+                    <p><strong>Smoker:</strong> {{ 'Yes' if patient.smoker else 'No' }}</p>
+                    <p><strong>Smoking Details:</strong> {{ patient.smoker_details or 'N/A' }}</p>
+                    <p><strong>Alcohol Use:</strong> {{ 'Yes' if patient.alcohol else 'No' }}</p>
+                    <p><strong>Alcohol Use Details:</strong> {{ patient.alcohol_details or 'N/A' }}</p>
+                </div>
             </div>
         </div>
 

@@ -4,11 +4,10 @@
         {% for visit in visits %}
             {% set collapse_id = "collapse" ~ loop.index %}
             {% set heading_id = "heading" ~ loop.index %}
-            {% set aria_expanded_value = 'true' if loop.first else 'false' %}
             <div class="card">
                 <div class="card-header" id="{{ heading_id }}">
                     <h5 class="mb-0">
-                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#{{ collapse_id }}" aria-expanded="{{ aria_expanded_value }}" aria-controls="{{ collapse_id }}">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#{{ collapse_id }}" aria-expanded="{{ 'true' if loop.first else 'false' }}" aria-controls="{{ collapse_id }}">
                             Visit Date: {{ visit.visit_date if visit.visit_date else 'N/A' }}
                             {% if not dob_missing and visit.age_at_visit != "N/A" %}
                                 (Age: {{ visit.age_at_visit }})
@@ -18,9 +17,20 @@
                         </button>
                     </h5>
                 </div>
-                <div id="{{ collapse_id }}" class="collapse {% if loop.first %}show{% endif %}" aria-labelledby="{{ heading_id }}" data-parent="#visitsAccordion">
+                <div id="{{ collapse_id }}" class="collapse {% if loop.first %}show{% endif %}" aria-labelledby="{{ heading_id }}">
                     <div class="card-body">
-                        <p><strong>Notes:</strong></p>
+                        {% if visit.vital_signs %}
+                            <h6>Vitals</h6>
+                            <ul class="mb-2">
+                                {% set vs = visit.vital_signs %}
+                                {% if vs.weight_kg %}<li>Weight: {{ vs.weight_kg }} kg</li>{% endif %}
+                                {% if vs.bp %}<li>BP: {{ vs.bp }}</li>{% endif %}
+                                {% if vs.temperature %}<li>Temperature: {{ vs.temperature }}&#8451;</li>{% endif %}
+                                {% if vs.hr %}<li>HR: {{ vs.hr }}</li>{% endif %}
+                                {% if not vs.weight_kg and not vs.bp and not vs.temperature and not vs.hr %}<li>No vitals recorded.</li>{% endif %}
+                            </ul>
+                        {% endif %}
+                        <h6>Note</h6>
                         <pre>{{ visit.notes if visit.notes else 'No specific notes for this visit.' }}</pre>
                         <p><small><em>Raw Entry: {{ visit.raw_visit_entry }}</em></small></p>
                         {# Display Addenda for this visit #}

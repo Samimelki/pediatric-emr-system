@@ -1,21 +1,25 @@
 <h4>Add New Visit</h4>
 <form method="POST" action="{{ url_for('patient.add_visit', patient_id=patient.id) }}" class="mb-4">
     <div class="form-row">
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
             <label for="visit_date">Visit Date <span class="text-danger">*</span></label>
             <input type="date" class="form-control" id="visit_date" name="visit_date" value="{{ today_date }}" required>
         </div>
-        <div class="form-group col-md-3">
-            <label for="weight_g">Weight (g)</label>
-            <input type="number" class="form-control" id="weight_g" name="weight_g" step="any">
+        <div class="form-group col-md-2">
+            <label for="weight_kg">Weight (kg)</label>
+            <input type="number" class="form-control" id="weight_kg" name="weight_kg" step="any">
         </div>
-        <div class="form-group col-md-3">
-            <label for="height_cm">Height (cm)</label>
-            <input type="number" class="form-control" id="height_cm" name="height_cm" step="any">
+        <div class="form-group col-md-2">
+            <label for="bp">Blood Pressure (BP)</label>
+            <input type="text" class="form-control" id="bp" name="bp" placeholder="e.g. 120/80">
         </div>
-        <div class="form-group col-md-3">
-            <label for="head_circumference_cm">Head Circ. (cm)</label>
-            <input type="number" class="form-control" id="head_circumference_cm" name="head_circumference_cm" step="any">
+        <div class="form-group col-md-2">
+            <label for="temperature">Temperature (°C)</label>
+            <input type="number" class="form-control" id="temperature" name="temperature" step="any">
+        </div>
+        <div class="form-group col-md-2">
+            <label for="hr">Heart Rate (HR)</label>
+            <input type="number" class="form-control" id="hr" name="hr" step="any">
         </div>
     </div>
     <div class="form-group">

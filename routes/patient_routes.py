@@ -1,10 +1,11 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
 import sqlite3
 import math
 from datetime import datetime, date
 from collections import defaultdict
 from database import get_db, get_active_custom_demographic_fields
 from dateutil.relativedelta import relativedelta
+import json
 
 # Whitelist of editable standard demographic fields
 EDITABLE_DEMOGRAPHIC_FIELDS = {
@@ -189,7 +190,7 @@ def patient_detail(patient_id):
             # Add patient_history_text if present in DB, or try to parse from raw_dossier_text as fallback
             if 'patient_history_text' not in patient or not patient['patient_history_text']:
                 # Try to parse from raw_dossier_text if available
-                raw_text = patient.get('raw_dossier_text', '')
+                raw_text = patient.get('raw_dossier_text') or ''
                 # Simple heuristic: extract lines that look like history fields
                 history_lines = []
                 for line in raw_text.splitlines():
@@ -214,7 +215,14 @@ def patient_detail(patient_id):
                     visit_dict['age_at_visit'] = calculate_age_at_visit(patient['date_of_birth'], visit_dict['visit_date'])
                 else:
                     visit_dict['age_at_visit'] = "N/A"
-                
+                # Parse vital_signs JSON
+                if visit_dict.get('vital_signs'):
+                    try:
+                        visit_dict['vital_signs'] = json.loads(visit_dict['vital_signs'])
+                    except Exception:
+                        visit_dict['vital_signs'] = {}
+                else:
+                    visit_dict['vital_signs'] = {}
                 # Fetch addenda for this visit
                 addenda_cursor = db.execute("SELECT * FROM VisitAddenda WHERE visit_id = ? ORDER BY addendum_datetime ASC", (visit_dict['id'],))
                 visit_dict['addenda'] = [dict(add_row) for add_row in addenda_cursor.fetchall()]
@@ -387,7 +395,11 @@ def add_visit(patient_id):
                 flash("Patient's birth date is invalid. Please correct it before adding new visits.", 'warning')
 
         visit_date_str = request.form.get('visit_date')
-        vital_signs = request.form.get('vital_signs', '').strip()
+        # New adult vital fields
+        weight_kg = request.form.get('weight_kg')
+        bp = request.form.get('bp')
+        temperature = request.form.get('temperature')
+        hr = request.form.get('hr')
         chief_complaint = request.form.get('chief_complaint', '').strip()
         subjective = request.form.get('subjective', '').strip()
         objective = request.form.get('objective', '').strip()
@@ -412,8 +424,26 @@ def add_visit(patient_id):
             flash(f"Error: New visit date ({visit_date_str}) cannot be before the patient's birth date ({patient_birth_date.strftime('%Y-%m-%d')}).", 'danger')
             return redirect(url_for('patient.patient_detail', patient_id=patient_id))
 
+        # Build the vital_signs JSON
+        vital_signs = {
+            'weight_kg': float(weight_kg) if weight_kg else None,
+            'bp': bp if bp else None,
+            'temperature': float(temperature) if temperature else None,
+            'hr': int(hr) if hr else None
+        }
+        vital_signs = {k: v for k, v in vital_signs.items() if v is not None}
+        vital_signs_json = json.dumps(vital_signs)
+
+        # Compose a readable string for raw_visit_entry
+        vs_parts = []
+        if weight_kg: vs_parts.append(f"Weight: {weight_kg} kg")
+        if bp: vs_parts.append(f"BP: {bp}")
+        if temperature: vs_parts.append(f"Temp: {temperature}°C")
+        if hr: vs_parts.append(f"HR: {hr}")
+        vs_string = ", ".join(vs_parts)
+
         raw_visit_parts = [f"*{formatted_date_for_raw}*"]
-        if vital_signs: raw_visit_parts.append(f"VS: {vital_signs}")
+        if vs_string: raw_visit_parts.append(f"VS: {vs_string}")
         if chief_complaint: raw_visit_parts.append(f"CC: {chief_complaint}")
         if subjective: raw_visit_parts.append(f"Subjective: {subjective}")
         if objective: raw_visit_parts.append(f"Objective: {objective}")
@@ -422,11 +452,11 @@ def add_visit(patient_id):
         raw_visit_parts.append(f"- Notes: {notes}")
         raw_visit_entry = ' '.join(raw_visit_parts)
 
-        sql_insert_visit = """INSERT INTO Visits 
-            (patient_id, visit_date, vital_signs, chief_complaint, subjective, objective, assessment, plan, notes, raw_visit_entry) 
+        sql_insert_visit = """INSERT INTO Visits \
+            (patient_id, visit_date, vital_signs, chief_complaint, subjective, objective, assessment, plan, notes, raw_visit_entry) \
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
         db.execute(sql_insert_visit, (
-            patient_id, visit_date_iso, vital_signs, chief_complaint, subjective, 
+            patient_id, visit_date_iso, vital_signs_json, chief_complaint, subjective, 
             objective, assessment, plan, notes, raw_visit_entry
         ))
         
@@ -558,4 +588,45 @@ def edit_patient_history(patient_id):
         flash('Patient history updated successfully!', 'success')
         return redirect(url_for('patient.patient_detail', patient_id=patient_id))
 
-    return render_template('edit_patient_history.html', patient=patient, patient_id=patient_id, history_fields=history_fields, title="Edit Patient History") 
+    return render_template('edit_patient_history.html', patient=patient, patient_id=patient_id, history_fields=history_fields, title="Edit Patient History")
+
+@patient_bp.route('/visit/<int:visit_id>/edit_measurements', methods=['POST'])
+def update_visit_measurements(visit_id):
+    db = get_db()
+    try:
+        # Fetch the visit and patient_id
+        visit_cursor = db.execute("SELECT patient_id FROM Visits WHERE id = ?", (visit_id,))
+        visit = visit_cursor.fetchone()
+        if not visit:
+            flash("Visit not found.", "danger")
+            return redirect(url_for('patient.list_patients'))
+        patient_id = visit['patient_id']
+
+        # Get new measurement values from the form
+        weight_kg = request.form.get('weight_kg')
+        bp = request.form.get('bp')
+        temperature = request.form.get('temperature')
+        hr = request.form.get('hr')
+
+        # Build the vital_signs JSON
+        vital_signs = {
+            'weight_kg': float(weight_kg) if weight_kg else None,
+            'bp': bp if bp else None,
+            'temperature': float(temperature) if temperature else None,
+            'hr': int(hr) if hr else None
+        }
+        # Remove None values for cleanliness
+        vital_signs = {k: v for k, v in vital_signs.items() if v is not None}
+        vital_signs_json = json.dumps(vital_signs)
+
+        # Update the visit
+        db.execute(
+            "UPDATE Visits SET vital_signs = ? WHERE id = ?",
+            (vital_signs_json, visit_id)
+        )
+        db.commit()
+        flash('Visit measurements updated successfully!', 'success')
+    except Exception as e:
+        db.rollback()
+        flash(f'Error updating visit measurements: {e}', 'danger')
+    return redirect(url_for('patient.patient_detail', patient_id=patient_id)) 
