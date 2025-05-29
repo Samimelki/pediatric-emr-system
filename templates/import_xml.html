@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Import Medical Records (Word Documents){% endblock %}
+
+{% block content %}
+    <h1>Import Medical Records from Word Documents</h1>
+    <p>This action will populate the database with data from all Word documents (.docx) in a selected folder (and subfolders). If a database already exists, this operation will <strong>append</strong> new patients by default, or <strong>replace</strong> all data if you check 'Full Replace'.</p>
+    <ul>
+        <li>Select a folder containing Word documents (.docx) to import all files inside it.</li>
+        <li><strong>Warning:</strong> If you check 'Full Replace', this will replace all existing data in the EMR database.</li>
+    </ul>
+    <form method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="docxfile" class="form-label">Choose a folder of Word documents:</label>
+            <input type="file" class="form-control" name="docxfile" id="docxfile" accept=".docx" webkitdirectory multiple required>
+            <small class="form-text text-muted">All .docx files in the selected folder (and subfolders) will be imported.</small>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="confirm_replace" id="confirm_replace" required>
+            <label class="form-check-label" for="confirm_replace">
+                I understand that importing will append new patients, or initialize/replace existing data in the EMR if 'Full Replace' is checked.
+            </label>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="full_replace" id="full_replace">
+            <label class="form-check-label" for="full_replace">
+                Full Replace: Remove all existing data before import (dangerous!)
+            </label>
+        </div>
+        <button type="submit" class="btn btn-primary">Import Medical Records</button>
+    </form>
+    <hr>
+    <h2>Current Configuration</h2>
+    <p><strong>Database Path:</strong> {{ current_db_path }}</p>
+    <p><strong>Upload Folder (Temporary):</strong> {{ upload_folder }}</p>
+{% endblock %} 

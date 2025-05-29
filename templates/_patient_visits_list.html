@@ -1,0 +1,52 @@
+<h4 class="mt-4">Visits (from Dossier)</h4>
+{% if visits %}
+    <div class="accordion" id="visitsAccordion">
+        {% for visit in visits %}
+            {% set collapse_id = "collapse" ~ loop.index %}
+            {% set heading_id = "heading" ~ loop.index %}
+            {% set aria_expanded_value = 'true' if loop.first else 'false' %}
+            <div class="card">
+                <div class="card-header" id="{{ heading_id }}">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#{{ collapse_id }}" aria-expanded="{{ aria_expanded_value }}" aria-controls="{{ collapse_id }}">
+                            Visit Date: {{ visit.visit_date if visit.visit_date else 'N/A' }}
+                            {% if not dob_missing and visit.age_at_visit != "N/A" %}
+                                (Age: {{ visit.age_at_visit }})
+                            {% elif dob_missing %}
+                                (Age: N/A - DOB Missing)
+                            {% endif %}
+                        </button>
+                    </h5>
+                </div>
+                <div id="{{ collapse_id }}" class="collapse {% if loop.first %}show{% endif %}" aria-labelledby="{{ heading_id }}" data-parent="#visitsAccordion">
+                    <div class="card-body">
+                        <p><strong>Notes:</strong></p>
+                        <pre>{{ visit.notes if visit.notes else 'No specific notes for this visit.' }}</pre>
+                        <p><small><em>Raw Entry: {{ visit.raw_visit_entry }}</em></small></p>
+                        {# Display Addenda for this visit #}
+                        {% if visit.addenda %}
+                            <div class="mt-2">
+                                <h6>Addenda:</h6>
+                                <ul class="list-unstyled ml-3">{% for addendum in visit.addenda %}<li>
+                                        <small class="text-muted">({{ addendum.addendum_datetime | format_datetime }})</small>
+                                        <p class="addendum-text mb-1">{{ addendum.addendum_text }}</p>
+                                    </li>{% endfor %}</ul>
+                            </div>
+                        {% endif %}
+                        {# Form to add a new addendum #}
+                        <div class="mt-3">
+                            <form method="POST" action="{{ url_for('patient.add_visit_addendum', visit_id=visit.id) }}" class="form-inline">
+                                <div class="form-group mr-2 flex-grow-1">
+                                    <textarea name="addendum_text" class="form-control form-control-sm w-100" rows="2" placeholder="Add an addendum to this visit..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-outline-primary">Add Addendum</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No visit records found for this patient.</p>
+{% endif %} 

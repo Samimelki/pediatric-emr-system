@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Add New Patient</h2>
+    <hr>
+
+    <form method="POST" action="{{ url_for('patient.add_patient_submit') }}">
+        
+        <h4>Personal Information</h4>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="prenom">First Name (Prénom) <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="prenom" name="prenom" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="nom">Last Name (Nom) <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="nom" name="nom" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="naissance_date">Date of Birth (Date de Naissance)</label>
+                <input type="date" class="form-control" id="naissance_date" name="naissance_date">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="sexe">Sex (Sexe)</label>
+                <select id="sexe" name="sexe" class="form-control">
+                    <option value="" selected>Choose...</option>
+                    <option value="M">M</option>
+                    <option value="F">F</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+        </div>
+
+        <h4>Parental Information</h4>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="mere_nom">Mother's First Name (Prénom Mère)</label>
+                <input type="text" class="form-control" id="mere_nom" name="mere_nom">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="pere_nom">Father's First Name (Prénom Père)</label>
+                <input type="text" class="form-control" id="pere_nom" name="pere_nom">
+            </div>
+        </div>
+
+        <h4>Contact & Administrative Information</h4>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="domicile">Address (Domicile)</label>
+                <input type="text" class="form-control" id="domicile" name="domicile">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="telephone">Telephone (Téléphone)</label>
+                <input type="text" class="form-control" id="telephone" name="telephone">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="third_party_payer">Third Party Payer</label>
+                <input type="text" class="form-control" id="third_party_payer" name="third_party_payer">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="pediatre_initiales">Pediatrician Initials</label>
+                <input type="text" class="form-control" id="pediatre_initiales" name="pediatre_initiales">
+            </div>
+        </div>
+
+        <h4>Birth Information</h4>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="birth_weight_g">Birth Weight (grams)</label>
+                <input type="number" class="form-control" id="birth_weight_g" name="birth_weight_g" step="any">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="birth_height_cm">Birth Height (cm)</label>
+                <input type="number" class="form-control" id="birth_height_cm" name="birth_height_cm" step="any">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="birth_head_circumference_cm">Birth Head Circumference (cm)</label>
+                <input type="number" class="form-control" id="birth_head_circumference_cm" name="birth_head_circumference_cm" step="any">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="hopital">Birth Hospital/Country</label>
+                <input type="text" class="form-control" id="hopital" name="hopital">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="birth_notes">Birth Notes</label>
+            <textarea class="form-control" id="birth_notes" name="birth_notes" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="obstetrical_history">Obstetrical History</label>
+            <textarea class="form-control" id="obstetrical_history" name="obstetrical_history" rows="3"></textarea>
+        </div>
+
+        <h4>Diagnoses</h4>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="diag1">Diagnosis 1</label>
+                <input type="text" class="form-control" id="diag1" name="diag1">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="diag2">Diagnosis 2</label>
+                <input type="text" class="form-control" id="diag2" name="diag2">
+            </div>
+        </div>
+
+        <h4>Standard Vaccines</h4>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="dtcp1_date">DTCP 1</label>
+                <input type="date" class="form-control" id="dtcp1_date" name="dtcp1_date">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="dtcp2_date">DTCP 2</label>
+                <input type="date" class="form-control" id="dtcp2_date" name="dtcp2_date">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="dtcp3_date">DTCP 3</label>
+                <input type="date" class="form-control" id="dtcp3_date" name="dtcp3_date">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="dtcp_rappel1_date">DTCP Booster 1</label>
+                <input type="date" class="form-control" id="dtcp_rappel1_date" name="dtcp_rappel1_date">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="dtcp_rappel2_date">DTCP Booster 2</label>
+                <input type="date" class="form-control" id="dtcp_rappel2_date" name="dtcp_rappel2_date">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="dtcp_rappel3_date">DTCP Booster 3</label>
+                <input type="date" class="form-control" id="dtcp_rappel3_date" name="dtcp_rappel3_date">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="dtcp_rappel4_date">DTCP Booster 4</label>
+                <input type="date" class="form-control" id="dtcp_rappel4_date" name="dtcp_rappel4_date">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="hep_b1_date">Hepatitis B 1</label>
+                <input type="date" class="form-control" id="hep_b1_date" name="hep_b1_date">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="hep_b2_date">Hepatitis B 2</label>
+                <input type="date" class="form-control" id="hep_b2_date" name="hep_b2_date">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="hep_b3_date">Hepatitis B 3</label>
+                <input type="date" class="form-control" id="hep_b3_date" name="hep_b3_date">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="hib1_date">Hib 1</label>
+                <input type="date" class="form-control" id="hib1_date" name="hib1_date">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="hib2_date">Hib 2</label>
+                <input type="date" class="form-control" id="hib2_date" name="hib2_date">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="hib3_date">Hib 3</label>
+                <input type="date" class="form-control" id="hib3_date" name="hib3_date">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="hib_rappel_date">Hib Booster</label>
+                <input type="date" class="form-control" id="hib_rappel_date" name="hib_rappel_date">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="ror_date">MMR (ROR)</label>
+                <input type="date" class="form-control" id="ror_date" name="ror_date">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="rougeole_seule_date">Measles (Single)</label>
+                <input type="date" class="form-control" id="rougeole_seule_date" name="rougeole_seule_date">
+            </div>
+        </div>
+
+        <h4>Tuberculosis Tests (Monotest)</h4>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="monotest1">Monotest 1 Date</label>
+                <input type="date" class="form-control" id="monotest1" name="monotest1">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="monotest2">Monotest 2 Date</label>
+                <input type="date" class="form-control" id="monotest2" name="monotest2">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="monotest3">Monotest 3 Date</label>
+                <input type="date" class="form-control" id="monotest3" name="monotest3">
+            </div>
+        </div>
+        
+        <h4>Raw Text Data (Optional)</h4>
+        <div class="form-group">
+            <label for="raw_dossier_text">Raw Dossier Text (Memo)</label>
+            <textarea class="form-control" id="raw_dossier_text" name="raw_dossier_text" rows="5"></textarea>
+            <small class="form-text text-muted">Original memo field content. Visit entries will be parsed from here if structured correctly (e.g., *dd-mm-yyyy* notes).</small>
+        </div>
+        <div class="form-group">
+            <label for="raw_autres_vaccins_text">Raw Other Vaccines Text</label>
+            <textarea class="form-control" id="raw_autres_vaccins_text" name="raw_autres_vaccins_text" rows="3"></textarea>
+            <small class="form-text text-muted">Original text for other vaccines. Entries will be parsed if structured correctly (e.g., Vaccine Name: dd/mm/yyyy).</small>
+        </div>
+
+        <hr class="mt-4 mb-3">
+
+        <button type="submit" class="btn btn-primary mr-2">Add Patient</button>
+        <a href="{{ url_for('patient.list_patients') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %} 

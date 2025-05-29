@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Simple Bootstrap for basic styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>{% block title %}Pediatric EMR{% endblock %}</title>
+    <style>
+        body { padding-top: 5rem; }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .footer {
+            padding: 1rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid #e5e5e5;
+            text-align: center;
+        }
+    </style>
+    {# Global custom styles can go here or in a separate file linked below #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/emr_styles.css') }}">
+    {% block styles %}{% endblock %}
+</head>
+<body {% block body_attributes %}{% endblock %}>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Pediatric EMR</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item {% if request.endpoint == 'index' %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                </li>
+                <li class="nav-item {% if request.endpoint == 'patient.list_patients' %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('patient.list_patients') }}">Patients</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Tools & Settings
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="toolsDropdown">
+                        <a class="dropdown-item {% if request.endpoint == 'admin.import_xml_data' %}active{% endif %}" href="{{ url_for('admin.import_xml_data') }}"><i class="fas fa-file-import"></i> Import Medical Records</a>
+                        <a class="dropdown-item {% if request.endpoint == 'settings.manage_pdf_settings' %}active{% endif %}" href="{{ url_for('settings.manage_pdf_settings') }}"><i class="fas fa-file-pdf"></i> PDF Export Settings</a>
+                        <a class="dropdown-item {% if request.endpoint == 'settings.manage_custom_fields' %}active{% endif %}" href="{{ url_for('settings.manage_custom_fields') }}"><i class="fas fa-user-cog"></i> Custom Patient Fields</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" onclick="window.pywebview && window.pywebview.api.save_database_backup().then(handleBackupResponse).catch(handleBackupError); return false;"><i class="fas fa-database"></i> Backup Database</a>
+                        <a class="dropdown-item {% if request.endpoint == 'admin.manage_database_route' %}active{% endif %}" href="{{ url_for('admin.manage_database_route') }}"><i class="fas fa-hdd"></i> Manage/Restore Database</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" onclick="window.pywebview && window.pywebview.api.save_xml_export().then(handleXmlExportResponse).catch(handleXmlExportError); return false;"><i class="fas fa-file-code"></i> Export All Patients to XML</a>
+                        <a class="dropdown-item" href="#" onclick="window.pywebview && window.pywebview.api.save_csv_export().then(handleCsvExportResponse).catch(handleCsvExportError); return false;"><i class="fas fa-file-csv"></i> Export All Patients to CSVs (Zip)</a>
+                    </div>
+                </li>
+                <!-- Add more navigation items here -->
+            </ul>
+            <!-- Add search or user login info here if needed -->
+        </div>
+    </nav>
+
+    <main role="main" class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show mt-3" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main><!-- /.container -->
+
+    <footer class="footer">
+        <div class="container">
+            <span class="text-muted">&copy; {{ current_year }} Dr. Melki's EMR Modernization Project.</span>
+        </div>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/chart.umd.min.js') }}"></script>
+    {% block scripts %}{% endblock %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM fully loaded and parsed'); // Log 1
+
+            const dbBackupLink = document.querySelector('a[href="{{ url_for("admin.download_db") }}"]');
+            console.log('DB Backup Link Element:', dbBackupLink); // Log 2
+            if (dbBackupLink) {
+                dbBackupLink.addEventListener('click', function(event) {
+                    console.log('DB Backup link clicked.'); // Log 3
+                    if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.save_database_backup === 'function') {
+                        console.log('DB Backup: pywebview API path taken.'); // Log 4
+                        event.preventDefault(); 
+                        window.pywebview.api.save_database_backup().then(function(response) {
+                            if (response && response.status) {
+                                if (response.status === 'success') {
+                                    alert('Database backup successful: ' + (response.path || 'See Downloads folder'));
+                                } else if (response.status === 'error') {
+                                    alert('Database backup failed: ' + response.message);
+                                } else if (response.status === 'cancelled') {
+                                    console.log('Database backup cancelled by user.');
+                                } else {
+                                     alert('Backup status: ' + response.message);
+                                }
+                            } else {
+                                alert('Received an unexpected response from the backup function.');
+                            }
+                        }).catch(function(error) {
+                            console.error('DB Backup pywebview API error:', error); // Log Error
+                            alert('An error occurred while trying to call the backup function: ' + error);
+                        });
+                    } else {
+                        console.log('DB Backup: Standard browser path taken (or API not available).'); // Log 5
+                    }
+                });
+            }
+
+            const xmlExportLink = document.querySelector('a[href="{{ url_for("admin.export_xml_data_route") }}"]');
+            console.log('XML Export Link Element:', xmlExportLink); // Log 6
+            if (xmlExportLink) {
+                xmlExportLink.addEventListener('click', function(event) {
+                    console.log('XML Export link clicked.'); // Log 7
+                    if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.save_xml_export === 'function') {
+                        console.log('XML Export: pywebview API path taken.'); // Log 8
+                        event.preventDefault(); 
+                        window.pywebview.api.save_xml_export().then(function(response) {
+                            if (response && response.status) {
+                                if (response.status === 'success') {
+                                    alert('XML export successful: ' + (response.path || 'See chosen save location'));
+                                } else if (response.status === 'error') {
+                                    alert('XML export failed: ' + response.message);
+                                } else if (response.status === 'info') {
+                                    alert('XML export information: ' + response.message);
+                                } else if (response.status === 'cancelled') {
+                                    console.log('XML export cancelled by user.');
+                                } else {
+                                     alert('Export status: ' + response.message);
+                                }
+                            } else {
+                                alert('Received an unexpected response from the XML export function.');
+                            }
+                        }).catch(function(error) {
+                            console.error('XML Export pywebview API error:', error); // Log Error
+                            alert('An error occurred while trying to call the XML export function: ' + error);
+                        });
+                    } else {
+                        console.log('XML Export: Standard browser path taken (or API not available).'); // Log 9
+                    }
+                });
+            }
+
+            const csvExportLink = document.querySelector('a[href="{{ url_for("admin.export_csv_data_route") }}"]');
+            console.log('CSV Export Link Element:', csvExportLink); // Log CSV
+            if (csvExportLink) {
+                csvExportLink.addEventListener('click', function(event) {
+                    console.log('CSV Export link clicked.'); // Log CSV
+                    if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.save_csv_export === 'function') {
+                        console.log('CSV Export: pywebview API path taken.'); // Log CSV
+                        event.preventDefault(); 
+                        window.pywebview.api.save_csv_export().then(function(response) {
+                            if (response && response.status) {
+                                if (response.status === 'success') {
+                                    alert('CSV export successful (ZIP): ' + (response.path || 'See chosen save location'));
+                                } else if (response.status === 'error') {
+                                    alert('CSV export failed: ' + response.message);
+                                } else if (response.status === 'info') {
+                                    alert('CSV export information: ' + response.message);
+                                } else if (response.status === 'cancelled') {
+                                    console.log('CSV export cancelled by user.');
+                                } else {
+                                     alert('CSV Export status: ' + response.message);
+                                }
+                            } else {
+                                alert('Received an unexpected response from the CSV export function.');
+                            }
+                        }).catch(function(error) {
+                            console.error('CSV Export pywebview API error:', error); // Log CSV Error
+                            alert('An error occurred while trying to call the CSV export function: ' + error);
+                        });
+                    } else {
+                        console.log('CSV Export: Standard browser path taken (or API not available).'); // Log CSV
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

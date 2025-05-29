@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Edit Patient History for {{ patient.first_name }} {{ patient.last_name }} (MRN: {{ patient.mrn }})</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="pmh">Past Medical History</label>
+            <textarea class="form-control" id="pmh" name="pmh" rows="2">{{ history_fields.pmh }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="psh">Past Surgical History</label>
+            <textarea class="form-control" id="psh" name="psh" rows="2">{{ history_fields.psh }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="family_history">Family History</label>
+            <textarea class="form-control" id="family_history" name="family_history" rows="2">{{ history_fields.family_history }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="medications">Medications</label>
+            <textarea class="form-control" id="medications" name="medications" rows="2">{{ history_fields.medications }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="allergies">Allergies</label>
+            <textarea class="form-control" id="allergies" name="allergies" rows="2">{{ history_fields.allergies }}</textarea>
+        </div>
+        <hr>
+        <h4>Social History</h4>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="smoker" name="smoker" value="1" {% if history_fields.smoker %}checked{% endif %}>
+            <label class="form-check-label" for="smoker">Smoker</label>
+        </div>
+        <div class="form-group">
+            <label for="smoker_details">Smoking Details</label>
+            <input type="text" class="form-control" id="smoker_details" name="smoker_details" value="{{ history_fields.smoker_details }}">
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="alcohol" name="alcohol" value="1" {% if history_fields.alcohol %}checked{% endif %}>
+            <label class="form-check-label" for="alcohol">Alcohol Use</label>
+        </div>
+        <div class="form-group">
+            <label for="alcohol_details">Alcohol Use Details</label>
+            <input type="text" class="form-control" id="alcohol_details" name="alcohol_details" value="{{ history_fields.alcohol_details }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{{ url_for('patient.patient_detail', patient_id=patient.id) }}" class="btn btn-secondary ml-2">Cancel</a>
+    </form>
+{% endblock %} 

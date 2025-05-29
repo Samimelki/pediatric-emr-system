@@ -1,0 +1,90 @@
+body.landing-page, html.landing-page {
+  height: 100%;
+  font-family: 'Lato', sans-serif;
+}
+
+.bg-page-color { /* Renamed from .bg-hero-gradient */
+  /* background-color: #E0F7FA; /* Fallback or remove if image covers all */
+  background-image: url('/static/img/PEDS EMR IMAGE.png');
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  min-height: calc(100vh - 56px); /* Adjust 56px if your navbar height is different */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  position: relative; /* Needed for overlay positioning */
+}
+
+/* Reinstated overlay for readability over the new background image */
+.bg-page-color::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.05); /* Light overlay - adjust opacity as needed */
+  /* Or a darker overlay if preferred: rgba(0, 0, 0, 0.2); */
+  z-index: 1;
+}
+
+.landing-content {
+    position: relative; /* Ensure content is above the overlay */
+    z-index: 2;
+    width: 100%; 
+    max-width: 1920px; 
+    margin: 0 auto; 
+}
+
+/* Removed .landing-image styles as the img tag will be removed from HTML */
+/* .landing-image { ... } */
+
+
+.action-buttons {
+    margin-top: 2rem; 
+}
+
+.action-buttons .btn {
+  padding: 1rem 2rem;
+  font-size: 1.15rem; 
+  margin: 0.75rem;
+  border-radius: 30px; 
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2); /* Slightly stronger shadow for better pop on image */
+  font-weight: bold;
+  border-width: 3px; /* Remove border if background color is strong enough */
+  border-style: solid; 
+  border-color: rgba(0,0,0,0.6); 
+}
+
+.btn-search {
+  background-color: #FFA726; /* Orange accent from image */
+  /* border-color: #FFA726; */
+  color: #FFFFFF; /* White text for contrast on orange */
+}
+
+.btn-search:hover {
+  background-color: #FB8C00; 
+  /* border-color: #FB8C00; */
+  color: #FFFFFF; 
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+}
+
+.btn-add {
+  background-color: #FF8A80; /* Soft Pink/Coral accent from image */
+  /* border-color: #FF8A80; */
+  color: white;
+}
+
+.btn-add:hover {
+  background-color: #FF5252; 
+  /* border-color: #FF5252; */
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+} 

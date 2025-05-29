@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ title }} for {{ visit.prenom }} {{ visit.nom }} (MRN: {{ visit.mrn }})</h2>
+    <p>Current Visit Date: {{ visit.visit_date.split('T')[0] if visit.visit_date else 'Not set' }}</p>
+    {% if patient_birth_date_str %}
+    <p class="text-muted"><small>Patient Date of Birth: {{ patient_birth_date_str.split('T')[0] }}</small></p>
+    {% else %}
+    <p class="text-warning"><small>Patient Date of Birth not recorded. Be careful when setting the visit date.</small></p>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('patient.edit_single_visit_date', visit_id=visit.id) }}">
+        <div class="form-group">
+            <label for="visit_date">New Visit Date:</label>
+            <input type="date" class="form-control" id="visit_date" name="visit_date" 
+                   value="{{ current_date_val if current_date_val else '' }}" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Update Visit Date</button>
+        <a href="{{ url_for('patient.patient_detail', patient_id=visit.patient_id) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %} 

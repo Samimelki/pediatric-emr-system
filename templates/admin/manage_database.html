@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Manage Database</h2>
+    <p class="text-muted">Use these tools to manage your application's database. Handle with care.</p>
+    <hr>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>Restore Database from Backup</h4>
+        </div>
+        <div class="card-body">
+            <p class="card-text">
+                Select a previously downloaded database backup file (<code>.db</code>, <code>.sqlite</code>, <code>.sqlite3</code>) to restore your application's data to that point.
+            </p>
+            <div class="alert alert-warning" role="alert">
+                <strong><i class="fas fa-exclamation-triangle"></i> Warning:</strong> Restoring from a backup will <strong>completely replace</strong> your current active database. 
+                Any changes made since the selected backup was created will be permanently lost. 
+                It is highly recommended to download a fresh backup of your current data before restoring, if you have recent important changes.
+            </div>
+
+            <form method="POST" action="{{ url_for('admin.manage_database_route') }}" enctype="multipart/form-data" id="restoreDbForm">
+                <div class="form-group">
+                    <label for="restore_db_file">Select Database Backup File:</label>
+                    <input type="file" class="form-control-file" id="restore_db_file" name="restore_db_file" accept=".db,.sqlite,.sqlite3" required>
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="confirm_replace_db" name="confirm_replace_db" required>
+                    <label class="form-check-label" for="confirm_replace_db">
+                        I understand that this action will replace the current database with the selected backup, and any unsaved data will be lost. 
+                        I have taken necessary precautions (like downloading a current backup if needed).
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-danger"><i class="fas fa-undo"></i> Restore Database</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <p>Current active database file path: <code>{{ current_db_path }}</code></p>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    // Optional: Add any JS needed for this page, e.g., for more dynamic confirmations.
+    // For now, standard form submission and server-side validation is handled.
+</script>
+{% endblock %} 

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if patient %}
+        <h2>
+            {{ patient.first_name }} {{ patient.last_name }} (MRN: {{ patient.mrn }})
+            {% if patient.sex %}({{ patient.sex }}){% endif %}<br>
+            {% if patient.date_of_birth %}
+                <small class="text-muted">DOB: {{ patient.date_of_birth }}</small><br>
+            {% else %}
+                <small class="text-muted">DOB: Not Recorded</small><br>
+            {% endif %}
+        </h2>
+        <hr>
+
+        <div class="mb-3">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="exportPdfDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Export PDF
+                </button>
+                <div class="dropdown-menu" aria-labelledby="exportPdfDropdown">
+                    <!-- Export options can be added here -->
+                </div>
+            </div>
+        </div>
+        
+        {% include '_patient_demographics.html' %}
+
+        <div class="card mt-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Patient History</h5>
+                <a href="{{ url_for('patient.edit_patient_history', patient_id=patient.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+            </div>
+            <div class="card-body">
+                <p><strong>Past Medical History:</strong> {{ patient.pmh or 'N/A' }}</p>
+                <p><strong>Past Surgical History:</strong> {{ patient.psh or 'N/A' }}</p>
+                <p><strong>Family History:</strong> {{ patient.family_history or 'N/A' }}</p>
+                <p><strong>Medications:</strong> {{ patient.medications or 'N/A' }}</p>
+                <p><strong>Allergies:</strong> {{ patient.allergies or 'N/A' }}</p>
+                <hr>
+                <h6>Social History</h6>
+                <p><strong>Smoker:</strong> {{ 'Yes' if patient.smoker else 'No' }}</p>
+                <p><strong>Smoking Details:</strong> {{ patient.smoker_details or 'N/A' }}</p>
+                <p><strong>Alcohol Use:</strong> {{ 'Yes' if patient.alcohol else 'No' }}</p>
+                <p><strong>Alcohol Use Details:</strong> {{ patient.alcohol_details or 'N/A' }}</p>
+            </div>
+        </div>
+
+        {# Dynamically render other custom field sections #}
+        {% if grouped_custom_fields %}
+            {% set handled_sections = ['Demographics', 'Birth History', 'Contact & Admin Details'] %}
+            {% for section_name, fields_in_section in grouped_custom_fields.items() %}
+                {% if section_name not in handled_sections and fields_in_section %}
+                    <div class="card mt-3">
+                        <div class="card-header" id="headingCustom{{ section_name|replace(' ', '_')|replace('&', 'And') }}">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link custom-section-button" data-toggle="collapse" data-target="#collapseCustom{{ section_name|replace(' ', '_')|replace('&', 'And') }}" aria-expanded="false" aria-controls="collapseCustom{{ section_name|replace(' ', '_')|replace('&', 'And') }}">
+                                    {{ section_name }}
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseCustom{{ section_name|replace(' ', '_')|replace('&', 'And') }}" class="collapse" aria-labelledby="headingCustom{{ section_name|replace(' ', '_')|replace('&', 'And') }}">
+                            <div class="card-body">
+                                {% for field in fields_in_section %}
+                                    <p><strong>{{ field.field_label }}:</strong> {{ patient[field.field_name] if patient[field.field_name] else 'N/A' }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% include '_patient_visits_form.html' %}
+
+        {% include '_patient_visits_list.html' %}
+
+        <hr class="mt-4 mb-4">
+
+        <p class="mt-4"><a href="{{ url_for('patient.list_patients') }}" class="btn btn-secondary">&laquo; Back to Patient List</a></p>
+
+    {% else %}
+        <h2>Patient Not Found</h2>
+        <p>The patient with the requested ID could not be found.</p>
+        <p><a href="{{ url_for('patient.list_patients') }}">Return to Patient List</a></p>
+    {% endif %}
+{% endblock %} 

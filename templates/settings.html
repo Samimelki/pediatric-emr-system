@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}PDF Export Settings{% endblock %}
+
+{% block content %}
+    <h1>PDF Export Settings</h1>
+    <p>Configure the details that appear on exported PDF documents (Vaccination Records, Patient Histories).</p>
+
+    <form method="post">
+        <h2>Physician Details (French)</h2>
+        <div class="mb-3">
+            <label for="physician_name_fr" class="form-label">Name (FR):</label>
+            <input type="text" class="form-control" id="physician_name_fr" name="physician_name_fr" value="{{ config.physician_details_fr.name }}">
+        </div>
+        <div class="mb-3">
+            <label for="physician_specialty_fr" class="form-label">Specialty (FR):</label>
+            <input type="text" class="form-control" id="physician_specialty_fr" name="physician_specialty_fr" value="{{ config.physician_details_fr.specialty }}">
+        </div>
+        <div class="mb-3">
+            <label for="physician_hospital_fr" class="form-label">Hospital/Clinic (FR):</label>
+            <input type="text" class="form-control" id="physician_hospital_fr" name="physician_hospital_fr" value="{{ config.physician_details_fr.hospital_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="physician_faculty_fr" class="form-label">Faculty/University (FR):</label>
+            <input type="text" class="form-control" id="physician_faculty_fr" name="physician_faculty_fr" value="{{ config.physician_details_fr.faculty_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="physician_contact1_fr" class="form-label">Contact Line 1 (FR):</label>
+            <input type="text" class="form-control" id="physician_contact1_fr" name="physician_contact1_fr" value="{{ config.physician_details_fr.contact_line1 }}">
+        </div>
+        <div class="mb-3">
+            <label for="physician_contact2_fr" class="form-label">Contact Line 2 (FR):</label>
+            <input type="text" class="form-control" id="physician_contact2_fr" name="physician_contact2_fr" value="{{ config.physician_details_fr.contact_line2 }}">
+        </div>
+        <div class="mb-3">
+            <label for="footer_note_fr" class="form-label">Footer Note (FR):</label>
+            <textarea class="form-control" id="footer_note_fr" name="footer_note_fr" rows="2">{{ config.footer_note_fr }}</textarea>
+        </div>
+
+        <hr>
+        <h2>Physician Details (English)</h2>
+        <div class="mb-3">
+            <label for="physician_name_en" class="form-label">Name (EN):</label>
+            <input type="text" class="form-control" id="physician_name_en" name="physician_name_en" value="{{ config.physician_details_en.name }}">
+        </div>
+        <div class="mb-3">
+            <label for="physician_specialty_en" class="form-label">Specialty (EN):</label>
+            <input type="text" class="form-control" id="physician_specialty_en" name="physician_specialty_en" value="{{ config.physician_details_en.specialty }}">
+        </div>
+        <div class="mb-3">
+            <label for="physician_hospital_en" class="form-label">Hospital/Clinic (EN):</label>
+            <input type="text" class="form-control" id="physician_hospital_en" name="physician_hospital_en" value="{{ config.physician_details_en.hospital_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="physician_faculty_en" class="form-label">Faculty/University (EN):</label>
+            <input type="text" class="form-control" id="physician_faculty_en" name="physician_faculty_en" value="{{ config.physician_details_en.faculty_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="physician_contact1_en" class="form-label">Contact Line 1 (EN):</label>
+            <input type="text" class="form-control" id="physician_contact1_en" name="physician_contact1_en" value="{{ config.physician_details_en.contact_line1 }}">
+        </div>
+        <div class="mb-3">
+            <label for="physician_contact2_en" class="form-label">Contact Line 2 (EN):</label>
+            <input type="text" class="form-control" id="physician_contact2_en" name="physician_contact2_en" value="{{ config.physician_details_en.contact_line2 }}">
+        </div>
+        <div class="mb-3">
+            <label for="footer_note_en" class="form-label">Footer Note (EN):</label>
+            <textarea class="form-control" id="footer_note_en" name="footer_note_en" rows="2">{{ config.footer_note_en }}</textarea>
+        </div>
+
+        <hr>
+        <h2>Physician Details (Arabic)</h2>
+        <div class="mb-3">
+            <label for="physician_name_ar" class="form-label">Name (AR):</label>
+            <input type="text" class="form-control" id="physician_name_ar" name="physician_name_ar" value="{{ config.physician_details_ar.name }}" dir="rtl">
+        </div>
+        <div class="mb-3">
+            <label for="physician_specialty_ar" class="form-label">Specialty (AR):</label>
+            <input type="text" class="form-control" id="physician_specialty_ar" name="physician_specialty_ar" value="{{ config.physician_details_ar.specialty }}" dir="rtl">
+        </div>
+        <div class="mb-3">
+            <label for="physician_hospital_ar" class="form-label">Hospital/Clinic (AR):</label>
+            <input type="text" class="form-control" id="physician_hospital_ar" name="physician_hospital_ar" value="{{ config.physician_details_ar.hospital_name }}" dir="rtl">
+        </div>
+        <div class="mb-3">
+            <label for="physician_faculty_ar" class="form-label">Faculty/University (AR):</label>
+            <input type="text" class="form-control" id="physician_faculty_ar" name="physician_faculty_ar" value="{{ config.physician_details_ar.faculty_name }}" dir="rtl">
+        </div>
+        <div class="mb-3">
+            <label for="physician_contact1_ar" class="form-label">Contact Line 1 (AR):</label>
+            <input type="text" class="form-control" id="physician_contact1_ar" name="physician_contact1_ar" value="{{ config.physician_details_ar.contact_line1 }}" dir="rtl">
+        </div>
+        <div class="mb-3">
+            <label for="physician_contact2_ar" class="form-label">Contact Line 2 (AR):</label>
+            <input type="text" class="form-control" id="physician_contact2_ar" name="physician_contact2_ar" value="{{ config.physician_details_ar.contact_line2 }}" dir="rtl">
+        </div>
+        <div class="mb-3">
+            <label for="footer_note_ar" class="form-label">Footer Note (AR):</label>
+            <textarea class="form-control" id="footer_note_ar" name="footer_note_ar" rows="2" dir="rtl">{{ config.footer_note_ar }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Settings</button>
+    </form>
+{% endblock %} 

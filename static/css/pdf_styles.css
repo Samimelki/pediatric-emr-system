@@ -1,0 +1,206 @@
+/* static/css/pdf_styles.css */
+@page {
+    size: A4;
+    margin: 1cm 1.5cm 2.5cm 1.5cm; /* Top, Right, Bottom, Left margins - Increased bottom margin for footer */
+    
+    /* @bottom-left {
+        content: element(physician_footer);
+        vertical-align: top;
+        padding-top: 5px; /* Adjust as needed */
+    /* } */
+
+    @bottom-center {
+        content: element(physician_footer) "Page " counter(page) " of " counter(pages);
+        font-size: 9pt; /* Slightly smaller */
+        color: #555;
+        vertical-align: top; /* Align physician_footer to top, then page number */
+        padding-top: 5px; /* Match old @bottom-left padding */
+        /* padding-bottom: 2mm; /* Small padding from edge */ /* This might push content up */
+    }
+}
+
+body {
+    font-family: Arial, sans-serif; /* Or a specific font available to WeasyPrint */
+    font-size: 10pt; /* Base font size for the document */
+    line-height: 1.4;
+    color: #333;
+}
+
+.physician-info {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 10pt;
+}
+.physician-info p {
+    margin: 2px 0;
+}
+
+.title-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 16pt;
+    font-weight: bold;
+    text-decoration: underline;
+    display: inline-block; /* Allows for border/padding around title text if needed */
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.blurb {
+    margin-bottom: 15px;
+    font-size: 10pt;
+}
+.blurb strong {
+    font-weight: bold;
+}
+
+.vaccine-section-title,
+.section-title { /* For total history */
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    page-break-after: avoid; /* Try to keep title with content below */
+}
+
+.vaccine-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+    font-size: 8pt; /* Smaller font for table data */
+    page-break-inside: auto; /* Allow table to break if necessary but try to keep rows together */
+}
+
+.vaccine-table th,
+.vaccine-table td {
+    border: 1px solid #ccc;
+    padding: 4px 6px;
+    text-align: left;
+}
+
+.vaccine-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    font-size: 8.5pt;
+}
+
+.vaccine-table td.vaccine-name-cell {
+    min-width: 150px; /* Adjust as needed */
+    font-weight: bold;
+    white-space: normal; /* Ensure it's not pre or nowrap */
+    overflow-wrap: break-word; /* Standard: break long words that would overflow */
+    word-break: normal; /* Default: break at spaces/hyphens unless overflow-wrap kicks in */
+    -webkit-hyphens: none; /* Disable hyphenation */
+    hyphens: none; /* Disable hyphenation */
+}
+
+.vaccine-table td.date-cell {
+    text-align: center;
+    min-width: 60px; /* Adjust as needed */
+    padding: 0;
+}
+
+.vaccine-table tr {
+    page-break-inside: avoid; /* Try to keep rows on the same page */
+}
+
+/* For Total History PDF */
+.patient-id-header {
+    margin-bottom: 15px;
+    font-size: 10pt;
+}
+.patient-id-header p {
+    margin: 0;
+}
+
+.patient-info-grid {
+    display: grid; /* Weasyprint might have limited grid support, test this. Flexbox might be an alternative if grid doesn't work well */
+    grid-template-columns: auto 1fr;
+    gap: 5px 10px;
+    margin-bottom: 15px;
+    font-size: 9pt;
+}
+.patient-info-grid strong {
+    font-weight: bold;
+}
+
+.visits-history {
+    margin-top: 10px;
+    font-size: 9pt;
+}
+.visit-entry {
+    margin-bottom: 8px;
+    page-break-inside: avoid;
+}
+.visit-entry .date {
+    font-weight: bold;
+    margin-right: 10px;
+}
+.visit-entry .notes {
+    white-space: pre-wrap; /* Preserve whitespace from notes */
+}
+/* End Total History Specific */
+
+
+.signature-section {
+    margin-top: 30px; /* Default top margin */
+    text-align: left; /* Or right, depending on preference */
+    font-size: 10pt;
+    page-break-inside: avoid;
+}
+
+/* Specific adjustment for total_history where signature might follow a list */
+.visits-history + .signature-section {
+    margin-top: 20px; 
+}
+
+.signature-stamp-image {
+    display: block; 
+    max-width: 200px; 
+    max-height: 100px; 
+    margin-top: 5px; /* Default margin from text above it (like "Done in Beirut...") */
+    page-break-before: auto; 
+    page-break-inside: avoid; 
+}
+
+.footer-content-for-pdf {
+    position: running(physician_footer);
+    font-size: 8pt;
+    color: #555;
+    text-align: center; /* Center the block now that it's in @bottom-center */
+    width: 100%; 
+    margin-bottom: 5px; /* Add some space between this block and page number if they stack */
+}
+
+.footer-content-for-pdf p {
+    margin: 0;
+    padding: 0;
+    text-align: left; /* Keep the paragraph text left-aligned within the centered block */
+}
+
+/* Ensure a line above the physician_footer if desired, can be done in @bottom-left or on the element */
+/* @page :first { */ /* No top border for physician footer on first page if header is different */
+    /* @bottom-left { border-top: none; } */
+/* } */
+/* @page { */ /* Default for all pages */
+    /* @bottom-left { border-top: 0.5pt solid #aaa; padding-top: 2mm; } */ /* Example of adding border in @page */
+/* } */
+
+.footer-content-for-pdf::before { /* Add border using pseudo-element if preferred */
+    content: "";
+    display: block;
+    border-top: 0.5pt solid #aaa;
+    margin-bottom: 2mm;
+    width: 100%;
+}
+
+/* Utility class for spacing if needed */
+.recommended-vaccines-title-pdf { /* Renamed to avoid conflict if emr_styles.css is ever accidentally loaded */
+    margin-top: 20px !important; /* Important if overriding other styles, though better to be specific */
+}
+
+/* Add space at the very end of the body to ensure signature doesn't overlap with page counter if it's the last item */
+/* body::after { ... } */ /* Removed this, direct margin on footer should be better */ 

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ title }} for {{ patient.prenom }} {{ patient.nom }} (MRN: {{ patient.mrn }})</h2>
+    <hr>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('patient.update_standard_vaccine', patient_id=patient.id) }}">
+        <input type="hidden" name="vaccine_field_name" value="{{ field_name }}">
+        
+        <div class="form-group row">
+            <label for="vaccine_date" class="col-sm-3 col-form-label"><strong>{{ field_label }}:</strong></label>
+            <div class="col-sm-9">
+                <input type="date" class="form-control" id="vaccine_date" name="vaccine_date" value="{{ current_value if current_value else '' }}">
+                <small class="form-text text-muted">Leave blank to clear the date. Format: YYYY-MM-DD</small>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="{{ url_for('patient.patient_detail', patient_id=patient.id) }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </div>
+    </form>
+
+</div>
+{% endblock %} 

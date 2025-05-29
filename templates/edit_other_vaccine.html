@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Other Vaccine for {{ patient.prenom }} {{ patient.nom }} (MRN: {{ patient.mrn }})</h2>
+    <hr>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('patient.update_other_vaccine', vaccine_id=vaccine.id) }}">
+        <input type="hidden" name="patient_id" value="{{ patient.id }}">
+        <div class="form-group row">
+            <label for="vaccine_name" class="col-sm-3 col-form-label"><strong>Vaccine Name:</strong></label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="vaccine_name" name="vaccine_name" value="{{ vaccine.vaccine_name }}" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="vaccine_date" class="col-sm-3 col-form-label"><strong>Vaccine Date:</strong></label>
+            <div class="col-sm-9">
+                <input type="date" class="form-control" id="vaccine_date" name="vaccine_date" value="{{ vaccine.vaccine_date if vaccine.vaccine_date else '' }}">
+                <small class="form-text text-muted">Leave blank to clear the date. Format: YYYY-MM-DD</small>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="{{ url_for('patient.patient_detail', patient_id=patient.id) }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </div>
+    </form>
+
+</div>
+{% endblock %} 

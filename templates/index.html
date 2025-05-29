@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Pediatric EMR - Home{% endblock %}
+
+{% block body_attributes %}class="landing-page"{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid bg-page-color px-0">
+    <div class="landing-content">
+        <div class="container text-center">
+            {# Image is now set as background via CSS on .bg-page-color #}
+            <div class="action-buttons" style="padding-top: 60vh;"> {# Adjusted padding to push buttons down #}
+                <a href="{{ url_for('patient.list_patients') }}" class="btn btn-search btn-lg">Search Patients</a>
+                <a href="{{ url_for('patient.add_patient_form') }}" class="btn btn-add btn-lg">Add New Patient</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer_content %}
+    {# Hide footer on landing page for a cleaner look #}
+    <div class="d-none">{{ super() }}</div>
+{% endblock %} 

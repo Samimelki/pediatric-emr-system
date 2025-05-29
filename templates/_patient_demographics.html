@@ -1,0 +1,60 @@
+<h4>
+    Demographics
+    <!-- Debug: Patient ID: {{ patient.id if patient else 'No Patient Object' }} -->
+    <a href="{{ url_for('patient.edit_demographics', patient_id=patient.id) }}" class="btn btn-outline-primary btn-sm ml-2">Edit Demographics</a>
+</h4>
+<div class="row mb-2">
+    <div class="col-md-6">
+        <p><strong>Mother's Name:</strong> {{ patient.mere_nom if patient.mere_nom else 'N/A' }}</p>
+    </div>
+    <div class="col-md-6">
+        <p><strong>Father's Name:</strong> {{ patient.pere_nom if patient.pere_nom else 'N/A' }}</p>
+    </div>
+</div>
+
+{# Render custom fields assigned to 'Demographics' section #}
+{% if grouped_custom_fields and 'Demographics' in grouped_custom_fields %}
+    {% for field in grouped_custom_fields['Demographics'] %}
+        <div class="row mb-0">
+            <div class="col-md-12">
+                 <p><strong>{{ field.field_label }}:</strong> {{ patient[field.field_name] if patient[field.field_name] else 'N/A' }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<p>
+    <button class="btn btn-outline-info btn-sm mb-2 mt-2" type="button" data-toggle="collapse" data-target="#collapseDemographicsAdmin" aria-expanded="false" aria-controls="collapseDemographicsAdmin">
+        Show/Hide Contact & Admin Details
+    </button>
+</p>
+<div class="collapse" id="collapseDemographicsAdmin"> {# Changed ID to avoid conflict if we add another #}
+    <div class="card card-body mb-3">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Pediatrician Initials:</strong> {{ patient.pediatre_initiales if patient.pediatre_initiales else 'N/A' }}</p>
+                <p><strong>Address:</strong> {{ patient.domicile if patient.domicile else 'N/A' }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Telephone:</strong> {{ patient.telephone if patient.telephone else 'N/A' }}</p>
+                <p><strong>Third Party Payer:</strong> {{ patient.third_party_payer if patient.third_party_payer else 'N/A' }}</p>
+            </div>
+        </div>
+        
+        {# Render custom fields assigned to 'Contact & Admin Details' section #}
+        {% if grouped_custom_fields and 'Contact & Admin Details' in grouped_custom_fields %}
+            <hr>
+            <h5>Custom Contact/Admin Fields</h5>
+            {% for field in grouped_custom_fields['Contact & Admin Details'] %}
+                <div class="row mb-0">
+                    <div class="col-md-12">
+                        <p><strong>{{ field.field_label }}:</strong> {{ patient[field.field_name] if patient[field.field_name] else 'N/A' }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+{# The generic loop for 'custom_fields_metadata' and 'Additional Information' heading is removed.
+   It will be handled by patient_detail.html for sections not explicitly handled by includes. #} 

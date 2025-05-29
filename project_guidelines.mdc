@@ -1,0 +1,11 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+rule "File Length"
+for "**/*"
+when "file_length_lines > 200"
+labels ["needs-refactoring", "guideline-violation"]
+description "Files should be kept under 200 lines of code to maintain readability and manageability. Consider refactoring into smaller modules or components."
+severity "warning"

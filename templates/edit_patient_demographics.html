@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - {{ patient.prenom }} {{ patient.nom }} - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Edit Demographics for: {{ patient.prenom }} {{ patient.nom }} (MRN: {{ patient.mrn }})</h3>
+    <hr>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('patient.edit_demographics', patient_id=patient.id) }}">
+        {# Loop through the whitelisted editable fields to create form inputs #}
+        {% for field_key, field_label in editable_fields.items() %}
+            {% if field_key not in ['pmh', 'psh', 'family_history', 'medications', 'allergies', 'smoker', 'smoker_details', 'alcohol', 'alcohol_details'] %}
+            <div class="form-group row">
+                <label for="{{ field_key }}" class="col-sm-3 col-form-label">{{ field_label }}:</label>
+                <div class="col-sm-9">
+                    {% set current_value = patient.get(field_key) %}
+                    {% if field_key == 'sexe' %}
+                        <select class="form-control" id="{{ field_key }}" name="{{ field_key }}">
+                            <option value="" {% if not current_value %}selected{% endif %}>Choose...</option>
+                            <option value="M" {% if current_value == 'M' %}selected{% endif %}>M (Male)</option>
+                            <option value="F" {% if current_value == 'F' %}selected{% endif %}>F (Female)</option>
+                            <option value="Other" {% if current_value == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    {% elif field_key.endswith('_date') %}
+                        <input type="date" class="form-control" id="{{ field_key }}" name="{{ field_key }}" value="{{ current_value if current_value else '' }}">
+                    {% elif field_key == 'obstetrical_history' %}
+                        <textarea class="form-control" id="{{ field_key }}" name="{{ field_key }}" rows="3">{{ current_value if current_value else '' }}</textarea>
+                    {% else %}
+                        <input type="text" class="form-control" id="{{ field_key }}" name="{{ field_key }}" value="{{ current_value if current_value else '' }}">
+                    {% endif %}
+                    {% if field_key == 'nom' or field_key == 'prenom' %}
+                        <small class="form-text text-danger">Required field.</small>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+
+        {# Custom Demographic Fields #}
+        {% if custom_fields_metadata %}
+            <hr>
+            <h5>Additional Information</h5>
+            {% for field_meta in custom_fields_metadata %}
+                <div class="form-group row">
+                    <label for="{{ field_meta.field_name }}" class="col-sm-3 col-form-label">{{ field_meta.field_label }}:</label>
+                    <div class="col-sm-9">
+                        {% set current_value = patient.get(field_meta.field_name) %}
+                        {# Basic input for TEXT. Can be expanded for other field_meta.field_type like date, number etc. #}
+                        {% if field_meta.field_type == 'DATE' %}
+                             <input type="date" class="form-control" id="{{ field_meta.field_name }}" name="{{ field_meta.field_name }}" value="{{ current_value if current_value else '' }}">
+                        {% elif field_meta.field_type == 'INTEGER' or field_meta.field_type == 'REAL' %}
+                             <input type="number" class="form-control" id="{{ field_meta.field_name }}" name="{{ field_meta.field_name }}" value="{{ current_value if current_value is not none else '' }}" {% if field_meta.field_type == 'REAL' %}step="any"{% endif %}>
+                        {% else %} {# Default to TEXT #}
+                            <input type="text" class="form-control" id="{{ field_meta.field_name }}" name="{{ field_meta.field_name }}" value="{{ current_value if current_value else '' }}">
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <hr>
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="{{ url_for('patient.patient_detail', patient_id=patient.id) }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </div>
+    </form>
+
+</div>
+{% endblock %} 
