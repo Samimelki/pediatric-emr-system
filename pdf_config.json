@@ -17,14 +17,5 @@
     },
     "footer_note_fr": "Note de bas de page (Défaut)",
     "footer_note_en": "Footer note (Default)",
-    "physician_details_ar": {
-        "name": "د. الاسم واللقب (افتراضي)",
-        "specialty": "طبيب أطفال (افتراضي)",
-        "hospital_name": "المستشفى/العيادة (افتراضي)",
-        "faculty_name": "الكلية/الجامعة (افتراضي)",
-        "contact_line1": "معلومات الاتصال (افتراضي)",
-        "contact_line2": "معلومات الاتصال ٢ (افتراضي)"
-    },
-    "footer_note_ar": "ملاحظة التذييل (افتراضي)",
     "signature_image_filename": "signature_stamp.png"
 }

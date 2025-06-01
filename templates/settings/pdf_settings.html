@@ -9,7 +9,7 @@
 
     <form method="POST" action="{{ url_for('settings.manage_pdf_settings') }}" enctype="multipart/form-data">
         
-        {% for lang_code, lang_name in [('fr', 'French'), ('en', 'English'), ('ar', 'Arabic')] %}
+        {% for lang_code, lang_name in [('fr', 'French'), ('en', 'English')] %}
         <fieldset class="mb-4">
             <legend>{{ lang_name }} Details</legend>
             <div class="row">

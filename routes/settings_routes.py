@@ -5,6 +5,8 @@ import json
 from werkzeug.utils import secure_filename
 from routes.pdf_export_routes import load_pdf_config, clear_pdf_config_cache, DEFAULT_PDF_CONFIG
 from datetime import datetime
+import shutil
+from config_manager import save_config, load_config
 
 settings_bp = Blueprint('settings', __name__, url_prefix='/settings')
 
@@ -25,7 +27,7 @@ def manage_pdf_settings():
         current_config = load_pdf_config(force_reload=True) # Load fresh before modifying
         
         # Update physician details and footers
-        for lang_key in ['fr', 'en', 'ar']:
+        for lang_key in ['fr', 'en']:
             current_config[f'physician_details_{lang_key}'] = {
                 "name": request.form.get(f'physician_name_{lang_key}', DEFAULT_PDF_CONFIG[f'physician_details_{lang_key}']['name']),
                 "specialty": request.form.get(f'physician_specialty_{lang_key}', DEFAULT_PDF_CONFIG[f'physician_details_{lang_key}']['specialty']),
@@ -181,4 +183,102 @@ def toggle_custom_field_active(field_id):
         flash(f"Custom field '{field_to_toggle['field_label']}' has been {'activated' if new_status else 'deactivated'}.", 'success')
     else:
         flash(message, 'danger')
-    return redirect(url_for('settings.manage_custom_fields')) 
+    return redirect(url_for('settings.manage_custom_fields'))
+
+@settings_bp.route('/storage', methods=['GET', 'POST'])
+def storage_settings():
+    if request.method == 'POST':
+        storage_type = request.form.get('storage_type', 'local')
+        cloud_path = request.form.get('cloud_path')
+        
+        # Load current config
+        config = load_config()
+        
+        # If switching to cloud storage, move the database and Word documents
+        if storage_type != 'local' and config['storage_type'] == 'local':
+            try:
+                # Create new paths in cloud storage
+                new_db_path = os.path.join(cloud_path, 'word_docs_emr.db')
+                new_word_docs_path = os.path.join(cloud_path, 'word_documents')
+                
+                # Copy database to new location
+                shutil.copy2(current_app.config['DATABASE'], new_db_path)
+                
+                # Copy Word documents to new location
+                if os.path.exists(config['word_docs_folder']):
+                    if not os.path.exists(new_word_docs_path):
+                        os.makedirs(new_word_docs_path)
+                    for filename in os.listdir(config['word_docs_folder']):
+                        if filename.endswith('.docx'):
+                            shutil.copy2(
+                                os.path.join(config['word_docs_folder'], filename),
+                                os.path.join(new_word_docs_path, filename)
+                            )
+                
+                # Update config
+                config['database_path'] = new_db_path
+                config['storage_type'] = storage_type
+                config['cloud_path'] = cloud_path
+                config['word_docs_folder'] = new_word_docs_path
+                
+                if save_config(config):
+                    flash('Successfully moved database and Word documents to cloud storage', 'success')
+                else:
+                    flash('Failed to save configuration', 'danger')
+                    return redirect(url_for('settings.storage_settings'))
+                
+            except Exception as e:
+                flash(f'Error moving files to cloud storage: {str(e)}', 'danger')
+                return redirect(url_for('settings.storage_settings'))
+        
+        # If switching to local storage, move files back
+        elif storage_type == 'local' and config['storage_type'] != 'local':
+            try:
+                # Create new paths in local storage
+                new_db_path = os.path.join(os.path.dirname(current_app.config['DATABASE']), 'word_docs_emr.db')
+                new_word_docs_path = os.path.join(os.path.dirname(current_app.config['DATABASE']), 'word_documents')
+                
+                # Copy database to new location
+                shutil.copy2(config['database_path'], new_db_path)
+                
+                # Copy Word documents to new location
+                if os.path.exists(config['word_docs_folder']):
+                    if not os.path.exists(new_word_docs_path):
+                        os.makedirs(new_word_docs_path)
+                    for filename in os.listdir(config['word_docs_folder']):
+                        if filename.endswith('.docx'):
+                            shutil.copy2(
+                                os.path.join(config['word_docs_folder'], filename),
+                                os.path.join(new_word_docs_path, filename)
+                            )
+                
+                # Update config
+                config['database_path'] = new_db_path
+                config['storage_type'] = storage_type
+                config['cloud_path'] = None
+                config['word_docs_folder'] = new_word_docs_path
+                
+                if save_config(config):
+                    flash('Successfully moved database and Word documents to local storage', 'success')
+                else:
+                    flash('Failed to save configuration', 'danger')
+                    return redirect(url_for('settings.storage_settings'))
+                
+            except Exception as e:
+                flash(f'Error moving files to local storage: {str(e)}', 'danger')
+                return redirect(url_for('settings.storage_settings'))
+        
+        # Update storage type and cloud path
+        config['storage_type'] = storage_type
+        config['cloud_path'] = cloud_path if storage_type != 'local' else None
+        
+        if save_config(config):
+            flash('Storage settings updated successfully', 'success')
+        else:
+            flash('Failed to save configuration', 'danger')
+    
+    # Load current config for display
+    config = load_config()
+    return render_template('settings/storage.html',
+                         storage_type=config['storage_type'],
+                         cloud_path=config['cloud_path']) 
