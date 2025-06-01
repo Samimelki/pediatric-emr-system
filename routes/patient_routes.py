@@ -6,8 +6,11 @@ from collections import defaultdict
 from database import get_db, get_active_custom_demographic_fields
 from dateutil.relativedelta import relativedelta
 import json
-from config_manager import load_config
+from config_manager import load_config, USER_MEDIA_FOLDER
 from word_document_manager import WordDocumentManager
+from werkzeug.utils import secure_filename
+import mimetypes
+import os
 
 # Whitelist of editable standard demographic fields
 EDITABLE_DEMOGRAPHIC_FIELDS = {
@@ -228,6 +231,9 @@ def patient_detail(patient_id):
                 # Fetch addenda for this visit
                 addenda_cursor = db.execute("SELECT * FROM VisitAddenda WHERE visit_id = ? ORDER BY addendum_datetime ASC", (visit_dict['id'],))
                 visit_dict['addenda'] = [dict(add_row) for add_row in addenda_cursor.fetchall()]
+                # Fetch media for this visit
+                media_cursor = db.execute("SELECT * FROM VisitMedia WHERE visit_id = ? ORDER BY upload_date DESC", (visit_dict['id'],))
+                visit_dict['media'] = [dict(media_row) for media_row in media_cursor.fetchall()]
                 visits_with_addenda.append(visit_dict)
         else:
             flash(f'Patient with ID {patient_id} not found.', 'warning')
@@ -659,4 +665,51 @@ def update_visit_measurements(visit_id):
     except Exception as e:
         db.rollback()
         flash(f'Error updating visit measurements: {e}', 'danger')
-    return redirect(url_for('patient.patient_detail', patient_id=patient_id)) 
+    return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+
+@patient_bp.route('/visit/<int:visit_id>/upload_media', methods=['POST'])
+def upload_visit_media(visit_id):
+    db = get_db()
+    files = request.files.getlist('media_files')
+    description = request.form.get('description', '')
+    saved_files = []
+    visit_media_folder = os.path.join(USER_MEDIA_FOLDER, 'visit_media')
+    os.makedirs(visit_media_folder, exist_ok=True)
+    for file in files:
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            ext = filename.rsplit('.', 1)[-1].lower()
+            allowed = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'mp4', 'mov'}
+            if ext not in allowed:
+                flash(f'File type not allowed: {filename}', 'danger')
+                continue
+            save_path = os.path.join(visit_media_folder, filename)
+            file.save(save_path)
+            media_type = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+            db.execute(
+                "INSERT INTO VisitMedia (visit_id, filename, media_type, upload_date, description) VALUES (?, ?, ?, datetime('now'), ?)",
+                (visit_id, filename, media_type, description)
+            )
+            saved_files.append(filename)
+    db.commit()
+    if saved_files:
+        flash(f'Uploaded: {", ".join(saved_files)}', 'success')
+    return redirect(request.referrer or url_for('patient.patient_detail', patient_id=request.form.get('patient_id')))
+
+@patient_bp.route('/visit/<int:visit_id>/media/<int:media_id>/delete', methods=['POST'])
+def delete_visit_media(media_id, visit_id):
+    db = get_db()
+    # Get filename to delete file from disk
+    media_row = db.execute("SELECT filename FROM VisitMedia WHERE id = ?", (media_id,)).fetchone()
+    if media_row:
+        filename = media_row['filename']
+        file_path = os.path.join(USER_MEDIA_FOLDER, 'visit_media', filename)
+        try:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            flash(f"Error deleting file from disk: {e}", 'danger')
+    db.execute("DELETE FROM VisitMedia WHERE id = ?", (media_id,))
+    db.commit()
+    flash('Media file deleted.', 'success')
+    return redirect(request.referrer or url_for('patient.patient_detail', patient_id=visit_id)) 

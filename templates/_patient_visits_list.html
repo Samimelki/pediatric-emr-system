@@ -52,6 +52,67 @@
                                 <button type="submit" class="btn btn-sm btn-outline-primary">Add Addendum</button>
                             </form>
                         </div>
+                        {# Media Upload and Display #}
+                        <div class="mt-3">
+                            <h6>Visit Media</h6>
+                            <form method="POST" action="{{ url_for('patient.upload_visit_media', visit_id=visit.id) }}" enctype="multipart/form-data" class="mb-2">
+                                <div class="form-group">
+                                    <input type="file" name="media_files" multiple class="form-control-file">
+                                    <input type="text" name="description" class="form-control mt-1" placeholder="Description (optional)">
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-outline-success">Upload Media</button>
+                            </form>
+                            {% set visit_media = visit.media %}
+                            {% if visit_media %}
+                                <div class="row">
+                                    {% for media in visit_media %}
+                                        <div class="col-md-3 mb-2 text-center">
+                                            {% if media.media_type.startswith('image') %}
+                                                <a href="#" data-toggle="modal" data-target="#mediaModal{{ visit.id }}{{ loop.index }}">
+                                                    <img src="/settings/user_media/visit_media/{{ media.filename }}" alt="Media" class="img-thumbnail" style="max-width: 100%; max-height: 120px;">
+                                                </a>
+                                            {% elif media.media_type == 'application/pdf' %}
+                                                <a href="#" data-toggle="modal" data-target="#mediaModal{{ visit.id }}{{ loop.index }}">PDF: {{ media.filename }}</a>
+                                            {% elif media.media_type.startswith('video') %}
+                                                <a href="#" data-toggle="modal" data-target="#mediaModal{{ visit.id }}{{ loop.index }}">Video: {{ media.filename }}</a>
+                                            {% else %}
+                                                <a href="/settings/user_media/visit_media/{{ media.filename }}" target="_blank">{{ media.filename }}</a>
+                                            {% endif %}
+                                            {% if media.description %}<div><small>{{ media.description }}</small></div>{% endif %}
+                                            <form method="POST" action="{{ url_for('patient.delete_visit_media', media_id=media.id, visit_id=visit.id) }}" style="display:inline;">
+                                                <button type="submit" class="btn btn-sm btn-danger mt-1" onclick="return confirm('Delete this media file?');">Delete</button>
+                                            </form>
+                                            {# Modal for viewing media #}
+                                            <div class="modal fade" id="mediaModal{{ visit.id }}{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="mediaModalLabel{{ visit.id }}{{ loop.index }}" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="mediaModalLabel{{ visit.id }}{{ loop.index }}">{{ media.filename }}</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            {% if media.media_type.startswith('image') %}
+                                                                <img src="/settings/user_media/visit_media/{{ media.filename }}" alt="Media" style="max-width: 100%; max-height: 70vh;">
+                                                            {% elif media.media_type == 'application/pdf' %}
+                                                                <embed src="/settings/user_media/visit_media/{{ media.filename }}" type="application/pdf" width="100%" height="600px" />
+                                                            {% elif media.media_type.startswith('video') %}
+                                                                <video src="/settings/user_media/visit_media/{{ media.filename }}" controls style="max-width: 100%; max-height: 70vh;"></video>
+                                                            {% else %}
+                                                                <a href="/settings/user_media/visit_media/{{ media.filename }}" target="_blank">Download {{ media.filename }}</a>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="text-muted">No media uploaded for this visit.</div>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>

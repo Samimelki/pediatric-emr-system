@@ -97,6 +97,19 @@ def init_db_schema():
     );
     """)
 
+    # VisitMedia Table for storing images, PDFs, and videos attached to visits
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS VisitMedia (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        visit_id INTEGER NOT NULL,
+        filename TEXT NOT NULL,
+        media_type TEXT NOT NULL,
+        upload_date TEXT NOT NULL,
+        description TEXT,
+        FOREIGN KEY (visit_id) REFERENCES Visits(id)
+    );
+    """)
+
     # CustomDemographicFields Table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS CustomDemographicFields (
