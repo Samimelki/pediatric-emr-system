@@ -120,7 +120,8 @@ app.register_blueprint(settings_bp) # Register the settings blueprint
 # Main index route (can stay here or be moved to a general_routes.py if more exist)
 @app.route('/')
 def index():
-    return render_template('index.html', title='Home')
+    config = load_config()
+    return render_template('index.html', title='Home', config=config)
 
 # Function to run Flask app
 def run_flask_app():

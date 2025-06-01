@@ -18,6 +18,8 @@ DEFAULT_CONFIG = {
     'storage_type': 'local',  # 'local', 'google_drive', 'dropbox', 'onedrive'
     'cloud_path': None,  # Path to cloud storage folder when using cloud storage
     'word_docs_folder': WORD_DOCS_FOLDER,  # Path to Word documents folder
+    'emr_name': 'GARBIS EMR',  # Customizable EMR name
+    'background_image_filename': None,  # Home page background image filename
 }
 
 def deep_update(d, u):

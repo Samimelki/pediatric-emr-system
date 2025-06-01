@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}GARBIS EMR - Home{% endblock %}
+{% block title %}{{ config.emr_name }} - Home{% endblock %}
 
 {% block body_attributes %}class="landing-page"{% endblock %}
 
@@ -8,6 +8,16 @@
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+{% if config.background_image_filename %}
+<style>
+.bg-page-color {
+    background-image: url('/settings/user_media/{{ config.background_image_filename }}') !important;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+</style>
+{% endif %}
 {% endblock %}
 
 {% block content %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Personalization Settings - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Personalization Settings</h2>
+    <p class="text-muted">Customize your EMR system's appearance and branding.</p>
+    <hr>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>EMR System Name</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('settings.personalization_settings') }}" enctype="multipart/form-data">
+                <div class="form-group mb-3">
+                    <label for="emr_name">EMR System Name</label>
+                    <input type="text" class="form-control" id="emr_name" name="emr_name" value="{{ config.emr_name }}" required>
+                    <small class="form-text text-muted">This name will be displayed in the navigation bar and browser title.</small>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="background_image">Home Page Background Image</label>
+                    <input type="file" class="form-control-file" id="background_image" name="background_image" accept="image/*">
+                    <small class="form-text text-muted">Upload a new background image for the home page. Recommended: landscape orientation.</small>
+                    {% if config.background_image_filename %}
+                        <div class="mt-2">
+                            <strong>Current Image:</strong><br>
+                            <img src="{{ url_for('settings.get_user_media_file', filename=config.background_image_filename) }}" alt="Current Background" style="max-width: 300px; max-height: 150px; border: 1px solid #ccc;">
+                        </div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

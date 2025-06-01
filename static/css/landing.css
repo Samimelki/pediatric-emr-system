@@ -5,7 +5,7 @@ body.landing-page, html.landing-page {
 
 .bg-page-color { /* Renamed from .bg-hero-gradient */
   /* background-color: #E0F7FA; /* Fallback or remove if image covers all */
-  background-image: url('/static/img/IMG_5191.JPG');
+  /* background-image: url('/static/img/IMG_5191.JPG'); */
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;

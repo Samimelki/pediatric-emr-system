@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from routes.pdf_export_routes import load_pdf_config, clear_pdf_config_cache, DEFAULT_PDF_CONFIG
 from datetime import datetime
 import shutil
-from config_manager import save_config, load_config
+from config_manager import save_config, load_config, USER_MEDIA_FOLDER
 
 settings_bp = Blueprint('settings', __name__, url_prefix='/settings')
 
@@ -281,4 +281,30 @@ def storage_settings():
     config = load_config()
     return render_template('settings/storage.html',
                          storage_type=config['storage_type'],
-                         cloud_path=config['cloud_path']) 
+                         cloud_path=config['cloud_path'])
+
+@settings_bp.route('/personalization', methods=['GET', 'POST'])
+def personalization_settings():
+    config = load_config()
+    if request.method == 'POST':
+        config['emr_name'] = request.form.get('emr_name', 'GARBIS EMR')
+
+        # Handle background image upload
+        file = request.files.get('background_image')
+        if file and file.filename:
+            allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
+            ext = file.filename.rsplit('.', 1)[-1].lower()
+            if ext in allowed_extensions:
+                filename = f"background_image.{ext}"
+                save_path = os.path.join(USER_MEDIA_FOLDER, filename)
+                file.save(save_path)
+                config['background_image_filename'] = filename
+            else:
+                flash('Invalid file type for background image. Allowed: png, jpg, jpeg, gif.', 'danger')
+
+        if save_config(config):
+            flash('Personalization settings updated successfully', 'success')
+        else:
+            flash('Failed to save configuration', 'danger')
+        return redirect(url_for('settings.personalization_settings'))
+    return render_template('settings/personalization.html', title='Personalization Settings', config=config) 

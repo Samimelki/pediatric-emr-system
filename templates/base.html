@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <title>{% block title %}GARBIS EMR{% endblock %}</title>
+    <title>{% block title %}{{ config.emr_name }}{% endblock %}</title>
     <style>
         body { padding-top: 5rem; }
         .navbar {
@@ -26,7 +26,7 @@
 </head>
 <body {% block body_attributes %}{% endblock %}>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="{{ url_for('index') }}">GARBIS EMR</a>
+        <a class="navbar-brand" href="{{ url_for('index') }}">{{ config.emr_name }}</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -50,6 +50,7 @@
                         <a class="dropdown-item {% if request.endpoint == 'settings.manage_pdf_settings' %}active{% endif %}" href="{{ url_for('settings.manage_pdf_settings') }}"><i class="fas fa-file-pdf"></i> PDF Export Settings</a>
                         <a class="dropdown-item {% if request.endpoint == 'settings.manage_custom_fields' %}active{% endif %}" href="{{ url_for('settings.manage_custom_fields') }}"><i class="fas fa-user-cog"></i> Custom Patient Fields</a>
                         <a class="dropdown-item {% if request.endpoint == 'settings.storage_settings' %}active{% endif %}" href="{{ url_for('settings.storage_settings') }}"><i class="fas fa-database"></i> Storage Settings</a>
+                        <a class="dropdown-item {% if request.endpoint == 'settings.personalization_settings' %}active{% endif %}" href="{{ url_for('settings.personalization_settings') }}"><i class="fas fa-paint-brush"></i> Personalization</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" onclick="window.pywebview && window.pywebview.api.save_database_backup().then(handleBackupResponse).catch(handleBackupError); return false;"><i class="fas fa-database"></i> Backup Database</a>
                         <a class="dropdown-item {% if request.endpoint == 'admin.manage_database_route' %}active{% endif %}" href="{{ url_for('admin.manage_database_route') }}"><i class="fas fa-hdd"></i> Manage/Restore Database</a>
