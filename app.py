@@ -1,5 +1,6 @@
 import os # Add os import for path operations
 import sys # For sys.executable and sys.frozen
+import json # For storing cloud storage configuration
 
 # --- PyInstaller: WeasyPrint Font Configuration ---
 # When bundled, WeasyPrint (via Fontconfig) might not find its configuration.
@@ -33,6 +34,9 @@ from xml_exporter import generate_patient_xml # Added for XML export
 from csv_exporter import generate_patient_csvs # Added for CSV export
 from utils import format_datetime # Import the datetime formatter
 
+# Import configuration management
+from config_manager import load_config, APP_DATA_DIR, UPLOAD_FOLDER, USER_MEDIA_FOLDER, WORD_DOCS_FOLDER
+
 # Import Blueprints
 from routes.patient_routes import patient_bp
 from routes.pdf_export_routes import pdf_export_bp
@@ -44,25 +48,53 @@ APP_NAME = "WordDocsEMR"
 USER_DOCUMENTS = os.path.join(os.path.expanduser('~'), 'Documents')
 APP_DATA_DIR = os.path.join(USER_DOCUMENTS, APP_NAME)
 DATABASE_NAME = 'word_docs_emr.db'
-DATABASE_PATH = os.path.join(APP_DATA_DIR, DATABASE_NAME)
+CONFIG_FILE = os.path.join(APP_DATA_DIR, 'config.json')
+DEFAULT_DATABASE_PATH = os.path.join(APP_DATA_DIR, DATABASE_NAME)
 UPLOAD_FOLDER = os.path.join(APP_DATA_DIR, 'uploads') # For temporary XML uploads
 USER_MEDIA_FOLDER = os.path.join(APP_DATA_DIR, 'user_media') # For user-uploaded images like signatures
 ALLOWED_EXTENSIONS = {'xml'}
 
+# Default configuration
+DEFAULT_CONFIG = {
+    'database_path': DEFAULT_DATABASE_PATH,
+    'storage_type': 'local',  # 'local', 'google_drive', 'dropbox', 'onedrive'
+    'cloud_path': None,  # Path to cloud storage folder when using cloud storage
+}
+
+def save_config(config):
+    """Save configuration to config.json."""
+    try:
+        with open(CONFIG_FILE, 'w') as f:
+            json.dump(config, f, indent=4)
+        return True
+    except Exception as e:
+        print(f"Error saving config: {e}")
+        return False
+
 app = Flask(__name__)
 app.secret_key = 'your secret key' # Important for flash messages
 
-# Ensure APP_DATA_DIR and UPLOAD_FOLDER exist
+# Load configuration
+config = load_config()
+
+# Ensure all required directories exist
 if not os.path.exists(APP_DATA_DIR):
     os.makedirs(APP_DATA_DIR)
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
-if not os.path.exists(USER_MEDIA_FOLDER): # Create USER_MEDIA_FOLDER if it doesn't exist
+if not os.path.exists(USER_MEDIA_FOLDER):
     os.makedirs(USER_MEDIA_FOLDER)
+if not os.path.exists(WORD_DOCS_FOLDER):
+    os.makedirs(WORD_DOCS_FOLDER)
+    print(f"Created Word documents folder at: {WORD_DOCS_FOLDER}")
 
-app.config['DATABASE'] = DATABASE_PATH
+# Set database path from config
+app.config['DATABASE'] = config['database_path']
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['USER_MEDIA_FOLDER'] = USER_MEDIA_FOLDER # Add to app.config
+app.config['USER_MEDIA_FOLDER'] = USER_MEDIA_FOLDER
+app.config['STORAGE_TYPE'] = config['storage_type']
+app.config['CLOUD_PATH'] = config['cloud_path']
+app.config['WORD_DOCS_FOLDER'] = WORD_DOCS_FOLDER
 
 # Cache busting configurations for development
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -107,6 +139,47 @@ class Api:
 
     def set_app(self, flask_app):
         self.app = flask_app
+
+    def select_cloud_folder(self):
+        """Opens a folder selection dialog for choosing a cloud storage location."""
+        if not self.window:
+            return {"status": "error", "message": "Window reference not configured."}
+        
+        try:
+            # Get the user's home directory
+            home_dir = os.path.expanduser('~')
+            
+            # Common cloud storage locations
+            cloud_locations = [
+                os.path.join(home_dir, 'Google Drive'),
+                os.path.join(home_dir, 'Dropbox'),
+                os.path.join(home_dir, 'OneDrive'),
+                os.path.join(home_dir, 'Documents', 'Google Drive'),
+                os.path.join(home_dir, 'Documents', 'Dropbox'),
+                os.path.join(home_dir, 'Documents', 'OneDrive')
+            ]
+            
+            # Find the first existing cloud storage location
+            start_dir = home_dir
+            for location in cloud_locations:
+                if os.path.exists(location):
+                    start_dir = location
+                    break
+            
+            # Open folder selection dialog
+            chosen_path = self.window.create_file_dialog(
+                webview.FOLDER_DIALOG,
+                directory=start_dir
+            )
+            
+            if chosen_path and chosen_path.strip():
+                return {"status": "success", "path": chosen_path}
+            else:
+                return {"status": "cancelled", "message": "No folder selected"}
+                
+        except Exception as e:
+            print(f"Error selecting cloud folder: {e}")
+            return {"status": "error", "message": str(e)}
 
     def save_chart_image(self, filename, base64_data_uri):
         """Saves a base64 encoded image to a file, prompting the user for location."""

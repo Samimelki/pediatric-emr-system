@@ -6,6 +6,8 @@ from collections import defaultdict
 from database import get_db, get_active_custom_demographic_fields
 from dateutil.relativedelta import relativedelta
 import json
+from config_manager import load_config
+from word_document_manager import WordDocumentManager
 
 # Whitelist of editable standard demographic fields
 EDITABLE_DEMOGRAPHIC_FIELDS = {
@@ -306,6 +308,10 @@ def edit_demographics(patient_id):
         try:
             db.execute(update_sql, sql_params_dict)
             db.commit()
+            # Update Word document
+            config = load_config()
+            word_manager = WordDocumentManager(db_path=config['database_path'], documents_folder=config['word_docs_folder'])
+            word_manager.create_or_update_document(patient_id)
             flash('Patient demographics updated successfully!', 'success')
         except sqlite3.Error as e:
             db.rollback()
@@ -361,16 +367,24 @@ def add_patient_submit():
             flash('First name and Last name are required.', 'danger')
             return redirect(url_for('patient.add_patient_form'))
 
-        columns = ', '.join(form_data.keys())
-        placeholders = ', '.join([f':{key}' for key in form_data.keys()])
-        sql = f"INSERT INTO Patients ({columns}) VALUES ({placeholders})"
+        # Use DatabaseOperations to create the patient and Word document
+        from database_operations import DatabaseOperations
         
-        cursor = db.execute(sql, form_data)
-        db.commit()
-        new_patient_id = cursor.lastrowid
+        config = load_config()
+        db_ops = DatabaseOperations(
+            db_path=config['database_path'],
+            documents_folder=config['word_docs_folder']
+        )
+        
+        # Create patient and Word document
+        patient_id, doc_path = db_ops.create_patient(form_data)
+        
+        # Update Word document
+        word_manager = WordDocumentManager(db_path=config['database_path'], documents_folder=config['word_docs_folder'])
+        word_manager.create_or_update_document(patient_id)
         
         flash(f"Patient {form_data['first_name']} {form_data['last_name']} (MRN: {new_mrn}) added successfully!", 'success')
-        return redirect(url_for('patient.patient_detail', patient_id=new_patient_id))
+        return redirect(url_for('patient.patient_detail', patient_id=patient_id))
 
     except sqlite3.Error as e:
         db.rollback()
@@ -467,6 +481,10 @@ def add_visit(patient_id):
         db.execute("UPDATE Patients SET raw_dossier_text = ? WHERE id = ?", (updated_dossier_text, patient_id))
         
         db.commit()
+        # Update Word document after adding visit
+        config = load_config()
+        word_manager = WordDocumentManager(db_path=config['database_path'], documents_folder=config['word_docs_folder'])
+        word_manager.create_or_update_document(patient_id)
         flash('New visit added successfully!', 'success')
 
     except sqlite3.Error as e:
@@ -531,6 +549,10 @@ def add_visit_addendum(visit_id):
         db.execute("UPDATE Patients SET raw_dossier_text = ? WHERE id = ?", (updated_dossier_text, patient_id))
         
         db.commit()
+        # Update Word document after addendum
+        config = load_config()
+        word_manager = WordDocumentManager(db_path=config['database_path'], documents_folder=config['word_docs_folder'])
+        word_manager.create_or_update_document(patient_id)
         flash('Visit addendum added successfully!', 'success')
 
     except sqlite3.Error as e:
@@ -585,6 +607,10 @@ def edit_patient_history(patient_id):
         updates['patient_id'] = patient_id
         db.execute(f"UPDATE Patients SET {set_clause} WHERE id = :patient_id", updates)
         db.commit()
+        # Update Word document after history edit
+        config = load_config()
+        word_manager = WordDocumentManager(db_path=config['database_path'], documents_folder=config['word_docs_folder'])
+        word_manager.create_or_update_document(patient_id)
         flash('Patient history updated successfully!', 'success')
         return redirect(url_for('patient.patient_detail', patient_id=patient_id))
 
@@ -625,6 +651,10 @@ def update_visit_measurements(visit_id):
             (vital_signs_json, visit_id)
         )
         db.commit()
+        # Update Word document after visit measurements edit
+        config = load_config()
+        word_manager = WordDocumentManager(db_path=config['database_path'], documents_folder=config['word_docs_folder'])
+        word_manager.create_or_update_document(patient_id)
         flash('Visit measurements updated successfully!', 'success')
     except Exception as e:
         db.rollback()

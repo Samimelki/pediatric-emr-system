@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Storage Settings - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Storage Settings</h2>
+    <p class="text-muted">Configure where your EMR database is stored.</p>
+    <hr>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>Database Storage Location</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('settings.storage_settings') }}">
+                <div class="form-group mb-3">
+                    <label for="storage_type">Storage Type</label>
+                    <select class="form-control" id="storage_type" name="storage_type" onchange="toggleCloudPath()">
+                        <option value="local" {% if storage_type == 'local' %}selected{% endif %}>Local Storage (Default)</option>
+                        <option value="google_drive" {% if storage_type == 'google_drive' %}selected{% endif %}>Google Drive</option>
+                        <option value="dropbox" {% if storage_type == 'dropbox' %}selected{% endif %}>Dropbox</option>
+                        <option value="onedrive" {% if storage_type == 'onedrive' %}selected{% endif %}>OneDrive</option>
+                    </select>
+                    <small class="form-text text-muted">
+                        <ul class="mb-0 pl-3">
+                            <li><strong>Local Storage:</strong> Database is stored in <code>~/Documents/WordDocsEMR/word_docs_emr.db</code></li>
+                            <li><strong>Cloud Storage:</strong> Choose a folder in your cloud storage service to store the database</li>
+                        </ul>
+                    </small>
+                </div>
+
+                <div id="cloud_path_group" class="form-group mb-3" style="display: none;">
+                    <label for="cloud_path">Cloud Storage Folder</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="cloud_path" name="cloud_path" value="{{ cloud_path or '' }}" readonly>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-primary" onclick="selectCloudFolder()">Browse...</button>
+                        </div>
+                    </div>
+                    <small class="form-text text-muted">Select a folder in your cloud storage where the database will be stored. The database file will be named <code>word_docs_emr.db</code> in the selected folder.</small>
+                </div>
+
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> Current database location: <code>{{ current_db_path }}</code>
+                </div>
+
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Note:</strong> When switching storage locations, the database will be automatically copied to the new location. Make sure you have enough space in the target location.
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Settings</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+function toggleCloudPath() {
+    const storageType = document.getElementById('storage_type').value;
+    const cloudPathGroup = document.getElementById('cloud_path_group');
+    cloudPathGroup.style.display = storageType === 'local' ? 'none' : 'block';
+}
+
+function selectCloudFolder() {
+    if (window.pywebview && window.pywebview.api) {
+        window.pywebview.api.select_cloud_folder()
+            .then(response => {
+                if (response.status === 'success') {
+                    document.getElementById('cloud_path').value = response.path;
+                } else if (response.status === 'error') {
+                    alert('Error selecting folder: ' + response.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error selecting folder. Please try again.');
+            });
+    } else {
+        alert('Application interface not available. Please try again.');
+    }
+}
+
+// Initialize the form state
+document.addEventListener('DOMContentLoaded', function() {
+    toggleCloudPath();
+});
+</script>
+{% endblock %} 

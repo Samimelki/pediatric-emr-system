@@ -32,7 +32,6 @@ def allowed_file(filename):
 
 @admin_bp.route('/import_xml', methods=['GET', 'POST'])
 def import_xml_data():
-    from word_importer import WordDocumentImporter
     if request.method == 'POST':
         files = request.files.getlist('docxfile')
         confirm_replace = request.form.get('confirm_replace')
@@ -62,6 +61,8 @@ def import_xml_data():
             from database import init_db_schema
             with current_app.app_context():
                 init_db_schema()
+
+        # Use WordDocumentImporter to parse the documents
         importer = WordDocumentImporter(db_path)
         results = importer.import_batch(docx_paths)
         total_success = sum(1 for _, success, _ in results if success)
@@ -69,6 +70,7 @@ def import_xml_data():
         for filename, success, msg in results:
             flash(f"{filename}: {'Success' if success else 'Failed'} - {msg}", 'info' if success else 'danger')
         flash(f'Import complete: {total_success} succeeded, {total_fail} failed.', 'success' if total_fail == 0 else 'warning')
+        
         # Clean up temp files
         for docx_file in docx_paths:
             if os.path.exists(docx_file) and docx_file.startswith(current_app.config['UPLOAD_FOLDER']):

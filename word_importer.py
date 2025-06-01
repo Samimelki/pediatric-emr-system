@@ -5,6 +5,8 @@ from datetime import datetime
 import json
 from typing import Dict, Optional, List, Tuple
 import os
+from word_document_manager import WordDocumentManager
+from config_manager import load_config
 
 class WordDocumentImporter:
     def __init__(self, db_path: str):
@@ -155,7 +157,6 @@ class WordDocumentImporter:
                 'medications': '', 'allergies': '',
                 'smoker': False, 'smoker_details': '',
                 'alcohol': False, 'alcohol_details': '',
-                'raw_dossier_text': '\n'.join(full_text_lines),
                 'visits': []
             }
 
@@ -347,6 +348,10 @@ class WordDocumentImporter:
 
             patient_data['visits'] = [v for v in visits_list if v.get('notes') or v.get('visit_date')]
             patient_data['patient_history_text'] = '\n'.join(patient_history_lines).strip()
+            # Set raw_dossier_text to only the parsed visits
+            patient_data['raw_dossier_text'] = "\n\n".join(
+                f"{v['visit_date'] or '[No Date]'}\n{v['notes']}" for v in patient_data['visits'] if v.get('notes')
+            )
 
             for key in ['pmh', 'psh', 'medications', 'allergies', 'family_history', 'phone']:
                 if isinstance(patient_data[key], str):
@@ -473,26 +478,22 @@ class WordDocumentImporter:
         results = []
         conn = self.connect_db()
         cursor = conn.cursor()
+        word_manager = WordDocumentManager(self.db_path, load_config().get('word_docs_folder'))
         try:
             for idx, doc_path in enumerate(doc_paths, start=1):
-                # Generate a unique MRN for this document IF it turns out to be a new patient.
-                # This MRN is passed to get_or_create_patient to be used if a new patient is created.
-                # If an existing patient is found by Name/DOB, their existing MRN will be kept.
-                doc_specific_mrn = f"O{idx:03d}" # Padded for consistency e.g. O001, O002
+                doc_specific_mrn = f"O{idx:03d}"
                 success = False
                 message = ""
                 try:
-                    # print(f"Processing document: {doc_path} with tentative MRN {doc_specific_mrn}")
                     patient_data = self.parse_patient_doc(doc_path)
                     if patient_data:
-                        # Pass doc_specific_mrn to be used if a new patient is created or if lookup by this MRN is needed.
                         patient_id = self.get_or_create_patient(cursor, patient_data, new_doc_mrn=doc_specific_mrn)
                         if patient_id:
                             for visit_entry in patient_data.get('visits', []):
                                 self.add_visit(cursor, patient_id, visit_entry)
+                            conn.commit()  # Commit so WordDocumentManager can see the patient
+                            word_manager.create_or_update_document(patient_id)
                             success = True
-                            # The MRN displayed here could be the original doc_specific_mrn or an existing one if merged.
-                            # For clarity, fetch the actual MRN associated with patient_id for the message.
                             cursor.execute("SELECT mrn FROM Patients WHERE id = ?", (patient_id,))
                             final_mrn_for_message = cursor.fetchone()[0]
                             message = f"Processed for patient MRN {final_mrn_for_message} (ID: {patient_id}). Original doc MRN was {doc_specific_mrn if final_mrn_for_message != doc_specific_mrn else 'N/A'}."
@@ -505,12 +506,11 @@ class WordDocumentImporter:
                     print(message)
                     import traceback
                     traceback.print_exc()
-                
                 results.append((os.path.basename(doc_path), success, message))
-            if any(r[1] for r in results): # If any success
+            if any(r[1] for r in results):
                 conn.commit()
             else:
-                conn.rollback() # Rollback if all failed or no successes
+                conn.rollback()
         except Exception as e_batch:
             conn.rollback()
             print(f"Critical error during batch import: {e_batch}")
