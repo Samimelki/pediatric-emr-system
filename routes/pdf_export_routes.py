@@ -5,9 +5,11 @@ import json # Added for loading config
 import os # Added for path joining
 from weasyprint import HTML, CSS
 # from weasyprint.fonts import FontConfiguration # Still commented out
+import io
 
 from database import get_db # Assuming database.py is in the parent directory
 from utils import format_date_for_pdf # Assuming utils.py is in the parent directory
+from routes.patient_routes import calculate_age_at_visit # Import the age calculation function
 
 pdf_export_bp = Blueprint('pdf_export', __name__, url_prefix='/patient/<int:patient_id>/export')
 
@@ -506,3 +508,97 @@ def export_total_history_en(patient_id):
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = f'attachment; filename=total_history_{patient["id"]}_en.pdf'
     return response
+
+@pdf_export_bp.route('/complete_report')
+def export_complete_report(patient_id):
+    try:
+        db = get_db()
+        config = load_pdf_config()
+        
+        # Get patient data
+        patient_row = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,)).fetchone()
+        if not patient_row:
+            current_app.logger.error(f"Patient with ID {patient_id} not found for complete_report.")
+            return "Patient not found", 404
+        patient = dict(patient_row)
+
+        # Get visit history with addenda
+        visit_rows = db.execute("""
+            SELECT v.*, 
+                   GROUP_CONCAT(a.addendum_text, '|||') as addenda_text,
+                   GROUP_CONCAT(a.addendum_datetime, '|||') as addenda_dates
+            FROM Visits v
+            LEFT JOIN VisitAddenda a ON v.id = a.visit_id
+            WHERE v.patient_id = ?
+            GROUP BY v.id
+            ORDER BY v.visit_date DESC
+        """, (patient_id,)).fetchall()
+        
+        processed_visits = []
+        for visit_row in visit_rows:
+            visit = dict(visit_row) 
+            
+            # Parse vital signs JSON
+            if visit.get('vital_signs'):
+                try:
+                    visit['vital_signs'] = json.loads(visit['vital_signs'])
+                except json.JSONDecodeError:
+                    visit['vital_signs'] = {} 
+            else:
+                visit['vital_signs'] = {}
+            
+            # Process addenda
+            visit['addenda'] = []
+            if visit.get('addenda_text') and visit.get('addenda_dates'):
+                addenda_texts = visit['addenda_text'].split('|||')
+                addenda_dates = visit['addenda_dates'].split('|||')
+                for text, date_str in zip(addenda_texts, addenda_dates):
+                    if text and date_str: # Ensure there's actual text and date
+                        visit['addenda'].append({'addendum_text': text, 'addendum_datetime': date_str})
+            
+            # Calculate age at visit
+            if patient.get('date_of_birth') and visit.get('visit_date'):
+                visit['age_at_visit'] = calculate_age_at_visit(patient['date_of_birth'], visit['visit_date'])
+            else:
+                visit['age_at_visit'] = "N/A"
+            
+            processed_visits.append(visit)
+
+        physician_details = config.get('physician_details_en', {})
+        footer_note = config.get('footer_note_en', '')
+        
+        signature_filename = config.get('signature_image_filename')
+        signature_image_url_for_pdf = None
+        if signature_filename:
+            full_path = os.path.join(current_app.config['USER_MEDIA_FOLDER'], signature_filename)
+            if os.path.exists(full_path):
+                signature_image_url_for_pdf = f"file://{os.path.abspath(full_path)}"
+            else:
+                current_app.logger.warning(f"Signature file {signature_filename} not found at {full_path}")
+
+
+        current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+
+        html_out = render_template('complete_report.html',
+                                 patient=patient,
+                                 visites=processed_visits, # Use processed_visits
+                                 physician=physician_details,
+                                 footer_note=footer_note,
+                                 signature_image_url_for_pdf=signature_image_url_for_pdf,
+                                 current_date=current_date,
+                                 format_date_for_pdf=format_date_for_pdf, # Pass format_date_for_pdf
+                                 json=json # Pass json for parsing in template if needed
+                                 ) 
+        
+        pdf_stylesheets = _get_pdf_stylesheets()
+        
+        pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
+        
+        response = make_response(pdf)
+        response.headers['Content-Type'] = 'application/pdf'
+        # response.headers['Content-Disposition'] = f'attachment; filename=complete_report_{patient_id}.pdf' # Removed for inline display
+        return response
+
+    except Exception as e:
+        current_app.logger.error(f"Error generating complete report for patient {patient_id}: {str(e)}", exc_info=True)
+        return f"Error generating report: {str(e)}", 500

@@ -19,7 +19,10 @@
                     Export PDF
                 </button>
                 <div class="dropdown-menu" aria-labelledby="exportPdfDropdown">
-                    <!-- Export options can be added here -->
+                    {% set complete_report_url = url_for('pdf_export.export_complete_report', patient_id=patient.id) %}
+                    <a class="dropdown-item" href="{{ complete_report_url }}" target="_blank">
+                        <i class="fas fa-file-medical"></i> Complete Report
+                    </a>
                 </div>
             </div>
         </div>
@@ -90,4 +93,8 @@
         <p>The patient with the requested ID could not be found.</p>
         <p><a href="{{ url_for('patient.list_patients') }}">Return to Patient List</a></p>
     {% endif %}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }} {# Include scripts from base.html if any #}
 {% endblock %} 

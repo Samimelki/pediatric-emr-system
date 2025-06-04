@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Medical Record - {{ patient.nom }} {{ patient.prenom }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pdf_styles.css') }}">
+</head>
+<body>
+    <div class="physician-info">
+        <p><strong>{{ physician.name }}</strong></p>
+        <p>{{ physician.specialty }}</p>
+        {% if physician.hospital_name %}<p>{{ physician.hospital_name }}</p>{% endif %}
+        {% if physician.faculty_name %}<p>{{ physician.faculty_name }}</p>{% endif %}
+    </div>
+
+    <div class="title-container">
+        <div class="title">Complete Medical Record</div>
+    </div>
+
+    <div class="patient-id-header">
+        <p>
+            <strong>{{ patient.prenom }} {{ patient.nom }}</strong> (MRN: {{ patient.mrn }})<br>
+            Date of Birth: {{ format_date_for_pdf(patient.naissance_date, '%d/%m/%Y') if patient.naissance_date else 'N/A' }}
+            {% if patient.sexe %}| Sex: {{ patient.sexe }}{% endif %}
+        </p>
+    </div>
+
+    <h2 class="section-title">Demographic Information</h2>
+    <div class="patient-info-grid">
+        <strong>Mother's First Name:</strong><span>{{ patient.mere_nom if patient.mere_nom else 'N/A' }}</span>
+        <strong>Father's First Name:</strong><span>{{ patient.pere_nom if patient.pere_nom else 'N/A' }}</span>
+        <strong>Pediatrician Initials:</strong><span>{{ patient.pediatre_initiales if patient.pediatre_initiales else 'N/A' }}</span>
+        <strong>Address:</strong><span>{{ patient.domicile if patient.domicile else 'N/A' }}</span>
+        <strong>Telephone:</strong><span>{{ patient.telephone if patient.telephone else 'N/A' }}</span>
+        <strong>Payer:</strong><span>{{ patient.payeur if patient.payeur else 'N/A' }}</span>
+        <strong>Obstetrical History:</strong><span>{{ patient.obstetrical_history if patient.obstetrical_history else 'N/A' }}</span>
+        <strong>Diagnosis 1:</strong><span>{{ patient.diag1 if patient.diag1 else 'N/A' }}</span>
+        <strong>Diagnosis 2:</strong><span>{{ patient.diag2 if patient.diag2 else 'N/A' }}</span>
+    </div>
+
+    <h2 class="section-title">Birth Information</h2>
+    <div class="patient-info-grid">
+        <strong>Weight (g):</strong><span>{{ patient.birth_weight_g if patient.birth_weight_g else 'N/A' }}</span>
+        <strong>Height (cm):</strong><span>{{ patient.birth_height_cm if patient.birth_height_cm else 'N/A' }}</span>
+        <strong>HC (cm):</strong><span>{{ patient.birth_head_circumference_cm if patient.birth_head_circumference_cm else 'N/A' }}</span>
+        <strong>Birth Hospital/Country:</strong><span>{{ patient.hopital if patient.hopital else 'N/A' }}</span>
+        <strong>Birth Notes:</strong><span>{{ patient.birth_notes if patient.birth_notes else 'N/A' }}</span>
+    </div>
+
+    <h2>Vaccination Table</h2>
+    <p>Note: This table includes all recorded vaccines, including those not part of the standard schedule.</p>
+
+    <h3 class="vaccine-section-title">Mandatory Vaccinations</h3>
+    {% if mandatory_vaccine_table_data %}
+        <table class="vaccine-table">
+            <thead>
+                <tr>
+                    <th>{{ table_column_labels.vaccine_col }}</th>
+                    {% for dose_key in active_dose_keys %}
+                        <th>{{ table_column_labels[dose_key] }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for vaccine_row in mandatory_vaccine_table_data %}
+                <tr>
+                    <td class="vaccine-name-cell">{{ vaccine_row.vaccine_display_name | safe }}</td>
+                    {% for dose_key in active_dose_keys %}
+                        <td class="date-cell">{{ vaccine_row.dose_dates[dose_key] | default('-', true) }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No mandatory vaccinations recorded.</p>
+    {% endif %}
+
+    <h3 class="vaccine-section-title recommended-vaccines-title-pdf">Recommended Vaccinations</h3>
+    {% if recommended_vaccine_table_data %}
+        <table class="vaccine-table">
+            <thead>
+                <tr>
+                    <th>{{ table_column_labels.vaccine_col }}</th>
+                    {% for dose_key in active_dose_keys %}
+                        <th>{{ table_column_labels[dose_key] }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for vaccine_row in recommended_vaccine_table_data %}
+                <tr>
+                    <td class="vaccine-name-cell">{{ vaccine_row.vaccine_display_name | safe }}</td>
+                    {% for dose_key in active_dose_keys %}
+                        <td class="date-cell">{{ vaccine_row.dose_dates[dose_key] | default('-', true) }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No recommended vaccinations recorded.</p>
+    {% endif %}
+
+    <h2 class="section-title">Consultation History</h2>
+    <div class="visits-history">
+        {% if visites %}
+            {% for visit in visites %}
+            <div class="visit-entry">
+                <span class="date">*{{ format_date_for_pdf(visit.visit_date, '%d-%m-%y') }}*</span>
+                <div class="notes">{{ visit.raw_visit_entry.split('*', 2)[-1] | trim if visit.raw_visit_entry else 'N/A' }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No consultation records found.</p>
+        {% endif %}
+    </div>
+
+    <div class="signature-section">
+        <p>Done in Beirut on {{ current_date }}</p>
+    </div>
+
+    {% if signature_image_url_for_pdf %}
+    <img src="{{ signature_image_url_for_pdf }}" class="signature-stamp-image" alt="Signature/Stamp">
+    {% endif %}
+
+    <div class="footer-content-for-pdf">
+        <p>
+            {% if physician.contact_line1 %}{{ physician.contact_line1 }}{% endif %}
+            {% if physician.contact_line1 and physician.contact_line2 %} - {% endif %}
+            {% if physician.contact_line2 %}{{ physician.contact_line2 }}{% endif %}
+            {% if footer_note and footer_note != "Footer note (Default)" %}
+                {% if physician.contact_line1 or physician.contact_line2 %} | {% endif %}
+                {{ footer_note }}
+            {% endif %}
+        </p>
+    </div>
+</body>
+</html> 
