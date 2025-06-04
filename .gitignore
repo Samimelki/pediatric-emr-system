@@ -1,0 +1,7 @@
+# Ignore patient records folder
+patient_records/
+Patient records/
+
+# Ignore build and dist folders
+build/
+dist/ 
