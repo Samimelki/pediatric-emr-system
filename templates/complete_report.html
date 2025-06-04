@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Patient Report</title>
+    <style>
+        @page {
+            margin: 2cm; 
+            margin-bottom: 3cm; /* Increased bottom margin for multi-line centered footer */
+
+            @bottom-center { 
+                content: element(pdf_footer_text) "\A Page " counter(page) " of " counter(pages);
+                vertical-align: bottom; 
+                padding-bottom: 0.5cm; 
+                font-size: 0.8em; 
+                line-height: 1.4; /* Increased line height for readability */
+                text-align: center;
+                white-space: pre-wrap; /* Allows \A to work for newlines */
+                /* Added for line above footer */
+                border-top: 1px solid #000;
+                padding-top: 0.3cm;
+            }
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0; 
+            padding: 0;
+        }
+        .physician-details { 
+            margin-bottom: 1cm; 
+        }
+        .report-title-header { 
+            text-align: center;
+            margin-bottom: 1.5cm; 
+        }
+        .patient-details {
+            margin-bottom: 1.5cm; 
+        }
+        .section {
+            margin-bottom: 1cm;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 0.5cm;
+            border-bottom: 1px solid #000;
+            padding-bottom: 0.2cm;
+        }
+        .visit {
+            margin-bottom: 1cm;
+            page-break-inside: avoid;
+        }
+        .visit-date {
+            font-weight: bold;
+        }
+        .vitals {
+            margin: 0.5cm 0;
+        }
+        .main-footer-content { /* This div defines the running element pdf_footer_text */
+            position: running(pdf_footer_text); 
+            text-align: center; /* Content within this div will be centered */
+            font-size: inherit; /* Inherits from @bottom-center */
+            line-height: inherit; /* Inherits from @bottom-center */
+        }
+        .signature-block { 
+            margin-top: 2cm; 
+            page-break-before: auto; 
+            text-align: right; 
+        }
+        .signature-block img { 
+            max-width: 150px; 
+        }
+        .signature-block p.generated-date {
+            text-align: right; /* Match signature alignment */
+            font-size: 0.8em; /* Smaller like footer text */
+            margin-bottom: 0.2cm; /* Space between date and signature image */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1cm;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 0.3cm;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        .notes {
+            margin: 0.5cm 0;
+        }
+        .addenda {
+            margin: 0.5cm 0;
+            font-size: 0.9em;
+        }
+        .addenda small {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-footer-content">
+        {% if footer_note %}{{ footer_note }}{% endif %}
+    </div>
+
+    <div class="physician-details">
+        <h2>{{ physician.name }}</h2>
+        <p>{{ physician.specialty }}</p>
+        <p>{{ physician.hospital_name }}</p>
+        <p>{{ physician.faculty_name }}</p>
+        <p>{{ physician.contact_line1 }}</p>
+        <p>{{ physician.contact_line2 }}</p>
+    </div>
+
+    <div class="report-title-header">
+        <h1>Complete Patient Report</h1>
+    </div>
+
+    <div class="patient-details">
+        <h3>Patient Information</h3>
+        <table>
+            <tr>
+                <th>MRN</th>
+                <td>{{ patient.mrn }}</td>
+                <th>Name</th>
+                <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+            </tr>
+            <tr>
+                <th>Date of Birth</th>
+                <td>{{ patient.date_of_birth }}</td>
+                <th>Gender</th>
+                <td>{{ patient.sexe }}</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td colspan="3">{{ patient.address }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ patient.phone }}</td>
+                <th>Email</th>
+                <td>{{ patient.email }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3 class="section-title">Medical History</h3>
+        <table>
+            <tr>
+                <th>Past Medical History</th>
+                <td>{{ patient.pmh or 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Past Surgical History</th>
+                <td>{{ patient.psh or 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Family History</th>
+                <td>{{ patient.family_history or 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Medications</th>
+                <td>{{ patient.medications or 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Allergies</th>
+                <td>{{ patient.allergies or 'N/A' }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3 class="section-title">Visit History</h3>
+        {% for visit in visites %}
+        <div class="visit">
+            <div class="visit-date">
+                Visit Date: {{ visit.visit_date }}
+                {% if visit.age_at_visit != "N/A" %}
+                    (Age: {{ visit.age_at_visit }})
+                {% endif %}
+            </div>
+            
+            {% if visit.vital_signs %}
+            <div class="vitals">
+                <strong>Vital Signs:</strong>
+                <ul>
+                    {% if visit.vital_signs.weight_kg %}
+                        <li>Weight: {{ visit.vital_signs.weight_kg }} kg</li>
+                    {% endif %}
+                    {% if visit.vital_signs.bp %}
+                        <li>Blood Pressure: {{ visit.vital_signs.bp }}</li>
+                    {% endif %}
+                    {% if visit.vital_signs.temperature %}
+                        <li>Temperature: {{ visit.vital_signs.temperature }}°C</li>
+                    {% endif %}
+                    {% if visit.vital_signs.hr %}
+                        <li>Heart Rate: {{ visit.vital_signs.hr }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <div class="notes">
+                <strong>Notes:</strong>
+                <p>{{ visit.notes or 'No specific notes for this visit.' }}</p>
+            </div>
+
+            {% if visit.addenda %}
+            <div class="addenda">
+                <strong>Addenda:</strong>
+                <ul>
+                    {% for addendum in visit.addenda %}
+                    <li>
+                        <small>({{ addendum.addendum_datetime }})</small>
+                        <p>{{ addendum.addendum_text }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if signature_image_url_for_pdf or current_date %}
+    <div class="signature-block">
+        {% if current_date %}<p class="generated-date">{{ current_date }}</p>{% endif %}
+        {% if signature_image_url_for_pdf %}
+        <img src="{{ signature_image_url_for_pdf }}" alt="Signature">
+        {% endif %}
+    </div>
+    {% endif %}
+
+</body>
+</html> 
