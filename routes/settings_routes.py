@@ -3,10 +3,9 @@ from database import get_custom_demographic_fields, add_custom_demographic_field
 import os
 import json
 from werkzeug.utils import secure_filename
-from routes.pdf_export_routes import load_pdf_config, clear_pdf_config_cache, DEFAULT_PDF_CONFIG
 from datetime import datetime
 import shutil
-from config_manager import save_config, load_config, USER_MEDIA_FOLDER
+from config_manager import save_config, load_config, USER_MEDIA_FOLDER, DEFAULT_PDF_CONFIG
 
 settings_bp = Blueprint('settings', __name__, url_prefix='/settings')
 
@@ -14,21 +13,22 @@ settings_bp = Blueprint('settings', __name__, url_prefix='/settings')
 ALLOWED_SIGNATURE_EXTENSIONS = {'png'}
 SIGNATURE_FILENAME = "signature_stamp.png" # Fixed filename for the signature
 
+ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg'} # Combined for logo and signature
+
 def allowed_file(filename, allowed_extensions):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
 @settings_bp.route('/pdf', methods=['GET', 'POST'])
 def manage_pdf_settings():
-    config_path = os.path.join(current_app.root_path, 'pdf_config.json')
-    user_media_folder = current_app.config['USER_MEDIA_FOLDER']
+    app_config = load_config() # Load main application config
+    # Ensure pdf_settings exists, initialized with defaults if not (handled by load_config)
+    pdf_settings = app_config.setdefault('pdf_settings', DEFAULT_PDF_CONFIG.copy()) 
 
     if request.method == 'POST':
-        current_config = load_pdf_config(force_reload=True) # Load fresh before modifying
-        
         # Update physician details and footers
         for lang_key in ['fr', 'en']:
-            current_config[f'physician_details_{lang_key}'] = {
+            pdf_settings[f'physician_details_{lang_key}'] = {
                 "name": request.form.get(f'physician_name_{lang_key}', DEFAULT_PDF_CONFIG[f'physician_details_{lang_key}']['name']),
                 "specialty": request.form.get(f'physician_specialty_{lang_key}', DEFAULT_PDF_CONFIG[f'physician_details_{lang_key}']['specialty']),
                 "hospital_name": request.form.get(f'physician_hospital_{lang_key}', DEFAULT_PDF_CONFIG[f'physician_details_{lang_key}']['hospital_name']),
@@ -36,67 +36,108 @@ def manage_pdf_settings():
                 "contact_line1": request.form.get(f'physician_contact1_{lang_key}', DEFAULT_PDF_CONFIG[f'physician_details_{lang_key}']['contact_line1']),
                 "contact_line2": request.form.get(f'physician_contact2_{lang_key}', DEFAULT_PDF_CONFIG[f'physician_details_{lang_key}']['contact_line2'])
             }
-            current_config[f'footer_note_{lang_key}'] = request.form.get(f'footer_note_{lang_key}', DEFAULT_PDF_CONFIG[f'footer_note_{lang_key}'])
+            pdf_settings[f'footer_note_{lang_key}'] = request.form.get(f'footer_note_{lang_key}', DEFAULT_PDF_CONFIG[f'footer_note_{lang_key}'])
 
-        # Handle signature image upload
-        if 'signature_image' in request.files:
-            file = request.files['signature_image']
-            if file and file.filename != '' and allowed_file(file.filename, ALLOWED_SIGNATURE_EXTENSIONS):
-                # filename = secure_filename(file.filename) # We'll use a fixed name
-                save_path = os.path.join(user_media_folder, SIGNATURE_FILENAME)
+        # Update Report Titles
+        pdf_settings['report_title_en'] = request.form.get('report_title_en', DEFAULT_PDF_CONFIG['report_title_en'])
+        pdf_settings['report_title_fr'] = request.form.get('report_title_fr', DEFAULT_PDF_CONFIG['report_title_fr'])
+
+        # Update footer alignment
+        pdf_settings['footer_alignment'] = request.form.get('footer_alignment', DEFAULT_PDF_CONFIG.get('footer_alignment', 'center')) # Ensure fallback if key missing in new DEFAULT_PDF_CONFIG
+
+        # Handle Logo Image
+        if request.form.get('remove_logo') == 'true':
+            old_logo_filename = pdf_settings.get('logo_image_filename')
+            if old_logo_filename:
                 try:
-                    file.save(save_path)
-                    current_config['signature_image_filename'] = SIGNATURE_FILENAME
+                    os.remove(os.path.join(USER_MEDIA_FOLDER, old_logo_filename))
+                    flash('Logo image removed.', 'success')
+                except OSError as e:
+                    flash(f'Error removing logo image file: {e}', 'danger')
+            pdf_settings['logo_image_filename'] = None
+        elif 'logo_image' in request.files:
+            file = request.files['logo_image']
+            if file and file.filename != '' and allowed_file(file.filename, ALLOWED_IMAGE_EXTENSIONS):
+                # Remove old logo if it exists and has a different extension or just to replace
+                old_logo_filename = pdf_settings.get('logo_image_filename')
+                if old_logo_filename:
+                    try:
+                        os.remove(os.path.join(USER_MEDIA_FOLDER, old_logo_filename))
+                    except OSError:
+                        pass # Ignore if old file cannot be removed
+                
+                ext = file.filename.rsplit('.', 1)[1].lower()
+                new_logo_filename = f"logo_image.{ext}"
+                try:
+                    file.save(os.path.join(USER_MEDIA_FOLDER, new_logo_filename))
+                    pdf_settings['logo_image_filename'] = new_logo_filename
+                    flash('Logo image uploaded successfully.', 'success')
+                except Exception as e:
+                    flash(f'Error saving logo image: {e}', 'danger')
+            elif file.filename != '':
+                flash(f'Invalid file type for logo. Allowed: {", ".join(ALLOWED_IMAGE_EXTENSIONS)}', 'danger')
+
+        # Handle Signature Image (similar to logo)
+        if request.form.get('remove_signature') == 'true': # Name from pdf_settings.html was 'remove_signature'
+            old_sig_filename = pdf_settings.get('signature_image_filename')
+            if old_sig_filename:
+                try:
+                    os.remove(os.path.join(USER_MEDIA_FOLDER, old_sig_filename))
+                    flash('Signature image removed.', 'success')
+                except OSError as e:
+                    flash(f'Error removing signature image file: {e}', 'danger')
+            pdf_settings['signature_image_filename'] = None
+        elif 'signature_image' in request.files:
+            file = request.files['signature_image']
+            if file and file.filename != '' and allowed_file(file.filename, ALLOWED_IMAGE_EXTENSIONS):
+                old_sig_filename = pdf_settings.get('signature_image_filename')
+                if old_sig_filename:
+                    try:
+                        os.remove(os.path.join(USER_MEDIA_FOLDER, old_sig_filename))
+                    except OSError:
+                        pass
+                
+                ext = file.filename.rsplit('.', 1)[1].lower()
+                new_sig_filename = f"signature_stamp.{ext}" # Keep original naming convention somewhat
+                try:
+                    file.save(os.path.join(USER_MEDIA_FOLDER, new_sig_filename))
+                    pdf_settings['signature_image_filename'] = new_sig_filename
                     flash('Signature image uploaded successfully.', 'success')
                 except Exception as e:
                     flash(f'Error saving signature image: {e}', 'danger')
-            elif file.filename != '': # File was selected but not allowed type
-                flash(f'Invalid file type for signature. Only PNG is allowed.', 'danger')
-        
-        # Handle signature image removal
-        if request.form.get('remove_signature_image') == '1':
-            current_signature_file = current_config.get('signature_image_filename', '')
-            if current_signature_file:
-                file_to_delete = os.path.join(user_media_folder, current_signature_file)
-                if os.path.exists(file_to_delete):
-                    try:
-                        os.remove(file_to_delete)
-                        flash('Signature image removed.', 'success')
-                    except Exception as e:
-                        flash(f'Error removing signature image file: {e}', 'danger')
-                else:
-                    flash('Signature image file not found for removal, but config cleared.', 'info')
-                current_config['signature_image_filename'] = ''
+            elif file.filename != '':
+                 flash(f'Invalid file type for signature. Allowed: {", ".join(ALLOWED_IMAGE_EXTENSIONS)}', 'danger')
 
-        # Save updated config
-        try:
-            with open(config_path, 'w', encoding='utf-8') as f_save:
-                json.dump(current_config, f_save, indent=4, ensure_ascii=False)
-            clear_pdf_config_cache() # Important to clear cache so next load gets fresh data
+        app_config['pdf_settings'] = pdf_settings # Assign updated pdf_settings back to main config
+        if save_config(app_config):
             flash('PDF settings updated successfully.', 'success')
-        except Exception as e:
-            flash(f'Error saving PDF settings: {e}', 'danger')
+        else:
+            flash('Error saving PDF settings.', 'danger')
         
         return redirect(url_for('settings.manage_pdf_settings'))
 
     # GET request: Load current config and display form
-    current_config = load_pdf_config()
+    # app_config is already loaded, pdf_settings is extracted
     signature_image_url = None
-    cache_buster = None # Initialize cache_buster
-    if current_config.get('signature_image_filename'):
-        user_media_folder = current_app.config['USER_MEDIA_FOLDER'] # Define here for GET path
-        potential_path = os.path.join(user_media_folder, current_config['signature_image_filename'])
-        if os.path.exists(potential_path):
-            signature_image_url = url_for('settings.get_user_media_file', filename=current_config['signature_image_filename'])
-            # Use datetime from the standard library for timestamp
-            cache_buster = datetime.now().timestamp()
+    logo_image_url = None
+    cache_buster = str(datetime.now().timestamp()) # Ensure it's always set
 
+    if pdf_settings.get('signature_image_filename'):
+        if os.path.exists(os.path.join(USER_MEDIA_FOLDER, pdf_settings['signature_image_filename'])):
+            signature_image_url = url_for('settings.get_user_media_file', filename=pdf_settings['signature_image_filename']) + "?v=" + cache_buster
+
+    if pdf_settings.get('logo_image_filename'):
+        if os.path.exists(os.path.join(USER_MEDIA_FOLDER, pdf_settings['logo_image_filename'])):
+            logo_image_url = url_for('settings.get_user_media_file', filename=pdf_settings['logo_image_filename']) + "?v=" + cache_buster
+    
+    # Pass the main app_config and the specific pdf_settings part, plus defaults for pdf_settings
     return render_template('settings/pdf_settings.html', 
                            title='PDF Export Settings', 
-                           config=current_config, 
-                           default_config=DEFAULT_PDF_CONFIG,
+                           config=app_config,  # For base.html or other general settings
+                           pdf_settings=pdf_settings, # For direct access to PDF specific settings
+                           default_pdf_config=DEFAULT_PDF_CONFIG, # For default values in the form
                            signature_image_url=signature_image_url,
-                           cache_buster=cache_buster) # Pass cache_buster
+                           logo_image_url=logo_image_url)
 
 # Route to serve files from USER_MEDIA_FOLDER (e.g., signature image for preview on settings page)
 @settings_bp.route('/user_media/<path:filename>')

@@ -3,65 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complete Patient Report</title>
+    <title>{{ report_title or 'Patient Report' }}</title>
     <style>
         @page {
-            margin: 2cm; 
-            margin-bottom: 3cm; /* Increased bottom margin for multi-line centered footer */
-
-            @bottom-center { 
-                content: element(pdf_footer_text) "\A Page " counter(page) " of " counter(pages);
+            margin: 2cm; /* Standard page margins */
+            margin-bottom: 2.5cm;
+            /* Define all footer boxes */
+            @bottom-left {
+                {% if footer_alignment == 'left' %}
+                  {% if footer_note %}
+                    content: element(pdf_footer_text) "\A Page " counter(page) " of " counter(pages);
+                  {% else %}
+                    content: "Page " counter(page) " of " counter(pages);
+                  {% endif %}
+                {% else %}
+                  content: none;
+                {% endif %}
                 vertical-align: bottom; 
                 padding-bottom: 0.5cm; 
                 font-size: 0.8em; 
-                line-height: 1.4; /* Increased line height for readability */
+                line-height: 1.4; 
+                text-align: left;
+                white-space: pre-wrap; 
+                border-top: 1px solid #000;
+                padding-top: 0.3cm;
+            }
+            @bottom-center { 
+                {% if footer_alignment == 'center' or footer_alignment is not defined %}
+                  {% if footer_note %}
+                    content: element(pdf_footer_text) "\A Page " counter(page) " of " counter(pages);
+                  {% else %}
+                    content: "Page " counter(page) " of " counter(pages);
+                  {% endif %}
+                {% else %}
+                  content: none;
+                {% endif %}
+                vertical-align: bottom; 
+                padding-bottom: 0.5cm; 
+                font-size: 0.8em; 
+                line-height: 1.4; 
                 text-align: center;
-                white-space: pre-wrap; /* Allows \A to work for newlines */
-                /* Added for line above footer */
+                white-space: pre-wrap; 
+                border-top: 1px solid #000;
+                padding-top: 0.3cm;
+            }
+            @bottom-right {
+                {% if footer_alignment == 'right' %}
+                  {% if footer_note %}
+                    content: element(pdf_footer_text) "\A Page " counter(page) " of " counter(pages);
+                  {% else %}
+                    content: "Page " counter(page) " of " counter(pages);
+                  {% endif %}
+                {% else %}
+                  content: none;
+                {% endif %}
+                vertical-align: bottom; 
+                padding-bottom: 0.5cm; 
+                font-size: 0.8em; 
+                line-height: 1.4; 
+                text-align: right;
+                white-space: pre-wrap; 
                 border-top: 1px solid #000;
                 padding-top: 0.3cm;
             }
         }
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial, sans-serif; /* Consider alternatives if available and desired e.g., Helvetica, Calibri */
             line-height: 1.6;
-            margin: 0; 
+            margin: 0;
             padding: 0;
+            color: #333; /* Darker grey for text instead of pure black */
         }
-        .physician-details { 
-            margin-bottom: 1cm; 
+
+        /* New Header Structure */
+        .report-main-header {
+            display: flex;
+            justify-content: space-between; /* Physician left, Logo right */
+            align-items: flex-start; /* Align items to the top of the flex container */
+            margin-bottom: 1.5cm; /* Space before the main report title */
+            /* Removed padding-top, page margin will handle top spacing */
         }
-        .report-title-header { 
-            text-align: center;
-            margin-bottom: 1.5cm; 
+
+        .physician-details-container {
+            flex: 1; /* Allows physician details to take available space */
+            text-align: left; /* Fixed */
         }
+        /* physician-details class can still style the h2, p tags if needed, but not for layout here */
+        .physician-details h2 {
+            font-size: 1.5em;
+            margin-top: 0; /* Remove top margin if any from h2 */
+            margin-bottom: 0.1em;
+        }
+        .physician-details p {
+            margin-bottom: 0.2em;
+            font-size: 0.9em;
+        }
+        .physician-details p:last-child { margin-bottom: 0; }
+
+        .logo-image-container {
+            text-align: right; /* Fixed */
+            margin-left: 20px; /* Space between physician details and logo */
+        }
+        .logo-image-container img {
+            max-height: 2.5cm; /* Adjust as needed */
+            max-width: 250px; /* Max width for the logo */
+            object-fit: contain;
+        }
+        /* END New Header Structure */
+
+        .main-report-title-block {
+            text-align: center; /* Fixed */
+            margin-top: 1cm;
+            margin-bottom: 1.5cm;
+        }
+        .main-report-title-block h1 {
+            font-size: 2em;
+            color: #111;
+            margin: 0;
+        }
+
         .patient-details {
             margin-bottom: 1.5cm; 
         }
         .section {
-            margin-bottom: 1cm;
+            margin-bottom: 1.5cm; /* Increased space between sections */
         }
         .section-title {
             font-weight: bold;
-            margin-bottom: 0.5cm;
-            border-bottom: 1px solid #000;
-            padding-bottom: 0.2cm;
+            font-size: 1.3em; /* Larger section titles */
+            margin-bottom: 0.8cm; /* More space after title */
+            border-bottom: 2px solid #555; /* More prominent border */
+            padding-bottom: 0.4cm; /* More padding below text, above border */
+            color: #222;
         }
         .visit {
-            margin-bottom: 1cm;
+            margin-bottom: 1.2cm;
             page-break-inside: avoid;
+            border-top: 1px solid #eee; /* Light separator for visits */
+            padding-top: 1cm; /* Space above visit content */
+        }
+        .visit:first-child {
+            border-top: none; /* No top border for the very first visit */
+            padding-top: 0;
         }
         .visit-date {
             font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 0.5cm;
+            color: #444;
         }
         .vitals {
             margin: 0.5cm 0;
         }
-        .main-footer-content { /* This div defines the running element pdf_footer_text */
+        .main-footer-content { 
             position: running(pdf_footer_text); 
-            text-align: center; /* Content within this div will be centered */
-            font-size: inherit; /* Inherits from @bottom-center */
-            line-height: inherit; /* Inherits from @bottom-center */
+            font-size: inherit; 
+            line-height: inherit; 
         }
         .signature-block { 
             margin-top: 2cm; 
@@ -72,32 +169,41 @@
             max-width: 150px; 
         }
         .signature-block p.generated-date {
-            text-align: right; /* Match signature alignment */
-            font-size: 0.8em; /* Smaller like footer text */
-            margin-bottom: 0.2cm; /* Space between date and signature image */
+            text-align: right;
+            font-size: 0.8em; 
+            margin-bottom: 0.2cm; 
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 1cm;
+            font-size: 0.9em; 
         }
         th, td {
-            border: 1px solid #000;
-            padding: 0.3cm;
+            border: 1px solid #ccc; 
+            padding: 0.5cm; 
             text-align: left;
+            vertical-align: top; 
         }
         th {
-            background-color: #f0f0f0;
+            background-color: #f7f7f7; 
+            font-weight: bold; 
+            text-align: left; 
         }
         .notes {
-            margin: 0.5cm 0;
+            margin: 0.8cm 0; 
         }
         .addenda {
-            margin: 0.5cm 0;
+            margin: 0.8cm 0;
             font-size: 0.9em;
         }
         .addenda small {
-            color: #666;
+            color: #555; 
+            display: block; 
+            margin-bottom: 0.2em;
+        }
+        .addenda p {
+            margin-top: 0; 
         }
     </style>
 </head>
@@ -106,17 +212,30 @@
         {% if footer_note %}{{ footer_note }}{% endif %}
     </div>
 
-    <div class="physician-details">
-        <h2>{{ physician.name }}</h2>
-        <p>{{ physician.specialty }}</p>
-        <p>{{ physician.hospital_name }}</p>
-        <p>{{ physician.faculty_name }}</p>
-        <p>{{ physician.contact_line1 }}</p>
-        <p>{{ physician.contact_line2 }}</p>
+    <div class="report-main-header">
+        <div class="physician-details-container">
+            <div class="physician-details"> {# Keep this class for text styling of h2, p #}
+                <h2>{{ physician.name }}</h2>
+                <p>{{ physician.specialty }}</p>
+                <p>{{ physician.hospital_name }}</p>
+                <p>{{ physician.faculty_name }}</p>
+                {% if physician.contact_line1 and physician.contact_line1 != default_physician_details_en_for_template.contact_line1 %}
+                <p>{{ physician.contact_line1 }}</p>
+                {% endif %}
+                {% if physician.contact_line2 and physician.contact_line2 != default_physician_details_en_for_template.contact_line2 %}
+                <p>{{ physician.contact_line2 }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% if logo_image_url_for_pdf %}
+        <div class="logo-image-container">
+            <img src="{{ logo_image_url_for_pdf }}" alt="Logo">
+        </div>
+        {% endif %}
     </div>
 
-    <div class="report-title-header">
-        <h1>Complete Patient Report</h1>
+    <div class="main-report-title-block">
+        <h1>{{ report_title | default('Complete Medical Report') }}</h1>
     </div>
 
     <div class="patient-details">
@@ -130,7 +249,7 @@
             </tr>
             <tr>
                 <th>Date of Birth</th>
-                <td>{{ patient.date_of_birth }}</td>
+                <td>{{ patient.dob }}</td> {# Assuming dob is now passed directly formatted #}
                 <th>Gender</th>
                 <td>{{ patient.sexe }}</td>
             </tr>
@@ -188,18 +307,10 @@
             <div class="vitals">
                 <strong>Vital Signs:</strong>
                 <ul>
-                    {% if visit.vital_signs.weight_kg %}
-                        <li>Weight: {{ visit.vital_signs.weight_kg }} kg</li>
-                    {% endif %}
-                    {% if visit.vital_signs.bp %}
-                        <li>Blood Pressure: {{ visit.vital_signs.bp }}</li>
-                    {% endif %}
-                    {% if visit.vital_signs.temperature %}
-                        <li>Temperature: {{ visit.vital_signs.temperature }}°C</li>
-                    {% endif %}
-                    {% if visit.vital_signs.hr %}
-                        <li>Heart Rate: {{ visit.vital_signs.hr }}</li>
-                    {% endif %}
+                    {% if visit.vital_signs.weight_kg %}<li>Weight: {{ visit.vital_signs.weight_kg }} kg</li>{% endif %}
+                    {% if visit.vital_signs.bp %}<li>Blood Pressure: {{ visit.vital_signs.bp }}</li>{% endif %}
+                    {% if visit.vital_signs.temperature %}<li>Temperature: {{ visit.vital_signs.temperature }}°C</li>{% endif %}
+                    {% if visit.vital_signs.hr %}<li>Heart Rate: {{ visit.vital_signs.hr }}</li>{% endif %}
                 </ul>
             </div>
             {% endif %}

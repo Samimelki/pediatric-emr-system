@@ -9,57 +9,104 @@
 
     <form method="POST" action="{{ url_for('settings.manage_pdf_settings') }}" enctype="multipart/form-data">
         
+        {# Report Titles - Moved to top for better flow #}
+        <fieldset class="mb-4">
+            <legend>Report Customization</legend>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="report_title_en" class="form-label">Default Report Title (English)</label>
+                    <input type="text" class="form-control" id="report_title_en" name="report_title_en" value="{{ config.pdf_settings.report_title_en | default(default_pdf_config.report_title_en, true) }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="report_title_fr" class="form-label">Default Report Title (French)</label>
+                    <input type="text" class="form-control" id="report_title_fr" name="report_title_fr" value="{{ config.pdf_settings.report_title_fr | default(default_pdf_config.report_title_fr, true) }}">
+                </div>
+            </div>
+        </fieldset>
+
         {% for lang_code, lang_name in [('fr', 'French'), ('en', 'English')] %}
         <fieldset class="mb-4">
-            <legend>{{ lang_name }} Details</legend>
+            <legend>Physician Details ({{ lang_name }})</legend>
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="physician_name_{{ lang_code }}" class="form-label">Physician Name</label>
-                    <input type="text" class="form-control" id="physician_name_{{ lang_code }}" name="physician_name_{{ lang_code }}" value="{{ config['physician_details_' + lang_code].name | default(default_config['physician_details_' + lang_code].name, true) }}">
+                    <input type="text" class="form-control" id="physician_name_{{ lang_code }}" name="physician_name_{{ lang_code }}" value="{{ config.pdf_settings['physician_details_' + lang_code].name | default(default_pdf_config['physician_details_' + lang_code].name, true) }}">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="physician_specialty_{{ lang_code }}" class="form-label">Specialty</label>
-                    <input type="text" class="form-control" id="physician_specialty_{{ lang_code }}" name="physician_specialty_{{ lang_code }}" value="{{ config['physician_details_' + lang_code].specialty | default(default_config['physician_details_' + lang_code].specialty, true) }}">
+                    <input type="text" class="form-control" id="physician_specialty_{{ lang_code }}" name="physician_specialty_{{ lang_code }}" value="{{ config.pdf_settings['physician_details_' + lang_code].specialty | default(default_pdf_config['physician_details_' + lang_code].specialty, true) }}">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="physician_hospital_{{ lang_code }}" class="form-label">Hospital/Clinic Name</label>
-                    <input type="text" class="form-control" id="physician_hospital_{{ lang_code }}" name="physician_hospital_{{ lang_code }}" value="{{ config['physician_details_' + lang_code].hospital_name | default(default_config['physician_details_' + lang_code].hospital_name, true) }}">
+                    <input type="text" class="form-control" id="physician_hospital_{{ lang_code }}" name="physician_hospital_{{ lang_code }}" value="{{ config.pdf_settings['physician_details_' + lang_code].hospital_name | default(default_pdf_config['physician_details_' + lang_code].hospital_name, true) }}">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="physician_faculty_{{ lang_code }}" class="form-label">Faculty/University Name</label>
-                    <input type="text" class="form-control" id="physician_faculty_{{ lang_code }}" name="physician_faculty_{{ lang_code }}" value="{{ config['physician_details_' + lang_code].faculty_name | default(default_config['physician_details_' + lang_code].faculty_name, true) }}">
+                    <input type="text" class="form-control" id="physician_faculty_{{ lang_code }}" name="physician_faculty_{{ lang_code }}" value="{{ config.pdf_settings['physician_details_' + lang_code].faculty_name | default(default_pdf_config['physician_details_' + lang_code].faculty_name, true) }}">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="physician_contact1_{{ lang_code }}" class="form-label">Contact Line 1</label>
-                    <input type="text" class="form-control" id="physician_contact1_{{ lang_code }}" name="physician_contact1_{{ lang_code }}" value="{{ config['physician_details_' + lang_code].contact_line1 | default(default_config['physician_details_' + lang_code].contact_line1, true) }}">
+                    <input type="text" class="form-control" id="physician_contact1_{{ lang_code }}" name="physician_contact1_{{ lang_code }}" value="{{ config.pdf_settings['physician_details_' + lang_code].contact_line1 | default(default_pdf_config['physician_details_' + lang_code].contact_line1, true) }}">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="physician_contact2_{{ lang_code }}" class="form-label">Contact Line 2</label>
-                    <input type="text" class="form-control" id="physician_contact2_{{ lang_code }}" name="physician_contact2_{{ lang_code }}" value="{{ config['physician_details_' + lang_code].contact_line2 | default(default_config['physician_details_' + lang_code].contact_line2, true) }}">
+                    <input type="text" class="form-control" id="physician_contact2_{{ lang_code }}" name="physician_contact2_{{ lang_code }}" value="{{ config.pdf_settings['physician_details_' + lang_code].contact_line2 | default(default_pdf_config['physician_details_' + lang_code].contact_line2, true) }}">
                 </div>
             </div>
             <div class="mb-3">
-                <label for="footer_note_{{ lang_code }}" class="form-label">Footer Note</label>
-                <textarea class="form-control" id="footer_note_{{ lang_code }}" name="footer_note_{{ lang_code }}" rows="2">{{ config['footer_note_' + lang_code] | default(default_config['footer_note_' + lang_code], true) }}</textarea>
+                <label for="footer_note_{{ lang_code }}" class="form-label">Footer Note (Contact Info for Footer)</label>
+                <textarea class="form-control" id="footer_note_{{ lang_code }}" name="footer_note_{{ lang_code }}" rows="2">{{ config.pdf_settings['footer_note_' + lang_code] | default(default_pdf_config['footer_note_' + lang_code], true) }}</textarea>
             </div>
         </fieldset>
         {% endfor %}
 
         <fieldset class="mb-4">
-            <legend>Signature/Stamp Image (PNG)</legend>
-            <div class="form-group">
-                <label for="signature_image">Upload New Signature/Stamp Image (Optional, .png, .jpg, .jpeg)</label>
-                <input type="file" class="form-control-file" id="signature_image" name="signature_image" accept=".png,.jpg,.jpeg">
-                {% if current_signature_filename %}
-                    <p class="mt-2">Current file: {{ current_signature_filename }} 
-                        <button type="submit" name="remove_signature" value="true" class="btn btn-sm btn-danger ml-2">Remove Current</button>
+            <legend>Logo Image (PNG, JPG, JPEG)</legend>
+            <div class="form-group mb-3">
+                <label for="logo_image">Upload New Logo Image (Optional)</label>
+                <input type="file" class="form-control-file" id="logo_image" name="logo_image" accept=".png,.jpg,.jpeg">
+                {% if config.pdf_settings.logo_image_filename %}
+                    <p class="mt-2">Current file: {{ config.pdf_settings.logo_image_filename }} 
+                        <button type="submit" name="remove_logo" value="true" class="btn btn-sm btn-danger ml-2">Remove Current Logo</button>
                     </p>
-                    {% if signature_image_url %}
-                        <img src="{{ signature_image_url }}" alt="Current Signature/Stamp" class="signature-preview-img">
+                    {% if logo_image_url %}
+                        <img src="{{ logo_image_url }}" alt="Current Logo" class="img-thumbnail mt-2" style="max-height: 100px;">
+                    {% endif %}
+                {% else %}
+                    <p class="mt-2">No logo image currently uploaded.</p>
+                {% endif %}
+            </div>
+        </fieldset>
+        
+        <fieldset class="mb-4">
+            <legend>Alignment Settings</legend>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="footer_alignment" class="form-label">Footer Text Alignment</label>
+                    <select class="form-select" id="footer_alignment" name="footer_alignment">
+                        <option value="left" {% if config.pdf_settings.footer_alignment == 'left' or (not config.pdf_settings.footer_alignment and default_pdf_config.get('footer_alignment') == 'left') %}selected{% endif %}>Left</option>
+                        <option value="center" {% if config.pdf_settings.footer_alignment == 'center' or (not config.pdf_settings.footer_alignment and default_pdf_config.get('footer_alignment') == 'center') %}selected{% endif %}>Center</option>
+                        <option value="right" {% if config.pdf_settings.footer_alignment == 'right' or (not config.pdf_settings.footer_alignment and default_pdf_config.get('footer_alignment') == 'right') %}selected{% endif %}>Right</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="mb-4">
+            <legend>Signature/Stamp Image (PNG, JPG, JPEG)</legend>
+            <div class="form-group">
+                <label for="signature_image">Upload New Signature/Stamp Image (Optional)</label>
+                <input type="file" class="form-control-file" id="signature_image" name="signature_image" accept=".png,.jpg,.jpeg">
+                {% if config.pdf_settings.signature_image_filename %}
+                    <p class="mt-2">Current file: {{ config.pdf_settings.signature_image_filename }} 
+                        <button type="submit" name="remove_signature" value="true" class="btn btn-sm btn-danger ml-2">Remove Current Signature</button>
+                    </p>
+                    {% if signature_image_url %} {# This is passed from the route #}
+                        <img src="{{ signature_image_url }}" alt="Current Signature/Stamp" class="img-thumbnail mt-2" style="max-height: 100px;">
                     {% endif %}
                 {% else %}
                     <p class="mt-2">No signature/stamp image currently uploaded.</p>
@@ -72,4 +119,12 @@
         <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
+<style>
+    .img-thumbnail {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        background-color: #fff;
+    }
+</style>
 {% endblock %} 
