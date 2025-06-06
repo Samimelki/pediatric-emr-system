@@ -46,6 +46,8 @@
                         Tools & Settings
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="toolsDropdown">
+                        <a class="dropdown-item {% if request.endpoint == 'emr_settings.emr_configuration' %}active{% endif %}" href="{{ url_for('emr_settings.emr_configuration') }}"><i class="fas fa-cogs"></i> EMR Configuration</a>
+                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item {% if request.endpoint == 'admin.import_xml_data' %}active{% endif %}" href="{{ url_for('admin.import_xml_data') }}"><i class="fas fa-file-import"></i> Import Medical Records</a>
                         <a class="dropdown-item {% if request.endpoint == 'settings.manage_pdf_settings' %}active{% endif %}" href="{{ url_for('settings.manage_pdf_settings') }}"><i class="fas fa-file-pdf"></i> PDF Export Settings</a>
                         <a class="dropdown-item {% if request.endpoint == 'settings.manage_custom_fields' %}active{% endif %}" href="{{ url_for('settings.manage_custom_fields') }}"><i class="fas fa-user-cog"></i> Custom Patient Fields</a>

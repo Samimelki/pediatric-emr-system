@@ -4,6 +4,8 @@ import math
 from datetime import datetime, date
 from collections import defaultdict
 from database import get_db, get_active_custom_demographic_fields
+from unified_database import get_patient_unified_data, save_patient_unified, get_visit_unified_data
+from emr_config import emr_config, EMRMode
 from dateutil.relativedelta import relativedelta
 import json
 from config_manager import load_config, USER_MEDIA_FOLDER
@@ -335,7 +337,18 @@ def edit_demographics(patient_id):
 
 @patient_bp.route('/new', methods=['GET'])
 def add_patient_form():
-    return render_template('add_patient.html', title='Add New Patient')
+    # Get current EMR configuration
+    emr_mode = emr_config.get_emr_mode()
+    emr_features = emr_config.get_enabled_features()
+    
+    # Get custom fields for the current mode
+    custom_fields = get_active_custom_demographic_fields()
+    
+    return render_template('unified_add_patient.html', 
+                         title='Add New Patient',
+                         emr_mode=emr_mode,
+                         emr_features=emr_features,
+                         custom_fields=custom_fields)
 
 @patient_bp.route('/add', methods=['POST'])
 def add_patient_submit():
@@ -347,49 +360,117 @@ def add_patient_submit():
         new_mrn_int = 1 if max_mrn_val is None else int(max_mrn_val) + 1
         new_mrn = str(new_mrn_int).zfill(5)
 
+        # Get current EMR mode to determine field mapping
+        emr_mode = emr_config.get_emr_mode()
+        
+        # Build form data with unified field mapping
         form_data = {
             'mrn': new_mrn,
-            'first_name': request.form.get('first_name'),
-            'last_name': request.form.get('last_name'),
-            'date_of_birth': request.form.get('date_of_birth') or None,
-            'sex': request.form.get('sex') or None,
-            'phone': request.form.get('phone') or None,
-            'address': request.form.get('address') or None,
-            'email': request.form.get('email') or None,
-            'insurance': request.form.get('insurance') or None,
-            'primary_physician': request.form.get('primary_physician') or None,
-            'pmh': request.form.get('pmh') or None,
-            'psh': request.form.get('psh') or None,
-            'medications': request.form.get('medications') or None,
-            'allergies': request.form.get('allergies') or None,
-            'smoker': request.form.get('smoker') == 'true',
-            'smoker_details': request.form.get('smoker_details') or None,
-            'alcohol': request.form.get('alcohol') == 'true',
-            'alcohol_details': request.form.get('alcohol_details') or None,
+            'emr_mode': emr_mode.value,
+            'created_date': datetime.now().isoformat(),
+            'modified_date': datetime.now().isoformat(),
             'raw_dossier_text': request.form.get('raw_dossier_text') or None
         }
-
-        if not form_data['last_name'] or not form_data['first_name']:
-            flash('First name and Last name are required.', 'danger')
-            return redirect(url_for('patient.add_patient_form'))
-
-        # Use DatabaseOperations to create the patient and Word document
-        from database_operations import DatabaseOperations
         
-        config = load_config()
-        db_ops = DatabaseOperations(
-            db_path=config['database_path'],
-            documents_folder=config['word_docs_folder']
-        )
+        # Core demographic fields (adapt based on mode)
+        if emr_mode == EMRMode.PEDIATRIC:
+            form_data.update({
+                'prenom': request.form.get('prenom'),
+                'nom': request.form.get('nom'),
+                'naissance_date': request.form.get('naissance_date') or None,
+                'sexe': request.form.get('sexe') or None,
+                'telephone': request.form.get('telephone') or None,
+                'domicile': request.form.get('domicile') or None
+            })
+            # Validate required pediatric fields
+            if not form_data['nom'] or not form_data['prenom']:
+                flash('Nom et prénom sont obligatoires.', 'danger')
+                return redirect(url_for('patient.add_patient_form'))
+        else:
+            # Adult or mixed mode
+            form_data.update({
+                'first_name': request.form.get('first_name'),
+                'last_name': request.form.get('last_name'),
+                'date_of_birth': request.form.get('date_of_birth') or None,
+                'sex': request.form.get('sex') or None,
+                'phone': request.form.get('phone') or None,
+                'address': request.form.get('address') or None,
+                'email': request.form.get('email') or None
+            })
+            # Validate required adult fields
+            if not form_data['last_name'] or not form_data['first_name']:
+                flash('First name and Last name are required.', 'danger')
+                return redirect(url_for('patient.add_patient_form'))
         
-        # Create patient and Word document
-        patient_id, doc_path = db_ops.create_patient(form_data)
+        # Adult-specific medical fields
+        if emr_mode in [EMRMode.ADULT, EMRMode.MIXED]:
+            form_data.update({
+                'insurance': request.form.get('insurance') or None,
+                'primary_physician': request.form.get('primary_physician') or None,
+                'pmh': request.form.get('pmh') or None,
+                'psh': request.form.get('psh') or None,
+                'family_history': request.form.get('family_history') or None,
+                'medications': request.form.get('medications') or None,
+                'allergies': request.form.get('allergies') or None,
+                'smoker': 1 if request.form.get('smoker') else 0,
+                'smoker_details': request.form.get('smoker_details') or None,
+                'alcohol': 1 if request.form.get('alcohol') else 0,
+                'alcohol_details': request.form.get('alcohol_details') or None
+            })
+        
+        # Pediatric-specific fields
+        if emr_mode in [EMRMode.PEDIATRIC, EMRMode.MIXED]:
+            form_data.update({
+                'mere_nom': request.form.get('mere_nom') or None,
+                'pere_nom': request.form.get('pere_nom') or None,
+                'third_party_payer': request.form.get('third_party_payer') or None,
+                'pediatre_initiales': request.form.get('pediatre_initiales') or None,
+                'birth_weight_g': request.form.get('birth_weight_g') or None,
+                'birth_height_cm': request.form.get('birth_height_cm') or None,
+                'birth_head_circumference_cm': request.form.get('birth_head_circumference_cm') or None,
+                'birth_notes': request.form.get('birth_notes') or None,
+                'obstetrical_history': request.form.get('obstetrical_history') or None,
+                'hopital': request.form.get('hopital') or None,
+                'diag1': request.form.get('diag1') or None,
+                'diag2': request.form.get('diag2') or None
+            })
+            
+            # Vaccine fields (if vaccines are enabled)
+            if emr_config.get_enabled_features().vaccines_enabled:
+                vaccine_fields = [
+                    'dtcp1_date', 'dtcp2_date', 'dtcp3_date',
+                    'dtcp_rappel1_date', 'dtcp_rappel2_date', 'dtcp_rappel3_date', 'dtcp_rappel4_date',
+                    'hep_b1_date', 'hep_b2_date', 'hep_b3_date',
+                    'hib1_date', 'hib2_date', 'hib3_date', 'hib_rappel_date',
+                    'ror_date', 'rougeole_seule_date',
+                    'monotest1', 'monotest2', 'monotest3',
+                    'raw_autres_vaccins_text'
+                ]
+                for field in vaccine_fields:
+                    form_data[field] = request.form.get(field) or None
+        
+                # Custom demographic fields
+        custom_fields = get_active_custom_demographic_fields()
+        for field in custom_fields:
+            field_value = request.form.get(field['field_name'])
+            if field_value:
+                form_data[field['field_name']] = field_value
+
+        # Use unified database system to create the patient
+        patient_id = save_patient_unified(form_data, emr_mode)
         
         # Update Word document
+        config = load_config()
         word_manager = WordDocumentManager(db_path=config['database_path'], documents_folder=config['word_docs_folder'])
         word_manager.create_or_update_document(patient_id)
         
-        flash(f"Patient {form_data['first_name']} {form_data['last_name']} (MRN: {new_mrn}) added successfully!", 'success')
+        # Create success message based on mode
+        if emr_mode == EMRMode.PEDIATRIC:
+            name = f"{form_data.get('prenom', '')} {form_data.get('nom', '')}"
+        else:
+            name = f"{form_data.get('first_name', '')} {form_data.get('last_name', '')}"
+            
+        flash(f"Patient {name} (MRN: {new_mrn}) added successfully!", 'success')
         return redirect(url_for('patient.patient_detail', patient_id=patient_id))
 
     except sqlite3.Error as e:

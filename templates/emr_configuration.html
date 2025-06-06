@@ -1,0 +1,410 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>EMR System Configuration</h2>
+    <hr>
+    
+    <!-- Current Status -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                <h5><i class="fas fa-info-circle"></i> Current Configuration</h5>
+                <p><strong>EMR Mode:</strong> {{ current_mode.value.title() }}</p>
+                <p><strong>Active Features:</strong> 
+                    {% set active_features = [] %}
+                    {% if current_features.vaccines_enabled %}{% set _ = active_features.append('Vaccines') %}{% endif %}
+                    {% if current_features.growth_charts_enabled %}{% set _ = active_features.append('Growth Charts') %}{% endif %}
+                    {% if current_features.vitals_tracking_enabled %}{% set _ = active_features.append('Vitals Tracking') %}{% endif %}
+                    {% if current_features.document_management_enabled %}{% set _ = active_features.append('Document Management') %}{% endif %}
+                    {% if current_features.statistics_reports_enabled %}{% set _ = active_features.append('Statistics & Reports') %}{% endif %}
+                    {% if current_features.custom_fields_enabled %}{% set _ = active_features.append('Custom Fields') %}{% endif %}
+                    
+                    {% if active_features %}
+                        {{ active_features | join(', ') }}
+                    {% else %}
+                        None
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Adult Patients</h5>
+                    <h3 class="text-primary">{{ patient_stats.get('adult', 0) }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Pediatric Patients</h5>
+                    <h3 class="text-success">{{ patient_stats.get('pediatric', 0) }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Mixed/Other</h5>
+                    <h3 class="text-info">{{ patient_stats.get('mixed', 0) + patient_stats.get('unknown', 0) }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Configuration Tabs -->
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-mode-tab" data-toggle="tab" href="#nav-mode" role="tab">
+                EMR Mode
+            </a>
+            <a class="nav-item nav-link" id="nav-features-tab" data-toggle="tab" href="#nav-features" role="tab">
+                Features
+            </a>
+            <a class="nav-item nav-link" id="nav-migration-tab" data-toggle="tab" href="#nav-migration" role="tab">
+                Data Migration
+            </a>
+            <a class="nav-item nav-link" id="nav-backup-tab" data-toggle="tab" href="#nav-backup" role="tab">
+                Backup & Restore
+            </a>
+        </div>
+    </nav>
+    
+    <div class="tab-content" id="nav-tabContent">
+        <!-- EMR Mode Tab -->
+        <div class="tab-pane fade show active" id="nav-mode" role="tabpanel">
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5>EMR Operating Mode</h5>
+                </div>
+                <div class="card-body">
+                    <p>Choose the primary mode for your EMR system. This affects which fields and features are displayed.</p>
+                    
+                    <form method="POST" action="{{ url_for('emr_settings.set_emr_mode') }}" onsubmit="return confirmModeChange()">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="emr_mode" id="mode_adult" value="adult" 
+                                       {{ 'checked' if current_mode.value == 'adult' else '' }}>
+                                <label class="form-check-label" for="mode_adult">
+                                    <strong>Adult EMR</strong><br>
+                                    <small class="text-muted">Optimized for adult patients with fields for insurance, medical history, social history, etc.</small>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="emr_mode" id="mode_pediatric" value="pediatric" 
+                                       {{ 'checked' if current_mode.value == 'pediatric' else '' }}>
+                                <label class="form-check-label" for="mode_pediatric">
+                                    <strong>Pediatric EMR</strong><br>
+                                    <small class="text-muted">Optimized for pediatric patients with vaccines, growth tracking, birth information, etc.</small>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="emr_mode" id="mode_mixed" value="mixed" 
+                                       {{ 'checked' if current_mode.value == 'mixed' else '' }}>
+                                <label class="form-check-label" for="mode_mixed">
+                                    <strong>Mixed Mode</strong><br>
+                                    <small class="text-muted">Shows all fields and features - suitable for practices seeing both adult and pediatric patients.</small>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reason">Reason for change (optional):</label>
+                            <input type="text" class="form-control" id="reason" name="reason" placeholder="e.g., transitioning to family practice">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Update EMR Mode</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Features Tab -->
+        <div class="tab-pane fade" id="nav-features" role="tabpanel">
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5>Feature Configuration</h5>
+                </div>
+                <div class="card-body">
+                    <p>Enable or disable specific EMR features based on your practice needs.</p>
+                    
+                    <form method="POST" action="{{ url_for('emr_settings.update_features') }}">
+                        <h6>Core Features</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="vaccines_enabled" name="vaccines_enabled" 
+                                           {{ 'checked' if current_features.vaccines_enabled else '' }}>
+                                    <label class="form-check-label" for="vaccines_enabled">
+                                        <strong>Vaccine Tracking</strong><br>
+                                        <small class="text-muted">Enable vaccine schedules and tracking</small>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="growth_charts_enabled" name="growth_charts_enabled" 
+                                           {{ 'checked' if current_features.growth_charts_enabled else '' }}>
+                                    <label class="form-check-label" for="growth_charts_enabled">
+                                        <strong>Growth Charts</strong><br>
+                                        <small class="text-muted">WHO growth charts and percentiles</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="vitals_tracking_enabled" name="vitals_tracking_enabled" 
+                                           {{ 'checked' if current_features.vitals_tracking_enabled else '' }}>
+                                    <label class="form-check-label" for="vitals_tracking_enabled">
+                                        <strong>Vitals Tracking</strong><br>
+                                        <small class="text-muted">Blood pressure, heart rate, temperature, etc.</small>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="document_management_enabled" name="document_management_enabled" 
+                                           {{ 'checked' if current_features.document_management_enabled else '' }}>
+                                    <label class="form-check-label" for="document_management_enabled">
+                                        <strong>Document Management</strong><br>
+                                        <small class="text-muted">File uploads and document attachments</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="statistics_reports_enabled" name="statistics_reports_enabled" 
+                                           {{ 'checked' if current_features.statistics_reports_enabled else '' }}>
+                                    <label class="form-check-label" for="statistics_reports_enabled">
+                                        <strong>Statistics & Reports</strong><br>
+                                        <small class="text-muted">Generate patient statistics and reports</small>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="custom_fields_enabled" name="custom_fields_enabled" 
+                                           {{ 'checked' if current_features.custom_fields_enabled else '' }}>
+                                    <label class="form-check-label" for="custom_fields_enabled">
+                                        <strong>Custom Fields</strong><br>
+                                        <small class="text-muted">Add custom demographic fields</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        <h6>User Interface</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="multi_language_support" name="multi_language_support" 
+                                           {{ 'checked' if current_features.multi_language_support else '' }}>
+                                    <label class="form-check-label" for="multi_language_support">
+                                        <strong>Multi-Language Support</strong><br>
+                                        <small class="text-muted">Show French/English field labels</small>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="simplified_interface" name="simplified_interface" 
+                                           {{ 'checked' if current_features.simplified_interface else '' }}>
+                                    <label class="form-check-label" for="simplified_interface">
+                                        <strong>Simplified Interface</strong><br>
+                                        <small class="text-muted">Hide advanced features for cleaner UI</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success mt-3">Update Features</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Data Migration Tab -->
+        <div class="tab-pane fade" id="nav-migration" role="tabpanel">
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5>Data Migration Tools</h5>
+                </div>
+                <div class="card-body">
+                    <p>Tools for migrating data from separate adult and pediatric EMR systems.</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Migration Status</h6>
+                            <button type="button" class="btn btn-info" onclick="validateMigration()">
+                                <i class="fas fa-check-circle"></i> Validate Data Integrity
+                            </button>
+                            <div id="migration-status" class="mt-3"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Manual Migration</h6>
+                            <p class="text-muted">Use the command line migration utility:</p>
+                            <code>python migration_utility.py</code>
+                            <br><br>
+                            <a href="{{ url_for('static', filename='migration_utility.py') }}" class="btn btn-outline-secondary" download>
+                                <i class="fas fa-download"></i> Download Migration Tool
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Backup & Restore Tab -->
+        <div class="tab-pane fade" id="nav-backup" role="tabpanel">
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5>Configuration Backup & Restore</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Export Configuration</h6>
+                            <p>Download your current EMR configuration as a backup.</p>
+                            <a href="{{ url_for('emr_settings.export_configuration') }}" class="btn btn-primary">
+                                <i class="fas fa-download"></i> Export Configuration
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Import Configuration</h6>
+                            <p>Restore EMR configuration from a backup file.</p>
+                            <form method="POST" action="{{ url_for('emr_settings.import_configuration') }}" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <input type="file" class="form-control-file" name="config_file" accept=".json" required>
+                                </div>
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-upload"></i> Import Configuration
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistics Dashboard -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>System Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div id="statistics-dashboard">
+                        <p>Loading statistics...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+function confirmModeChange() {
+    const currentMode = '{{ current_mode.value }}';
+    const selectedMode = document.querySelector('input[name="emr_mode"]:checked').value;
+    
+    if (currentMode !== selectedMode) {
+        return confirm(`Are you sure you want to change from ${currentMode} mode to ${selectedMode} mode? This will affect which fields are displayed in forms.`);
+    }
+    return true;
+}
+
+function validateMigration() {
+    const statusDiv = document.getElementById('migration-status');
+    statusDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Checking data integrity...';
+    
+    fetch('{{ url_for("emr_settings.validate_migration") }}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (data.valid) {
+                    statusDiv.innerHTML = '<div class="alert alert-success"><i class="fas fa-check-circle"></i> Data integrity check passed! No issues found.</div>';
+                } else {
+                    let issuesHtml = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle"></i> Issues found:<ul>';
+                    data.issues.forEach(issue => {
+                        issuesHtml += `<li>${issue}</li>`;
+                    });
+                    issuesHtml += '</ul></div>';
+                    statusDiv.innerHTML = issuesHtml;
+                }
+            } else {
+                statusDiv.innerHTML = `<div class="alert alert-danger"><i class="fas fa-times-circle"></i> Error: ${data.error}</div>`;
+            }
+        })
+        .catch(error => {
+            statusDiv.innerHTML = `<div class="alert alert-danger"><i class="fas fa-times-circle"></i> Network error: ${error.message}</div>`;
+        });
+}
+
+function loadStatistics() {
+    const dashboardDiv = document.getElementById('statistics-dashboard');
+    
+    fetch('{{ url_for("emr_settings.mode_statistics") }}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let html = '<div class="row">';
+                
+                // Patient statistics
+                html += '<div class="col-md-6"><h6>Patient Distribution</h6><ul class="list-group list-group-flush">';
+                for (const [mode, count] of Object.entries(data.patient_stats)) {
+                    html += `<li class="list-group-item d-flex justify-content-between align-items-center">
+                        ${mode.charAt(0).toUpperCase() + mode.slice(1)} Patients
+                        <span class="badge badge-primary badge-pill">${count}</span>
+                    </li>`;
+                }
+                html += '</ul></div>';
+                
+                // Visit statistics
+                html += '<div class="col-md-6"><h6>Visit Distribution</h6><ul class="list-group list-group-flush">';
+                for (const [mode, count] of Object.entries(data.visit_stats)) {
+                    html += `<li class="list-group-item d-flex justify-content-between align-items-center">
+                        ${mode.charAt(0).toUpperCase() + mode.slice(1)} Visits
+                        <span class="badge badge-secondary badge-pill">${count}</span>
+                    </li>`;
+                }
+                html += '</ul></div>';
+                
+                html += '</div>';
+                dashboardDiv.innerHTML = html;
+            } else {
+                dashboardDiv.innerHTML = `<div class="alert alert-warning">Could not load statistics: ${data.error}</div>`;
+            }
+        })
+        .catch(error => {
+            dashboardDiv.innerHTML = `<div class="alert alert-warning">Could not load statistics: ${error.message}</div>`;
+        });
+}
+
+// Load statistics on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadStatistics();
+});
+</script>
+{% endblock %} 

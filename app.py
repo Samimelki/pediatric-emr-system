@@ -21,6 +21,7 @@ from routes.patient_routes import patient_bp
 from routes.pdf_export_routes import pdf_export_bp
 from routes.admin_routes import admin_bp
 from routes.settings_routes import settings_bp
+from routes.emr_settings_routes import emr_settings_bp
 
 # --- Start of Logging Setup ---
 # Ensure the log directory exists
@@ -121,6 +122,7 @@ app.register_blueprint(patient_bp)
 app.register_blueprint(pdf_export_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(settings_bp)
+app.register_blueprint(emr_settings_bp)
 logging.info("Blueprints registered.")
 
 @app.route('/')
