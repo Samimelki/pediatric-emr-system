@@ -66,6 +66,10 @@ def manage_pdf_settings():
                     except OSError:
                         pass # Ignore if old file cannot be removed
                 
+                # Ensure USER_MEDIA_FOLDER exists
+                if not os.path.exists(USER_MEDIA_FOLDER):
+                    os.makedirs(USER_MEDIA_FOLDER, exist_ok=True)
+                
                 ext = file.filename.rsplit('.', 1)[1].lower()
                 new_logo_filename = f"logo_image.{ext}"
                 try:
@@ -96,6 +100,10 @@ def manage_pdf_settings():
                         os.remove(os.path.join(USER_MEDIA_FOLDER, old_sig_filename))
                     except OSError:
                         pass
+                
+                # Ensure USER_MEDIA_FOLDER exists
+                if not os.path.exists(USER_MEDIA_FOLDER):
+                    os.makedirs(USER_MEDIA_FOLDER, exist_ok=True)
                 
                 ext = file.filename.rsplit('.', 1)[1].lower()
                 new_sig_filename = f"signature_stamp.{ext}" # Keep original naming convention somewhat
@@ -328,7 +336,7 @@ def storage_settings():
 def personalization_settings():
     config = load_config()
     if request.method == 'POST':
-        config['emr_name'] = request.form.get('emr_name', 'GARBIS EMR')
+        config['emr_name'] = request.form.get('emr_name', 'EMR')
 
         # Handle background image upload
         file = request.files.get('background_image')
@@ -336,10 +344,18 @@ def personalization_settings():
             allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
             ext = file.filename.rsplit('.', 1)[-1].lower()
             if ext in allowed_extensions:
+                # Ensure USER_MEDIA_FOLDER exists
+                if not os.path.exists(USER_MEDIA_FOLDER):
+                    os.makedirs(USER_MEDIA_FOLDER, exist_ok=True)
+                
                 filename = f"background_image.{ext}"
                 save_path = os.path.join(USER_MEDIA_FOLDER, filename)
-                file.save(save_path)
-                config['background_image_filename'] = filename
+                try:
+                    file.save(save_path)
+                    config['background_image_filename'] = filename
+                    flash('Background image uploaded successfully.', 'success')
+                except Exception as e:
+                    flash(f'Error saving background image: {e}', 'danger')
             else:
                 flash('Invalid file type for background image. Allowed: png, jpg, jpeg, gif.', 'danger')
 

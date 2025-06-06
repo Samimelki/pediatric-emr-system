@@ -41,10 +41,15 @@ def import_xml_data():
             return redirect(request.url)
         docx_paths = []
         if files and any(f.filename for f in files):
+            # Ensure UPLOAD_FOLDER exists
+            upload_folder = current_app.config['UPLOAD_FOLDER']
+            if not os.path.exists(upload_folder):
+                os.makedirs(upload_folder, exist_ok=True)
+            
             for file in files:
                 if file and file.filename.lower().endswith('.docx'):
                     filename = secure_filename(file.filename)
-                    temp_docx_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+                    temp_docx_path = os.path.join(upload_folder, filename)
                     file.save(temp_docx_path)
                     docx_paths.append(temp_docx_path)
         else:
