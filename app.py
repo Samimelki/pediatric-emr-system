@@ -16,6 +16,7 @@ from xml_exporter import generate_patient_xml
 from csv_exporter import generate_patient_csvs
 from utils import format_datetime
 from config_manager import load_config, APP_DATA_DIR, UPLOAD_FOLDER, USER_MEDIA_FOLDER, WORD_DOCS_FOLDER
+from emr_config import emr_config, EMRMode
 from routes.patient_routes import patient_bp
 from routes.pdf_export_routes import pdf_export_bp
 from routes.admin_routes import admin_bp
@@ -87,21 +88,24 @@ if getattr(sys, 'frozen', False):
 app = Flask(__name__)
 app.secret_key = 'your secret key'
 
-logging.info("Loading configuration...")
-config = load_config()
+logging.info("Loading unified EMR configuration...")
+config = load_config()  # Legacy config for backward compatibility
 
-# Directory setup is now handled by config_manager, but logging confirms
-logging.info(f"APP_DATA_DIR: {APP_DATA_DIR}")
-logging.info(f"UPLOAD_FOLDER: {UPLOAD_FOLDER}")
-logging.info(f"USER_MEDIA_FOLDER: {USER_MEDIA_FOLDER}")
-logging.info(f"WORD_DOCS_FOLDER: {WORD_DOCS_FOLDER}")
+# Use the unified EMR configuration system
+logging.info(f"EMR Mode: {emr_config.get_emr_mode()}")
+logging.info(f"Database Path: {emr_config.get_database_path()}")
+logging.info(f"Upload Folder: {emr_config.get_upload_folder()}")
+logging.info(f"User Media Folder: {emr_config.get_user_media_folder()}")
+logging.info(f"Word Docs Folder: {emr_config.get_word_docs_folder()}")
 
-app.config['DATABASE'] = config['database_path']
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['USER_MEDIA_FOLDER'] = USER_MEDIA_FOLDER
-app.config['STORAGE_TYPE'] = config['storage_type']
-app.config['CLOUD_PATH'] = config['cloud_path']
-app.config['WORD_DOCS_FOLDER'] = WORD_DOCS_FOLDER
+# Configure Flask app with unified settings
+app.config['DATABASE'] = emr_config.get_database_path()
+app.config['UPLOAD_FOLDER'] = emr_config.get_upload_folder()
+app.config['USER_MEDIA_FOLDER'] = emr_config.get_user_media_folder()
+app.config['WORD_DOCS_FOLDER'] = emr_config.get_word_docs_folder()
+app.config['STORAGE_TYPE'] = config.get('storage_type', 'local')  # Legacy fallback
+app.config['CLOUD_PATH'] = config.get('cloud_path')  # Legacy fallback
+app.config['EMR_CONFIG'] = emr_config
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.jinja_env.filters['format_datetime'] = format_datetime
@@ -121,8 +125,16 @@ logging.info("Blueprints registered.")
 
 @app.route('/')
 def index():
-    config = load_config()
-    return render_template('index.html', title='Home', config=config)
+    config = load_config()  # Legacy config
+    emr_mode = emr_config.get_emr_mode()
+    features = emr_config.get_enabled_features()
+    
+    return render_template('index.html', 
+                         title='Home', 
+                         config=config, 
+                         emr_mode=emr_mode,
+                         emr_features=features,
+                         emr_config=emr_config)
 
 def run_flask_app():
     logging.info("Flask app thread started.")

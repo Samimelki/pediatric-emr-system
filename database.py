@@ -1,6 +1,13 @@
 import sqlite3
 from flask import g, current_app
 import re # For validating field names
+from unified_database import (
+    init_unified_db_schema, get_patient_unified_data, save_patient_unified,
+    get_visit_unified_data, get_custom_demographic_fields as get_unified_custom_fields,
+    get_active_custom_demographic_fields as get_unified_active_fields,
+    migrate_from_legacy_database
+)
+from emr_config import emr_config, EMRMode
 
 # DATABASE = 'emr_database.db' # This will now be set in app.config['DATABASE']
 
@@ -26,150 +33,18 @@ def close_connection(exception):
         db.close() 
 
 def init_db_schema():
-    """Initializes the database with all necessary tables if they don't exist."""
-    db = get_db()
-    cursor = db.cursor()
-
-    # Patients Table (revamped, English only)
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS Patients (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        mrn TEXT UNIQUE,
-        first_name TEXT,
-        last_name TEXT,
-        date_of_birth TEXT,
-        sex TEXT,
-        phone TEXT,
-        address TEXT,
-        email TEXT,
-        insurance TEXT,
-        primary_physician TEXT,
-        pmh TEXT,  -- Past Medical History
-        psh TEXT,  -- Past Surgical History
-        family_history TEXT,  -- Family History (added for Word import)
-        medications TEXT,
-        allergies TEXT,
-        smoker BOOLEAN,
-        smoker_details TEXT,
-        alcohol BOOLEAN,
-        alcohol_details TEXT,
-        raw_dossier_text TEXT
-    );
-    """)
-
-    # Ensure family_history column exists (for upgrades)
-    try:
-        patient_columns_cursor = db.execute("PRAGMA table_info(Patients);")
-        patient_column_names = [col['name'] for col in patient_columns_cursor.fetchall()]
-        if 'family_history' not in patient_column_names:
-            db.execute("ALTER TABLE Patients ADD COLUMN family_history TEXT;")
-            print("Added missing column family_history to Patients table during init.")
-    except sqlite3.Error as e:
-        print(f"Error adding family_history column during init: {e}")
-
-    # Visits Table (modified for adult patients)
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS Visits (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        patient_id INTEGER NOT NULL,
-        visit_date TEXT NOT NULL,
-        vital_signs TEXT,  -- JSON string containing BP, HR, Temp, etc.
-        chief_complaint TEXT,
-        subjective TEXT,
-        objective TEXT,
-        assessment TEXT,
-        plan TEXT,
-        notes TEXT,
-        raw_visit_entry TEXT,
-        FOREIGN KEY (patient_id) REFERENCES Patients (id)
-    );
-    """)
-
-    # VisitAddenda Table
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS VisitAddenda (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        visit_id INTEGER NOT NULL,
-        addendum_datetime TEXT NOT NULL,
-        addendum_text TEXT NOT NULL,
-        raw_addendum_entry TEXT,
-        FOREIGN KEY (visit_id) REFERENCES Visits(id)
-    );
-    """)
-
-    # VisitMedia Table for storing images, PDFs, and videos attached to visits
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS VisitMedia (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        visit_id INTEGER NOT NULL,
-        filename TEXT NOT NULL,
-        media_type TEXT NOT NULL,
-        upload_date TEXT NOT NULL,
-        description TEXT,
-        FOREIGN KEY (visit_id) REFERENCES Visits(id)
-    );
-    """)
-
-    # CustomDemographicFields Table
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS CustomDemographicFields (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        field_name TEXT UNIQUE NOT NULL,
-        field_label TEXT NOT NULL,
-        field_type TEXT NOT NULL DEFAULT 'TEXT',
-        display_order INTEGER,
-        is_active BOOLEAN NOT NULL DEFAULT TRUE,
-        display_section TEXT NOT NULL DEFAULT 'Additional Information'
-    );
-    """)
-    
-    # Ensure 'is_active' and 'display_section' columns exist
-    try:
-        cursor.execute("PRAGMA table_info(CustomDemographicFields);")
-        columns = [column[1] for column in cursor.fetchall()]
-        if 'is_active' not in columns:
-            cursor.execute("ALTER TABLE CustomDemographicFields ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE;")
-        if 'display_section' not in columns:
-            cursor.execute("ALTER TABLE CustomDemographicFields ADD COLUMN display_section TEXT NOT NULL DEFAULT 'Additional Information';")
-    except sqlite3.Error as e:
-        print(f"Error checking/adding columns to CustomDemographicFields: {e}")
-
-    # Ensure all existing custom fields exist as columns in Patients table
-    custom_fields = get_custom_demographic_fields(db_conn=db)
-    if custom_fields:
-        patient_columns_cursor = db.execute("PRAGMA table_info(Patients);")
-        patient_column_names = [col['name'] for col in patient_columns_cursor.fetchall()]
-        for field in custom_fields:
-            if field['field_name'] not in patient_column_names:
-                try:
-                    db.execute(f"ALTER TABLE Patients ADD COLUMN {field['field_name']} TEXT;")
-                    print(f"Added missing column {field['field_name']} to Patients table during init.")
-                except sqlite3.Error as e:
-                    print(f"Error adding missing column {field['field_name']} during init: {e}")
-
-    db.commit()
-    print("Database schema initialized or verified.")
+    """Initializes the unified database schema with mode-aware features."""
+    return init_unified_db_schema()
 
 def get_custom_demographic_fields(db_conn=None):
     """Fetches all defined custom demographic fields (active and inactive), ordered by display_order, then id."""
-    if db_conn:
-        conn = db_conn
-    else:
-        conn = get_db()
-    cursor = conn.execute("SELECT id, field_name, field_label, field_type, display_order, is_active, display_section FROM CustomDemographicFields ORDER BY display_order ASC, id ASC;")
-    fields = cursor.fetchall()
-    return fields
+    # Use unified system with mode awareness
+    return get_unified_custom_fields(db_conn)
 
 def get_active_custom_demographic_fields(db_conn=None):
     """Fetches only active custom demographic fields, ordered by display_order, then id."""
-    if db_conn:
-        conn = db_conn
-    else:
-        conn = get_db()
-    # Query for active fields
-    cursor = conn.execute("SELECT id, field_name, field_label, field_type, display_order, display_section FROM CustomDemographicFields WHERE is_active = TRUE ORDER BY display_order ASC, id ASC;")
-    fields = cursor.fetchall()
-    return fields
+    # Use unified system with mode awareness
+    return get_unified_active_fields(db_conn)
 
 def add_custom_demographic_field(field_label: str, field_name_suggestion: str, field_type: str = 'TEXT', display_section: str = 'Additional Information'):
     """
