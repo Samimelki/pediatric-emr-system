@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+{% block title %}
+    {% if emr_config.get_emr_mode().value == 'pediatric' %}
+        Suivi des Vaccins
+    {% else %}
+        Vaccine Tracking
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>
+        {% if emr_config.get_emr_mode().value == 'pediatric' %}
+            Suivi des Vaccins - Tableau de Bord
+        {% else %}
+            Vaccine Tracking Dashboard
+        {% endif %}
+    </h2>
+    
+    <hr>
+
+    <!-- Vaccine Statistics Overview -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                            Patients avec Vaccins
+                        {% else %}
+                            Patients with Vaccines
+                        {% endif %}
+                    </h5>
+                    <h3 class="card-text">{{ stats.patients_with_vaccines or 0 }}</h3>
+                    <small>
+                        {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                            sur {{ stats.total_pediatric_patients or 0 }} patients pédiatriques
+                        {% else %}
+                            of {{ stats.total_pediatric_patients or 0 }} pediatric patients
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                            Autres Vaccins
+                        {% else %}
+                            Other Vaccines
+                        {% endif %}
+                    </h5>
+                    <h3 class="card-text">{{ stats.non_standard_vaccines or 0 }}</h3>
+                    <small>
+                        {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                            vaccins non-standards enregistrés
+                        {% else %}
+                            non-standard vaccines recorded
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                            Moyenne Vaccins/Enfant
+                        {% else %}
+                            Avg Vaccines/Child
+                        {% endif %}
+                    </h5>
+                    <h3 class="card-text">
+                        {% if stats.avg_vaccines_per_child %}
+                            {{ "%.1f" | format(stats.avg_vaccines_per_child) }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </h3>
+                    <small>
+                        {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                            vaccins standards par enfant
+                        {% else %}
+                            standard vaccines per child
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                            Taux de Vaccination
+                        {% else %}
+                            Vaccination Rate
+                        {% endif %}
+                    </h5>
+                    <h3 class="card-text">
+                        {% if stats.total_pediatric_patients and stats.total_pediatric_patients > 0 %}
+                            {{ "%.1f" | format((stats.patients_with_vaccines / stats.total_pediatric_patients) * 100) }}%
+                        {% else %}
+                            0%
+                        {% endif %}
+                    </h3>
+                    <small>
+                        {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                            des patients ont des vaccins
+                        {% else %}
+                            of patients have vaccines
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h4>
+                {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                    Actions Rapides
+                {% else %}
+                    Quick Actions
+                {% endif %}
+            </h4>
+            <div class="btn-group" role="group">
+                <a href="{{ url_for('vaccine.vaccine_search') }}" class="btn btn-primary">
+                    <i class="fas fa-search"></i> 
+                    {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                        Rechercher par Vaccin
+                    {% else %}
+                        Search by Vaccine
+                    {% endif %}
+                </a>
+                <a href="{{ url_for('patient.list_patients') }}?filter=missing_vaccines" class="btn btn-warning">
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                        Vaccins Manquants
+                    {% else %}
+                        Missing Vaccines
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vaccine Search -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">
+                {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                    Recherche de Vaccins
+                {% else %}
+                    Vaccine Search
+                {% endif %}
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('vaccine.vaccine_search') }}" class="form-inline">
+                <div class="form-group mr-3">
+                    <label for="search_term" class="sr-only">
+                        {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                            Terme de recherche
+                        {% else %}
+                            Search term
+                        {% endif %}
+                    </label>
+                    <input type="text" class="form-control" id="search_term" name="q" 
+                           placeholder="{% if emr_config.get_emr_mode().value == 'pediatric' %}Nom du patient ou vaccin{% else %}Patient name or vaccine{% endif %}" 
+                           value="{{ request.args.get('q', '') }}">
+                </div>
+                <div class="form-group mr-3">
+                    <select name="vaccine_type" class="form-control">
+                        <option value="all">
+                            {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                                Tous les vaccins
+                            {% else %}
+                                All vaccines
+                            {% endif %}
+                        </option>
+                        <option value="dtcp" {{ 'selected' if request.args.get('vaccine_type') == 'dtcp' else '' }}>DTCP</option>
+                        <option value="hepatitis_b" {{ 'selected' if request.args.get('vaccine_type') == 'hepatitis_b' else '' }}>
+                            {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                                Hépatite B
+                            {% else %}
+                                Hepatitis B
+                            {% endif %}
+                        </option>
+                        <option value="hib" {{ 'selected' if request.args.get('vaccine_type') == 'hib' else '' }}>Hib</option>
+                        <option value="mmr" {{ 'selected' if request.args.get('vaccine_type') == 'mmr' else '' }}>
+                            {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                                ROR
+                            {% else %}
+                                MMR
+                            {% endif %}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group mr-3">
+                    <select name="status" class="form-control">
+                        <option value="all">
+                            {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                                Tous les statuts
+                            {% else %}
+                                All statuses
+                            {% endif %}
+                        </option>
+                        <option value="completed" {{ 'selected' if request.args.get('status') == 'completed' else '' }}>
+                            {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                                Complété
+                            {% else %}
+                                Completed
+                            {% endif %}
+                        </option>
+                        <option value="incomplete" {{ 'selected' if request.args.get('status') == 'incomplete' else '' }}>
+                            {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                                Incomplet
+                            {% else %}
+                                Incomplete
+                            {% endif %}
+                        </option>
+                        <option value="missing" {{ 'selected' if request.args.get('status') == 'missing' else '' }}>
+                            {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                                Manquant
+                            {% else %}
+                                Missing
+                            {% endif %}
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> 
+                    {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                        Rechercher
+                    {% else %}
+                        Search
+                    {% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Recent Vaccine Activity -->
+    {% if recent_vaccines %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                    Activité Récente des Vaccins
+                {% else %}
+                    Recent Vaccine Activity
+                {% endif %}
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                                    Patient
+                                {% else %}
+                                    Patient
+                                {% endif %}
+                            </th>
+                            <th>
+                                {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                                    Vaccin
+                                {% else %}
+                                    Vaccine
+                                {% endif %}
+                            </th>
+                            <th>
+                                {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                                    Date
+                                {% else %}
+                                    Date
+                                {% endif %}
+                            </th>
+                            <th>
+                                {% if emr_config.get_emr_mode().value == 'pediatric' %}
+                                    Actions
+                                {% else %}
+                                    Actions
+                                {% endif %}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vaccine in recent_vaccines %}
+                        <tr>
+                            <td>
+                                <a href="{{ url_for('patient.patient_detail', patient_id=vaccine.patient_id) }}">
+                                    {{ vaccine.patient_name }}
+                                </a>
+                            </td>
+                            <td>{{ vaccine.vaccine_name }}</td>
+                            <td>{{ vaccine.vaccine_date or '-' }}</td>
+                            <td>
+                                <a href="{{ url_for('patient.patient_detail', patient_id=vaccine.patient_id) }}" 
+                                   class="btn btn-xs btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Vaccine tracking dashboard loaded');
+    });
+</script>
+{% endblock %} 

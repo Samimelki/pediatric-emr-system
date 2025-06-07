@@ -1,0 +1,546 @@
+{% if not dob_missing %}
+    <h4 class="mt-4">Growth Charts</h4>
+    <p class="text-muted"><small>Note: Charts display data from recorded visits where measurements are available. WHO percentiles (3rd, 15th, 50th, 85th, 97th) are shown for context if patient sex is recorded and recognized (Male/Female) and WHO data is available for the patient's age and sex.</small></p>
+
+    <div class="row">
+        <!-- Weight Chart Section -->
+        <div class="col-md-12 mb-4">
+            <h5>
+                Weight-for-Age
+                {% if who_wfa_data and patient_sex_for_chart %}
+                    <button class="btn btn-sm btn-outline-secondary ml-2" onclick="downloadChart('wfaChart', 'Weight_for_Age', 'png')">Download PNG</button>
+                    <button class="btn btn-sm btn-outline-secondary ml-1" onclick="downloadChart('wfaChart', 'Weight_for_Age', 'jpeg')">Download JPG</button>
+                {% endif %}
+            </h5>
+
+            {% if not patient_sex_for_chart %}
+                <p class="text-warning">Patient sex not recorded or not recognized for WHO standards. WHO percentiles cannot be displayed for Weight-for-Age.</p>
+            {% elif not who_wfa_data %}
+                <p class="text-muted"><small>WHO percentile data is not available for Weight-for-Age for the patient's sex/age range.</small></p>
+            {% endif %}
+
+            {% if weight_data %}
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                Weight-for-Age Chart ({{ patient_sex_for_chart | capitalize if patient_sex_for_chart else 'N/A' }})
+                            </div>
+                            <div class="card-body" style="height: 400px; position: relative;">
+                                <canvas id="wfaChart" class="chart-canvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p>No weight data to display for this patient.</p>
+            {% endif %}
+        </div>
+
+        <!-- Height Chart Section -->
+        <div class="col-md-12 mb-4">
+            <h5>
+                Length/Height-for-Age
+                {% if who_lhfa_data and patient_sex_for_chart %}
+                    <button class="btn btn-sm btn-outline-secondary ml-2" onclick="downloadChart('lhfaChart', 'Height_for_Age', 'png')">Download PNG</button>
+                    <button class="btn btn-sm btn-outline-secondary ml-1" onclick="downloadChart('lhfaChart', 'Height_for_Age', 'jpeg')">Download JPG</button>
+                {% endif %}
+            </h5>
+
+            {% if not patient_sex_for_chart %}
+                <p class="text-warning">Patient sex not recorded or not recognized for WHO standards. WHO percentiles cannot be displayed for Length/Height-for-Age.</p>
+            {% elif not who_lhfa_data %}
+                <p class="text-muted"><small>WHO percentile data is not available for Length/Height-for-Age for the patient's sex/age range.</small></p>
+            {% endif %}
+
+            {% if height_data %}
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                Length/Height-for-Age Chart ({{ patient_sex_for_chart | capitalize if patient_sex_for_chart else 'N/A' }})
+                            </div>
+                            <div class="card-body" style="height: 400px; position: relative;">
+                                <canvas id="lhfaChart" class="chart-canvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p>No height data to display for this patient.</p>
+            {% endif %}
+        </div>
+
+        <!-- Head Circumference Chart Section -->
+        <div class="col-md-12 mb-4">
+            <h5>
+                Head Circumference-for-Age
+                {% if who_hc_data and patient_sex_for_chart %}
+                    <button class="btn btn-sm btn-outline-secondary ml-2" onclick="downloadChart('hcfaChart', 'HC_for_Age', 'png')">Download PNG</button>
+                    <button class="btn btn-sm btn-outline-secondary ml-1" onclick="downloadChart('hcfaChart', 'HC_for_Age', 'jpeg')">Download JPG</button>
+                {% endif %}
+            </h5>
+
+            {% if not patient_sex_for_chart %}
+                <p class="text-warning">Patient sex not recorded or not recognized for WHO standards. WHO percentiles cannot be displayed for Head Circumference-for-Age.</p>
+            {% elif not who_hc_data %}
+                <p class="text-muted"><small>WHO percentile data is not available for Head Circumference-for-Age for the patient's sex/age range.</small></p>
+            {% endif %}
+
+            {% if hc_data %}
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                Head Circumference-for-Age Chart ({{ patient_sex_for_chart | capitalize if patient_sex_for_chart else 'N/A' }})
+                            </div>
+                            <div class="card-body" style="height: 400px; position: relative;">
+                                <canvas id="hcfaChart" class="chart-canvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p>No head circumference data to display for this patient.</p>
+            {% endif %}
+        </div>
+
+        <!-- Height Chart Section (5-19 years) -->
+        <div class="col-md-12 mb-4">
+            <h5>
+                Height-for-Age (5-19 years)
+                {% if who_hfa_5_19_data and patient_sex_for_chart %}
+                    <button class="btn btn-sm btn-outline-secondary ml-2" onclick="downloadChart('hfa519Chart', 'Height_5_19_for_Age', 'png')">Download PNG</button>
+                    <button class="btn btn-sm btn-outline-secondary ml-1" onclick="downloadChart('hfa519Chart', 'Height_5_19_for_Age', 'jpeg')">Download JPG</button>
+                {% endif %}
+            </h5>
+
+            {% if not patient_sex_for_chart %}
+                <p class="text-warning">Patient sex not recorded or not recognized for WHO standards. WHO percentiles cannot be displayed for Height-for-Age (5-19 years).</p>
+            {% elif not who_hfa_5_19_data %}
+                <p class="text-muted"><small>WHO percentile data is not available for Height-for-Age (5-19 years) for the patient's sex/age range.</small></p>
+            {% endif %}
+
+            {% if height_data %}
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                Height-for-Age Chart - 5-19 years ({{ patient_sex_for_chart | capitalize if patient_sex_for_chart else 'N/A' }})
+                            </div>
+                            <div class="card-body" style="height: 400px; position: relative;">
+                                <canvas id="hfa519Chart" class="chart-canvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p>No height data to display for this patient.</p>
+            {% endif %}
+        </div>
+    </div> <!-- End row -->
+{% else %}
+    <h4 class="mt-4">Growth Charts</h4>
+    <div class="alert alert-warning" role="alert">
+        Growth charts cannot be displayed because the patient's Date of Birth is not recorded.
+    </div>
+{% endif %}
+
+{% if not dob_missing %}
+<script>
+// Store chart instances globally for download access
+window.myCharts = {};
+const patientSexForChart = '{{ patient_sex_for_chart|default("")|safe }}';
+
+async function downloadChart(chartId, filenamePrefix, imageType = 'png') {
+    console.log('[Debug] downloadChart called with chartId:', chartId, 'filenamePrefix:', filenamePrefix, 'imageType:', imageType);
+    const chartInstance = window.myCharts[chartId];
+
+    if (chartInstance) {
+        const patientName = "{{ patient.first_name }}_{{ patient.last_name }}".replace(/\s+/g, '_');
+        const fileExtension = imageType === 'jpeg' ? 'jpg' : 'png';
+        const finalFilename = `${filenamePrefix}_${patientName}.${fileExtension}`;
+
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = chartInstance.canvas.width;
+        tempCanvas.height = chartInstance.canvas.height;
+        const tempCtx = tempCanvas.getContext('2d');
+
+        tempCtx.fillStyle = '#FFFFFF';
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        tempCtx.drawImage(chartInstance.canvas, 0, 0);
+
+        let imageURL_DataURI;
+        try {
+            if (imageType === 'jpeg') {
+                imageURL_DataURI = tempCanvas.toDataURL('image/jpeg', 0.9);
+            } else {
+                imageURL_DataURI = tempCanvas.toDataURL('image/png');
+            }
+        } catch (e) {
+            console.error('[Debug] Error during toDataURL call:', e);
+            alert('Failed to generate image data from canvas. See console.');
+            return;
+        }
+
+        if (window.pywebview && window.pywebview.api && window.pywebview.api.save_chart_image) {
+            try {
+                const result = await window.pywebview.api.save_chart_image(finalFilename, imageURL_DataURI);
+                if (result && result.status === 'success') {
+                    console.log('Chart saved to: ' + result.path);
+                } else if (result && result.status === 'error') {
+                    alert('Error saving chart: ' + result.message);
+                } else if (result && result.status === 'cancelled') {
+                    console.log('Save cancelled by user.');
+                }
+            } catch (e) {
+                console.error('[Debug] Error EXECUTING pywebview.api.save_chart_image:', e);
+                alert('Error occurred while trying to save the chart. See console.');
+            }
+        } else {
+            const imageLink = document.createElement('a');
+            imageLink.href = imageURL_DataURI;
+            imageLink.download = finalFilename;
+            document.body.appendChild(imageLink);
+            imageLink.click();
+            document.body.removeChild(imageLink);
+        }
+    } else {
+        console.error('Chart instance not found for ID:', chartId);
+        alert('Could not download chart. Instance not found.');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const patientVisitAgesInMonths = JSON.parse('{{ visit_ages_in_months|tojson|safe }}');
+    const patientWeightData = JSON.parse('{{ weight_data|tojson|safe }}');
+    const patientHeightData = JSON.parse('{{ height_data|tojson|safe }}');
+    const patientHcData = JSON.parse('{{ hc_data|tojson|safe }}');
+
+    const whoWfaDataString = '{{ who_wfa_data | default({}) | tojson | safe }}';
+    const whoLhfaDataString = '{{ who_lhfa_data | default({}) | tojson | safe }}';
+    const whoHcDataString = '{{ who_hc_data | default({}) | tojson | safe }}';
+    const whoHfa519DataString = '{{ who_hfa_5_19_data | default({}) | tojson | safe }}';
+
+    const whoWfaData = JSON.parse(whoWfaDataString);
+    const whoLhfaData = JSON.parse(whoLhfaDataString);
+    
+    let whoHcData = {};
+    try {
+        if (whoHcDataString) {
+            whoHcData = JSON.parse(whoHcDataString);
+        }
+    } catch (e) {
+        console.error("Error parsing whoHcDataString:", e);
+        whoHcData = {};
+    }
+    
+    let whoHfa519Data = {};
+    try {
+        if (whoHfa519DataString) {
+            whoHfa519Data = JSON.parse(whoHfa519DataString);
+        }
+    } catch (e) {
+        console.error("Error parsing whoHfa519DataString:", e);
+        whoHfa519Data = {};
+    }
+    
+    function transformPatientData(agesInMonths, measurementData) {
+        if (!agesInMonths || !measurementData || agesInMonths.length !== measurementData.length) {
+            return [];
+        }
+        return agesInMonths.map((age, index) => ({
+            x: age,
+            y: measurementData[index]
+        }));
+    }
+
+    const patientWeightXY = transformPatientData(patientVisitAgesInMonths, patientWeightData);
+    const patientHeightXY = transformPatientData(patientVisitAgesInMonths, patientHeightData);
+    const patientHcXY = transformPatientData(patientVisitAgesInMonths, patientHcData);
+    
+    const percentileColors = {
+        P3: 'rgba(255, 0, 0, 0.7)',
+        P15: 'rgba(255, 165, 0, 0.7)',
+        P50: 'rgba(0, 128, 0, 0.7)',
+        P85: 'rgba(255, 165, 0, 0.7)',
+        P97: 'rgba(255, 0, 0, 0.7)'
+    };
+    
+    // Function to calculate approximate percentile for a patient's measurement
+    function calculatePercentile(patientValue, ageInMonths, whoData) {
+        if (!whoData || !whoData.Month || !patientValue) {
+            return null;
+        }
+        
+        // Find the closest age in WHO data
+        let closestAgeIndex = -1;
+        let closestAgeDiff = Infinity;
+        
+        for (let i = 0; i < whoData.Month.length; i++) {
+            const ageDiff = Math.abs(whoData.Month[i] - ageInMonths);
+            if (ageDiff < closestAgeDiff) {
+                closestAgeDiff = ageDiff;
+                closestAgeIndex = i;
+            }
+        }
+        
+        if (closestAgeIndex === -1) {
+            return null;
+        }
+        
+        // Get percentile values for this age
+        const p3 = whoData.P3[closestAgeIndex];
+        const p15 = whoData.P15[closestAgeIndex];
+        const p50 = whoData.P50[closestAgeIndex];
+        const p85 = whoData.P85[closestAgeIndex];
+        const p97 = whoData.P97[closestAgeIndex];
+        
+        // Interpolate to find approximate percentile
+        if (patientValue <= p3) {
+            // Below 3rd percentile
+            if (patientValue < p3 * 0.9) {
+                return "<3rd";
+            }
+            return "~3rd";
+        } else if (patientValue <= p15) {
+            // Between 3rd and 15th percentile
+            const ratio = (patientValue - p3) / (p15 - p3);
+            const percentile = 3 + (ratio * (15 - 3));
+            return Math.round(percentile) + "th";
+        } else if (patientValue <= p50) {
+            // Between 15th and 50th percentile  
+            const ratio = (patientValue - p15) / (p50 - p15);
+            const percentile = 15 + (ratio * (50 - 15));
+            return Math.round(percentile) + "th";
+        } else if (patientValue <= p85) {
+            // Between 50th and 85th percentile
+            const ratio = (patientValue - p50) / (p85 - p50);
+            const percentile = 50 + (ratio * (85 - 50));
+            return Math.round(percentile) + "th";
+        } else if (patientValue <= p97) {
+            // Between 85th and 97th percentile
+            const ratio = (patientValue - p85) / (p97 - p85);
+            const percentile = 85 + (ratio * (97 - 85));
+            return Math.round(percentile) + "th";
+        } else {
+            // Above 97th percentile
+            if (patientValue > p97 * 1.1) {
+                return ">97th";
+            }
+            return "~97th";
+        }
+    }
+    const percentileLabels = {
+        P3: '3rd Percentile',
+        P15: '15th Percentile',
+        P50: '50th Percentile (Median)',
+        P85: '85th Percentile',
+        P97: '97th Percentile'
+    };
+
+    const chartBackgroundPlugin = {
+        id: 'customCanvasBackgroundColor',
+        beforeDraw: (chart, args, options) => {
+            if (options.color) {
+                const {ctx} = chart;
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-over';
+                ctx.fillStyle = options.color;
+                ctx.fillRect(0, 0, chart.width, chart.height);
+                ctx.restore();
+            }
+        }
+    };
+    Chart.register(chartBackgroundPlugin);
+
+    function createGrowthChart(canvasId, patientDatasetLabel, patientXYData, whoPercentileData, yAxisLabelString, patientPointColor, yAxisMin, yAxisFixedMax, yAxisStepSize, sexForBackground, xAxisTitleString, xAxisMinVal, xAxisMaxVal) {
+        const ctx = document.getElementById(canvasId);
+        if (!ctx) {
+            console.error('Canvas element not found:', canvasId);
+            return;
+        }
+
+        let chartBackgroundColor = 'rgba(0, 0, 0, 0)';
+        if (sexForBackground === 'girls') {
+            chartBackgroundColor = 'rgba(255, 192, 203, 0.15)';
+        } else if (sexForBackground === 'boys') {
+            chartBackgroundColor = 'rgba(100, 149, 237, 0.15)';
+        }
+
+        const datasets = [];
+
+        datasets.push({
+            label: patientDatasetLabel,
+            data: patientXYData,
+            borderColor: patientPointColor,
+            backgroundColor: patientPointColor,
+            tension: 0.1,
+            fill: false,
+            pointRadius: 5,
+            pointHoverRadius: 7,
+            spanGaps: true,
+            order: 0
+        });
+
+        if (whoPercentileData && whoPercentileData.Month && whoPercentileData.Month.length > 0) {
+            for (const pKey in percentileLabels) {
+                if (whoPercentileData[pKey] && whoPercentileData[pKey].length === whoPercentileData.Month.length) {
+                    const percentileXYData = whoPercentileData.Month.map((month, index) => ({
+                        x: month,
+                        y: whoPercentileData[pKey][index]
+                    }));
+                    
+                    datasets.push({
+                        label: percentileLabels[pKey],
+                        data: percentileXYData,
+                        borderColor: percentileColors[pKey],
+                        borderWidth: 1.5,
+                        pointRadius: 0,
+                        pointHoverRadius: 0,
+                        fill: false,
+                        tension: 0.2,
+                        spanGaps: true,
+                        order: 1 
+                    });
+                }
+            }
+        }
+
+        const chartConfig = {
+            type: 'line',
+            data: {
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'linear',
+                        title: {
+                            display: true,
+                            text: xAxisTitleString
+                        },
+                        min: xAxisMinVal,
+                        max: xAxisMaxVal,
+                        ticks: {
+                            callback: function(value, index, ticks) {
+                                const years = Math.floor(value / 12);
+                                const monthsRemainder = value % 12;
+                                
+                                if (value === 0 && xAxisMinVal === 0) return 'Birth';
+                                if (value < 0) return undefined;
+
+                                if (value > 0 && value < 24) {
+                                    return (value % 2 === 0) ? value + 'm' : undefined;
+                                } else if (value >= 24 && value <= xAxisMaxVal) {
+                                    if (monthsRemainder === 0) return years + 'y';
+                                    if (monthsRemainder === 6) return years + 'y 6m';
+                                    return undefined;
+                                }
+                                return undefined;
+                            }
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: yAxisLabelString
+                        },
+                        min: yAxisMin,
+                        max: yAxisFixedMax,
+                        ticks: {
+                            stepSize: yAxisStepSize
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                if (tooltipItems.length > 0) {
+                                    const item = tooltipItems[0];
+                                    const ageInMonths = item.parsed.x;
+                                    if (ageInMonths === 0) return 'Birth';
+                                    if (ageInMonths < 24) return Math.round(ageInMonths) + 'm';
+                                    
+                                    const years = Math.floor(ageInMonths / 12);
+                                    const monthsRemainder = Math.round(ageInMonths % 12);
+                                    let title = years + 'y';
+                                    if (monthsRemainder > 0) {
+                                        title += ' ' + monthsRemainder + 'm';
+                                    }
+                                    return title;
+                                }
+                                return '';
+                            },
+                            label: function(context) {
+                                let currentLabel = context.dataset.label || '';
+                                if (currentLabel) {
+                                    currentLabel += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    currentLabel += context.parsed.y.toFixed(1);
+                                    if (yAxisLabelString.toLowerCase().includes('(kg)')) {
+                                        currentLabel += ' kg';
+                                    } else if (yAxisLabelString.toLowerCase().includes('(cm)')) {
+                                        currentLabel += ' cm';
+                                    }
+                                    
+                                    // Add percentile calculation for patient data points
+                                    if (currentLabel.includes('Patient') && whoPercentileData && whoPercentileData.Month) {
+                                        const ageInMonths = context.parsed.x;
+                                        const patientValue = context.parsed.y;
+                                        const percentile = calculatePercentile(patientValue, ageInMonths, whoPercentileData);
+                                        if (percentile) {
+                                            currentLabel += ' (~' + percentile + ' %ile)';
+                                        }
+                                    }
+                                }
+                                return currentLabel;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                    },
+                    customCanvasBackgroundColor: {
+                        color: chartBackgroundColor
+                    }
+                }
+            }
+        };
+
+        window.myCharts[canvasId] = new Chart(ctx.getContext('2d'), chartConfig);
+    }
+
+    if (patientVisitAgesInMonths && patientVisitAgesInMonths.length > 0) {
+        if (whoWfaData && whoWfaData.Month && whoWfaData.Month.length > 0) {
+            createGrowthChart('wfaChart', 'Patient Weight (kg)', patientWeightXY, whoWfaData, 'Weight (kg)', 'rgba(0, 0, 255, 1)', 0, 25, 1, patientSexForChart, 'Age (Months)', 0, 60);
+        } else {
+            createGrowthChart('wfaChart', 'Patient Weight (kg)', patientWeightXY, {}, 'Weight (kg)', 'rgba(0, 0, 255, 1)', 0, 25, 1, patientSexForChart, 'Age (Months)', 0, 60);
+        }
+
+        if (whoLhfaData && whoLhfaData.Month && whoLhfaData.Month.length > 0) {
+            createGrowthChart('lhfaChart', 'Patient Length/Height (cm)', patientHeightXY, whoLhfaData, 'Length/Height (cm)', 'rgba(0, 0, 255, 1)', 40, 130, 5, patientSexForChart, 'Age (Months)', 0, 60);
+        } else {
+            createGrowthChart('lhfaChart', 'Patient Length/Height (cm)', patientHeightXY, {}, 'Length/Height (cm)', 'rgba(0, 0, 255, 1)', 40, 130, 5, patientSexForChart, 'Age (Months)', 0, 60);
+        }
+
+        if (whoHcData && whoHcData.Month && whoHcData.Month.length > 0) {
+            createGrowthChart('hcfaChart', 'Patient Head Circ. (cm)', patientHcXY, whoHcData, 'Head Circumference (cm)', 'rgba(0, 0, 255, 1)', 30, 60, 1, patientSexForChart, 'Age (Months)', 0, 60);
+        } else {
+            createGrowthChart('hcfaChart', 'Patient Head Circ. (cm)', patientHcXY, {}, 'Head Circumference (cm)', 'rgba(0, 0, 255, 1)', 30, 60, 1, patientSexForChart, 'Age (Months)', 0, 60);
+        }
+
+        // Height-for-Age 5-19 years chart
+        if (whoHfa519Data && whoHfa519Data.Month && whoHfa519Data.Month.length > 0) {
+            createGrowthChart('hfa519Chart', 'Patient Height (cm) - 5-19 years', patientHeightXY, whoHfa519Data, 'Height (cm)', 'rgba(0, 0, 255, 1)', 100, 190, 5, patientSexForChart, 'Age (Months)', 60, 228);
+        } else {
+            createGrowthChart('hfa519Chart', 'Patient Height (cm) - 5-19 years', patientHeightXY, {}, 'Height (cm)', 'rgba(0, 0, 255, 1)', 100, 190, 5, patientSexForChart, 'Age (Months)', 60, 228);
+        }
+    }
+});
+</script>
+{% endif %} 

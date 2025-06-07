@@ -5,6 +5,38 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import numpy as np
 
+def convert_weight_to_kg(weight_raw):
+    """
+    Convert weight value to kg according to the storage format rules:
+    - 2 digits (10-99): Already in kg, display as-is
+    - 500-9999: In grams, divide by 1000 to display as kg
+    - 10000+: Would be stored as kg value (e.g., 10 for 10kg), display as-is
+    """
+    if weight_raw is None:
+        return None
+    
+    try:
+        weight_val = float(weight_raw)
+        
+        # 2 digits (10-99): already in kg
+        if 10 <= weight_val <= 99:
+            return weight_val
+        
+        # 500-9999: stored in grams, convert to kg
+        elif 500 <= weight_val <= 9999:
+            return weight_val / 1000.0
+        
+        # 10000+: this shouldn't happen as per user, but if it does, treat as kg
+        elif weight_val >= 10000:
+            return weight_val / 1000.0
+        
+        # Less than 10: assume kg (edge case)
+        else:
+            return weight_val
+            
+    except (ValueError, TypeError):
+        return None
+
 # This is a simplified get_db for the standalone statistics module.
 # It assumes a Flask app context is not always available.
 # For direct script execution, you might need to pass the db path explicitly.
@@ -234,7 +266,7 @@ def calculate_percentiles(db_path=None, target_percentiles=None, smoothing_windo
                         
                     if 0 <= age_in_total_months <= max_age_months:
                         if weight_g is not None and weight_g > 0:
-                            all_measurements[who_sex]['wfa'][age_in_total_months].append(weight_g / 1000.0) # Convert g to kg
+                            all_measurements[who_sex]['wfa'][age_in_total_months].append(convert_weight_to_kg(weight_g))
                         if height_cm is not None and height_cm > 0:
                             all_measurements[who_sex]['lhfa'][age_in_total_months].append(height_cm)
                         if hc_cm is not None and hc_cm > 0:
@@ -420,7 +452,7 @@ def find_measurement_outliers(db_path=None, std_dev_threshold=4.0, age_limit_mon
                         data_point = (patient_id, patient_mrn)
                         if visit_row['weight_g'] is not None and visit_row['weight_g'] > 0:
                             all_measurements_for_stats[who_sex]['wfa'][age_in_total_months].append(
-                                (visit_row['weight_g'] / 1000.0, patient_id, patient_mrn)
+                                (convert_weight_to_kg(visit_row['weight_g']), patient_id, patient_mrn)
                             )
                         if visit_row['height_cm'] is not None and visit_row['height_cm'] > 0:
                             all_measurements_for_stats[who_sex]['lhfa'][age_in_total_months].append(

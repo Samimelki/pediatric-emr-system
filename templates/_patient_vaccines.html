@@ -1,0 +1,118 @@
+{% if emr_config.should_show_vaccines() %}
+<h4 class="mt-4">Vaccine Records</h4>
+<div class="accordion" id="vaccineRecordsAccordion">
+    <div class="card">
+        <div class="card-header" id="headingMandatoryVaccines">
+            <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseMandatoryVaccines" aria-expanded="true" aria-controls="collapseMandatoryVaccines">
+                    Mandatory Vaccines
+                </button>
+            </h5>
+        </div>
+        <div id="collapseMandatoryVaccines" class="collapse show" aria-labelledby="headingMandatoryVaccines">
+            <div class="card-body">
+                {% if mandatory_vaccines_emr %}
+                    <table class="table table-sm table-striped table-bordered vaccine-table-emr">
+                        <thead>
+                            <tr>
+                                <th class="vaccine-name-col-emr">{{ table_column_labels_emr.vaccine_col if table_column_labels_emr else 'Vaccine' }}</th>
+                                {% for dose_key in active_dose_keys_emr %}
+                                    <th class="dose-col-emr">{{ table_column_labels_emr[dose_key] if table_column_labels_emr else dose_key.upper() }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vaccine_row in mandatory_vaccines_emr %}
+                            <tr>
+                                <td class="vaccine-name-cell">{{ vaccine_row.vaccine_display_name }}</td>
+                                {% for dose_key in active_dose_keys_emr %}
+                                    <td class="dose-cell-emr">
+                                        {% set cell_date = vaccine_row.dose_dates.get(dose_key) %}
+                                        {% set cell_edit_url = vaccine_row.edit_urls.get(dose_key) %}
+                                        {% if cell_date %}
+                                            {% if cell_edit_url %}
+                                                <a href="{{ cell_edit_url }}">{{ cell_date }}</a>
+                                            {% else %}
+                                                {{ cell_date }}
+                                            {% endif %}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No mandatory vaccine records found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-header" id="headingRecommendedVaccines">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseRecommendedVaccines" aria-expanded="false" aria-controls="collapseRecommendedVaccines">
+                    Recommended Vaccines
+                </button>
+            </h5>
+        </div>
+        <div id="collapseRecommendedVaccines" class="collapse" aria-labelledby="headingRecommendedVaccines">
+            <div class="card-body">
+                {% if recommended_vaccines_emr %}
+                    <table class="table table-sm table-striped table-bordered vaccine-table-emr">
+                        <thead>
+                            <tr>
+                                <th class="vaccine-name-col-emr">{{ table_column_labels_emr.vaccine_col if table_column_labels_emr else 'Vaccine' }}</th>
+                                {% for dose_key in active_dose_keys_emr %}
+                                    <th class="dose-col-emr">{{ table_column_labels_emr[dose_key] if table_column_labels_emr else dose_key.upper() }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vaccine_row in recommended_vaccines_emr %}
+                            <tr>
+                                <td class="vaccine-name-cell">{{ vaccine_row.vaccine_display_name }}</td>
+                                {% for dose_key in active_dose_keys_emr %}
+                                    <td class="dose-cell-emr">
+                                        {% set cell_date = vaccine_row.dose_dates.get(dose_key) %}
+                                        {% set cell_edit_url = vaccine_row.edit_urls.get(dose_key) %}
+                                        {% if cell_date %}
+                                            {% if cell_edit_url %}
+                                                <a href="{{ cell_edit_url }}">{{ cell_date }}</a>
+                                            {% else %}
+                                                {{ cell_date }}
+                                            {% endif %}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No recommended vaccine records found.</p>
+                {% endif %}
+
+                <hr class="mt-3 mb-3">
+                <h6>Add New Other/Recommended Vaccine</h6>
+                <form method="POST" action="{{ url_for('patient.add_other_vaccine', patient_id=patient.id) }}" class="form-inline">
+                    <div class="form-group mr-2 mb-2">
+                        <label for="other_vaccine_name" class="sr-only">Vaccine Name</label>
+                        <input type="text" class="form-control form-control-sm" id="other_vaccine_name" name="other_vaccine_name" placeholder="Vaccine Name" required>
+                    </div>
+                    <div class="form-group mr-2 mb-2">
+                        <label for="other_vaccine_date" class="sr-only">Vaccine Date</label>
+                        <input type="date" class="form-control form-control-sm" id="other_vaccine_date" name="other_vaccine_date" placeholder="YYYY-MM-DD">
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-success mb-2">Add Vaccine</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 
+{% endif %} 

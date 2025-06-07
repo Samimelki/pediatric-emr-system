@@ -80,9 +80,13 @@
             {% endfor %}
         {% endif %}
 
+        {% include '_patient_vaccines.html' %}
+
         {% include '_patient_visits_form.html' %}
 
         {% include '_patient_visits_list.html' %}
+
+        {% include '_patient_growth_charts.html' %}
 
         <hr class="mt-4 mb-4">
 

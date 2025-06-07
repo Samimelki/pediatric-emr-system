@@ -4,9 +4,9 @@
 <div class="container mt-4">
     <h2>
         {% if emr_mode.value == 'pediatric' %}
-            Importer les Données XML (EMR Pédiatrique)
+            Importer des Documents Word
         {% else %}
-            Import XML Data (Pediatric EMR)
+            Import Word Documents
         {% endif %}
     </h2>
     <hr>
@@ -40,46 +40,46 @@
         </h6>
         <ul class="mb-0">
             {% if emr_mode.value == 'pediatric' %}
-                <li>Cette action importera les données des patients depuis un fichier XML vers la base de données EMR unifiée.</li>
+                <li>Cette action importera les données des patients depuis des documents Word (.docx) vers la base de données EMR.</li>
+                <li>Sélectionnez un dossier contenant des documents Word (.docx) pour importer tous les fichiers qu'il contient.</li>
                 <li>Par défaut, cela <strong>ajoutera</strong> de nouveaux patients aux données existantes.</li>
                 <li><strong>Attention:</strong> L'option "Remplacement complet" supprimera toutes les données existantes dans l'EMR.</li>
-                <li>Formats supportés: Fichiers Excel XML avec données de patients pédiatriques.</li>
             {% else %}
-                <li>This action will import patient data from an XML file into the unified EMR database.</li>
+                <li>This action will import patient data from Word documents (.docx) into the EMR database.</li>
+                <li>Select a folder containing Word documents (.docx) to import all files inside it.</li>
                 <li>By default, this will <strong>append</strong> new patients to existing data.</li>
                 <li><strong>Warning:</strong> "Full Replace" option will remove all existing EMR data.</li>
-                <li>Supported formats: Excel XML files with pediatric patient data.</li>
             {% endif %}
         </ul>
     </div>
 
     <!-- Import Form -->
     <div class="card">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-success text-white">
             <h5 class="mb-0">
                 {% if emr_mode.value == 'pediatric' %}
-                    Sélectionner le Fichier XML
+                    Sélectionner les Documents Word
                 {% else %}
-                    Select XML File
+                    Select Word Documents
                 {% endif %}
             </h5>
         </div>
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
                 <div class="mb-3">
-                    <label for="xmlfile" class="form-label">
+                    <label for="docxfile" class="form-label">
                         {% if emr_mode.value == 'pediatric' %}
-                            Choisir un fichier XML :
+                            Choisir un dossier de documents Word :
                         {% else %}
-                            Choose XML file:
+                            Choose a folder of Word documents:
                         {% endif %}
                     </label>
-                    <input type="file" class="form-control" name="xmlfile" id="xmlfile" accept=".xml" required>
+                    <input type="file" class="form-control" name="docxfile" id="docxfile" accept=".docx" webkitdirectory multiple required>
                     <small class="form-text text-muted">
                         {% if emr_mode.value == 'pediatric' %}
-                            Seuls les fichiers .xml sont autorisés.
+                            Tous les fichiers .docx dans le dossier sélectionné (et sous-dossiers) seront importés.
                         {% else %}
-                            Only .xml files are allowed.
+                            All .docx files in the selected folder (and subfolders) will be imported.
                         {% endif %}
                     </small>
                 </div>
@@ -111,12 +111,12 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary me-2">
-                    <i class="fas fa-upload"></i>
+                <button type="submit" class="btn btn-success me-2">
+                    <i class="fas fa-file-word"></i>
                     {% if emr_mode.value == 'pediatric' %}
-                        Importer les Données XML
+                        Importer les Documents
                     {% else %}
-                        Import XML Data
+                        Import Documents
                     {% endif %}
                 </button>
                 <a href="{{ url_for('import.import_home') }}" class="btn btn-secondary">
@@ -163,95 +163,121 @@
         </div>
     </div>
 
-    <!-- Expected Data Format -->
+    <!-- Expected Document Format -->
     <div class="mt-4">
         <div class="card">
             <div class="card-header bg-light">
                 <h6 class="mb-0">
                     {% if emr_mode.value == 'pediatric' %}
-                        📋 Format de Données Attendu
+                        📋 Format de Document Attendu
                     {% else %}
-                        📋 Expected Data Format
+                        📋 Expected Document Format
                     {% endif %}
                 </h6>
             </div>
             <div class="card-body">
                 <p class="small text-muted">
                     {% if emr_mode.value == 'pediatric' %}
-                        Le fichier XML doit contenir des données de patients pédiatriques avec les champs suivants:
+                        Les documents Word doivent être structurés avec les informations suivantes:
                     {% else %}
-                        The XML file should contain pediatric patient data with the following fields:
+                        Word documents should be structured with the following information:
                     {% endif %}
                 </p>
                 <div class="row">
                     <div class="col-md-4">
                         <strong>
                             {% if emr_mode.value == 'pediatric' %}
-                                Informations du Patient:
+                                Structure du Document:
                             {% else %}
-                                Patient Information:
+                                Document Structure:
                             {% endif %}
                         </strong>
                         <ul class="small text-muted">
                             {% if emr_mode.value == 'pediatric' %}
-                                <li>Nom et prénom</li>
-                                <li>Date de naissance</li>
-                                <li>Sexe</li>
-                                <li>Adresse et téléphone</li>
+                                <li>Première ligne: Nom du patient</li>
+                                <li>Informations démographiques</li>
+                                <li>Historique médical</li>
+                                <li>Visites avec dates</li>
                             {% else %}
-                                <li>Name and first name</li>
-                                <li>Date of birth</li>
-                                <li>Gender</li>
-                                <li>Address and phone</li>
+                                <li>First line: Patient name</li>
+                                <li>Demographic information</li>
+                                <li>Medical history</li>
+                                <li>Visits with dates</li>
                             {% endif %}
                         </ul>
                     </div>
                     <div class="col-md-4">
                         <strong>
                             {% if emr_mode.value == 'pediatric' %}
-                                Données Médicales:
+                                Champs Reconnus:
                             {% else %}
-                                Medical Data:
+                                Recognized Fields:
                             {% endif %}
                         </strong>
                         <ul class="small text-muted">
                             {% if emr_mode.value == 'pediatric' %}
-                                <li>Calendrier de vaccination</li>
-                                <li>Mesures de croissance</li>
-                                <li>Historique des visites</li>
-                                <li>Diagnostics</li>
+                                <li>PMH: (Antécédents médicaux)</li>
+                                <li>PSH: (Antécédents chirurgicaux)</li>
+                                <li>Meds: / Medications:</li>
+                                <li>Allergies:</li>
                             {% else %}
-                                <li>Vaccination schedule</li>
-                                <li>Growth measurements</li>
-                                <li>Visit history</li>
-                                <li>Diagnoses</li>
+                                <li>PMH: (Past Medical History)</li>
+                                <li>PSH: (Past Surgical History)</li>
+                                <li>Meds: / Medications:</li>
+                                <li>Allergies:</li>
                             {% endif %}
                         </ul>
                     </div>
                     <div class="col-md-4">
                         <strong>
                             {% if emr_mode.value == 'pediatric' %}
-                                Données Familiales:
+                                Format des Visites:
                             {% else %}
-                                Family Data:
+                                Visit Format:
                             {% endif %}
                         </strong>
                         <ul class="small text-muted">
                             {% if emr_mode.value == 'pediatric' %}
-                                <li>Nom de la mère</li>
-                                <li>Nom du père</li>
-                                <li>Pédiatre</li>
-                                <li>Hôpital</li>
+                                <li>Dates au format DD/MM/YYYY</li>
+                                <li>Notes de visite</li>
+                                <li>Examens objectifs</li>
+                                <li>Plans de traitement</li>
                             {% else %}
-                                <li>Mother's name</li>
-                                <li>Father's name</li>
-                                <li>Pediatrician</li>
-                                <li>Hospital</li>
+                                <li>Dates in DD/MM/YYYY format</li>
+                                <li>Visit notes</li>
+                                <li>Objective findings</li>
+                                <li>Treatment plans</li>
                             {% endif %}
                         </ul>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="mt-4">
+        <div class="alert alert-light">
+            <h6>
+                {% if emr_mode.value == 'pediatric' %}
+                    💡 Conseils pour l'Import
+                {% else %}
+                    💡 Import Tips
+                {% endif %}
+            </h6>
+            <ul class="mb-0 small">
+                {% if emr_mode.value == 'pediatric' %}
+                    <li><strong>Préparation:</strong> Assurez-vous que vos documents Word sont bien formatés et cohérents.</li>
+                    <li><strong>Test:</strong> Commencez par importer quelques documents pour vérifier le résultat.</li>
+                    <li><strong>Nommage:</strong> Les noms de fichiers n'affectent pas l'import - le contenu est analysé.</li>
+                    <li><strong>Duplicatas:</strong> Les patients existants seront détectés par nom et date de naissance.</li>
+                {% else %}
+                    <li><strong>Preparation:</strong> Ensure your Word documents are properly formatted and consistent.</li>
+                    <li><strong>Testing:</strong> Start by importing a few documents to verify the results.</li>
+                    <li><strong>Naming:</strong> File names don't affect import - content is parsed.</li>
+                    <li><strong>Duplicates:</strong> Existing patients will be detected by name and date of birth.</li>
+                {% endif %}
+            </ul>
         </div>
     </div>
 </div>

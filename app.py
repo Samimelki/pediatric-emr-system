@@ -115,6 +115,14 @@ app.jinja_env.filters['format_datetime'] = format_datetime
 def inject_now():
     return {'current_year': datetime.datetime.now().year}
 
+@app.context_processor
+def inject_emr_config():
+    return {
+        'emr_config': emr_config,
+        'emr_mode': emr_config.get_emr_mode(),
+        'emr_features': emr_config.get_enabled_features()
+    }
+
 app.teardown_appcontext(close_connection)
 
 logging.info("Registering blueprints...")
@@ -123,6 +131,15 @@ app.register_blueprint(pdf_export_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(settings_bp)
 app.register_blueprint(emr_settings_bp)
+
+# Import functionality
+from routes.import_routes import import_bp
+app.register_blueprint(import_bp)
+
+# Vaccine functionality
+from routes.vaccine_routes import vaccine_bp
+app.register_blueprint(vaccine_bp)
+
 logging.info("Blueprints registered.")
 
 @app.route('/')

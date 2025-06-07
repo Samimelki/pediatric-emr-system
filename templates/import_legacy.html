@@ -1,0 +1,424 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>
+        {% if emr_mode.value == 'pediatric' %}
+            Migration des Bases de Données Existantes
+        {% else %}
+            Legacy Database Migration
+        {% endif %}
+    </h2>
+    <hr>
+
+    <!-- EMR Mode Indicator -->
+    <div class="alert alert-info">
+        <strong>
+            {% if emr_mode.value == 'pediatric' %}
+                Mode EMR: {{ emr_mode.value.title() }}
+            {% else %}
+                EMR Mode: {{ emr_mode.value.title() }}
+            {% endif %}
+        </strong>
+        <a href="{{ url_for('emr_settings.emr_configuration') }}" class="btn btn-sm btn-outline-secondary float-right">
+            {% if emr_mode.value == 'pediatric' %}
+                Changer le Mode
+            {% else %}
+                Change Mode
+            {% endif %}
+        </a>
+    </div>
+
+    <!-- Instructions -->
+    <div class="alert alert-warning">
+        <h6>
+            {% if emr_mode.value == 'pediatric' %}
+                ⚠️ Important - Migration de Données
+            {% else %}
+                ⚠️ Important - Data Migration
+            {% endif %}
+        </h6>
+        <ul class="mb-0">
+            {% if emr_mode.value == 'pediatric' %}
+                <li>Cette page vous permet de migrer les données depuis vos bases de données EMR existantes vers le système unifié.</li>
+                <li>La migration est <strong>sécurisée</strong> et crée automatiquement des sauvegardes.</li>
+                <li>Les données seront mappées automatiquement vers le nouveau schéma unifié.</li>
+                <li>Cette opération peut prendre plusieurs minutes selon la taille de vos bases de données.</li>
+            {% else %}
+                <li>This page allows you to migrate data from your existing EMR databases to the unified system.</li>
+                <li>Migration is <strong>safe</strong> and automatically creates backups.</li>
+                <li>Data will be automatically mapped to the new unified schema.</li>
+                <li>This operation may take several minutes depending on your database size.</li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- Database Detection Status -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header {% if adult_db_available %}bg-success{% else %}bg-secondary{% endif %} text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-user-md"></i>
+                        {% if emr_mode.value == 'pediatric' %}
+                            EMR Adultes
+                        {% else %}
+                            Adult EMR
+                        {% endif %}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if adult_db_available %}
+                        <div class="text-success">
+                            <i class="fas fa-check-circle"></i>
+                            {% if emr_mode.value == 'pediatric' %}
+                                Base de données détectée
+                            {% else %}
+                                Database detected
+                            {% endif %}
+                        </div>
+                        <small class="text-muted">{{ adult_db_path }}</small>
+                    {% else %}
+                        <div class="text-muted">
+                            <i class="fas fa-times-circle"></i>
+                            {% if emr_mode.value == 'pediatric' %}
+                                Aucune base de données trouvée
+                            {% else %}
+                                No database found
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header {% if pediatric_db_available %}bg-success{% else %}bg-secondary{% endif %} text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-baby"></i>
+                        {% if emr_mode.value == 'pediatric' %}
+                            EMR Pédiatrique
+                        {% else %}
+                            Pediatric EMR
+                        {% endif %}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if pediatric_db_available %}
+                        <div class="text-success">
+                            <i class="fas fa-check-circle"></i>
+                            {% if emr_mode.value == 'pediatric' %}
+                                Base de données détectée
+                            {% else %}
+                                Database detected
+                            {% endif %}
+                        </div>
+                        <small class="text-muted">{{ pediatric_db_path }}</small>
+                    {% else %}
+                        <div class="text-muted">
+                            <i class="fas fa-times-circle"></i>
+                            {% if emr_mode.value == 'pediatric' %}
+                                Aucune base de données trouvée
+                            {% else %}
+                                No database found
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Migration Options -->
+    {% if adult_db_available or pediatric_db_available %}
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                {% if emr_mode.value == 'pediatric' %}
+                    Options de Migration
+                {% else %}
+                    Migration Options
+                {% endif %}
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{{ url_for('import.migrate_legacy') }}">
+                <div class="mb-4">
+                    <h6>
+                        {% if emr_mode.value == 'pediatric' %}
+                            Sélectionnez le type de migration :
+                        {% else %}
+                            Select migration type:
+                        {% endif %}
+                    </h6>
+                    
+                    {% if adult_db_available %}
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="migration_type" id="migrate_adult" value="adult">
+                        <label class="form-check-label" for="migrate_adult">
+                            <strong>
+                                {% if emr_mode.value == 'pediatric' %}
+                                    Migrer uniquement l'EMR Adultes
+                                {% else %}
+                                    Migrate Adult EMR only
+                                {% endif %}
+                            </strong>
+                            <br>
+                            <small class="text-muted">
+                                {% if emr_mode.value == 'pediatric' %}
+                                    Importe les patients adultes avec historique médical, visites et documents Word.
+                                {% else %}
+                                    Import adult patients with medical history, visits, and Word documents.
+                                {% endif %}
+                            </small>
+                        </label>
+                    </div>
+                    {% endif %}
+
+                    {% if pediatric_db_available %}
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="migration_type" id="migrate_pediatric" value="pediatric">
+                        <label class="form-check-label" for="migrate_pediatric">
+                            <strong>
+                                {% if emr_mode.value == 'pediatric' %}
+                                    Migrer uniquement l'EMR Pédiatrique
+                                {% else %}
+                                    Migrate Pediatric EMR only
+                                {% endif %}
+                            </strong>
+                            <br>
+                            <small class="text-muted">
+                                {% if emr_mode.value == 'pediatric' %}
+                                    Importe les patients pédiatriques avec vaccins, croissance et visites.
+                                {% else %}
+                                    Import pediatric patients with vaccines, growth data, and visits.
+                                {% endif %}
+                            </small>
+                        </label>
+                    </div>
+                    {% endif %}
+
+                    {% if adult_db_available and pediatric_db_available %}
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="migration_type" id="migrate_both" value="both">
+                        <label class="form-check-label" for="migrate_both">
+                            <strong>
+                                {% if emr_mode.value == 'pediatric' %}
+                                    Migrer les Deux Systèmes
+                                {% else %}
+                                    Migrate Both Systems
+                                {% endif %}
+                            </strong>
+                            <br>
+                            <small class="text-muted">
+                                {% if emr_mode.value == 'pediatric' %}
+                                    Importe toutes les données depuis les deux systèmes EMR. (Recommandé)
+                                {% else %}
+                                    Import all data from both EMR systems. (Recommended)
+                                {% endif %}
+                            </small>
+                        </label>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Confirmation -->
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="confirm_migration" id="confirm_migration" required>
+                        <label class="form-check-label" for="confirm_migration">
+                            {% if emr_mode.value == 'pediatric' %}
+                                Je comprends que cette migration importera les données dans le système EMR unifié. Des sauvegardes seront créées automatiquement.
+                            {% else %}
+                                I understand that this migration will import data into the unified EMR system. Backups will be created automatically.
+                            {% endif %}
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary me-2">
+                    <i class="fas fa-database"></i>
+                    {% if emr_mode.value == 'pediatric' %}
+                        Démarrer la Migration
+                    {% else %}
+                        Start Migration
+                    {% endif %}
+                </button>
+                <a href="{{ url_for('import.import_home') }}" class="btn btn-secondary">
+                    {% if emr_mode.value == 'pediatric' %}
+                        Retour
+                    {% else %}
+                        Back
+                    {% endif %}
+                </a>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <!-- No databases found -->
+    <div class="alert alert-info">
+        <h6>
+            {% if emr_mode.value == 'pediatric' %}
+                Aucune Base de Données Détectée
+            {% else %}
+                No Databases Detected
+            {% endif %}
+        </h6>
+        <p class="mb-0">
+            {% if emr_mode.value == 'pediatric' %}
+                Aucune base de données EMR existante n'a été trouvée dans les emplacements standard. 
+                Assurez-vous que vos systèmes EMR sont installés dans les dossiers attendus ou utilisez 
+                les options d'import XML/Word pour importer vos données.
+            {% else %}
+                No existing EMR databases were found in standard locations. 
+                Make sure your EMR systems are installed in the expected folders, or use the 
+                XML/Word import options to import your data.
+            {% endif %}
+        </p>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <strong>
+                    {% if emr_mode.value == 'pediatric' %}
+                        Emplacements Vérifiés :
+                    {% else %}
+                        Checked Locations:
+                    {% endif %}
+                </strong>
+                <ul class="small text-muted">
+                    <li>../foxpro2025/emr_database.db</li>
+                    <li>~/Documents/WordDocsEMR/emr_database.db</li>
+                    <li>~/Documents/FoxPro2025/emr_database.db</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <strong>
+                    {% if emr_mode.value == 'pediatric' %}
+                        Alternatives :
+                    {% else %}
+                        Alternatives:
+                    {% endif %}
+                </strong>
+                <ul class="small">
+                    <li><a href="{{ url_for('import.import_xml') }}">
+                        {% if emr_mode.value == 'pediatric' %}
+                            Import XML
+                        {% else %}
+                            XML Import
+                        {% endif %}
+                    </a></li>
+                    <li><a href="{{ url_for('import.import_documents') }}">
+                        {% if emr_mode.value == 'pediatric' %}
+                            Import Documents Word
+                        {% else %}
+                            Word Documents Import
+                        {% endif %}
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Migration Process Information -->
+    <div class="mt-4">
+        <div class="card">
+            <div class="card-header bg-light">
+                <h6 class="mb-0">
+                    {% if emr_mode.value == 'pediatric' %}
+                        📋 Processus de Migration
+                    {% else %}
+                        📋 Migration Process
+                    {% endif %}
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>
+                            {% if emr_mode.value == 'pediatric' %}
+                                1. Sauvegarde
+                            {% else %}
+                                1. Backup
+                            {% endif %}
+                        </strong>
+                        <ul class="small text-muted">
+                            {% if emr_mode.value == 'pediatric' %}
+                                <li>Sauvegarde automatique</li>
+                                <li>Horodatage unique</li>
+                                <li>Validation d'intégrité</li>
+                            {% else %}
+                                <li>Automatic backup</li>
+                                <li>Unique timestamp</li>
+                                <li>Integrity validation</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>
+                            {% if emr_mode.value == 'pediatric' %}
+                                2. Mapping
+                            {% else %}
+                                2. Mapping
+                            {% endif %}
+                        </strong>
+                        <ul class="small text-muted">
+                            {% if emr_mode.value == 'pediatric' %}
+                                <li>Conversion des champs</li>
+                                <li>Mapping automatique</li>
+                                <li>Préservation des données</li>
+                            {% else %}
+                                <li>Field conversion</li>
+                                <li>Automatic mapping</li>
+                                <li>Data preservation</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>
+                            {% if emr_mode.value == 'pediatric' %}
+                                3. Validation
+                            {% else %}
+                                3. Validation
+                            {% endif %}
+                        </strong>
+                        <ul class="small text-muted">
+                            {% if emr_mode.value == 'pediatric' %}
+                                <li>Vérification des données</li>
+                                <li>Rapport de migration</li>
+                                <li>Confirmation de réussite</li>
+                            {% else %}
+                                <li>Data verification</li>
+                                <li>Migration report</li>
+                                <li>Success confirmation</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Automatically select both if both databases are available
+document.addEventListener('DOMContentLoaded', function() {
+    const bothOption = document.getElementById('migrate_both');
+    if (bothOption && {{ adult_db_available|lower }} && {{ pediatric_db_available|lower }}) {
+        bothOption.checked = true;
+    } else {
+        // Select the first available option
+        const adultOption = document.getElementById('migrate_adult');
+        const pediatricOption = document.getElementById('migrate_pediatric');
+        
+        if (adultOption && {{ adult_db_available|lower }}) {
+            adultOption.checked = true;
+        } else if (pediatricOption && {{ pediatric_db_available|lower }}) {
+            pediatricOption.checked = true;
+        }
+    }
+});
+</script>
+
+{% endblock %} 

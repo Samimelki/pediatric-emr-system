@@ -1,0 +1,88 @@
+ * Serving Flask app 'app'
+ * Debug mode: off
+[pywebview] Using Cocoa
+[pywebview] before_load event fired. injecting pywebview object
+[pywebview] Loading JS files from /Users/samimelki/Word Docs EMR/.venv/lib/python3.13/site-packages/webview/js
+[pywebview] _pywebviewready event fired
+[pywebview] loaded event fired
+[pywebview] before_load event fired. injecting pywebview object
+[pywebview] Loading JS files from /Users/samimelki/Word Docs EMR/.venv/lib/python3.13/site-packages/webview/js
+[pywebview] _pywebviewready event fired
+[pywebview] loaded event fired
+[pywebview] before_load event fired. injecting pywebview object
+[pywebview] Loading JS files from /Users/samimelki/Word Docs EMR/.venv/lib/python3.13/site-packages/webview/js
+[pywebview] _pywebviewready event fired
+[pywebview] loaded event fired
+[pywebview] before_load event fired. injecting pywebview object
+[pywebview] Loading JS files from /Users/samimelki/Word Docs EMR/.venv/lib/python3.13/site-packages/webview/js
+[pywebview] _pywebviewready event fired
+[pywebview] loaded event fired
+Unified database schema initialized successfully.
+DEBUG: Processing vaccines for patient 10000
+DEBUG: Patient data keys: ['id', 'mrn', 'mrn_agg', 'first_name', 'last_name', 'prenom', 'nom', 'date_of_birth', 'naissance_date', 'birth_weight_g', 'birth_height_cm', 'birth_head_circumference_cm', 'birth_notes', 'sex', 'sexe', 'phone', 'telephone', 'address', 'domicile', 'email', 'insurance', 'primary_physician', 'pmh', 'psh', 'family_history', 'medications', 'allergies', 'smoker', 'smoker_details', 'alcohol', 'alcohol_details', 'mere_nom', 'pere_nom', 'pediatre_initiales', 'third_party_payer', 'hopital', 'diag1', 'diag2', 'obstetrical_history', 'monotest1', 'monotest2', 'monotest3', 'rougeole_seule_date', 'dtcp1_date', 'dtcp2_date', 'dtcp3_date', 'dtcp_rappel1_date', 'dtcp_rappel2_date', 'dtcp_rappel3_date', 'dtcp_rappel4_date', 'hep_b1_date', 'hep_b2_date', 'hep_b3_date', 'hib1_date', 'hib2_date', 'hib3_date', 'hib_rappel_date', 'ror_date', 'raw_dossier_text', 'raw_autres_vaccins_text', 'created_date', 'modified_date', 'emr_mode', 'patient_history_text']
+DEBUG: Sample vaccine fields: dtcp1_date=2013-01-17, hep_b1_date=2012-11-14
+DEBUG: Found 0 non-standard vaccines
+DEBUG: Prepared 5 total vaccines for EMR table
+DEBUG: Vaccine DTaP - IPV - canonical: DTaP - IPV
+DEBUG: Added to mandatory: DTaP - IPV
+DEBUG: Vaccine Hepatitis B - canonical: Hepatitis B
+DEBUG: Added to mandatory: Hepatitis B
+DEBUG: Vaccine Hib (Haemophilus influenzae b) - canonical: Hib (Haemophilus influenzae b)
+DEBUG: Added to mandatory: Hib (Haemophilus influenzae b)
+DEBUG: Vaccine MMR (Measles, Mumps, Rubella) - canonical: MMR (Measles, Mumps, Rubella)
+DEBUG: Added to mandatory: MMR (Measles, Mumps, Rubella)
+DEBUG: Vaccine PPD (TB Skin Test) - canonical: PPD (TB Skin Test)
+DEBUG: Added to mandatory: PPD (TB Skin Test)
+DEBUG: Final counts - Mandatory: 5, Recommended: 0
+DEBUG: Active dose keys: ['d1', 'd2', 'd3', 'r1', 'r2']
+DEBUG: Processing vaccines for patient 10000
+DEBUG: Patient data keys: ['id', 'mrn', 'mrn_agg', 'first_name', 'last_name', 'prenom', 'nom', 'date_of_birth', 'naissance_date', 'birth_weight_g', 'birth_height_cm', 'birth_head_circumference_cm', 'birth_notes', 'sex', 'sexe', 'phone', 'telephone', 'address', 'domicile', 'email', 'insurance', 'primary_physician', 'pmh', 'psh', 'family_history', 'medications', 'allergies', 'smoker', 'smoker_details', 'alcohol', 'alcohol_details', 'mere_nom', 'pere_nom', 'pediatre_initiales', 'third_party_payer', 'hopital', 'diag1', 'diag2', 'obstetrical_history', 'monotest1', 'monotest2', 'monotest3', 'rougeole_seule_date', 'dtcp1_date', 'dtcp2_date', 'dtcp3_date', 'dtcp_rappel1_date', 'dtcp_rappel2_date', 'dtcp_rappel3_date', 'dtcp_rappel4_date', 'hep_b1_date', 'hep_b2_date', 'hep_b3_date', 'hib1_date', 'hib2_date', 'hib3_date', 'hib_rappel_date', 'ror_date', 'raw_dossier_text', 'raw_autres_vaccins_text', 'created_date', 'modified_date', 'emr_mode', 'patient_history_text']
+DEBUG: Sample vaccine fields: dtcp1_date=2013-01-17, hep_b1_date=2012-11-14
+DEBUG: Found 0 non-standard vaccines
+DEBUG: Prepared 5 total vaccines for EMR table
+DEBUG: Vaccine DTaP - IPV - canonical: DTaP - IPV
+DEBUG: Added to mandatory: DTaP - IPV
+DEBUG: Vaccine Hepatitis B - canonical: Hepatitis B
+DEBUG: Added to mandatory: Hepatitis B
+DEBUG: Vaccine Hib (Haemophilus influenzae b) - canonical: Hib (Haemophilus influenzae b)
+DEBUG: Added to mandatory: Hib (Haemophilus influenzae b)
+DEBUG: Vaccine MMR (Measles, Mumps, Rubella) - canonical: MMR (Measles, Mumps, Rubella)
+DEBUG: Added to mandatory: MMR (Measles, Mumps, Rubella)
+DEBUG: Vaccine PPD (TB Skin Test) - canonical: PPD (TB Skin Test)
+DEBUG: Added to mandatory: PPD (TB Skin Test)
+DEBUG: Final counts - Mandatory: 5, Recommended: 0
+DEBUG: Active dose keys: ['d1', 'd2', 'd3', 'r1', 'r2']
+DEBUG: Processing vaccines for patient 10000
+DEBUG: Patient data keys: ['id', 'mrn', 'mrn_agg', 'first_name', 'last_name', 'prenom', 'nom', 'date_of_birth', 'naissance_date', 'birth_weight_g', 'birth_height_cm', 'birth_head_circumference_cm', 'birth_notes', 'sex', 'sexe', 'phone', 'telephone', 'address', 'domicile', 'email', 'insurance', 'primary_physician', 'pmh', 'psh', 'family_history', 'medications', 'allergies', 'smoker', 'smoker_details', 'alcohol', 'alcohol_details', 'mere_nom', 'pere_nom', 'pediatre_initiales', 'third_party_payer', 'hopital', 'diag1', 'diag2', 'obstetrical_history', 'monotest1', 'monotest2', 'monotest3', 'rougeole_seule_date', 'dtcp1_date', 'dtcp2_date', 'dtcp3_date', 'dtcp_rappel1_date', 'dtcp_rappel2_date', 'dtcp_rappel3_date', 'dtcp_rappel4_date', 'hep_b1_date', 'hep_b2_date', 'hep_b3_date', 'hib1_date', 'hib2_date', 'hib3_date', 'hib_rappel_date', 'ror_date', 'raw_dossier_text', 'raw_autres_vaccins_text', 'created_date', 'modified_date', 'emr_mode', 'patient_history_text']
+DEBUG: Sample vaccine fields: dtcp1_date=2013-01-17, hep_b1_date=2012-11-14
+DEBUG: Found 0 non-standard vaccines
+DEBUG: Prepared 5 total vaccines for EMR table
+DEBUG: Vaccine DTaP - IPV - canonical: DTaP - IPV
+DEBUG: Added to mandatory: DTaP - IPV
+DEBUG: Vaccine Hepatitis B - canonical: Hepatitis B
+DEBUG: Added to mandatory: Hepatitis B
+DEBUG: Vaccine Hib (Haemophilus influenzae b) - canonical: Hib (Haemophilus influenzae b)
+DEBUG: Added to mandatory: Hib (Haemophilus influenzae b)
+DEBUG: Vaccine MMR (Measles, Mumps, Rubella) - canonical: MMR (Measles, Mumps, Rubella)
+DEBUG: Added to mandatory: MMR (Measles, Mumps, Rubella)
+DEBUG: Vaccine PPD (TB Skin Test) - canonical: PPD (TB Skin Test)
+DEBUG: Added to mandatory: PPD (TB Skin Test)
+DEBUG: Final counts - Mandatory: 5, Recommended: 0
+DEBUG: Active dose keys: ['d1', 'd2', 'd3', 'r1', 'r2']
+DEBUG: Processing vaccines for patient 10000
+DEBUG: Patient data keys: ['id', 'mrn', 'mrn_agg', 'first_name', 'last_name', 'prenom', 'nom', 'date_of_birth', 'naissance_date', 'birth_weight_g', 'birth_height_cm', 'birth_head_circumference_cm', 'birth_notes', 'sex', 'sexe', 'phone', 'telephone', 'address', 'domicile', 'email', 'insurance', 'primary_physician', 'pmh', 'psh', 'family_history', 'medications', 'allergies', 'smoker', 'smoker_details', 'alcohol', 'alcohol_details', 'mere_nom', 'pere_nom', 'pediatre_initiales', 'third_party_payer', 'hopital', 'diag1', 'diag2', 'obstetrical_history', 'monotest1', 'monotest2', 'monotest3', 'rougeole_seule_date', 'dtcp1_date', 'dtcp2_date', 'dtcp3_date', 'dtcp_rappel1_date', 'dtcp_rappel2_date', 'dtcp_rappel3_date', 'dtcp_rappel4_date', 'hep_b1_date', 'hep_b2_date', 'hep_b3_date', 'hib1_date', 'hib2_date', 'hib3_date', 'hib_rappel_date', 'ror_date', 'raw_dossier_text', 'raw_autres_vaccins_text', 'created_date', 'modified_date', 'emr_mode', 'patient_history_text']
+DEBUG: Sample vaccine fields: dtcp1_date=2013-01-17, hep_b1_date=2012-11-14
+DEBUG: Found 0 non-standard vaccines
+DEBUG: Prepared 5 total vaccines for EMR table
+DEBUG: Vaccine DTaP - IPV - canonical: DTaP - IPV
+DEBUG: Added to mandatory: DTaP - IPV
+DEBUG: Vaccine Hepatitis B - canonical: Hepatitis B
+DEBUG: Added to mandatory: Hepatitis B
+DEBUG: Vaccine Hib (Haemophilus influenzae b) - canonical: Hib (Haemophilus influenzae b)
+DEBUG: Added to mandatory: Hib (Haemophilus influenzae b)
+DEBUG: Vaccine MMR (Measles, Mumps, Rubella) - canonical: MMR (Measles, Mumps, Rubella)
+DEBUG: Added to mandatory: MMR (Measles, Mumps, Rubella)
+DEBUG: Vaccine PPD (TB Skin Test) - canonical: PPD (TB Skin Test)
+DEBUG: Added to mandatory: PPD (TB Skin Test)
+DEBUG: Final counts - Mandatory: 5, Recommended: 0
+DEBUG: Active dose keys: ['d1', 'd2', 'd3', 'r1', 'r2']

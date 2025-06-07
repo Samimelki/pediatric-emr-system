@@ -29,80 +29,53 @@ def parse_date_to_iso(date_str, input_format='%d-%m-%y'):
     return None
 
 def _parse_measurement_string(measurement_str):
-    """Helper to parse a W/H/HC string."""
-    weight_g, height_cm, head_circumference_cm = None, None, None
+    """Parse measurement string like '3880/51/37' into weight_g, height_cm, hc_cm."""
     if not measurement_str:
-        return weight_g, height_cm, head_circumference_cm
+        return None, None, None
+    
     parts = measurement_str.split('/')
+    weight_g = None
+    height_cm = None
+    hc_cm = None
+    
     try:
-        if len(parts) > 0 and parts[0].strip():
-            w_str_cleaned = parts[0].strip()
-            is_decimal_kg = '.' in w_str_cleaned
-            
-            if is_decimal_kg:
-                val_numeric = float(w_str_cleaned)
-                final_w_grams = int(val_numeric * 1000)
-            else: # Integer value
-                val_numeric = int(w_str_cleaned)
-                if len(w_str_cleaned) == 1 or len(w_str_cleaned) == 2:
-                    # 1 or 2 digits, assume KG, convert to grams
-                    final_w_grams = val_numeric * 1000
-                else:
-                    # 3 or more digits, assume already GRAMS
-                    final_w_grams = val_numeric
-            
-            weight_g = final_w_grams
-        if len(parts) > 1 and parts[1].strip():
-            h_str = parts[1].strip()
-            height_cm = float(h_str)
-        if len(parts) > 2 and parts[2].strip():
-            hc_str = parts[2].strip()
-            head_circumference_cm = float(hc_str)
-    except ValueError:
-        pass # Or log error
-    return weight_g, height_cm, head_circumference_cm
+        if len(parts) >= 1 and parts[0].strip():
+            weight_g = int(float(parts[0].strip()))
+        if len(parts) >= 2 and parts[1].strip():
+            height_cm = float(parts[1].strip())
+        if len(parts) >= 3 and parts[2].strip():
+            hc_cm = float(parts[2].strip())
+    except (ValueError, IndexError):
+        pass
+    
+    return weight_g, height_cm, hc_cm
 
-def parse_memo_text(memo_content_raw):
-    """
-    Parses the raw memo text (from /fichier/dossier) into a list of structured visit entries.
-    """
-    if not memo_content_raw:
+def parse_memo_text(memo_text):
+    """Parse memo text to extract birth measurements and visits."""
+    if not memo_text:
         return {'birth_measurements': {}, 'parsed_visits': []}
-
-    normalized_content = memo_content_raw.replace("&#10;", "\n").strip()
-    lines = re.split(r'\r\n|\n|\r', normalized_content)
-
+    
+    lines = [line.strip() for line in memo_text.strip().split('\n') if line.strip()]
+    if not lines:
+        return {'birth_measurements': {}, 'parsed_visits': []}
+    
     birth_measurements_data = {}
     parsed_visits = []
-    
-    # Regex for measurements: W, W/H, W/H/HC - parts can be empty after slash
-    # Anchored to the start of a line, not necessarily numeric only (could be just "3000/")
-    # and not followed by a date marker *, to differentiate from visit lines.
-    # This is a bit heuristic, assuming birth measurements are usually at the top
-    # and not formatted like a dated visit entry.
-    # standalone_measurement_pattern = re.compile(r"^(\d+(?:\.\d+)?(?:/\d*(?:\.\d+)?(?:/\d*(?:\.\d+)?)?)?)$(?![\s\S]*^\*\d{2}-\d{2}-\d{2}\*)") # Even older regex
-    # standalone_measurement_pattern = re.compile(r"^(\d+(?:\.\d+)?(?:/\d*(?:\.\d+)?(?:/\d*(?:\.\d+)?)?)?)(?:\s+.*)?$") # Old regex
-    # New regex: Captures measurements (group 1) and optional following text (group 2) on the first line.
-    standalone_measurement_pattern = re.compile(r"^(\d+(?:\.\d+)?(?:/\d*(?:\.\d+)?(?:/\d*(?:\.\d+)?)?)?)(?:\s+(.*))?$")
-    
-    # Try to find birth measurements in the first few lines if they don't look like visits
-    # and if the memo doesn't start directly with a visit
     processed_birth_measurement_lines = 0
+    
+    # Enhanced regex to capture measurements at start of line with optional text after
+    standalone_measurement_pattern = re.compile(r"^(\d+(?:\.\d+)?(?:/\d*(?:\.\d+)?(?:/\d*(?:\.\d+)?)?)?)(.*)$")
+    
+    # Check first line for birth measurements
     if lines and not lines[0].startswith('*'):
-        # Check first line for birth measurements
-        # We look for a line that IS ONLY measurements, and not part of a dated entry
-        # Example: "3880/51/37" or "4000/" 
-        # This regex looks for a line that is *only* measurements.
-        # standalone_measurement_pattern = re.compile(r"^(\d+(?:\.\d+)?(?:/\d*(?:\.\d+)?(?:/\d*(?:\.\d+)?)?)?)$") # Old regex
-        # New regex: Captures measurements at the start of the line, allowing other text after it.
         first_line_match = standalone_measurement_pattern.match(lines[0].strip())
         if first_line_match:
-            bm_w, bm_h, bm_hc = _parse_measurement_string(first_line_match.group(1)) # Group 1 is the measurement string
+            bm_w, bm_h, bm_hc = _parse_measurement_string(first_line_match.group(1))
             if bm_w is not None: 
                 birth_measurements_data['weight_g'] = bm_w
                 birth_measurements_data['height_cm'] = bm_h
                 birth_measurements_data['hc_cm'] = bm_hc
-                birth_notes = first_line_match.group(2) # Group 2 is the text after measurements
+                birth_notes = first_line_match.group(2)
                 if birth_notes:
                     birth_measurements_data['notes'] = birth_notes.strip()
                 processed_birth_measurement_lines = 1
@@ -135,11 +108,9 @@ def parse_memo_text(memo_content_raw):
             })
         elif entry_text.startswith("*") and entry_text.count("*") >= 2 and parsed_visits:
             # This handles notes that continue on a new line and also start with *
-            # or malformed entries that we append to the last valid visit's notes.
             parsed_visits[-1]['notes'] += "\n" + entry_text
         elif parsed_visits: # If it's not a visit and not a continuation starting with *, append to previous note
              parsed_visits[-1]['notes'] += "\n" + entry_text
-        # else: lines before the first visit (if not birth measurements) or random lines are ignored
 
     return {'birth_measurements': birth_measurements_data, 'parsed_visits': parsed_visits}
 
@@ -174,19 +145,23 @@ def parse_autres_vac_text(autres_vac_content_raw):
         # else: line doesn't match format, ignore for now or log
     return parsed_vaccines
 
-def _extract_headers_from_row(header_row_element, ns):
-    """Extracts headers from the header row element."""
+def _extract_headers_from_row(header_row, ns):
+    """Extract headers from the header row."""
     headers = {}
-    current_col_idx = 1
-    for cell in header_row_element.findall('{%s}Cell' % ns[''], ns):
-        cell_index_str = cell.get('{%s}Index' % ns['ss'])
-        if cell_index_str:
-            current_col_idx = int(cell_index_str)
+    logical_col_idx = 1
+    cells = header_row.findall('{%s}Cell' % ns[''], ns)
+    
+    for cell in cells:
+        ss_index = cell.get('{%s}Index' % ns['ss'])
+        if ss_index:
+            logical_col_idx = int(ss_index)
+        
         data_element = cell.find('{%s}Data' % ns[''], ns)
         if data_element is not None and data_element.text:
-            if current_col_idx <= 37: # We only care about headers up to column 37
-                headers[current_col_idx] = data_element.text.strip()
-        current_col_idx += 1
+            headers[logical_col_idx] = data_element.text.strip()
+        
+        logical_col_idx += 1
+    
     return headers
 
 def _process_row(row_element, headers, ns):
@@ -224,7 +199,7 @@ def _process_row(row_element, headers, ns):
     return patient_data
 
 def parse_excel_xml(file_path):
-    """ Parses data from an Excel XML file. """
+    """Parses data from an Excel XML file."""
     all_patients_data = []
     try:
         with open(file_path, 'r', encoding='utf-8') as f:

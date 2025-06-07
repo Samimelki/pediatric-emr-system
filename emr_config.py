@@ -294,6 +294,57 @@ class EMRConfig:
         """Get configuration for a specific feature"""
         return self.config.get('features', {}).get(feature_name, {})
     
+    def get_enabled_features(self):
+        """Get a structured object of enabled features for easy template access"""
+        from collections import namedtuple
+        
+        Features = namedtuple('Features', [
+            'vaccines_enabled',
+            'growth_charts_enabled', 
+            'vitals_tracking_enabled',
+            'document_management_enabled',
+            'statistics_reports_enabled',
+            'custom_fields_enabled',
+            'multi_language_support',
+            'simplified_interface'
+        ])
+        
+        return Features(
+            vaccines_enabled=self.should_show_vaccines(),
+            growth_charts_enabled=self.should_show_growth_charts(),
+            vitals_tracking_enabled=self.should_show_adult_vitals(),
+            document_management_enabled=self.is_feature_enabled('document_management'),
+            statistics_reports_enabled=self.is_feature_enabled('statistics_reports'),
+            custom_fields_enabled=self.is_feature_enabled('custom_fields'),
+            multi_language_support=self.is_feature_enabled('multi_language'),
+            simplified_interface=self.is_feature_enabled('simplified_interface')
+        )
+    
+    def update_features(self, features_data: Dict[str, bool]):
+        """Update multiple features at once"""
+        if 'features' not in self.config:
+            self.config['features'] = {}
+            
+        # Map simplified names to our feature config structure
+        feature_mapping = {
+            'vaccines_enabled': 'vaccines',
+            'growth_charts_enabled': 'growth_charts',
+            'vitals_tracking_enabled': 'adult_vitals',
+            'document_management_enabled': 'document_management',
+            'statistics_reports_enabled': 'statistics_reports',
+            'custom_fields_enabled': 'custom_fields',
+            'multi_language_support': 'multi_language',
+            'simplified_interface': 'simplified_interface'
+        }
+        
+        for simple_name, enabled in features_data.items():
+            feature_name = feature_mapping.get(simple_name, simple_name)
+            if feature_name not in self.config['features']:
+                self.config['features'][feature_name] = {}
+            self.config['features'][feature_name]['enabled'] = enabled
+        
+        self.save_config()
+    
     # Visit Configuration
     def get_visit_fields(self, mode: Optional[EMRMode] = None) -> List[str]:
         """Get appropriate visit fields for the current mode"""
@@ -390,6 +441,25 @@ class EMRConfig:
             'primary_language': self.config.get('primary_language', 'en'),
             'secondary_language': self.config.get('secondary_language', 'fr')
         }
+    
+    # Language Configuration
+    def get_primary_language(self) -> str:
+        """Get primary language (en or fr)"""
+        return self.config.get('primary_language', 'en')
+    
+    def set_primary_language(self, language: str):
+        """Set primary language"""
+        if language in ['en', 'fr']:
+            self.config['primary_language'] = language
+            self.save_config()
+    
+    def is_french_primary(self) -> bool:
+        """Check if French is the primary language"""
+        return self.get_primary_language() == 'fr'
+    
+    def is_english_primary(self) -> bool:
+        """Check if English is the primary language"""
+        return self.get_primary_language() == 'en'
 
 # Global configuration instance
 emr_config = EMRConfig()

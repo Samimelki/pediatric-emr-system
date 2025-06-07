@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>
+        {% if emr_mode.value == 'pediatric' %}
+            Importer des Dossiers Médicaux
+        {% else %}
+            Import Medical Records
+        {% endif %}
+    </h2>
+    <hr>
+
+    <!-- EMR Mode Indicator -->
+    <div class="alert alert-info">
+        <strong>
+            {% if emr_mode.value == 'pediatric' %}
+                Mode EMR: {{ emr_mode.value.title() }}
+            {% else %}
+                EMR Mode: {{ emr_mode.value.title() }}
+            {% endif %}
+        </strong>
+        <a href="{{ url_for('emr_settings.emr_configuration') }}" class="btn btn-sm btn-outline-secondary float-right">
+            {% if emr_mode.value == 'pediatric' %}
+                Changer le Mode
+            {% else %}
+                Change Mode
+            {% endif %}
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- XML Import Card -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-file-code"></i>
+                        {% if emr_mode.value == 'pediatric' %}
+                            Importer depuis XML
+                        {% else %}
+                            Import from XML
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <p class="card-text">
+                        {% if emr_mode.value == 'pediatric' %}
+                            Importer les données des patients depuis des fichiers XML (données EMR pédiatriques).
+                        {% else %}
+                            Import patient data from XML files (pediatric EMR data).
+                        {% endif %}
+                    </p>
+                    <ul class="text-muted small">
+                        {% if emr_mode.value == 'pediatric' %}
+                            <li>Données des patients avec vaccins</li>
+                            <li>Mesures de croissance</li>
+                            <li>Historique des visites</li>
+                            <li>Support pour les formats Excel XML</li>
+                        {% else %}
+                            <li>Patient data with vaccines</li>
+                            <li>Growth measurements</li>
+                            <li>Visit history</li>
+                            <li>Excel XML format support</li>
+                        {% endif %}
+                    </ul>
+                    <div class="mt-auto">
+                        <a href="{{ url_for('import.import_xml') }}" class="btn btn-primary">
+                            {% if emr_mode.value == 'pediatric' %}
+                                Importer XML
+                            {% else %}
+                                Import XML
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Word Documents Import Card -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-file-word"></i>
+                        {% if emr_mode.value == 'pediatric' %}
+                            Importer depuis Word
+                        {% else %}
+                            Import from Word Documents
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <p class="card-text">
+                        {% if emr_mode.value == 'pediatric' %}
+                            Importer les données des patients depuis des documents Word (.docx).
+                        {% else %}
+                            Import patient data from Word documents (.docx files).
+                        {% endif %}
+                    </p>
+                    <ul class="text-muted small">
+                        {% if emr_mode.value == 'pediatric' %}
+                            <li>Documents Word structurés</li>
+                            <li>Historique médical des patients</li>
+                            <li>Données des visites</li>
+                            <li>Import en lot</li>
+                        {% else %}
+                            <li>Structured Word documents</li>
+                            <li>Patient medical history</li>
+                            <li>Visit data</li>
+                            <li>Batch import</li>
+                        {% endif %}
+                    </ul>
+                    <div class="mt-auto">
+                        <a href="{{ url_for('import.import_documents') }}" class="btn btn-success">
+                            {% if emr_mode.value == 'pediatric' %}
+                                Importer Documents
+                            {% else %}
+                                Import Documents
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legacy Database Migration Card -->
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-database"></i>
+                        {% if emr_mode.value == 'pediatric' %}
+                            Migration des Bases de Données Existantes
+                        {% else %}
+                            Legacy Database Migration
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        {% if emr_mode.value == 'pediatric' %}
+                            Migrer les données depuis vos bases de données EMR existantes (adulte et pédiatrique) vers le système unifié.
+                        {% else %}
+                            Migrate data from your existing EMR databases (adult and pediatric) to the unified system.
+                        {% endif %}
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="text-muted small">
+                                {% if emr_mode.value == 'pediatric' %}
+                                    <li>Migration sécurisée avec sauvegarde</li>
+                                    <li>Validation de l'intégrité des données</li>
+                                {% else %}
+                                    <li>Safe migration with backup</li>
+                                    <li>Data integrity validation</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="text-muted small">
+                                {% if emr_mode.value == 'pediatric' %}
+                                    <li>Mapping automatique des champs</li>
+                                    <li>Support des deux systèmes</li>
+                                {% else %}
+                                    <li>Automatic field mapping</li>
+                                    <li>Both systems supported</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('import.import_legacy_databases') }}" class="btn btn-warning">
+                        {% if emr_mode.value == 'pediatric' %}
+                            Migrer les Bases de Données
+                        {% else %}
+                            Migrate Databases
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="alert alert-light">
+        <h6>
+            {% if emr_mode.value == 'pediatric' %}
+                💡 Aide et Conseils
+            {% else %}
+                💡 Help & Tips
+            {% endif %}
+        </h6>
+        <ul class="mb-0 small">
+            {% if emr_mode.value == 'pediatric' %}
+                <li><strong>Sauvegarde recommandée:</strong> Créez toujours une sauvegarde avant d'importer des données.</li>
+                <li><strong>Test d'abord:</strong> Testez avec un petit échantillon de données avant l'import complet.</li>
+                <li><strong>Validation:</strong> Vérifiez les données importées pour vous assurer de leur exactitude.</li>
+            {% else %}
+                <li><strong>Backup recommended:</strong> Always create a backup before importing data.</li>
+                <li><strong>Test first:</strong> Test with a small sample of data before full import.</li>
+                <li><strong>Validation:</strong> Review imported data to ensure accuracy.</li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %} 
