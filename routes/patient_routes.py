@@ -5,7 +5,7 @@ from datetime import datetime, date
 from collections import defaultdict
 from database import get_db, get_active_custom_demographic_fields
 from unified_database import get_patient_unified_data, save_patient_unified, get_visit_unified_data
-from emr_config import emr_config, EMRMode
+from emr_config import emr_config
 from dateutil.relativedelta import relativedelta
 import json
 from config_manager import load_config, USER_MEDIA_FOLDER
@@ -400,8 +400,8 @@ def patient_detail(patient_id):
                 else:
                     visit_dict['vital_signs'] = {}
                 
-                # For pediatric EMR, add direct measurement fields to vitals if they exist
-                if emr_config.get_emr_mode() == EMRMode.PEDIATRIC or emr_config.get_emr_mode() == EMRMode.MIXED:
+                # For profiles with pediatric features, add direct measurement fields to vitals if they exist
+                if emr_config.is_feature_enabled('weight_tracking') or emr_config.is_feature_enabled('height_tracking'):
                     if visit_dict.get('weight_g') and not visit_dict['vital_signs'].get('weight_kg'):
                         visit_dict['vital_signs']['weight_kg'] = convert_weight_to_kg(visit_dict['weight_g'])
                     if visit_dict.get('height_cm') and not visit_dict['vital_signs'].get('height_cm'):
@@ -434,7 +434,7 @@ def patient_detail(patient_id):
     active_dose_keys_emr = []
     table_column_labels_emr = {}
     
-    if emr_config.should_show_vaccines():
+    if emr_config.is_feature_enabled('vaccines'):
         try:
             # Import vaccine constants
             from routes.pdf_export_routes import (
@@ -666,8 +666,8 @@ def add_patient_submit():
             'raw_dossier_text': request.form.get('raw_dossier_text') or None
         }
         
-        # Core demographic fields (adapt based on mode)
-        if emr_mode == EMRMode.PEDIATRIC:
+        # Core demographic fields (adapt based on profile features)
+        if emr_config.is_feature_enabled('parental_info'):
             form_data.update({
                 'prenom': request.form.get('prenom'),
                 'nom': request.form.get('nom'),
@@ -697,7 +697,7 @@ def add_patient_submit():
                 return redirect(url_for('patient.add_patient_form'))
         
         # Adult-specific medical fields
-        if emr_mode in [EMRMode.ADULT, EMRMode.MIXED]:
+        if not emr_config.is_feature_enabled('parental_info'):
             form_data.update({
                 'insurance': request.form.get('insurance') or None,
                 'primary_physician': request.form.get('primary_physician') or None,
@@ -713,7 +713,7 @@ def add_patient_submit():
             })
         
         # Pediatric-specific fields
-        if emr_mode in [EMRMode.PEDIATRIC, EMRMode.MIXED]:
+        if emr_config.is_feature_enabled('parental_info') or emr_config.is_feature_enabled('birth_measurements'):
             form_data.update({
                 'mere_nom': request.form.get('mere_nom') or None,
                 'pere_nom': request.form.get('pere_nom') or None,
@@ -730,7 +730,7 @@ def add_patient_submit():
             })
             
             # Vaccine fields (if vaccines are enabled)
-            if emr_config.get_enabled_features().vaccines_enabled:
+            if emr_config.is_feature_enabled('vaccines'):
                 vaccine_fields = [
                     'dtcp1_date', 'dtcp2_date', 'dtcp3_date',
                     'dtcp_rappel1_date', 'dtcp_rappel2_date', 'dtcp_rappel3_date', 'dtcp_rappel4_date',
@@ -758,8 +758,8 @@ def add_patient_submit():
         word_manager = WordDocumentManager(db_path=config['database_path'], documents_folder=config['word_docs_folder'])
         word_manager.create_or_update_document(patient_id)
         
-        # Create success message based on mode
-        if emr_mode == EMRMode.PEDIATRIC:
+        # Create success message based on profile features
+        if emr_config.is_feature_enabled('parental_info'):
             name = f"{form_data.get('prenom', '')} {form_data.get('nom', '')}"
         else:
             name = f"{form_data.get('first_name', '')} {form_data.get('last_name', '')}"

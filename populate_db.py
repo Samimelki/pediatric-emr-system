@@ -2,7 +2,7 @@ import sqlite3
 import json
 from xml_parser import parse_excel_xml, parse_date_to_iso, parse_memo_text
 from unified_database import save_patient_unified, get_db
-from emr_config import EMRMode
+# from emr_config import EMRMode  # No longer needed with profile-based system
 import datetime
 
 # Header mapping for XML to unified database fields
@@ -157,7 +157,7 @@ def _insert_non_standard_vaccines_unified(patient_id, parsed_vaccines):
     
     return vaccines_added_count
 
-def populate_database_from_parsed_data(all_xml_patients, target_mode=EMRMode.PEDIATRIC):
+def populate_database_from_parsed_data(all_xml_patients, target_mode='pediatric'):
     """Populate unified database from parsed XML data."""
     
     if not all_xml_patients:
@@ -224,7 +224,7 @@ def populate_database_from_parsed_data(all_xml_patients, target_mode=EMRMode.PED
     
     return patients_added, visits_added, non_std_vaccines_added
 
-def populate_database(xml_file, target_mode=EMRMode.PEDIATRIC):
+def populate_database(xml_file, target_mode='pediatric'):
     """Main entry point for XML database population."""
     print(f"Parsing XML data from: {xml_file}")
     all_xml_patients = parse_excel_xml(xml_file)

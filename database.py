@@ -7,7 +7,7 @@ from unified_database import (
     get_active_custom_demographic_fields as get_unified_active_fields,
     migrate_from_legacy_database
 )
-from emr_config import emr_config, EMRMode
+from emr_config import emr_config
 
 # DATABASE = 'emr_database.db' # This will now be set in app.config['DATABASE']
 

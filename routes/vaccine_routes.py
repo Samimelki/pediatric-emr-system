@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
 from database import get_db
-from emr_config import emr_config, EMRMode
+from emr_config import emr_config
 from statistics_engine.statistics_calculator import calculate_average_vaccines_per_child
 import sqlite3
 

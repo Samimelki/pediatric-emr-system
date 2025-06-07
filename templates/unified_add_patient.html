@@ -238,11 +238,11 @@
         <div class="form-row">
             <div class="form-group col-md-3">
                 {% if emr_mode.value == 'pediatric' %}
-                    <label for="birth_weight_g">Poids Naissance (g)</label>
+                                    <label for="birth_weight_g">Poids Naissance (g ou kg)</label>
                 {% else %}
-                    <label for="birth_weight_g">Birth Weight (grams)</label>
+                <label for="birth_weight_g">Birth Weight (g or kg)</label>
                 {% endif %}
-                <input type="number" class="form-control" id="birth_weight_g" name="birth_weight_g" step="any">
+                <input type="number" class="form-control" id="birth_weight_g" name="birth_weight_g" step="any" placeholder="22 or 3456">
             </div>
             <div class="form-group col-md-3">
                 {% if emr_mode.value == 'pediatric' %}

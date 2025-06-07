@@ -1,3 +1,4 @@
+{% if is_feature_enabled('growth_charts') %}
 {% if not dob_missing %}
     <h4 class="mt-4">Growth Charts</h4>
     <p class="text-muted"><small>Note: Charts display data from recorded visits where measurements are available. WHO percentiles (3rd, 15th, 50th, 85th, 97th) are shown for context if patient sex is recorded and recognized (Male/Female) and WHO data is available for the patient's age and sex.</small></p>
@@ -543,4 +544,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+{% endif %}
 {% endif %} 

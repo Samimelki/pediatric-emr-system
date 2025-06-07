@@ -3,7 +3,7 @@ import json
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from emr_config import emr_config, EMRMode
+from emr_config import emr_config
 
 # Import XML processing functionality
 from xml_parser import parse_excel_xml
@@ -92,7 +92,7 @@ def import_xml():
                 # Import to unified database
                 patients_added, visits_added, vaccines_added = populate_database_from_parsed_data(
                     parsed_patients, 
-                    target_mode=EMRMode.PEDIATRIC if current_mode == EMRMode.PEDIATRIC else EMRMode.MIXED
+                    target_mode='pediatric' if current_mode == 'pediatric' else 'mixed'
                 )
                 
                 flash(f'XML import completed: {patients_added} patients, {visits_added} visits, {vaccines_added} vaccines imported.', 'success')

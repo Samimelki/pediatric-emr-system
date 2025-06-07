@@ -1,120 +1,165 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
-from emr_config import emr_config, EMRMode
+from emr_config import emr_config, AVAILABLE_FEATURES
 from database import get_db
+from datetime import datetime
+import json
 
 emr_settings_bp = Blueprint('emr_settings', __name__, url_prefix='/emr-settings')
 
 @emr_settings_bp.route('/')
 def emr_configuration():
-    """Main EMR configuration page."""
-    current_mode = emr_config.get_emr_mode()
-    current_features = emr_config.get_enabled_features()
-    
-    # Get patient counts by mode for statistics
-    db = get_db()
-    stats = {}
-    try:
-        cursor = db.execute("SELECT emr_mode, COUNT(*) as count FROM Patients GROUP BY emr_mode")
-        for row in cursor.fetchall():
-            stats[row['emr_mode']] = row['count']
-    except:
-        stats = {'adult': 0, 'pediatric': 0, 'mixed': 0}
-    
-    return render_template('emr_configuration.html',
-                         title='EMR Configuration',
-                         current_mode=current_mode,
-                         current_features=current_features,
-                         emr_modes=EMRMode,
-                         patient_stats=stats)
+    """Legacy EMR configuration page - redirect to profile settings."""
+    return redirect(url_for('emr_settings.profile_settings'))
 
-@emr_settings_bp.route('/mode', methods=['POST'])
-def set_emr_mode():
-    """Set the EMR operating mode."""
+@emr_settings_bp.route('/profile-settings')
+def profile_settings():
+    """New profile-based settings page"""
+    # Get current profile information
+    active_profile_name = emr_config.get_active_profile_name()
+    current_profile = emr_config.get_active_profile()
+    all_profiles = emr_config.get_all_profiles()
+    enabled_features = emr_config.get_enabled_features()
+    feature_categories = emr_config.get_feature_categories()
+    
+    # Get practice information
+    practice_info = emr_config.get_practice_info()
+    
+    return render_template('emr_profile_settings.html',
+                         active_profile_name=active_profile_name,
+                         current_profile=current_profile,
+                         profiles=all_profiles,
+                         enabled_features=enabled_features,
+                         available_features=AVAILABLE_FEATURES,
+                         feature_categories=feature_categories,
+                         practice_name=practice_info.get('name', 'Medical Practice'))
+
+@emr_settings_bp.route('/switch-profile', methods=['POST'])
+def switch_profile():
+    """Switch to a different profile"""
     try:
-        mode_str = request.form.get('emr_mode')
-        if not mode_str:
-            flash('No EMR mode specified.', 'danger')
-            return redirect(url_for('emr_settings.emr_configuration'))
+        profile_name = request.form.get('profile_name')
         
-        # Validate mode
-        try:
-            new_mode = EMRMode(mode_str)
-        except ValueError:
-            flash(f'Invalid EMR mode: {mode_str}', 'danger')
-            return redirect(url_for('emr_settings.emr_configuration'))
+        if not profile_name:
+            flash('No profile selected', 'danger')
+            return redirect(url_for('emr_settings.profile_settings'))
         
-        # Record configuration change
-        old_mode = emr_config.get_emr_mode()
+        old_profile = emr_config.get_active_profile_name()
         
-        # Set new mode
-        emr_config.set_emr_mode(new_mode)
+        if emr_config.set_active_profile(profile_name):
+            # Log the change
+            _log_configuration_change(old_profile, profile_name, 'profile_switch', 
+                                    request.form.get('reason', 'User switched profile'))
+            flash(f'Switched to profile: {profile_name}', 'success')
+        else:
+            flash('Profile not found', 'danger')
+            
+    except Exception as e:
+        print(f"Error switching profile: {e}")
+        flash('Error switching profile', 'danger')
+    
+    return redirect(url_for('emr_settings.profile_settings'))
+
+@emr_settings_bp.route('/update-profile', methods=['POST'])
+def update_profile():
+    """Update an existing profile"""
+    try:
+        data = request.get_json()
+        profile_name = data.get('profile_name')
+        features = data.get('features', {})
         
-        # Log the change
-        _log_configuration_change(old_mode, new_mode, 'emr_mode', request.form.get('reason', ''))
+        if not profile_name:
+            return jsonify({'success': False, 'message': 'Profile name required'})
         
-        # Success message
-        mode_names = {
-            EMRMode.ADULT: 'Adult EMR',
-            EMRMode.PEDIATRIC: 'Pediatric EMR',
-            EMRMode.MIXED: 'Mixed Mode (Adult + Pediatric)'
+        # Get current profile and update features
+        current_profile = emr_config.get_all_profiles().get(profile_name, {})
+        current_profile['features'] = features
+        
+        if emr_config.update_profile(profile_name, current_profile):
+            # Log the change
+            enabled_count = sum(1 for enabled in features.values() if enabled)
+            _log_configuration_change(None, None, 'profile_update', 
+                                    f'Updated {profile_name}: {enabled_count} features enabled')
+            return jsonify({'success': True, 'message': 'Profile updated successfully'})
+        else:
+            return jsonify({'success': False, 'message': 'Failed to update profile'})
+            
+    except Exception as e:
+        print(f"Error updating profile: {e}")
+        return jsonify({'success': False, 'message': str(e)})
+
+@emr_settings_bp.route('/create-profile', methods=['POST'])
+def create_profile():
+    """Create a new profile"""
+    try:
+        data = request.get_json()
+        profile_name = data.get('profile_name')
+        
+        if not profile_name:
+            return jsonify({'success': False, 'message': 'Profile name required'})
+            
+        # Check if profile already exists
+        if profile_name in emr_config.get_all_profiles():
+            return jsonify({'success': False, 'message': 'Profile name already exists'})
+        
+        # Create profile data structure
+        profile_data = {
+            'name': data.get('name', profile_name),
+            'description': data.get('description', 'Custom profile'),
+            'features': data.get('features', {}),
+            'settings': data.get('settings', {
+                'weight_unit_preference': 'auto',
+                'language': 'en',
+                'show_percentiles': True,
+                'require_visit_notes': True
+            })
         }
         
-        flash(f'EMR mode changed to: {mode_names[new_mode]}', 'success')
-        
+        if emr_config.create_profile(profile_name, profile_data):
+            # Log the change
+            enabled_count = sum(1 for enabled in profile_data['features'].values() if enabled)
+            _log_configuration_change(None, None, 'profile_create', 
+                                    f'Created {profile_name}: {enabled_count} features enabled')
+            return jsonify({'success': True, 'message': 'Profile created successfully'})
+        else:
+            return jsonify({'success': False, 'message': 'Failed to create profile'})
+            
     except Exception as e:
-        flash(f'Error changing EMR mode: {str(e)}', 'danger')
-    
-    return redirect(url_for('emr_settings.emr_configuration'))
+        print(f"Error creating profile: {e}")
+        return jsonify({'success': False, 'message': str(e)})
 
-@emr_settings_bp.route('/features', methods=['POST'])
-def update_features():
-    """Update EMR feature toggles."""
+@emr_settings_bp.route('/delete-profile', methods=['POST'])
+def delete_profile():
+    """Delete a profile"""
     try:
-        # Get current features
-        current_features = emr_config.get_enabled_features()
+        data = request.get_json()
+        profile_name = data.get('profile_name')
         
-        # Update features based on form data
-        features_data = {}
+        if not profile_name:
+            return jsonify({'success': False, 'message': 'Profile name required'})
         
-        # Feature toggles
-        features_data['vaccines_enabled'] = 'vaccines_enabled' in request.form
-        features_data['growth_charts_enabled'] = 'growth_charts_enabled' in request.form
-        features_data['vitals_tracking_enabled'] = 'vitals_tracking_enabled' in request.form
-        features_data['document_management_enabled'] = 'document_management_enabled' in request.form
-        features_data['statistics_reports_enabled'] = 'statistics_reports_enabled' in request.form
-        features_data['custom_fields_enabled'] = 'custom_fields_enabled' in request.form
-        
-        # UI preferences
-        features_data['multi_language_support'] = 'multi_language_support' in request.form
-        features_data['simplified_interface'] = 'simplified_interface' in request.form
-        
-        # Update configuration
-        emr_config.update_features(features_data)
-        
-        # Log the change
-        changed_features = []
-        for key, value in features_data.items():
-            if getattr(current_features, key, False) != value:
-                changed_features.append(f"{key}: {'enabled' if value else 'disabled'}")
-        
-        if changed_features:
-            _log_configuration_change(None, None, 'features', 
-                                    f"Changed: {', '.join(changed_features)}")
-        
-        flash('EMR features updated successfully!', 'success')
-        
+        if emr_config.delete_profile(profile_name):
+            # Log the change
+            _log_configuration_change(None, None, 'profile_delete', 
+                                    f'Deleted profile: {profile_name}')
+            return jsonify({'success': True, 'message': 'Profile deleted successfully'})
+        else:
+            return jsonify({'success': False, 'message': 'Cannot delete default profiles or profile not found'})
+            
     except Exception as e:
-        flash(f'Error updating features: {str(e)}', 'danger')
-    
-    return redirect(url_for('emr_settings.emr_configuration'))
+        print(f"Error deleting profile: {e}")
+        return jsonify({'success': False, 'message': str(e)})
 
-@emr_settings_bp.route('/api/mode-statistics')
-def mode_statistics():
-    """API endpoint for EMR mode statistics."""
+@emr_settings_bp.route('/api/profile-statistics')
+def profile_statistics():
+    """API endpoint for profile usage statistics."""
     try:
         db = get_db()
         
-        # Patient counts by mode
+        # Get current profile info
+        active_profile = emr_config.get_active_profile_name()
+        enabled_features = emr_config.get_enabled_features()
+        
+        # Patient counts (legacy - we'll maintain for compatibility)
         cursor = db.execute("""
             SELECT 
                 COALESCE(emr_mode, 'unknown') as mode,
@@ -124,36 +169,25 @@ def mode_statistics():
         """)
         patient_stats = {row['mode']: row['count'] for row in cursor.fetchall()}
         
-        # Visit counts by mode (via patient)
+        # Visit counts
         cursor = db.execute("""
             SELECT 
-                COALESCE(p.emr_mode, 'unknown') as mode,
-                COUNT(v.id) as count 
-            FROM Visits v
-            LEFT JOIN Patients p ON v.patient_id = p.id
-            GROUP BY p.emr_mode
+                COUNT(*) as total_visits,
+                COUNT(DISTINCT patient_id) as unique_patients
+            FROM Visits 
+            WHERE visit_date >= DATE('now', '-30 days')
         """)
-        visit_stats = {row['mode']: row['count'] for row in cursor.fetchall()}
-        
-        # Recent activity
-        cursor = db.execute("""
-            SELECT 
-                p.emr_mode,
-                DATE(v.visit_date) as visit_date,
-                COUNT(*) as visits_count
-            FROM Visits v
-            LEFT JOIN Patients p ON v.patient_id = p.id
-            WHERE v.visit_date >= DATE('now', '-30 days')
-            GROUP BY p.emr_mode, DATE(v.visit_date)
-            ORDER BY visit_date DESC
-        """)
-        recent_activity = cursor.fetchall()
+        recent_activity = cursor.fetchone()
         
         return jsonify({
             'success': True,
+            'active_profile': active_profile,
+            'enabled_features_count': len(enabled_features),
             'patient_stats': patient_stats,
-            'visit_stats': visit_stats,
-            'recent_activity': [dict(row) for row in recent_activity]
+            'recent_activity': {
+                'total_visits': recent_activity['total_visits'],
+                'unique_patients': recent_activity['unique_patients']
+            }
         })
         
     except Exception as e:
@@ -191,19 +225,20 @@ def validate_migration():
         if orphaned_visits > 0:
             issues.append(f"{orphaned_visits} orphaned visits found")
         
-        # Check for mode mismatches
-        cursor = db.execute("""
-            SELECT COUNT(*) as count FROM Patients 
-            WHERE emr_mode IS NULL OR emr_mode = ''
-        """)
-        missing_modes = cursor.fetchone()['count']
-        if missing_modes > 0:
-            issues.append(f"{missing_modes} patients missing EMR mode")
+        # Check for missing visit data where features are enabled
+        if emr_config.is_feature_enabled('weight_tracking'):
+            cursor = db.execute("""
+                SELECT COUNT(*) as count FROM Visits 
+                WHERE weight_g IS NULL
+            """)
+            missing_weights = cursor.fetchone()['count']
+            if missing_weights > 0:
+                issues.append(f"{missing_weights} visits missing weight data")
         
         return jsonify({
             'success': True,
             'issues': issues,
-            'valid': len(issues) == 0
+            'total_issues': len(issues)
         })
         
     except Exception as e:
@@ -217,10 +252,11 @@ def export_configuration():
     """Export current EMR configuration."""
     try:
         config_data = {
-            'emr_mode': emr_config.get_emr_mode().value,
-            'features': emr_config.get_enabled_features()._asdict(),
-            'export_timestamp': emr_config.datetime.now().isoformat(),
-            'version': '1.0'
+            'export_date': datetime.now().isoformat(),
+            'active_profile': emr_config.get_active_profile_name(),
+            'profiles': emr_config.get_all_profiles(),
+            'practice_info': emr_config.get_practice_info(),
+            'version': '2.0.0'
         }
         
         response = jsonify(config_data)
@@ -228,88 +264,82 @@ def export_configuration():
         return response
         
     except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
+        flash(f'Error exporting configuration: {str(e)}', 'danger')
+        return redirect(url_for('emr_settings.profile_settings'))
 
 @emr_settings_bp.route('/import-config', methods=['POST'])
 def import_configuration():
-    """Import EMR configuration from file."""
+    """Import EMR configuration from uploaded file."""
     try:
         if 'config_file' not in request.files:
-            flash('No configuration file provided.', 'danger')
-            return redirect(url_for('emr_settings.emr_configuration'))
+            flash('No configuration file uploaded.', 'danger')
+            return redirect(url_for('emr_settings.profile_settings'))
         
         file = request.files['config_file']
         if file.filename == '':
             flash('No file selected.', 'danger')
-            return redirect(url_for('emr_settings.emr_configuration'))
+            return redirect(url_for('emr_settings.profile_settings'))
         
         if not file.filename.endswith('.json'):
             flash('Configuration file must be a JSON file.', 'danger')
-            return redirect(url_for('emr_settings.emr_configuration'))
+            return redirect(url_for('emr_settings.profile_settings'))
         
-        # Parse configuration
-        import json
-        config_data = json.load(file)
+        # Parse JSON
+        try:
+            config_data = json.loads(file.read().decode('utf-8'))
+        except json.JSONDecodeError as e:
+            flash(f'Invalid JSON file: {str(e)}', 'danger')
+            return redirect(url_for('emr_settings.profile_settings'))
         
-        # Validate structure
-        required_keys = ['emr_mode', 'features', 'version']
-        if not all(key in config_data for key in required_keys):
-            flash('Invalid configuration file format.', 'danger')
-            return redirect(url_for('emr_settings.emr_configuration'))
+        # Validate required keys
+        required_keys = ['active_profile', 'profiles', 'version']
+        for key in required_keys:
+            if key not in config_data:
+                flash(f'Invalid configuration file: missing {key}', 'danger')
+                return redirect(url_for('emr_settings.profile_settings'))
         
-        # Apply configuration
-        old_mode = emr_config.get_emr_mode()
+        # Import profiles
+        old_profile = emr_config.get_active_profile_name()
         
-        # Set mode
-        new_mode = EMRMode(config_data['emr_mode'])
-        emr_config.set_emr_mode(new_mode)
+        # Import each profile
+        for profile_name, profile_data in config_data['profiles'].items():
+            if profile_name not in emr_config.get_all_profiles():
+                emr_config.create_profile(profile_name, profile_data)
+            else:
+                emr_config.update_profile(profile_name, profile_data)
         
-        # Set features
-        emr_config.update_features(config_data['features'])
+        # Set active profile
+        if config_data['active_profile'] in config_data['profiles']:
+            emr_config.set_active_profile(config_data['active_profile'])
         
         # Log the change
-        _log_configuration_change(old_mode, new_mode, 'import', 
-                                f"Imported from file: {file.filename}")
+        _log_configuration_change(old_profile, config_data['active_profile'], 'config_import', 
+                                f"Imported configuration with {len(config_data['profiles'])} profiles")
         
-        flash('Configuration imported successfully!', 'success')
+        flash(f'Configuration imported successfully! Imported {len(config_data["profiles"])} profiles.', 'success')
         
     except Exception as e:
         flash(f'Error importing configuration: {str(e)}', 'danger')
     
-    return redirect(url_for('emr_settings.emr_configuration'))
+    return redirect(url_for('emr_settings.profile_settings'))
 
-def _log_configuration_change(old_mode, new_mode, change_type, reason):
-    """Log configuration changes to the database."""
+def _log_configuration_change(old_value, new_value, change_type, reason):
+    """Log configuration changes for audit trail."""
     try:
         db = get_db()
-        
-        # Prepare change data
-        features_changed = None
-        if change_type == 'features':
-            features_changed = reason
-        elif change_type == 'import':
-            features_changed = reason
-        
-        # Insert audit record
         db.execute("""
-            INSERT INTO ConfigurationAudit 
-            (change_date, emr_mode_from, emr_mode_to, features_changed, changed_by, reason)
+            INSERT INTO ConfigurationChanges 
+            (change_date, old_value, new_value, change_type, changed_by, reason)
             VALUES (?, ?, ?, ?, ?, ?)
         """, (
-            emr_config.datetime.now().isoformat(),
-            old_mode.value if old_mode else None,
-            new_mode.value if new_mode else None,
-            features_changed,
+            datetime.now().isoformat(),
+            str(old_value) if old_value else None,
+            str(new_value) if new_value else None,
+            change_type,
             'system',  # Could be enhanced to track actual user
             reason
         ))
-        
         db.commit()
-        
     except Exception as e:
         print(f"Error logging configuration change: {e}")
-        # Don't fail the main operation if logging fails
-        pass 
+        # Don't fail the main operation if logging fails 

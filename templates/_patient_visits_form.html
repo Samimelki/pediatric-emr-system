@@ -5,30 +5,42 @@
             <label for="visit_date">Visit Date <span class="text-danger">*</span></label>
             <input type="date" class="form-control" id="visit_date" name="visit_date" value="{{ today_date }}" required>
         </div>
+        {% if is_feature_enabled('weight_tracking') %}
         <div class="form-group col-md-2">
-            <label for="weight_g">Weight (g)</label>
-            <input type="number" class="form-control" id="weight_g" name="weight_g" step="any">
+            <label for="weight_g">Weight (g or kg)</label>
+            <input type="number" class="form-control" id="weight_g" name="weight_g" step="any" placeholder="22 or 3456">
         </div>
+        {% endif %}
+        {% if is_feature_enabled('height_tracking') %}
         <div class="form-group col-md-2">
             <label for="height_cm">Height (cm)</label>
             <input type="number" class="form-control" id="height_cm" name="height_cm" step="any">
         </div>
+        {% endif %}
+        {% if is_feature_enabled('head_circumference') %}
         <div class="form-group col-md-2">
             <label for="head_circumference_cm">Head Circ. (cm)</label>
             <input type="number" class="form-control" id="head_circumference_cm" name="head_circumference_cm" step="any">
         </div>
+        {% endif %}
+        {% if is_feature_enabled('blood_pressure') %}
         <div class="form-group col-md-2">
             <label for="bp">Blood Pressure (BP)</label>
             <input type="text" class="form-control" id="bp" name="bp" placeholder="e.g. 120/80">
         </div>
+        {% endif %}
+        {% if is_feature_enabled('temperature') %}
         <div class="form-group col-md-2">
             <label for="temperature">Temperature (°C)</label>
             <input type="number" class="form-control" id="temperature" name="temperature" step="any">
         </div>
+        {% endif %}
+        {% if is_feature_enabled('heart_rate') %}
         <div class="form-group col-md-2">
             <label for="hr">Heart Rate (HR)</label>
             <input type="number" class="form-control" id="hr" name="hr" step="any">
         </div>
+        {% endif %}
     </div>
     <div class="form-group">
         <label for="visit_notes">Visit Notes <span class="text-danger">*</span></label>

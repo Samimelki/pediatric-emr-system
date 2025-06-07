@@ -22,9 +22,9 @@
     <form method="POST" action="{{ url_for('patient.update_visit_measurements', visit_id=visit.id) }}">
         <input type="hidden" name="patient_id" value="{{ patient.id }}">
         <div class="form-group row">
-            <label for="weight_g" class="col-sm-4 col-form-label"><strong>Weight (grams):</strong></label>
+            <label for="weight_g" class="col-sm-4 col-form-label"><strong>Weight (g or kg):</strong></label>
             <div class="col-sm-8">
-                <input type="number" class="form-control" id="weight_g" name="weight_g" value="{{ visit.weight_g if visit.weight_g is not none else '' }}" placeholder="grams">
+                <input type="number" class="form-control" id="weight_g" name="weight_g" value="{{ visit.weight_g if visit.weight_g is not none else '' }}" placeholder="22 or 3456">
             </div>
         </div>
         <div class="form-group row">

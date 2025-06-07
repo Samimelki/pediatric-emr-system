@@ -16,7 +16,7 @@ from xml_exporter import generate_patient_xml
 from csv_exporter import generate_patient_csvs
 from utils import format_datetime
 from config_manager import load_config, APP_DATA_DIR, UPLOAD_FOLDER, USER_MEDIA_FOLDER, WORD_DOCS_FOLDER
-from emr_config import emr_config, EMRMode
+from emr_config import emr_config
 from routes.patient_routes import patient_bp
 from routes.pdf_export_routes import pdf_export_bp
 from routes.admin_routes import admin_bp
@@ -119,8 +119,11 @@ def inject_now():
 def inject_emr_config():
     return {
         'emr_config': emr_config,
-        'emr_mode': emr_config.get_emr_mode(),
-        'emr_features': emr_config.get_enabled_features()
+        'emr_mode': emr_config.get_emr_mode(),  # Legacy compatibility
+        'active_profile': emr_config.get_active_profile(),
+        'emr_features': emr_config.get_enabled_features(),
+        'is_feature_enabled': emr_config.is_feature_enabled,
+        'practice_info': emr_config.get_practice_info()
     }
 
 app.teardown_appcontext(close_connection)

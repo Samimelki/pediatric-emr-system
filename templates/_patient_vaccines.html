@@ -1,4 +1,4 @@
-{% if emr_config.should_show_vaccines() %}
+{% if is_feature_enabled('vaccines') %}
 <h4 class="mt-4">Vaccine Records</h4>
 <div class="accordion" id="vaccineRecordsAccordion">
     <div class="card">

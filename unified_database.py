@@ -4,7 +4,7 @@ import re
 import json
 from datetime import datetime
 from typing import Dict, Any, List, Optional, Union
-from emr_config import emr_config, EMRMode
+from emr_config import emr_config
 
 # Database connection helper (unchanged from original)
 def get_db():
@@ -346,7 +346,7 @@ def _perform_schema_upgrades(db):
                 except sqlite3.Error as e:
                     print(f"Error adding custom field column {field['field_name']}: {e}")
 
-def get_patient_unified_data(patient_id: int, mode: Optional[EMRMode] = None) -> Optional[Dict[str, Any]]:
+def get_patient_unified_data(patient_id: int, mode: Optional[str] = None) -> Optional[Dict[str, Any]]:
     """Get patient data formatted according to the current EMR mode."""
     if mode is None:
         mode = emr_config.get_emr_mode()
@@ -361,11 +361,11 @@ def get_patient_unified_data(patient_id: int, mode: Optional[EMRMode] = None) ->
     # Convert to dictionary for easier manipulation
     patient_dict = dict(patient)
     
-    # Apply mode-specific field mapping
-    if mode == EMRMode.ADULT:
+        # Apply mode-specific field mapping
+    if mode == 'adult':
         # Prefer English fields, hide pediatric-specific data
         patient_dict = _map_to_adult_fields(patient_dict)
-    elif mode == EMRMode.PEDIATRIC:
+    elif mode == 'pediatric':
         # Prefer French fields, show pediatric data
         patient_dict = _map_to_pediatric_fields(patient_dict)
     else:  # MIXED mode
@@ -422,10 +422,14 @@ def _map_to_mixed_fields(patient_dict: Dict[str, Any]) -> Dict[str, Any]:
     else:
         return _map_to_pediatric_fields(patient_dict)
 
-def get_visit_unified_data(visit_id: int, mode: Optional[EMRMode] = None) -> Optional[Dict[str, Any]]:
+def get_visit_unified_data(visit_id: int, mode: Optional[str] = None) -> Optional[Dict[str, Any]]:
     """Get visit data formatted according to the current EMR mode."""
     if mode is None:
         mode = emr_config.get_emr_mode()
+    
+    # Extract string value if mode is an EMRMode object (for backward compatibility)
+    if hasattr(mode, 'value'):
+        mode = mode.value
     
     db = get_db()
     cursor = db.execute("SELECT * FROM Visits WHERE id = ?", (visit_id,))
@@ -445,16 +449,20 @@ def get_visit_unified_data(visit_id: int, mode: Optional[EMRMode] = None) -> Opt
     
     return visit_dict
 
-def save_patient_unified(patient_data: Dict[str, Any], mode: Optional[EMRMode] = None) -> int:
+def save_patient_unified(patient_data: Dict[str, Any], mode: Optional[str] = None) -> int:
     """Save patient data with unified field mapping."""
     if mode is None:
         mode = emr_config.get_emr_mode()
+    
+    # Extract string value if mode is an EMRMode object (for backward compatibility)
+    if hasattr(mode, 'value'):
+        mode = mode.value
     
     db = get_db()
     
     # Prepare data with proper field mapping
     save_data = patient_data.copy()
-    save_data['emr_mode'] = mode.value
+    save_data['emr_mode'] = mode
     save_data['modified_date'] = datetime.now().isoformat()
     
     # Apply bidirectional field mapping to ensure data is saved in both formats when possible
@@ -551,10 +559,14 @@ def _update_patient_unified(patient_data: Dict[str, Any]) -> int:
     
     return patient_id
 
-def get_custom_demographic_fields(db_conn=None, mode: Optional[EMRMode] = None):
+def get_custom_demographic_fields(db_conn=None, mode: Optional[str] = None):
     """Get custom demographic fields filtered by EMR mode."""
     if mode is None:
         mode = emr_config.get_emr_mode()
+    
+    # Extract string value if mode is an EMRMode object (for backward compatibility)
+    if hasattr(mode, 'value'):
+        mode = mode.value
     
     if db_conn:
         conn = db_conn
@@ -570,10 +582,10 @@ def get_custom_demographic_fields(db_conn=None, mode: Optional[EMRMode] = None):
     ORDER BY display_order ASC, id ASC
     """
     
-    cursor = conn.execute(query, (mode.value,))
+    cursor = conn.execute(query, (mode,))
     return cursor.fetchall()
 
-def get_active_custom_demographic_fields(db_conn=None, mode: Optional[EMRMode] = None):
+def get_active_custom_demographic_fields(db_conn=None, mode: Optional[str] = None):
     """Fetches only active custom demographic fields for the current mode."""
     return get_custom_demographic_fields(db_conn, mode)
 

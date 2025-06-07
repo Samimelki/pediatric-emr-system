@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMR Profile Settings - {{ practice_name or 'Medical Practice' }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .profile-card {
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .profile-card:hover {
+            border-color: #0d6efd;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .profile-card.active {
+            border-color: #198754;
+            background-color: #f8f9fa;
+        }
+        .feature-category {
+            border-left: 4px solid #0d6efd;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .feature-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            border: 1px solid #e9ecef;
+            border-radius: 0.375rem;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .feature-toggle:hover {
+            background-color: #f8f9fa;
+        }
+        .feature-toggle.enabled {
+            background-color: #e7f3ff;
+            border-color: #0d6efd;
+        }
+        .category-pediatric { border-left-color: #28a745; }
+        .category-adult { border-left-color: #dc3545; }
+        .category-general { border-left-color: #6c757d; }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-user-cog me-2"></i>EMR Profile Settings
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('index') }}">
+                    <i class="fas fa-home me-1"></i>Back to EMR
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Current Profile Display -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <h5><i class="fas fa-info-circle me-2"></i>Current Profile</h5>
+                    <p class="mb-0">
+                        <strong>{{ current_profile.name }}</strong> - {{ current_profile.description }}
+                        <br><small class="text-muted">{{ enabled_features|length }} features enabled</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Selection -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-layer-group me-2"></i>Available Profiles</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for profile_key, profile in profiles.items() %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card profile-card {% if profile_key == active_profile_name %}active{% endif %}" 
+                             onclick="switchProfile('{{ profile_key }}')">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">{{ profile.name }}</h6>
+                                <p class="card-text small text-muted">{{ profile.description }}</p>
+                                {% if profile_key == active_profile_name %}
+                                <span class="badge bg-success">Active</span>
+                                {% else %}
+                                <button class="btn btn-sm btn-outline-primary">Select</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Customization -->
+        <div class="card mb-4">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-sliders-h me-2"></i>Customize Features</h5>
+                <div>
+                    <button class="btn btn-light btn-sm me-2" onclick="toggleAllFeatures(true)">
+                        <i class="fas fa-check-square me-1"></i>Enable All
+                    </button>
+                    <button class="btn btn-light btn-sm" onclick="toggleAllFeatures(false)">
+                        <i class="fas fa-square me-1"></i>Disable All
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <form id="featuresForm">
+                    {% for category, features in feature_categories.items() %}
+                    <div class="feature-category category-{{ category.lower() }}">
+                        <h6 class="text-primary mb-3">
+                            <i class="fas fa-{% if category == 'Pediatric' %}baby{% elif category == 'Adult' %}user-md{% else %}cogs{% endif %} me-2"></i>
+                            {{ category }} Features
+                        </h6>
+                        {% for feature_key in features %}
+                        {% set feature_info = available_features[feature_key] %}
+                        <div class="feature-toggle {% if current_profile.features.get(feature_key, False) %}enabled{% endif %}">
+                            <div>
+                                <strong>{{ feature_info.name }}</strong>
+                                <br><small class="text-muted">{{ feature_info.description }}</small>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" name="feature_{{ feature_key }}" 
+                                       {% if current_profile.features.get(feature_key, False) %}checked{% endif %}
+                                       onchange="updateFeatureDisplay(this)">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </form>
+            </div>
+        </div>
+
+        <!-- Save Options -->
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-save me-2"></i>Save Configuration</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Update Current Profile</h6>
+                        <p class="text-muted">Save changes to the current profile: <strong>{{ current_profile.name }}</strong></p>
+                        <button class="btn btn-success" onclick="saveCurrentProfile()">
+                            <i class="fas fa-save me-1"></i>Save Changes
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Save as New Profile</h6>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" id="newProfileName" placeholder="Enter profile name">
+                            <input type="text" class="form-control" id="newProfileDescription" placeholder="Description">
+                        </div>
+                        <button class="btn btn-primary" onclick="saveAsNewProfile()">
+                            <i class="fas fa-plus me-1"></i>Create New Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function switchProfile(profileKey) {
+            if (confirm('Switch to this profile? Your current customizations will be lost if not saved.')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ url_for("emr_settings.switch_profile") }}';
+                
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'profile_name';
+                input.value = profileKey;
+                
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+        function updateFeatureDisplay(checkbox) {
+            const featureToggle = checkbox.closest('.feature-toggle');
+            if (checkbox.checked) {
+                featureToggle.classList.add('enabled');
+            } else {
+                featureToggle.classList.remove('enabled');
+            }
+        }
+
+        function toggleAllFeatures(enable) {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"][name^="feature_"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = enable;
+                updateFeatureDisplay(checkbox);
+            });
+        }
+
+        function getFeatureConfiguration() {
+            const form = document.getElementById('featuresForm');
+            const formData = new FormData(form);
+            const features = {};
+            
+            // Get all available features and set them to false initially
+            {% for feature_key in available_features.keys() %}
+            features['{{ feature_key }}'] = false;
+            {% endfor %}
+            
+            // Set enabled features to true
+            for (let [name, value] of formData.entries()) {
+                if (name.startsWith('feature_')) {
+                    const featureName = name.replace('feature_', '');
+                    features[featureName] = true;
+                }
+            }
+            
+            return features;
+        }
+
+        function saveCurrentProfile() {
+            const features = getFeatureConfiguration();
+            
+            fetch('{{ url_for("emr_settings.update_profile") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    profile_name: '{{ active_profile_name }}',
+                    features: features
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Profile updated successfully!');
+                    location.reload();
+                } else {
+                    alert('Error updating profile: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating profile');
+            });
+        }
+
+        function saveAsNewProfile() {
+            const name = document.getElementById('newProfileName').value.trim();
+            const description = document.getElementById('newProfileDescription').value.trim();
+            
+            if (!name) {
+                alert('Please enter a profile name');
+                return;
+            }
+            
+            const features = getFeatureConfiguration();
+            
+            fetch('{{ url_for("emr_settings.create_profile") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    profile_name: name,
+                    name: name,
+                    description: description || 'Custom profile',
+                    features: features,
+                    settings: {
+                        weight_unit_preference: 'auto',
+                        language: '{{ current_profile.settings.get("language", "en") }}',
+                        show_percentiles: true,
+                        require_visit_notes: true
+                    }
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('New profile created successfully!');
+                    location.reload();
+                } else {
+                    alert('Error creating profile: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error creating profile');
+            });
+        }
+
+        // Initialize feature displays
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"][name^="feature_"]');
+            checkboxes.forEach(updateFeatureDisplay);
+        });
+    </script>
+</body>
+</html> 

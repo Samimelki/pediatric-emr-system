@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 
 try:
-    from emr_config import emr_config, EMRMode
+    from emr_config import emr_config
 except ImportError:
     print("Error: emr_config module not found. Make sure you're running from the EMR directory.")
     sys.exit(1)
@@ -395,16 +395,16 @@ def main():
     
     print(f"\nMigration {'completed successfully' if results['success'] else 'completed with errors'}!")
     
-    # Set EMR mode based on migrated data
+    # Set active profile based on migrated data
     if results['adult_migration']['success'] and results['pediatric_migration']['success']:
-        emr_config.set_emr_mode(EMRMode.MIXED)
-        print("\nEMR mode set to MIXED (both adult and pediatric)")
+        emr_config.set_active_profile('family_practice_profile')
+        print("\nActive profile set to Family Practice (both adult and pediatric)")
     elif results['adult_migration']['success']:
-        emr_config.set_emr_mode(EMRMode.ADULT)
-        print("\nEMR mode set to ADULT")
+        emr_config.set_active_profile('adult_profile')
+        print("\nActive profile set to Adult EMR")
     elif results['pediatric_migration']['success']:
-        emr_config.set_emr_mode(EMRMode.PEDIATRIC)
-        print("\nEMR mode set to PEDIATRIC")
+        emr_config.set_active_profile('pediatric_profile')
+        print("\nActive profile set to Pediatric EMR")
 
 if __name__ == "__main__":
     main() 
