@@ -795,6 +795,7 @@ def add_visit(patient_id):
         bp = request.form.get('bp')
         temperature = request.form.get('temperature')
         hr = request.form.get('hr')
+        spo2 = request.form.get('spo2')
         # Pediatric measurement fields (stored as direct columns)
         weight_g = request.form.get('weight_g')
         height_cm = request.form.get('height_cm')
@@ -830,7 +831,8 @@ def add_visit(patient_id):
             'head_circumference_cm': float(head_circumference_cm) if head_circumference_cm else None,
             'bp': bp if bp else None,
             'temperature': float(temperature) if temperature else None,
-            'hr': int(hr) if hr else None
+            'hr': int(hr) if hr else None,
+            'spo2': float(spo2) if spo2 else None
         }
         vital_signs = {k: v for k, v in vital_signs.items() if v is not None}
         vital_signs_json = json.dumps(vital_signs)
@@ -857,6 +859,7 @@ def add_visit(patient_id):
         if bp: vs_parts.append(f"BP: {bp}")
         if temperature: vs_parts.append(f"Temp: {temperature}°C")
         if hr: vs_parts.append(f"HR: {hr}")
+        if spo2: vs_parts.append(f"SpO2: {spo2}%")
         vs_string = ", ".join(vs_parts)
 
         raw_visit_parts = [f"*{formatted_date_for_raw}*"]
@@ -1064,6 +1067,7 @@ def update_visit_measurements(visit_id):
         bp = request.form.get('bp')
         temperature = request.form.get('temperature')
         hr = request.form.get('hr')
+        spo2 = request.form.get('spo2')
 
         # Convert and prepare values
         weight_g_val = float(weight_g) if weight_g else None
@@ -1077,7 +1081,8 @@ def update_visit_measurements(visit_id):
             'head_circumference_cm': head_circumference_cm_val,
             'bp': bp if bp else None,
             'temperature': float(temperature) if temperature else None,
-            'hr': int(hr) if hr else None
+            'hr': int(hr) if hr else None,
+            'spo2': float(spo2) if spo2 else None
         }
         # Remove None values for cleanliness
         vital_signs = {k: v for k, v in vital_signs.items() if v is not None}

@@ -63,7 +63,8 @@
                                 {% if vs.bp %}<li>BP: {{ vs.bp }}</li>{% endif %}
                                 {% if vs.temperature %}<li>Temperature: {{ vs.temperature }}&#8451;</li>{% endif %}
                                 {% if vs.hr %}<li>HR: {{ vs.hr }}</li>{% endif %}
-                                {% if not vs.bp and not vs.temperature and not vs.hr %}<li>No additional vitals recorded.</li>{% endif %}
+                                {% if vs.spo2 and is_feature_enabled('pulse_oximetry') %}<li>SpO2: {{ vs.spo2 }}%</li>{% endif %}
+                                {% if not vs.bp and not vs.temperature and not vs.hr and not (vs.spo2 and is_feature_enabled('pulse_oximetry')) %}<li>No additional vitals recorded.</li>{% endif %}
                             </ul>
                         {% endif %}
                         <h6>Note</h6>

@@ -61,6 +61,11 @@ AVAILABLE_FEATURES = {
         'description': 'Track body temperature',
         'category': 'General'
     },
+    'pulse_oximetry': {
+        'name': 'Pulse Oximetry',
+        'description': 'Track oxygen saturation (SpO2) measurements',
+        'category': 'General'
+    },
     'weight_tracking': {
         'name': 'Weight Tracking',
         'description': 'Smart weight tracking (kg/g conversion)',
@@ -106,6 +111,7 @@ DEFAULT_PROFILES = {
             'blood_pressure': False,
             'heart_rate': True,
             'temperature': True,
+            'pulse_oximetry': True,
             'weight_tracking': True,
             'height_tracking': True,
             'visit_notes': True,
@@ -131,6 +137,7 @@ DEFAULT_PROFILES = {
             'blood_pressure': True,
             'heart_rate': True,
             'temperature': True,
+            'pulse_oximetry': True,
             'weight_tracking': True,
             'height_tracking': True,
             'visit_notes': True,
@@ -156,6 +163,7 @@ DEFAULT_PROFILES = {
             'blood_pressure': True,
             'heart_rate': True,
             'temperature': True,
+            'pulse_oximetry': True,
             'weight_tracking': True,
             'height_tracking': True,
             'visit_notes': True,
