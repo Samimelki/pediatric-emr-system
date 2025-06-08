@@ -19,7 +19,7 @@
         {% endif %}
     {% endwith %}
 
-    <form method="POST" action="{{ url_for('patient.update_visit_measurements', visit_id=visit.id) }}">
+    <form method="POST" action="{{ url_for('visit.edit_visit_measurements', visit_id=visit.id) }}">
         <input type="hidden" name="patient_id" value="{{ patient.id }}">
         <div class="form-group row">
             <label for="weight_g" class="col-sm-4 col-form-label"><strong>Weight (g or kg):</strong></label>

@@ -1,9 +1,12 @@
 <h4>Add New Visit</h4>
-<form method="POST" action="{{ url_for('patient.add_visit', patient_id=patient.id) }}" class="mb-4">
+<form method="POST" action="{{ url_for('visit.add_visit', patient_id=patient.id) }}" class="mb-4">
     <div class="form-row">
         <div class="form-group col-md-2">
             <label for="visit_date">Visit Date <span class="text-danger">*</span></label>
-            <input type="date" class="form-control" id="visit_date" name="visit_date" value="{{ today_date }}" required>
+            <input type="text" class="form-control" id="visit_date" name="visit_date" 
+                   placeholder="{{ date_format|upper }}" maxlength="10"
+                   pattern="{% if date_format == 'dd/mm/yyyy' %}\d{2}/\d{2}/\d{4}{% else %}\d{2}/\d{2}/\d{4}{% endif %}" required>
+            <small class="form-text text-muted">Format: {{ date_format|upper }}</small>
         </div>
         {% if is_feature_enabled('weight_tracking') %}
         <div class="form-group col-md-2">
@@ -53,4 +56,76 @@
         <textarea class="form-control" id="visit_notes" name="visit_notes" rows="4" required></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Add Visit</button>
-</form> 
+</form>
+
+<script>
+// Auto-format date input based on user's preferred format
+document.getElementById('visit_date').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+    
+    if (value.length >= 2) {
+        value = value.substring(0, 2) + '/' + value.substring(2);
+    }
+    if (value.length >= 5) {
+        value = value.substring(0, 5) + '/' + value.substring(5, 9);
+    }
+    
+    e.target.value = value;
+});
+
+// Set today's date in the user's preferred format
+document.addEventListener('DOMContentLoaded', function() {
+    const visitDateInput = document.getElementById('visit_date');
+    const today = new Date();
+    const expectedFormat = '{{ date_format }}';
+    
+    let day = today.getDate().toString().padStart(2, '0');
+    let month = (today.getMonth() + 1).toString().padStart(2, '0');
+    let year = today.getFullYear();
+    
+    if (expectedFormat === 'dd/mm/yyyy') {
+        visitDateInput.value = `${day}/${month}/${year}`;
+    } else {
+        visitDateInput.value = `${month}/${day}/${year}`;
+    }
+});
+
+// Validate date format on form submission
+document.querySelector('form').addEventListener('submit', function(e) {
+    const dateInput = document.getElementById('visit_date');
+    const dateValue = dateInput.value;
+    const expectedFormat = '{{ date_format }}';
+    
+    if (dateValue && dateValue.length > 0) {
+        const datePattern = /^\d{2}\/\d{2}\/\d{4}$/;
+        if (!datePattern.test(dateValue)) {
+            e.preventDefault();
+            alert('Please enter date in ' + expectedFormat.toUpperCase() + ' format (e.g., {% if date_format == "dd/mm/yyyy" %}25/12/2023{% else %}12/25/2023{% endif %})');
+            dateInput.focus();
+            return false;
+        }
+        
+        // Additional validation to check if it's a valid date
+        const parts = dateValue.split('/');
+        let day, month, year;
+        
+        if (expectedFormat === 'dd/mm/yyyy') {
+            day = parseInt(parts[0]);
+            month = parseInt(parts[1]);
+            year = parseInt(parts[2]);
+        } else {
+            month = parseInt(parts[0]);
+            day = parseInt(parts[1]);
+            year = parseInt(parts[2]);
+        }
+        
+        const testDate = new Date(year, month - 1, day);
+        if (testDate.getFullYear() !== year || testDate.getMonth() !== (month - 1) || testDate.getDate() !== day) {
+            e.preventDefault();
+            alert('Please enter a valid date.');
+            dateInput.focus();
+            return false;
+        }
+    }
+});
+</script> 

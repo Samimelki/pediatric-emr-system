@@ -59,6 +59,29 @@ def switch_profile():
     
     return redirect(url_for('emr_settings.profile_settings'))
 
+@emr_settings_bp.route('/update-date-format', methods=['POST'])
+def update_date_format():
+    """Update date format setting for current profile"""
+    try:
+        data = request.get_json()
+        date_format = data.get('date_format')
+        
+        if not date_format or date_format not in ['dd/mm/yyyy', 'mm/dd/yyyy']:
+            return jsonify({'success': False, 'message': 'Invalid date format'})
+        
+        # Update the date format in the current profile
+        emr_config.set_date_format(date_format)
+        
+        # Log the change
+        _log_configuration_change(None, None, 'date_format_update', 
+                                f'Date format changed to: {date_format}')
+        
+        return jsonify({'success': True, 'message': 'Date format updated successfully'})
+        
+    except Exception as e:
+        print(f"Error updating date format: {e}")
+        return jsonify({'success': False, 'message': str(e)})
+
 @emr_settings_bp.route('/update-profile', methods=['POST'])
 def update_profile():
     """Update an existing profile"""
@@ -66,13 +89,16 @@ def update_profile():
         data = request.get_json()
         profile_name = data.get('profile_name')
         features = data.get('features', {})
+        settings = data.get('settings', {})
         
         if not profile_name:
             return jsonify({'success': False, 'message': 'Profile name required'})
         
-        # Get current profile and update features
+        # Get current profile and update features and settings
         current_profile = emr_config.get_all_profiles().get(profile_name, {})
         current_profile['features'] = features
+        if settings:
+            current_profile['settings'] = settings
         
         if emr_config.update_profile(profile_name, current_profile):
             # Log the change
@@ -327,16 +353,16 @@ def _log_configuration_change(old_value, new_value, change_type, reason):
     """Log configuration changes for audit trail."""
     try:
         db = get_db()
+        # Use the existing ConfigurationAudit table structure
         db.execute("""
-            INSERT INTO ConfigurationChanges 
-            (change_date, old_value, new_value, change_type, changed_by, reason)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO ConfigurationAudit 
+            (change_date, emr_mode_from, emr_mode_to, features_changed, reason)
+            VALUES (?, ?, ?, ?, ?)
         """, (
             datetime.now().isoformat(),
             str(old_value) if old_value else None,
             str(new_value) if new_value else None,
             change_type,
-            'system',  # Could be enhanced to track actual user
             reason
         ))
         db.commit()

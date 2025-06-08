@@ -3,6 +3,8 @@ from database import get_db
 from emr_config import emr_config
 from statistics_engine.statistics_calculator import calculate_average_vaccines_per_child
 import sqlite3
+from datetime import datetime
+from word_document_manager import WordDocumentManager
 
 vaccine_bp = Blueprint('vaccine', __name__, url_prefix='/vaccines')
 
@@ -241,4 +243,293 @@ def api_vaccine_statistics():
         
     except Exception as e:
         current_app.logger.error(f"Error in vaccine statistics API: {e}")
-        return jsonify({'error': str(e)}), 500 
+        return jsonify({'error': str(e)}), 500
+
+# =============================================================================
+# STANDARD VACCINE EDITING ROUTES
+# =============================================================================
+
+@vaccine_bp.route('/patient/<int:patient_id>/standard/edit', methods=['GET'])
+def edit_standard_vaccine_form(patient_id):
+    """Edit a standard vaccine field for a patient"""
+    db = get_db()
+    field_name = request.args.get('field_name')
+    
+    # Basic validation for allowed field names to prevent arbitrary column updates
+    allowed_vaccine_fields = [
+        'dtcp1_date', 'dtcp2_date', 'dtcp3_date', 
+        'dtcp_rappel1_date', 'dtcp_rappel2_date', 'dtcp_rappel3_date', 'dtcp_rappel4_date',
+        'hep_b1_date', 'hep_b2_date', 'hep_b3_date',
+        'hib1_date', 'hib2_date', 'hib3_date', 'hib_rappel_date',
+        'ror_date', 'rougeole_seule_date',
+        'monotest1', 'monotest2', 'monotest3' # Monotest fields are also often dates
+    ]
+    if not field_name or field_name not in allowed_vaccine_fields:
+        flash('Invalid or missing vaccine field specified for editing.', 'danger')
+        return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+
+    try:
+        # Fetch only the required field and basic patient identifiers
+        # Using f-string for column name is generally risky, but here field_name is validated against a whitelist
+        patient_data_cursor = db.execute(f"SELECT id, mrn, nom, prenom, {field_name} FROM Patients WHERE id = ?", (patient_id,))
+        patient = patient_data_cursor.fetchone()
+
+        if not patient:
+            flash('Patient not found.', 'danger')
+            return redirect(url_for('patient.list_patients'))
+        
+        current_value = patient[field_name]
+        
+        # Create a more human-readable label for the field
+        field_label = field_name.replace('_', ' ').replace('date', 'Date').title()
+        if 'Monotest' in field_label and not field_label.endswith("Date"):
+            field_label += " Date"
+
+        return render_template('edit_standard_vaccine.html',
+                               patient=patient,
+                               field_name=field_name,
+                               field_label=field_label,
+                               current_value=current_value,
+                               title=f"Edit {field_label}")
+
+    except sqlite3.Error as e:
+        flash(f"Database error fetching patient data for vaccine edit: {e}", 'danger')
+        return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+
+@vaccine_bp.route('/patient/<int:patient_id>/standard/update', methods=['POST'])
+def update_standard_vaccine_form(patient_id):
+    """Update a standard vaccine field for a patient"""
+    db = get_db()
+    field_name = request.form.get('vaccine_field_name')
+    vaccine_date_str = request.form.get('vaccine_date')
+
+    # Use the same allowed fields list
+    allowed_vaccine_fields = [
+        'dtcp1_date', 'dtcp2_date', 'dtcp3_date', 
+        'dtcp_rappel1_date', 'dtcp_rappel2_date', 'dtcp_rappel3_date', 'dtcp_rappel4_date',
+        'hep_b1_date', 'hep_b2_date', 'hep_b3_date',
+        'hib1_date', 'hib2_date', 'hib3_date', 'hib_rappel_date',
+        'ror_date', 'rougeole_seule_date',
+        'monotest1', 'monotest2', 'monotest3'
+    ]
+
+    if field_name not in allowed_vaccine_fields:
+        flash('Invalid vaccine field specified.', 'danger')
+        return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+
+    vaccine_date = None
+    if vaccine_date_str:
+        try:
+            datetime.strptime(vaccine_date_str, '%Y-%m-%d') # Validate format
+            vaccine_date = vaccine_date_str
+        except ValueError:
+            flash('Invalid date format. Please use YYYY-MM-DD.', 'danger')
+            # Redirect back to edit form
+            return redirect(url_for('vaccine.edit_standard_vaccine_form', patient_id=patient_id, field_name=field_name))
+
+    try:
+        db.execute(f"UPDATE Patients SET {field_name} = ? WHERE id = ?", (vaccine_date, patient_id))
+        db.commit()
+        flash(f'Vaccine updated successfully.', 'success')
+    except Exception as e:
+        db.rollback()
+        flash(f'Error updating vaccine: {e}', 'danger')
+    
+    return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+
+# =============================================================================
+# NON-STANDARD VACCINE EDITING ROUTES
+# =============================================================================
+
+@vaccine_bp.route('/patient/<int:patient_id>/other/add', methods=['GET', 'POST'])
+def add_other_vaccine(patient_id):
+    """Add a new non-standard vaccine for a patient"""
+    db = get_db()
+    patient_cursor = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,))
+    patient = patient_cursor.fetchone()
+    
+    if not patient:
+        flash("Patient not found.", "danger")
+        return redirect(url_for('patient.list_patients'))
+    
+    if request.method == 'POST':
+        vaccine_name = request.form.get('other_vaccine_name', '').strip()
+        vaccine_date = request.form.get('other_vaccine_date', '').strip()
+        
+        if not vaccine_name:
+            flash('Vaccine name is required.', 'danger')
+            return render_template('edit_other_vaccine.html',
+                                 title="Add Other Vaccine",
+                                 patient=patient,
+                                 vaccine={'vaccine_name': vaccine_name, 'vaccine_date': vaccine_date})
+        
+        try:
+            # Insert new vaccine record
+            db.execute("""
+                INSERT INTO NonStandardVaccines (patient_id, vaccine_name, vaccine_date, created_date)
+                VALUES (?, ?, ?, ?)
+            """, (patient_id, vaccine_name, vaccine_date if vaccine_date else None, datetime.now().isoformat()))
+            db.commit()
+            
+            # Update Word document
+            word_manager = WordDocumentManager(db_path=emr_config.get_database_path(), documents_folder=emr_config.get_word_docs_folder())
+            word_manager.create_or_update_document(patient_id)
+            
+            flash('Vaccine added successfully!', 'success')
+            return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+        except Exception as e:
+            db.rollback()
+            flash(f'Error adding vaccine: {e}', 'danger')
+    
+    # GET request - show form
+    return render_template('edit_other_vaccine.html',
+                         title="Add Other Vaccine",
+                         patient=patient,
+                         vaccine={'vaccine_name': '', 'vaccine_date': ''})
+
+@vaccine_bp.route('/other/<int:vaccine_id>/edit', methods=['GET'])
+def edit_other_vaccine_form(vaccine_id):
+    """Edit a non-standard vaccine record"""
+    db = get_db()
+    vaccine = db.execute(
+        'SELECT nsv.*, p.id as patient_id, p.nom, p.prenom, p.mrn FROM NonStandardVaccines nsv JOIN Patients p ON nsv.patient_id = p.id WHERE nsv.id = ?',
+        (vaccine_id,)
+    ).fetchone()
+
+    if not vaccine:
+        flash('Non-standard vaccine not found.', 'danger')
+        return redirect(url_for('patient.list_patients')) 
+
+    patient_data = {
+        'id': vaccine['patient_id'],
+        'nom': vaccine['nom'],
+        'prenom': vaccine['prenom'],
+        'mrn': vaccine['mrn']
+    }
+    
+    return render_template('edit_other_vaccine.html', vaccine=vaccine, patient=patient_data, title="Edit Other Vaccine")
+
+@vaccine_bp.route('/other/<int:vaccine_id>/update', methods=['POST'])
+def update_other_vaccine_form(vaccine_id):
+    """Update a non-standard vaccine record"""
+    db = get_db()
+    patient_id = request.form.get('patient_id') # Or fetch from DB if not passed
+    vaccine_name = request.form.get('vaccine_name')
+    vaccine_date_str = request.form.get('vaccine_date')
+
+    if not patient_id:
+        flash('Patient ID missing.', 'danger')
+        return redirect(url_for('patient.list_patients'))
+
+    vaccine_date = None
+    if vaccine_date_str:
+        try:
+            datetime.strptime(vaccine_date_str, '%Y-%m-%d') # Validate format
+            vaccine_date = vaccine_date_str
+        except ValueError:
+            flash('Invalid date format. Please use YYYY-MM-DD.', 'danger')
+            return redirect(url_for('vaccine.edit_other_vaccine_form', vaccine_id=vaccine_id))
+
+    if not vaccine_name:
+        flash('Vaccine name cannot be empty.', 'danger')
+        return redirect(url_for('vaccine.edit_other_vaccine_form', vaccine_id=vaccine_id))
+
+    try:
+        # Update the NonStandardVaccines table
+        db.execute(
+            'UPDATE NonStandardVaccines SET vaccine_name = ?, vaccine_date = ? WHERE id = ?',
+            (vaccine_name, vaccine_date, vaccine_id)
+        )
+        db.commit()
+        flash('Non-standard vaccine updated successfully.', 'success')
+    except Exception as e:
+        db.rollback()
+        flash(f'Error updating non-standard vaccine: {e}', 'danger')
+    
+    return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+
+@vaccine_bp.route('/other/<int:vaccine_id>/update', methods=['POST'])
+def update_other_vaccine(vaccine_id):
+    """Update a non-standard vaccine record (legacy route)"""
+    db = get_db()
+    vaccine_cursor = db.execute("SELECT patient_id FROM NonStandardVaccines WHERE id = ?", (vaccine_id,))
+    vaccine_record = vaccine_cursor.fetchone()
+    
+    if not vaccine_record:
+        flash("Vaccine record not found.", "danger")
+        return redirect(url_for('patient.list_patients'))
+    
+    patient_id = vaccine_record['patient_id']
+    vaccine_name = request.form.get('vaccine_name', '').strip()
+    vaccine_date = request.form.get('vaccine_date', '').strip()
+    
+    if not vaccine_name:
+        flash('Vaccine name is required.', 'danger')
+        return redirect(url_for('vaccine.edit_other_vaccine_form', vaccine_id=vaccine_id))
+    
+    try:
+        # Update vaccine record
+        db.execute("""
+            UPDATE NonStandardVaccines 
+            SET vaccine_name = ?, vaccine_date = ?
+            WHERE id = ?
+        """, (vaccine_name, vaccine_date if vaccine_date else None, vaccine_id))
+        db.commit()
+        
+        # Update Word document
+        word_manager = WordDocumentManager(db_path=emr_config.get_database_path(), documents_folder=emr_config.get_word_docs_folder())
+        word_manager.create_or_update_document(patient_id)
+        
+        flash('Vaccine record updated successfully!', 'success')
+    except Exception as e:
+        db.rollback()
+        flash(f'Error updating vaccine record: {e}', 'danger')
+    
+    return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+
+@vaccine_bp.route('/patient/<int:patient_id>/standard/update', methods=['POST'])
+def update_standard_vaccine(patient_id):
+    """Update a standard vaccine field for a patient (legacy route)"""
+    db = get_db()
+    patient_cursor = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,))
+    patient = patient_cursor.fetchone()
+    
+    if not patient:
+        flash("Patient not found.", "danger")
+        return redirect(url_for('patient.list_patients'))
+    
+    field_name = request.form.get('vaccine_field_name')
+    vaccine_date = request.form.get('vaccine_date')
+    
+    # Validate field name
+    vaccine_fields = [
+        'dtcp1_date', 'dtcp2_date', 'dtcp3_date',
+        'dtcp_rappel1_date', 'dtcp_rappel2_date', 'dtcp_rappel3_date', 'dtcp_rappel4_date',
+        'hep_b1_date', 'hep_b2_date', 'hep_b3_date',
+        'hib1_date', 'hib2_date', 'hib3_date', 'hib_rappel_date',
+        'ror_date', 'rougeole_seule_date'
+    ]
+    
+    if field_name not in vaccine_fields:
+        flash("Invalid vaccine field.", "danger")
+        return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+    
+    try:
+        # Update the vaccine field
+        if vaccine_date == '':
+            vaccine_date = None
+        
+        db.execute(f"UPDATE Patients SET {field_name} = ? WHERE id = ?", (vaccine_date, patient_id))
+        db.commit()
+        
+        # Update Word document
+        word_manager = WordDocumentManager(db_path=emr_config.get_database_path(), documents_folder=emr_config.get_word_docs_folder())
+        word_manager.create_or_update_document(patient_id)
+        
+        flash('Vaccine record updated successfully!', 'success')
+    except Exception as e:
+        db.rollback()
+        flash(f'Error updating vaccine record: {e}', 'danger')
+    
+    return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+

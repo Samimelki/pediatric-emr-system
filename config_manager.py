@@ -2,10 +2,10 @@ import os
 import json
 
 # Define application name and paths
-APP_NAME = "WordDocsEMR"
+APP_NAME = "UnifiedEMR"
 USER_DOCUMENTS = os.path.join(os.path.expanduser('~'), 'Documents')
 APP_DATA_DIR = os.path.join(USER_DOCUMENTS, APP_NAME)
-DATABASE_NAME = 'word_docs_emr.db'
+DATABASE_NAME = 'unified_emr.db'
 CONFIG_FILE = os.path.join(APP_DATA_DIR, 'config.json')
 DEFAULT_DATABASE_PATH = os.path.join(APP_DATA_DIR, DATABASE_NAME)
 UPLOAD_FOLDER = os.path.join(APP_DATA_DIR, 'uploads')  # For temporary XML uploads

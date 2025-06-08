@@ -35,6 +35,7 @@ def init_unified_db_schema():
         
         -- Unified Name Fields (English/French support)
         first_name TEXT,
+        middle_name TEXT,
         last_name TEXT,
         prenom TEXT,     -- French first name (pediatric)
         nom TEXT,        -- French last name (pediatric)
@@ -107,6 +108,7 @@ def init_unified_db_schema():
         -- Raw Text Fields
         raw_dossier_text TEXT,
         raw_autres_vaccins_text TEXT, -- Other vaccines text
+        notes TEXT,                   -- General notes field
         
         -- Metadata
         created_date TEXT DEFAULT CURRENT_TIMESTAMP,
@@ -282,6 +284,7 @@ def _perform_schema_upgrades(db):
         ("Patients", "created_date", "TEXT DEFAULT CURRENT_TIMESTAMP"),
         ("Patients", "modified_date", "TEXT DEFAULT CURRENT_TIMESTAMP"),
         ("Patients", "emr_mode", "TEXT DEFAULT 'mixed'"),
+        ("Patients", "middle_name", "TEXT"),
         ("Patients", "prenom", "TEXT"),
         ("Patients", "nom", "TEXT"),
         ("Patients", "naissance_date", "TEXT"),
@@ -298,6 +301,7 @@ def _perform_schema_upgrades(db):
         ("Patients", "third_party_payer", "TEXT"),
         ("Patients", "hopital", "TEXT"),
         ("Patients", "family_history", "TEXT"),
+        ("Patients", "notes", "TEXT"),
         
         # Visits table upgrades
         ("Visits", "weight_kg", "REAL"),

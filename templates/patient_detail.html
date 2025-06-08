@@ -32,9 +32,20 @@
                     Export PDF
                 </button>
                 <div class="dropdown-menu" aria-labelledby="exportPdfDropdown">
+                    <h6 class="dropdown-header">Complete Reports</h6>
                     {% set complete_report_url = url_for('pdf_export.export_complete_report', patient_id=patient.id) %}
                     <a class="dropdown-item" href="{{ complete_report_url }}" target="_blank">
-                        <i class="fas fa-file-medical"></i> Complete Report
+                        <i class="fas fa-file-medical"></i> Complete Medical Report
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <h6 class="dropdown-header">Vaccination Records</h6>
+                    {% set vaccination_fr_url = url_for('pdf_export.export_vaccination_record_fr', patient_id=patient.id) %}
+                    <a class="dropdown-item" href="{{ vaccination_fr_url }}" target="_blank">
+                        <i class="fas fa-syringe"></i> Vaccination Record (French)
+                    </a>
+                    {% set vaccination_en_url = url_for('pdf_export.export_vaccination_record_en', patient_id=patient.id) %}
+                    <a class="dropdown-item" href="{{ vaccination_en_url }}" target="_blank">
+                        <i class="fas fa-syringe"></i> Vaccination Record (English)
                     </a>
                 </div>
             </div>

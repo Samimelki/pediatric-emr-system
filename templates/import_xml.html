@@ -84,6 +84,56 @@
                     </small>
                 </div>
 
+                <!-- Document Format Selection -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        {% if emr_mode.value == 'pediatric' %}
+                            Format de Document Patient :
+                        {% else %}
+                            Patient Document Format:
+                        {% endif %}
+                    </label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" name="document_format" id="format_markdown" value="md" checked>
+                                <label class="form-check-label" for="format_markdown">
+                                    <strong>📄 Markdown (.md)</strong>
+                                    <br><small class="text-success">
+                                        {% if emr_mode.value == 'pediatric' %}
+                                            ⚡ Rapide • Fichiers légers • 11K patients: ~5-15 minutes
+                                        {% else %}
+                                            ⚡ Fast • Lightweight files • 11K patients: ~5-15 minutes
+                                        {% endif %}
+                                    </small>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" name="document_format" id="format_docx" value="docx">
+                                <label class="form-check-label" for="format_docx">
+                                    <strong>📝 Word (.docx)</strong>
+                                    <br><small class="text-warning">
+                                        {% if emr_mode.value == 'pediatric' %}
+                                            🐌 Plus lent • Joli formatage • 11K patients: ~2-6 heures
+                                        {% else %}
+                                            🐌 Slower • Pretty formatting • 11K patients: ~2-6 hours
+                                        {% endif %}
+                                    </small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <small class="form-text text-muted">
+                        {% if emr_mode.value == 'pediatric' %}
+                            💡 Recommandé: Markdown pour les gros imports (plus rapide), Word pour de petits imports (plus joli).
+                        {% else %}
+                            💡 Recommended: Markdown for large imports (faster), Word for small imports (prettier).
+                        {% endif %}
+                    </small>
+                </div>
+
                 <!-- Options -->
                 <div class="mb-3">
                     <div class="form-check">

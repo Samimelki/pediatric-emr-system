@@ -5,8 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complete Medical Record - {{ patient.nom }} {{ patient.prenom }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/pdf_styles.css') }}">
+    <style>
+        @page {
+            margin: 2cm;
+            margin-bottom: 2.5cm;
+            @bottom-center {
+                content: element(pdf_footer_text) "\A Page " counter(page) " of " counter(pages);
+                vertical-align: bottom;
+                padding-bottom: 0.5cm;
+                font-size: 0.8em;
+                line-height: 1.4;
+                text-align: center;
+                white-space: pre-wrap;
+                border-top: 1px solid #000;
+                padding-top: 0.3cm;
+            }
+        }
+        .footer-content-for-pdf {
+            position: running(pdf_footer_text);
+            font-size: inherit;
+            line-height: inherit;
+        }
+    </style>
 </head>
 <body>
+    <div class="footer-content-for-pdf">
+        {% if physician.contact_line1 %}{{ physician.contact_line1 }}{% endif %}
+        {% if physician.contact_line1 and physician.contact_line2 %} - {% endif %}
+        {% if physician.contact_line2 %}{{ physician.contact_line2 }}{% endif %}
+        {% if footer_note and footer_note != "Footer note (Default)" %}
+            {% if physician.contact_line1 or physician.contact_line2 %} | {% endif %}
+            {{ footer_note }}
+        {% endif %}
+    </div>
+
     <div class="physician-info">
         <p><strong>{{ physician.name }}</strong></p>
         <p>{{ physician.specialty }}</p>
@@ -43,8 +75,8 @@
     <div class="patient-info-grid">
         <strong>Weight (g):</strong><span>{{ patient.birth_weight_g if patient.birth_weight_g else 'N/A' }}</span>
         <strong>Height (cm):</strong><span>{{ patient.birth_height_cm if patient.birth_height_cm else 'N/A' }}</span>
-        <strong>HC (cm):</strong><span>{{ patient.birth_head_circumference_cm if patient.birth_head_circumference_cm else 'N/A' }}</span>
-        <strong>Birth Hospital/Country:</strong><span>{{ patient.hopital if patient.hopital else 'N/A' }}</span>
+        <strong>Head Circumference (cm):</strong><span>{{ patient.birth_head_circumference_cm if patient.birth_head_circumference_cm else 'N/A' }}</span>
+        <strong>Hospital/Country of Birth:</strong><span>{{ patient.hopital if patient.hopital else 'N/A' }}</span>
         <strong>Birth Notes:</strong><span>{{ patient.birth_notes if patient.birth_notes else 'N/A' }}</span>
     </div>
 
@@ -103,7 +135,7 @@
         <p>No recommended vaccinations recorded.</p>
     {% endif %}
 
-    <h2 class="section-title">Consultation History</h2>
+    <h2 class="section-title">Visit History</h2>
     <div class="visits-history">
         {% if visites %}
             {% for visit in visites %}
@@ -113,7 +145,7 @@
             </div>
             {% endfor %}
         {% else %}
-            <p>No consultation records found.</p>
+            <p>No visit records found.</p>
         {% endif %}
     </div>
 
@@ -125,16 +157,5 @@
     <img src="{{ signature_image_url_for_pdf }}" class="signature-stamp-image" alt="Signature/Stamp">
     {% endif %}
 
-    <div class="footer-content-for-pdf">
-        <p>
-            {% if physician.contact_line1 %}{{ physician.contact_line1 }}{% endif %}
-            {% if physician.contact_line1 and physician.contact_line2 %} - {% endif %}
-            {% if physician.contact_line2 %}{{ physician.contact_line2 }}{% endif %}
-            {% if footer_note and footer_note != "Footer note (Default)" %}
-                {% if physician.contact_line1 or physician.contact_line2 %} | {% endif %}
-                {{ footer_note }}
-            {% endif %}
-        </p>
-    </div>
 </body>
 </html> 

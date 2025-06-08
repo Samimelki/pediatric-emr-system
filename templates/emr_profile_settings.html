@@ -184,6 +184,37 @@
             </div>
         </div>
 
+        <!-- Profile Settings -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-cog me-2"></i>Profile Settings</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Date Format</h6>
+                        <p class="text-muted">Choose how dates are displayed throughout the EMR</p>
+                        <select class="form-select" id="dateFormat" onchange="updateDateFormat()">
+                            <option value="dd/mm/yyyy" {% if current_profile.settings.get('date_format', 'dd/mm/yyyy') == 'dd/mm/yyyy' %}selected{% endif %}>
+                                DD/MM/YYYY (e.g., 25/12/2023)
+                            </option>
+                            <option value="mm/dd/yyyy" {% if current_profile.settings.get('date_format', 'dd/mm/yyyy') == 'mm/dd/yyyy' %}selected{% endif %}>
+                                MM/DD/YYYY (e.g., 12/25/2023)
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Language</h6>
+                        <p class="text-muted">Primary language for the interface</p>
+                        <select class="form-select" id="language">
+                            <option value="en" {% if current_profile.settings.get('language', 'en') == 'en' %}selected{% endif %}>English</option>
+                            <option value="fr" {% if current_profile.settings.get('language', 'en') == 'fr' %}selected{% endif %}>Français</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Save Options -->
         <div class="card">
             <div class="card-header bg-success text-white">
@@ -271,8 +302,53 @@
             return features;
         }
 
+        function updateDateFormat() {
+            const dateFormat = document.getElementById('dateFormat').value;
+            
+            fetch('{{ url_for("emr_settings.update_date_format") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    date_format: dateFormat
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show a subtle notification
+                    const notification = document.createElement('div');
+                    notification.className = 'alert alert-success alert-dismissible fade show position-fixed';
+                    notification.style.top = '20px';
+                    notification.style.right = '20px';
+                    notification.style.zIndex = '9999';
+                    notification.innerHTML = `
+                        <i class="fas fa-check me-2"></i>Date format updated!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    `;
+                    document.body.appendChild(notification);
+                    
+                    // Auto-remove after 3 seconds
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 3000);
+                } else {
+                    alert('Error updating date format: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating date format');
+            });
+        }
+
         function saveCurrentProfile() {
             const features = getFeatureConfiguration();
+            const dateFormat = document.getElementById('dateFormat').value;
+            const language = document.getElementById('language').value;
             
             fetch('{{ url_for("emr_settings.update_profile") }}', {
                 method: 'POST',
@@ -281,7 +357,14 @@
                 },
                 body: JSON.stringify({
                     profile_name: '{{ active_profile_name }}',
-                    features: features
+                    features: features,
+                    settings: {
+                        date_format: dateFormat,
+                        language: language,
+                        weight_unit_preference: '{{ current_profile.settings.get("weight_unit_preference", "auto") }}',
+                        show_percentiles: {{ current_profile.settings.get("show_percentiles", true)|tojson }},
+                        require_visit_notes: {{ current_profile.settings.get("require_visit_notes", true)|tojson }}
+                    }
                 })
             })
             .then(response => response.json())

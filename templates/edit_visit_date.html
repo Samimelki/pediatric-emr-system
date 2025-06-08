@@ -11,15 +11,96 @@
     <p class="text-warning"><small>Patient Date of Birth not recorded. Be careful when setting the visit date.</small></p>
     {% endif %}
 
-    <form method="POST" action="{{ url_for('patient.edit_single_visit_date', visit_id=visit.id) }}">
+    <form method="POST" action="{{ url_for('visit.edit_visit_date', visit_id=visit.id) }}">
         <div class="form-group">
             <label for="visit_date">New Visit Date:</label>
-            <input type="date" class="form-control" id="visit_date" name="visit_date" 
+            <input type="text" class="form-control" id="visit_date" name="visit_date" 
+                   placeholder="{{ date_format|upper }}" maxlength="10"
+                   pattern="{% if date_format == 'dd/mm/yyyy' %}\d{2}/\d{2}/\d{4}{% else %}\d{2}/\d{2}/\d{4}{% endif %}" 
                    value="{{ current_date_val if current_date_val else '' }}" required>
+            <small class="form-text text-muted">Format: {{ date_format|upper }}</small>
         </div>
         
         <button type="submit" class="btn btn-primary">Update Visit Date</button>
         <a href="{{ url_for('patient.patient_detail', patient_id=visit.patient_id) }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
+
+<script>
+// Auto-format date input based on user's preferred format
+document.getElementById('visit_date').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+    
+    if (value.length >= 2) {
+        value = value.substring(0, 2) + '/' + value.substring(2);
+    }
+    if (value.length >= 5) {
+        value = value.substring(0, 5) + '/' + value.substring(5, 9);
+    }
+    
+    e.target.value = value;
+});
+
+// Convert current date value from YYYY-MM-DD to user format on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const visitDateInput = document.getElementById('visit_date');
+    const currentValue = visitDateInput.value;
+    const expectedFormat = '{{ date_format }}';
+    
+    if (currentValue && currentValue.includes('-')) {
+        // Convert from YYYY-MM-DD to user format
+        const parts = currentValue.split('-');
+        if (parts.length === 3) {
+            const year = parts[0];
+            const month = parts[1];
+            const day = parts[2];
+            
+            if (expectedFormat === 'dd/mm/yyyy') {
+                visitDateInput.value = `${day}/${month}/${year}`;
+            } else {
+                visitDateInput.value = `${month}/${day}/${year}`;
+            }
+        }
+    }
+});
+
+// Validate date format on form submission
+document.querySelector('form').addEventListener('submit', function(e) {
+    const dateInput = document.getElementById('visit_date');
+    const dateValue = dateInput.value;
+    const expectedFormat = '{{ date_format }}';
+    
+    if (dateValue && dateValue.length > 0) {
+        const datePattern = /^\d{2}\/\d{2}\/\d{4}$/;
+        if (!datePattern.test(dateValue)) {
+            e.preventDefault();
+            alert('Please enter date in ' + expectedFormat.toUpperCase() + ' format (e.g., {% if date_format == "dd/mm/yyyy" %}25/12/2023{% else %}12/25/2023{% endif %})');
+            dateInput.focus();
+            return false;
+        }
+        
+        // Additional validation to check if it's a valid date
+        const parts = dateValue.split('/');
+        let day, month, year;
+        
+        if (expectedFormat === 'dd/mm/yyyy') {
+            day = parseInt(parts[0]);
+            month = parseInt(parts[1]);
+            year = parseInt(parts[2]);
+        } else {
+            month = parseInt(parts[0]);
+            day = parseInt(parts[1]);
+            year = parseInt(parts[2]);
+        }
+        
+        const testDate = new Date(year, month - 1, day);
+        if (testDate.getFullYear() !== year || testDate.getMonth() !== (month - 1) || testDate.getDate() !== day) {
+            e.preventDefault();
+            alert('Please enter a valid date.');
+            dateInput.focus();
+            return false;
+        }
+    }
+});
+</script>
 {% endblock %} 

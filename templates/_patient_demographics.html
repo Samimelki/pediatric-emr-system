@@ -1,7 +1,7 @@
 <h4>
     Demographics
     <!-- Debug: Patient ID: {{ patient.id if patient else 'No Patient Object' }} -->
-    <a href="{{ url_for('patient.edit_demographics', patient_id=patient.id) }}" class="btn btn-outline-primary btn-sm ml-2">Edit Demographics</a>
+    <a href="{{ url_for('demographics.edit_demographics', patient_id=patient.id) }}" class="btn btn-outline-primary btn-sm ml-2">Edit Demographics</a>
 </h4>
 <div class="row mb-2">
     <div class="col-md-6">

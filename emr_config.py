@@ -123,7 +123,8 @@ DEFAULT_PROFILES = {
             'weight_unit_preference': 'grams',
             'language': 'fr',
             'show_percentiles': True,
-            'require_visit_notes': True
+            'require_visit_notes': True,
+            'date_format': 'dd/mm/yyyy'
         }
     },
     'adult_profile': {
@@ -149,7 +150,8 @@ DEFAULT_PROFILES = {
             'weight_unit_preference': 'kg',
             'language': 'en',
             'show_percentiles': False,
-            'require_visit_notes': True
+            'require_visit_notes': True,
+            'date_format': 'mm/dd/yyyy'
         }
     },
     'family_practice_profile': {
@@ -175,7 +177,8 @@ DEFAULT_PROFILES = {
             'weight_unit_preference': 'auto',
             'language': 'en',
             'show_percentiles': True,
-            'require_visit_notes': True
+            'require_visit_notes': True,
+            'date_format': 'dd/mm/yyyy'
         }
     }
 }
@@ -415,6 +418,24 @@ class EMRConfig:
             'name': self.config.get('practice_name', 'Medical Practice'),
             'language': self.config.get('primary_language', 'en')
         }
+    
+    def get_emr_name(self) -> str:
+        """Get the customizable EMR system name"""
+        return self.config.get('emr_name', self.config.get('practice_name', 'Unified EMR System'))
+    
+    def set_emr_name(self, name: str):
+        """Set the EMR system name"""
+        self.config['emr_name'] = name
+        self.save_config()
+    
+    def get_background_image_filename(self) -> str:
+        """Get the background image filename"""
+        return self.config.get('background_image_filename')
+    
+    def set_background_image_filename(self, filename: str):
+        """Set the background image filename"""
+        self.config['background_image_filename'] = filename
+        self.save_config()
 
     def get_primary_language(self) -> str:
         return self.config.get('primary_language', 'en')
@@ -429,6 +450,24 @@ class EMRConfig:
 
     def is_english_primary(self) -> bool:
         return self.get_primary_language() == 'en'
+    
+    def get_date_format(self) -> str:
+        """Get the date format from active profile settings"""
+        profile = self.get_active_profile()
+        return profile.get('settings', {}).get('date_format', 'dd/mm/yyyy')
+    
+    def set_date_format(self, date_format: str):
+        """Set the date format for the active profile"""
+        profile_name = self.get_active_profile_name()
+        if 'profiles' not in self.config:
+            self.config['profiles'] = {}
+        if profile_name not in self.config['profiles']:
+            self.config['profiles'][profile_name] = self.get_active_profile()
+        if 'settings' not in self.config['profiles'][profile_name]:
+            self.config['profiles'][profile_name]['settings'] = {}
+        
+        self.config['profiles'][profile_name]['settings']['date_format'] = date_format
+        self.save_config()
 
 # Global configuration instance
 emr_config = EMRConfig()

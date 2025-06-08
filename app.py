@@ -15,7 +15,7 @@ from database import get_db, close_connection, init_db_schema, get_all_patient_d
 from xml_exporter import generate_patient_xml
 from csv_exporter import generate_patient_csvs
 from utils import format_datetime
-from config_manager import load_config, APP_DATA_DIR, UPLOAD_FOLDER, USER_MEDIA_FOLDER, WORD_DOCS_FOLDER
+# Using emr_config instead of config_manager
 from emr_config import emr_config
 from routes.patient_routes import patient_bp
 from routes.pdf_export_routes import pdf_export_bp
@@ -64,8 +64,8 @@ try:
     from csv_exporter import generate_patient_csvs
     logging.info("Importing utils...")
     from utils import format_datetime
-    logging.info("Importing config_manager...")
-    from config_manager import load_config, APP_DATA_DIR, UPLOAD_FOLDER, USER_MEDIA_FOLDER, WORD_DOCS_FOLDER
+    logging.info("Using emr_config...")
+    # Already imported emr_config at top
     logging.info("Importing Blueprints...")
     from routes.patient_routes import patient_bp
     from routes.pdf_export_routes import pdf_export_bp
@@ -90,10 +90,10 @@ app = Flask(__name__)
 app.secret_key = 'your secret key'
 
 logging.info("Loading unified EMR configuration...")
-config = load_config()  # Legacy config for backward compatibility
+# Using emr_config instead of legacy config
 
 # Use the unified EMR configuration system
-logging.info(f"EMR Mode: {emr_config.get_emr_mode()}")
+logging.info(f"Active Profile: {emr_config.get_active_profile_name()}")
 logging.info(f"Database Path: {emr_config.get_database_path()}")
 logging.info(f"Upload Folder: {emr_config.get_upload_folder()}")
 logging.info(f"User Media Folder: {emr_config.get_user_media_folder()}")
@@ -104,12 +104,49 @@ app.config['DATABASE'] = emr_config.get_database_path()
 app.config['UPLOAD_FOLDER'] = emr_config.get_upload_folder()
 app.config['USER_MEDIA_FOLDER'] = emr_config.get_user_media_folder()
 app.config['WORD_DOCS_FOLDER'] = emr_config.get_word_docs_folder()
-app.config['STORAGE_TYPE'] = config.get('storage_type', 'local')  # Legacy fallback
-app.config['CLOUD_PATH'] = config.get('cloud_path')  # Legacy fallback
+app.config['STORAGE_TYPE'] = 'local'  # Default value
+app.config['CLOUD_PATH'] = None  # Default value
 app.config['EMR_CONFIG'] = emr_config
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.jinja_env.filters['format_datetime'] = format_datetime
+
+def format_date_standard(date_str):
+    """Display date in the user's preferred format"""
+    if not date_str:
+        return 'N/A'
+    try:
+        # Parse from standard internal format (YYYY-MM-DD)
+        parsed_date = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+        
+        # Format according to user preference
+        user_format = emr_config.get_date_format()
+        if user_format == 'dd/mm/yyyy':
+            return parsed_date.strftime('%d/%m/%Y')
+        elif user_format == 'mm/dd/yyyy':
+            return parsed_date.strftime('%m/%d/%Y')
+        else:
+            return parsed_date.strftime('%Y-%m-%d')  # fallback
+    except:
+        # If parsing fails, try different input formats and then display in preferred format
+        try:
+            for format_string in ['%d/%m/%Y', '%m/%d/%Y', '%d-%m-%Y', '%Y-%m-%d']:
+                try:
+                    parsed_date = datetime.datetime.strptime(date_str, format_string)
+                    user_format = emr_config.get_date_format()
+                    if user_format == 'dd/mm/yyyy':
+                        return parsed_date.strftime('%d/%m/%Y')
+                    elif user_format == 'mm/dd/yyyy':
+                        return parsed_date.strftime('%m/%d/%Y')
+                    else:
+                        return parsed_date.strftime('%Y-%m-%d')
+                except ValueError:
+                    continue
+            return date_str or 'N/A'
+        except:
+            return date_str or 'N/A'
+
+app.jinja_env.filters['format_date_standard'] = format_date_standard
 
 @app.context_processor
 def inject_now():
@@ -117,13 +154,22 @@ def inject_now():
 
 @app.context_processor
 def inject_emr_config():
+    # Also provide legacy config object for backward compatibility
+    legacy_config = {
+        'emr_name': emr_config.get_emr_name(),
+        'background_image_filename': emr_config.get_background_image_filename(),
+        'practice_name': emr_config.get_practice_info()['name']
+    }
+    
     return {
         'emr_config': emr_config,
-        'emr_mode': emr_config.get_emr_mode(),  # Legacy compatibility
+        'config': legacy_config,  # For backward compatibility with existing templates
+        'emr_mode': emr_config.get_emr_mode(),  # Temporary backward compatibility for templates
         'active_profile': emr_config.get_active_profile(),
         'emr_features': emr_config.get_enabled_features(),
         'is_feature_enabled': emr_config.is_feature_enabled,
-        'practice_info': emr_config.get_practice_info()
+        'practice_info': emr_config.get_practice_info(),
+        'date_format': emr_config.get_date_format()
     }
 
 app.teardown_appcontext(close_connection)
@@ -143,18 +189,23 @@ app.register_blueprint(import_bp)
 from routes.vaccine_routes import vaccine_bp
 app.register_blueprint(vaccine_bp)
 
+# Visit functionality
+from routes.visit_routes import visit_bp
+app.register_blueprint(visit_bp)
+
+# Demographics functionality
+from routes.demographics_routes import demographics_bp
+app.register_blueprint(demographics_bp)
+
 logging.info("Blueprints registered.")
 
 @app.route('/')
 def index():
-    config = load_config()  # Legacy config
-    emr_mode = emr_config.get_emr_mode()
+    # Using new profile-based system
     features = emr_config.get_enabled_features()
     
     return render_template('index.html', 
                          title='Home', 
-                         config=config, 
-                         emr_mode=emr_mode,
                          emr_features=features,
                          emr_config=emr_config)
 

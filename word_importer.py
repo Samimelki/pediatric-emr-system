@@ -6,7 +6,7 @@ import json
 from typing import Dict, Optional, List, Tuple
 import os
 from word_document_manager import WordDocumentManager
-from config_manager import load_config
+from emr_config import emr_config
 
 class WordDocumentImporter:
     def __init__(self, db_path: str):
@@ -474,11 +474,11 @@ class WordDocumentImporter:
         except Exception as e:
             print(f"Error adding visit for patient {patient_id}, date {parsed_visit_date}: {e}")
 
-    def import_batch(self, doc_paths: List[str]) -> List[Tuple[str, bool, str]]:
+    def import_batch(self, doc_paths: List[str], document_format='md') -> List[Tuple[str, bool, str]]:
         results = []
         conn = self.connect_db()
         cursor = conn.cursor()
-        word_manager = WordDocumentManager(self.db_path, load_config().get('word_docs_folder'))
+        word_manager = WordDocumentManager(self.db_path, emr_config.get_word_docs_folder())
         try:
             for idx, doc_path in enumerate(doc_paths, start=1):
                 doc_specific_mrn = f"O{idx:03d}"
@@ -492,7 +492,15 @@ class WordDocumentImporter:
                             for visit_entry in patient_data.get('visits', []):
                                 self.add_visit(cursor, patient_id, visit_entry)
                             conn.commit()  # Commit so WordDocumentManager can see the patient
-                            word_manager.create_or_update_document(patient_id)
+                            
+                            # Create/update document (failsafe feature)
+                            try:
+                                doc_path = word_manager.create_or_update_document(patient_id, document_format)
+                                format_name = "Word document" if document_format == 'docx' else "Markdown document"
+                                print(f"Created {format_name} for patient ID {patient_id}: {os.path.basename(doc_path)}")
+                            except Exception as e:
+                                print(f"Warning: Failed to create Word document for patient ID {patient_id}: {e}")
+                            
                             success = True
                             cursor.execute("SELECT mrn FROM Patients WHERE id = ?", (patient_id,))
                             final_mrn_for_message = cursor.fetchone()[0]
@@ -545,6 +553,15 @@ class WordDocumentImporter:
                 self.add_visit(cursor, patient_id, visit_entry)
             
             conn.commit()
+            
+            # Create/update Word document (failsafe feature)
+            try:
+                word_manager = WordDocumentManager(self.db_path, emr_config.get_word_docs_folder())
+                doc_path = word_manager.create_or_update_document(patient_id)
+                print(f"Created Word document for patient ID {patient_id}: {os.path.basename(doc_path)}")
+            except Exception as e:
+                print(f"Warning: Failed to create Word document for patient ID {patient_id}: {e}")
+            
             # Fetch the final MRN for the message, as it might have come from a merged existing record
             cursor.execute("SELECT mrn FROM Patients WHERE id = ?", (patient_id,))
             final_mrn_for_message = cursor.fetchone()[0]

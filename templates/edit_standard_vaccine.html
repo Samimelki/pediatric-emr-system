@@ -18,7 +18,7 @@
         {% endif %}
     {% endwith %}
 
-    <form method="POST" action="{{ url_for('patient.update_standard_vaccine', patient_id=patient.id) }}">
+    <form method="POST" action="{{ url_for('vaccine.update_standard_vaccine', patient_id=patient.id) }}">
         <input type="hidden" name="vaccine_field_name" value="{{ field_name }}">
         
         <div class="form-group row">

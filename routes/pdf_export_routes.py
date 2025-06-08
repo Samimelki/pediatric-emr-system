@@ -129,54 +129,16 @@ DEFAULT_PDF_CONFIG = {
 }
 
 def load_pdf_config(force_reload=False):
-    global PDF_CONFIG_CACHE, DEFAULT_PDF_CONFIG
-    if not force_reload and PDF_CONFIG_CACHE:
-        return PDF_CONFIG_CACHE
-
-    config_path = os.path.join(current_app.root_path, 'pdf_config.json')
+    """Load PDF configuration from the unified settings system"""
+    # Use the new unified config system instead of hardcoded pdf_config.json
+    config = load_config()
+    pdf_settings = config.get('pdf_settings', {})
     
-    try:
-        with open(config_path, 'r', encoding='utf-8') as f:
-            config_data = json.load(f)
-            
-            # Ensure all keys from DEFAULT_PDF_CONFIG are present
-            # and remove Arabic specific keys if they exist in the loaded file
-            # to align with the new DEFAULT_PDF_CONFIG
-            final_config = {}
-            for key, default_value in DEFAULT_PDF_CONFIG.items():
-                if key in config_data:
-                    # If default value is a dict, ensure loaded value is also a dict and merge missing sub-keys
-                    if isinstance(default_value, dict):
-                        if isinstance(config_data[key], dict):
-                            final_config[key] = default_value.copy()
-                            final_config[key].update(config_data[key])
-                        else: # type mismatch, use default
-                            final_config[key] = default_value.copy()
-                    else: # Not a dict, just use the loaded value
-                        final_config[key] = config_data[key]
-                else: # Key not in loaded_config, use default
-                    final_config[key] = default_value.copy() if isinstance(default_value, dict) else default_value
-            
-            PDF_CONFIG_CACHE = final_config
-            return PDF_CONFIG_CACHE
-    except FileNotFoundError:
-        print(f"WARNING: pdf_config.json not found at {config_path}. Using default PDF details and creating the file.")
-        try:
-            with open(config_path, 'w', encoding='utf-8') as f_create:
-                json.dump(DEFAULT_PDF_CONFIG, f_create, indent=4, ensure_ascii=False)
-            PDF_CONFIG_CACHE = DEFAULT_PDF_CONFIG.copy() # Use a copy
-        except Exception as e_create:
-            print(f"ERROR: Could not create pdf_config.json at {config_path}: {e_create}. Using in-memory defaults.")
-            PDF_CONFIG_CACHE = DEFAULT_PDF_CONFIG.copy()
-        return PDF_CONFIG_CACHE
-    except json.JSONDecodeError:
-        print(f"WARNING: pdf_config.json is not valid JSON. Using default PDF details.")
-        PDF_CONFIG_CACHE = DEFAULT_PDF_CONFIG.copy()
-        return PDF_CONFIG_CACHE
-    except Exception as e:
-        print(f"ERROR: An unexpected error occurred while loading pdf_config.json: {e}. Using default PDF details.")
-        PDF_CONFIG_CACHE = DEFAULT_PDF_CONFIG.copy()
-        return PDF_CONFIG_CACHE
+    # If pdf_settings is empty or missing, use defaults from config_manager
+    if not pdf_settings:
+        pdf_settings = CM_DEFAULT_PDF_CONFIG.copy()
+    
+    return pdf_settings
 
 def clear_pdf_config_cache():
     global PDF_CONFIG_CACHE
@@ -338,13 +300,12 @@ def export_vaccination_record_fr(patient_id):
     physician_details = config.get('physician_details_fr', {})
     footer_note = config.get('footer_note_fr', '')
     signature_filename = config.get('signature_image_filename')
-    signature_image_url_for_pdf = None
-    if signature_filename:
-        full_path = os.path.join(current_app.config['USER_MEDIA_FOLDER'], signature_filename)
-        if os.path.exists(full_path):
-            signature_image_url_for_pdf = f"file://{os.path.abspath(full_path)}"
+    logo_filename = config.get('logo_image_filename')
+    
+    signature_image_url_for_pdf = get_media_file_path(signature_filename)
+    logo_image_url_for_pdf = get_media_file_path(logo_filename)
 
-    current_date_fr = datetime.datetime.now().strftime("%d/%m/%y")
+    current_date = datetime.datetime.now().strftime("%d/%m/%Y")
 
     # Use centralized constants and helper
     mandatory_vaccine_table_data, recommended_vaccine_table_data, active_dose_keys = _prepare_vaccine_table_data(
@@ -362,10 +323,11 @@ def export_vaccination_record_fr(patient_id):
                                active_dose_keys=active_dose_keys,
                                table_column_labels=TABLE_COLUMN_LABELS_FR, 
                                physician=physician_details,
-                               current_date_fr=current_date_fr, 
+                               current_date=current_date, 
                                format_date_for_pdf=format_date_for_pdf,
                                footer_note=footer_note, 
-                               signature_image_url_for_pdf=signature_image_url_for_pdf)
+                               signature_image_url_for_pdf=signature_image_url_for_pdf,
+                               logo_image_url_for_pdf=logo_image_url_for_pdf)
     
     pdf_stylesheets = _get_pdf_stylesheets()
     
@@ -386,11 +348,10 @@ def export_vaccination_record_en(patient_id):
     physician_details = config.get('physician_details_en', {})
     footer_note = config.get('footer_note_en', '')
     signature_filename = config.get('signature_image_filename')
-    signature_image_url_for_pdf = None
-    if signature_filename:
-        full_path = os.path.join(current_app.config['USER_MEDIA_FOLDER'], signature_filename)
-        if os.path.exists(full_path):
-            signature_image_url_for_pdf = f"file://{os.path.abspath(full_path)}"
+    logo_filename = config.get('logo_image_filename')
+    
+    signature_image_url_for_pdf = get_media_file_path(signature_filename)
+    logo_image_url_for_pdf = get_media_file_path(logo_filename)
 
     current_date_en = datetime.datetime.now().strftime("%Y-%m-%d")
 
@@ -409,10 +370,11 @@ def export_vaccination_record_en(patient_id):
                                active_dose_keys=active_dose_keys,
                                table_column_labels=TABLE_COLUMN_LABELS_EN, 
                                physician=physician_details,
-                               current_date_en=current_date_en, 
+                               current_date=current_date_en, 
                                format_date_for_pdf=format_date_for_pdf,
                                footer_note=footer_note, 
-                               signature_image_url_for_pdf=signature_image_url_for_pdf)
+                               signature_image_url_for_pdf=signature_image_url_for_pdf,
+                               logo_image_url_for_pdf=logo_image_url_for_pdf)
     
     pdf_stylesheets = _get_pdf_stylesheets()
     
@@ -580,6 +542,10 @@ def export_complete_report(patient_id):
     signature_image_url_for_pdf = get_media_file_path(signature_filename)
     logo_image_url_for_pdf = get_media_file_path(logo_filename)
     
+    # Debug output for logo issues
+    current_app.logger.info(f"DEBUG: Logo filename: {logo_filename}")
+    current_app.logger.info(f"DEBUG: Logo URL for PDF: {logo_image_url_for_pdf}")
+    
     footer_alignment_setting = pdf_settings.get('footer_alignment', CM_DEFAULT_PDF_CONFIG.get('footer_alignment', 'center'))
 
     default_physician_details_en_for_template = CM_DEFAULT_PDF_CONFIG.get('physician_details_en', {})
@@ -599,12 +565,22 @@ def export_complete_report(patient_id):
     )
     
     pdf_stylesheets = _get_pdf_stylesheets()
-    pdf = HTML(string=html_out, base_url=current_app.root_path).write_pdf(stylesheets=pdf_stylesheets)
-
-    response = make_response(pdf)
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = f'attachment; filename={patient["first_name"]}_{patient["last_name"]}_complete_report.pdf'
-    return response
+    
+    # Create PDF with proper error handling
+    try:
+        pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
+        response = make_response(pdf)
+        response.headers['Content-Type'] = 'application/pdf'
+        
+        # Sanitize filename to avoid special characters that could cause header issues
+        safe_first_name = ''.join(c for c in patient["first_name"] if c.isalnum() or c in (' ', '-', '_')).strip()
+        safe_last_name = ''.join(c for c in patient["last_name"] if c.isalnum() or c in (' ', '-', '_')).strip()
+        filename = f'{safe_first_name}_{safe_last_name}_complete_report.pdf'.replace(' ', '_')
+        response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
+    except Exception as e:
+        current_app.logger.error(f"Error generating complete report PDF: {e}")
+        return f"Error generating PDF: {str(e)}", 500
 
 # Helper function to get absolute path for media files for WeasyPrint
 def get_media_file_path(filename):

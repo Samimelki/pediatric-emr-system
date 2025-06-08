@@ -3,13 +3,13 @@ import sqlite3
 from typing import Dict, Any, Optional, List, Tuple
 from word_document_manager import WordDocumentManager
 from database import get_db, get_custom_demographic_fields
-from config_manager import load_config
+from emr_config import emr_config
 
 class DatabaseOperations:
     def __init__(self, db_path: str, documents_folder: str):
         self.db_path = db_path
         self.documents_folder = documents_folder
-        self.config = load_config()
+        self.config = emr_config
         self.word_manager = WordDocumentManager(db_path, documents_folder)
         self._ensure_word_documents_folder()
 

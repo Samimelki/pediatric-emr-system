@@ -2,574 +2,207 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>
-        {% if emr_mode.value == 'pediatric' %}
-            Ajouter Nouveau Patient
-        {% else %}
-            Add New Patient
-        {% endif %}
-    </h2>
+    <h2>Add New Patient</h2>
     <hr>
 
-    <!-- EMR Mode Indicator -->
-    <div class="alert alert-info">
-        <strong>EMR Mode:</strong> {{ emr_mode.value.title() }}
-        {% if emr_mode.value == 'mixed' %}
-            <span class="text-muted">(All fields available)</span>
+    <form method="POST" action="{{ url_for('demographics.add_patient_submit') }}">
+        {% if show_duplicate_override %}
+        <input type="hidden" name="force_create" value="true">
         {% endif %}
-        <a href="{{ url_for('emr_settings.emr_configuration') }}" class="btn btn-sm btn-outline-secondary float-right">
-            Change Mode
-        </a>
-    </div>
-
-    <form method="POST" action="{{ url_for('patient.add_patient_submit') }}">
         
         <!-- Personal Information Section -->
-        <h4>
-            {% if emr_mode.value == 'pediatric' %}
-                Informations Personnelles
-            {% else %}
-                Personal Information
-            {% endif %}
-        </h4>
+        <h4>Personal Information</h4>
         <div class="form-row">
-            <div class="form-group col-md-6">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="prenom">Prénom <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="prenom" name="prenom" required>
-                {% else %}
-                    <label for="first_name">First Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="first_name" name="first_name" required>
-                {% endif %}
+            <div class="form-group col-md-4">
+                <label for="first_name">First Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="first_name" name="first_name" 
+                       value="{{ form_data.get('first_name', '') if form_data else '' }}" required>
             </div>
-            <div class="form-group col-md-6">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="nom">Nom <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="nom" name="nom" required>
-                {% else %}
-                    <label for="last_name">Last Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="last_name" name="last_name" required>
-                {% endif %}
+            <div class="form-group col-md-4">
+                <label for="middle_name">Middle Name</label>
+                <input type="text" class="form-control" id="middle_name" name="middle_name"
+                       value="{{ form_data.get('middle_name', '') if form_data else '' }}">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="last_name">Last Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="last_name" name="last_name" 
+                       value="{{ form_data.get('last_name', '') if form_data else '' }}" required>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="naissance_date">Date de Naissance</label>
-                    <input type="date" class="form-control" id="naissance_date" name="naissance_date">
-                {% else %}
-                    <label for="date_of_birth">Date of Birth</label>
-                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth">
-                {% endif %}
+                <label for="date_of_birth">Date of Birth</label>
+                <input type="text" class="form-control" id="date_of_birth" name="date_of_birth" 
+                       value="{{ form_data.get('date_of_birth', '') if form_data else '' }}"
+                       placeholder="{{ date_format|upper }}" maxlength="10"
+                       pattern="{% if date_format == 'dd/mm/yyyy' %}\d{2}/\d{2}/\d{4}{% else %}\d{2}/\d{2}/\d{4}{% endif %}">
+                <small class="form-text text-muted">Expected format: {{ date_format|upper }}</small>
             </div>
             <div class="form-group col-md-6">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="sexe">Sexe</label>
-                    <select id="sexe" name="sexe" class="form-control">
-                {% else %}
-                    <label for="sex">Sex</label>
-                    <select id="sex" name="sex" class="form-control">
-                {% endif %}
-                    <option value="" selected>Choose...</option>
-                    <option value="M">M</option>
-                    <option value="F">F</option>
-                    <option value="Other">Other</option>
+                <label for="sex">Sex</label>
+                <select id="sex" name="sex" class="form-control">
+                    <option value="" {% if not form_data or not form_data.get('sex') %}selected{% endif %}>Choose...</option>
+                    <option value="M" {% if form_data and form_data.get('sex') == 'M' %}selected{% endif %}>M</option>
+                    <option value="F" {% if form_data and form_data.get('sex') == 'F' %}selected{% endif %}>F</option>
+                    <option value="Other" {% if form_data and form_data.get('sex') == 'Other' %}selected{% endif %}>Other</option>
                 </select>
             </div>
         </div>
 
-        <!-- Contact Information Section -->
-        <h4>
-            {% if emr_mode.value == 'pediatric' %}
-                Informations de Contact
-            {% else %}
-                Contact Information
-            {% endif %}
-        </h4>
+        <!-- Parental Information -->
+        <h4>Parental Information</h4>
         <div class="form-row">
             <div class="form-group col-md-6">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="domicile">Domicile</label>
-                    <input type="text" class="form-control" id="domicile" name="domicile">
-                {% else %}
-                    <label for="address">Address</label>
-                    <input type="text" class="form-control" id="address" name="address">
-                {% endif %}
+                <label for="mere_nom">Mother's Name</label>
+                <input type="text" class="form-control" id="mere_nom" name="mere_nom"
+                       value="{{ form_data.get('mere_nom', '') if form_data else '' }}">
             </div>
             <div class="form-group col-md-6">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="telephone">Téléphone</label>
-                    <input type="text" class="form-control" id="telephone" name="telephone">
-                {% else %}
-                    <label for="phone">Phone</label>
-                    <input type="text" class="form-control" id="phone" name="phone">
-                {% endif %}
+                <label for="pere_nom">Father's Name</label>
+                <input type="text" class="form-control" id="pere_nom" name="pere_nom"
+                       value="{{ form_data.get('pere_nom', '') if form_data else '' }}">
             </div>
         </div>
-        
-        {% if emr_mode.value == 'adult' %}
-        <!-- Adult-specific fields -->
+
+        <!-- Contact Information -->
+        <h4>Contact Information</h4>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="address">Address</label>
+                <input type="text" class="form-control" id="address" name="address"
+                       value="{{ form_data.get('address', '') if form_data else '' }}">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="phone">Phone</label>
+                <input type="text" class="form-control" id="phone" name="phone"
+                       value="{{ form_data.get('phone', '') if form_data else '' }}">
+            </div>
+        </div>
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email">
-        </div>
-        {% endif %}
-
-        <!-- Pediatric-specific sections (shown in pediatric and mixed modes) -->
-        {% if emr_mode.value in ['pediatric', 'mixed'] %}
-        <h4>
-            {% if emr_mode.value == 'pediatric' %}
-                Informations des Parents
-            {% else %}
-                Parental Information
-            {% endif %}
-        </h4>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="mere_nom">Prénom Mère</label>
-                {% else %}
-                    <label for="mere_nom">Mother's First Name</label>
-                {% endif %}
-                <input type="text" class="form-control" id="mere_nom" name="mere_nom">
-            </div>
-            <div class="form-group col-md-6">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="pere_nom">Prénom Père</label>
-                {% else %}
-                    <label for="pere_nom">Father's First Name</label>
-                {% endif %}
-                <input type="text" class="form-control" id="pere_nom" name="pere_nom">
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Medical Information Section -->
-        <h4>
-            {% if emr_mode.value == 'pediatric' %}
-                Informations Médicales
-            {% else %}
-                Medical Information
-            {% endif %}
-        </h4>
-        
-        {% if emr_mode.value == 'adult' %}
-        <!-- Adult medical fields -->
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="insurance">Insurance</label>
-                <input type="text" class="form-control" id="insurance" name="insurance">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="primary_physician">Primary Physician</label>
-                <input type="text" class="form-control" id="primary_physician" name="primary_physician">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="pmh">Past Medical History</label>
-            <textarea class="form-control" id="pmh" name="pmh" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="psh">Past Surgical History</label>
-            <textarea class="form-control" id="psh" name="psh" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="family_history">Family History</label>
-            <textarea class="form-control" id="family_history" name="family_history" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="medications">Medications</label>
-            <textarea class="form-control" id="medications" name="medications" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="allergies">Allergies</label>
-            <textarea class="form-control" id="allergies" name="allergies" rows="3"></textarea>
-        </div>
-        
-        <!-- Social History -->
-        <h5>Social History</h5>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="smoker" name="smoker">
-                    <label class="form-check-label" for="smoker">Smoker</label>
-                </div>
-                <textarea class="form-control mt-2" id="smoker_details" name="smoker_details" rows="2" placeholder="Smoking details..."></textarea>
-            </div>
-            <div class="form-group col-md-6">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="alcohol" name="alcohol">
-                    <label class="form-check-label" for="alcohol">Alcohol Use</label>
-                </div>
-                <textarea class="form-control mt-2" id="alcohol_details" name="alcohol_details" rows="2" placeholder="Alcohol use details..."></textarea>
-            </div>
-        </div>
-        {% endif %}
-
-        {% if emr_mode.value in ['pediatric', 'mixed'] %}
-        <!-- Pediatric medical fields -->
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="third_party_payer">Tiers Payant</label>
-                {% else %}
-                    <label for="third_party_payer">Third Party Payer</label>
-                {% endif %}
-                <input type="text" class="form-control" id="third_party_payer" name="third_party_payer">
-            </div>
-            <div class="form-group col-md-6">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="pediatre_initiales">Initiales Pédiatre</label>
-                {% else %}
-                    <label for="pediatre_initiales">Pediatrician Initials</label>
-                {% endif %}
-                <input type="text" class="form-control" id="pediatre_initiales" name="pediatre_initiales">
-            </div>
+            <input type="email" class="form-control" id="email" name="email"
+                   value="{{ form_data.get('email', '') if form_data else '' }}">
         </div>
 
-        <!-- Birth Information -->
-        <h5>
-            {% if emr_mode.value == 'pediatric' %}
-                Informations de Naissance
-            {% else %}
-                Birth Information
-            {% endif %}
-        </h5>
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                {% if emr_mode.value == 'pediatric' %}
-                                    <label for="birth_weight_g">Poids Naissance (g ou kg)</label>
-                {% else %}
-                <label for="birth_weight_g">Birth Weight (g or kg)</label>
-                {% endif %}
-                <input type="number" class="form-control" id="birth_weight_g" name="birth_weight_g" step="any" placeholder="22 or 3456">
-            </div>
-            <div class="form-group col-md-3">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="birth_height_cm">Taille Naissance (cm)</label>
-                {% else %}
-                    <label for="birth_height_cm">Birth Height (cm)</label>
-                {% endif %}
-                <input type="number" class="form-control" id="birth_height_cm" name="birth_height_cm" step="any">
-            </div>
-            <div class="form-group col-md-3">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="birth_head_circumference_cm">PC Naissance (cm)</label>
-                {% else %}
-                    <label for="birth_head_circumference_cm">Birth Head Circumference (cm)</label>
-                {% endif %}
-                <input type="number" class="form-control" id="birth_head_circumference_cm" name="birth_head_circumference_cm" step="any">
-            </div>
-            <div class="form-group col-md-3">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="hopital">Hôpital/Pays</label>
-                {% else %}
-                    <label for="hopital">Birth Hospital/Country</label>
-                {% endif %}
-                <input type="text" class="form-control" id="hopital" name="hopital">
-            </div>
-        </div>
-        <div class="form-group">
-            {% if emr_mode.value == 'pediatric' %}
-                <label for="birth_notes">Notes de Naissance</label>
-            {% else %}
-                <label for="birth_notes">Birth Notes</label>
-            {% endif %}
-            <textarea class="form-control" id="birth_notes" name="birth_notes" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-            {% if emr_mode.value == 'pediatric' %}
-                <label for="obstetrical_history">Histoire Obstétricale</label>
-            {% else %}
-                <label for="obstetrical_history">Obstetrical History</label>
-            {% endif %}
-            <textarea class="form-control" id="obstetrical_history" name="obstetrical_history" rows="3"></textarea>
-        </div>
-
-        <!-- Diagnoses -->
-        <h5>
-            {% if emr_mode.value == 'pediatric' %}
-                Diagnostics
-            {% else %}
-                Diagnoses
-            {% endif %}
-        </h5>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="diag1">Diagnostic 1</label>
-                {% else %}
-                    <label for="diag1">Diagnosis 1</label>
-                {% endif %}
-                <input type="text" class="form-control" id="diag1" name="diag1">
-            </div>
-            <div class="form-group col-md-6">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="diag2">Diagnostic 2</label>
-                {% else %}
-                    <label for="diag2">Diagnosis 2</label>
-                {% endif %}
-                <input type="text" class="form-control" id="diag2" name="diag2">
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Vaccines Section (only shown if vaccines feature is enabled) -->
-        {% if emr_features.vaccines_enabled and emr_mode.value in ['pediatric', 'mixed'] %}
-        <h4>
-            {% if emr_mode.value == 'pediatric' %}
-                Vaccins Standards
-            {% else %}
-                Standard Vaccines
-            {% endif %}
-        </h4>
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                <label for="dtcp1_date">DTCP 1</label>
-                <input type="date" class="form-control" id="dtcp1_date" name="dtcp1_date">
-            </div>
-            <div class="form-group col-md-3">
-                <label for="dtcp2_date">DTCP 2</label>
-                <input type="date" class="form-control" id="dtcp2_date" name="dtcp2_date">
-            </div>
-            <div class="form-group col-md-3">
-                <label for="dtcp3_date">DTCP 3</label>
-                <input type="date" class="form-control" id="dtcp3_date" name="dtcp3_date">
-            </div>
-            <div class="form-group col-md-3">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="dtcp_rappel1_date">DTCP Rappel 1</label>
-                {% else %}
-                    <label for="dtcp_rappel1_date">DTCP Booster 1</label>
-                {% endif %}
-                <input type="date" class="form-control" id="dtcp_rappel1_date" name="dtcp_rappel1_date">
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="dtcp_rappel2_date">DTCP Rappel 2</label>
-                {% else %}
-                    <label for="dtcp_rappel2_date">DTCP Booster 2</label>
-                {% endif %}
-                <input type="date" class="form-control" id="dtcp_rappel2_date" name="dtcp_rappel2_date">
-            </div>
-            <div class="form-group col-md-3">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="dtcp_rappel3_date">DTCP Rappel 3</label>
-                {% else %}
-                    <label for="dtcp_rappel3_date">DTCP Booster 3</label>
-                {% endif %}
-                <input type="date" class="form-control" id="dtcp_rappel3_date" name="dtcp_rappel3_date">
-            </div>
-            <div class="form-group col-md-3">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="dtcp_rappel4_date">DTCP Rappel 4</label>
-                {% else %}
-                    <label for="dtcp_rappel4_date">DTCP Booster 4</label>
-                {% endif %}
-                <input type="date" class="form-control" id="dtcp_rappel4_date" name="dtcp_rappel4_date">
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="hep_b1_date">Hépatite B 1</label>
-                {% else %}
-                    <label for="hep_b1_date">Hepatitis B 1</label>
-                {% endif %}
-                <input type="date" class="form-control" id="hep_b1_date" name="hep_b1_date">
-            </div>
-            <div class="form-group col-md-3">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="hep_b2_date">Hépatite B 2</label>
-                {% else %}
-                    <label for="hep_b2_date">Hepatitis B 2</label>
-                {% endif %}
-                <input type="date" class="form-control" id="hep_b2_date" name="hep_b2_date">
-            </div>
-            <div class="form-group col-md-3">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="hep_b3_date">Hépatite B 3</label>
-                {% else %}
-                    <label for="hep_b3_date">Hepatitis B 3</label>
-                {% endif %}
-                <input type="date" class="form-control" id="hep_b3_date" name="hep_b3_date">
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                <label for="hib1_date">Hib 1</label>
-                <input type="date" class="form-control" id="hib1_date" name="hib1_date">
-            </div>
-            <div class="form-group col-md-3">
-                <label for="hib2_date">Hib 2</label>
-                <input type="date" class="form-control" id="hib2_date" name="hib2_date">
-            </div>
-            <div class="form-group col-md-3">
-                <label for="hib3_date">Hib 3</label>
-                <input type="date" class="form-control" id="hib3_date" name="hib3_date">
-            </div>
-            <div class="form-group col-md-3">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="hib_rappel_date">Hib Rappel</label>
-                {% else %}
-                    <label for="hib_rappel_date">Hib Booster</label>
-                {% endif %}
-                <input type="date" class="form-control" id="hib_rappel_date" name="hib_rappel_date">
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                <label for="ror_date">MMR (ROR)</label>
-                <input type="date" class="form-control" id="ror_date" name="ror_date">
-            </div>
-            <div class="form-group col-md-3">
-                {% if emr_mode.value == 'pediatric' %}
-                    <label for="rougeole_seule_date">Rougeole Seule</label>
-                {% else %}
-                    <label for="rougeole_seule_date">Measles (Single)</label>
-                {% endif %}
-                <input type="date" class="form-control" id="rougeole_seule_date" name="rougeole_seule_date">
-            </div>
-        </div>
-
-        <!-- Tuberculosis Tests -->
-        <h5>
-            {% if emr_mode.value == 'pediatric' %}
-                Tests Tuberculine (Monotest)
-            {% else %}
-                Tuberculosis Tests (Monotest)
-            {% endif %}
-        </h5>
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label for="monotest1">Monotest 1</label>
-                <input type="date" class="form-control" id="monotest1" name="monotest1">
-            </div>
-            <div class="form-group col-md-4">
-                <label for="monotest2">Monotest 2</label>
-                <input type="date" class="form-control" id="monotest2" name="monotest2">
-            </div>
-            <div class="form-group col-md-4">
-                <label for="monotest3">Monotest 3</label>
-                <input type="date" class="form-control" id="monotest3" name="monotest3">
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Custom Demographic Fields -->
+        <!-- Custom Fields Section -->
         {% if custom_fields %}
-        <h4>
-            {% if emr_mode.value == 'pediatric' %}
-                Informations Supplémentaires
-            {% else %}
-                Additional Information
-            {% endif %}
-        </h4>
+        <h4>Additional Information</h4>
         {% for field in custom_fields %}
         <div class="form-group">
-            <label for="{{ field.field_name }}">
-                {% if emr_mode.value == 'pediatric' and field.field_label_fr %}
-                    {{ field.field_label_fr }}
-                {% else %}
-                    {{ field.field_label }}
-                {% endif %}
-            </label>
-            {% if field.field_type == 'TEXTAREA' %}
-                <textarea class="form-control" id="{{ field.field_name }}" name="{{ field.field_name }}" rows="3"></textarea>
-            {% elif field.field_type == 'DATE' %}
-                <input type="date" class="form-control" id="{{ field.field_name }}" name="{{ field.field_name }}">
-            {% elif field.field_type == 'INTEGER' %}
-                <input type="number" class="form-control" id="{{ field.field_name }}" name="{{ field.field_name }}">
-            {% else %}
-                <input type="text" class="form-control" id="{{ field.field_name }}" name="{{ field.field_name }}">
-            {% endif %}
-            {% if field.help_text or field.help_text_fr %}
-                <small class="form-text text-muted">
-                    {% if emr_mode.value == 'pediatric' and field.help_text_fr %}
-                        {{ field.help_text_fr }}
-                    {% else %}
-                        {{ field.help_text }}
-                    {% endif %}
-                </small>
+            <label for="{{ field.field_name }}">{{ field.display_name }}</label>
+            {% if field.field_type == 'text' %}
+                <input type="text" class="form-control" id="{{ field.field_name }}" name="{{ field.field_name }}"
+                       value="{{ form_data.get(field.field_name, '') if form_data else '' }}">
+            {% elif field.field_type == 'textarea' %}
+                <textarea class="form-control" id="{{ field.field_name }}" name="{{ field.field_name }}" rows="3">{{ form_data.get(field.field_name, '') if form_data else '' }}</textarea>
+            {% elif field.field_type == 'select' %}
+                <select class="form-control" id="{{ field.field_name }}" name="{{ field.field_name }}">
+                    <option value="">Choose...</option>
+                    {% for option in field.options %}
+                    <option value="{{ option }}" {% if form_data and form_data.get(field.field_name) == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                </select>
             {% endif %}
         </div>
         {% endfor %}
         {% endif %}
 
-        <!-- Raw text areas -->
-        <h4>
-            {% if emr_mode.value == 'pediatric' %}
-                Texte Libre
-            {% else %}
-                Free Text
-            {% endif %}
-        </h4>
+        <!-- Notes Section -->
+        <h4>Notes</h4>
         <div class="form-group">
-            {% if emr_mode.value == 'pediatric' %}
-                <label for="raw_dossier_text">Texte Dossier Brut</label>
-            {% else %}
-                <label for="raw_dossier_text">Raw Dossier Text</label>
-            {% endif %}
-            <textarea class="form-control" id="raw_dossier_text" name="raw_dossier_text" rows="5"></textarea>
+            <label for="notes">Additional Notes</label>
+            <textarea class="form-control" id="notes" name="notes" rows="4" placeholder="Any additional information about the patient...">{{ form_data.get('notes', '') if form_data else '' }}</textarea>
         </div>
 
-        {% if emr_features.vaccines_enabled and emr_mode.value in ['pediatric', 'mixed'] %}
+        <!-- Document Format Section -->
+        <h4>Document Format</h4>
         <div class="form-group">
-            {% if emr_mode.value == 'pediatric' %}
-                <label for="raw_autres_vaccins_text">Autres Vaccins (Texte)</label>
-            {% else %}
-                <label for="raw_autres_vaccins_text">Other Vaccines (Text)</label>
-            {% endif %}
-            <textarea class="form-control" id="raw_autres_vaccins_text" name="raw_autres_vaccins_text" rows="3"></textarea>
-        </div>
-        {% endif %}
-
-        <!-- Form Actions -->
-        <hr>
-        <div class="form-row">
-            <div class="col-md-12 text-center">
-                <button type="submit" class="btn btn-success btn-lg">
-                    {% if emr_mode.value == 'pediatric' %}
-                        Enregistrer Patient
-                    {% else %}
-                        Save Patient
-                    {% endif %}
-                </button>
-                <a href="{{ url_for('patient.patients_list') }}" class="btn btn-secondary btn-lg ml-3">
-                    {% if emr_mode.value == 'pediatric' %}
-                        Annuler
-                    {% else %}
-                        Cancel
-                    {% endif %}
-                </a>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="document_format" id="format_md" value="md" 
+                       {% if not form_data or form_data.get('document_format') == 'md' or not form_data.get('document_format') %}checked{% endif %}>
+                <label class="form-check-label" for="format_md">
+                    ⚡ <strong>Markdown</strong> - Fast, recommended for batch creation
+                </label>
             </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="document_format" id="format_docx" value="docx"
+                       {% if form_data and form_data.get('document_format') == 'docx' %}checked{% endif %}>
+                <label class="form-check-label" for="format_docx">
+                    🐌 <strong>Word Document</strong> - Slower, but professional formatting
+                </label>
+            </div>
+        </div>
+
+        <hr>
+        <div class="form-group">
+            {% if show_duplicate_override %}
+            <button type="submit" class="btn btn-warning btn-lg">
+                <i class="fas fa-exclamation-triangle"></i> Add Anyway (Override Duplicate)
+            </button>
+            <button type="button" class="btn btn-secondary btn-lg ml-2" onclick="window.location.href='{{ url_for('demographics.add_patient_form') }}'">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-primary btn-lg">Add Patient</button>
+            {% endif %}
+            <a href="{{ url_for('patient.list_patients') }}" class="btn btn-secondary btn-lg ml-3">
+                <i class="fas fa-arrow-left"></i> Back to Patient List
+            </a>
         </div>
     </form>
 </div>
 
-<!-- JavaScript for dynamic form behavior -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Show/hide smoking and alcohol details based on checkboxes
-    const smokerCheckbox = document.getElementById('smoker');
-    const alcoholCheckbox = document.getElementById('alcohol');
-    const smokerDetails = document.getElementById('smoker_details');
-    const alcoholDetails = document.getElementById('alcohol_details');
+// Auto-format date input based on user's preferred format
+document.getElementById('date_of_birth').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
     
-    if (smokerCheckbox && smokerDetails) {
-        smokerCheckbox.addEventListener('change', function() {
-            smokerDetails.style.display = this.checked ? 'block' : 'none';
-        });
-        smokerDetails.style.display = smokerCheckbox.checked ? 'block' : 'none';
+    if (value.length >= 2) {
+        value = value.substring(0, 2) + '/' + value.substring(2);
+    }
+    if (value.length >= 5) {
+        value = value.substring(0, 5) + '/' + value.substring(5, 9);
     }
     
-    if (alcoholCheckbox && alcoholDetails) {
-        alcoholCheckbox.addEventListener('change', function() {
-            alcoholDetails.style.display = this.checked ? 'block' : 'none';
-        });
-        alcoholDetails.style.display = alcoholCheckbox.checked ? 'block' : 'none';
+    e.target.value = value;
+});
+
+// Validate date format on form submission
+document.querySelector('form').addEventListener('submit', function(e) {
+    const dateInput = document.getElementById('date_of_birth');
+    const dateValue = dateInput.value;
+    const expectedFormat = '{{ date_format }}';
+    
+    if (dateValue && dateValue.length > 0) {
+        const datePattern = /^\d{2}\/\d{2}\/\d{4}$/;
+        if (!datePattern.test(dateValue)) {
+            e.preventDefault();
+            alert('Please enter date in ' + expectedFormat.toUpperCase() + ' format (e.g., {% if date_format == "dd/mm/yyyy" %}25/12/1990{% else %}12/25/1990{% endif %})');
+            dateInput.focus();
+            return false;
+        }
+        
+        // Additional validation to check if it's a valid date
+        const parts = dateValue.split('/');
+        let day, month, year;
+        
+        if (expectedFormat === 'dd/mm/yyyy') {
+            day = parseInt(parts[0]);
+            month = parseInt(parts[1]);
+            year = parseInt(parts[2]);
+        } else {
+            month = parseInt(parts[0]);
+            day = parseInt(parts[1]);
+            year = parseInt(parts[2]);
+        }
+        
+        const testDate = new Date(year, month - 1, day);
+        if (testDate.getFullYear() !== year || testDate.getMonth() !== (month - 1) || testDate.getDate() !== day) {
+            e.preventDefault();
+            alert('Please enter a valid date.');
+            dateInput.focus();
+            return false;
+        }
     }
 });
 </script>

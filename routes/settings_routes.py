@@ -334,27 +334,41 @@ def storage_settings():
 
 @settings_bp.route('/personalization', methods=['GET', 'POST'])
 def personalization_settings():
-    config = load_config()
+    # Use emr_config for both legacy and new functionality
+    from emr_config import emr_config
+    
+    config = load_config()  # Legacy config for backward compatibility
+    
     if request.method == 'POST':
-        config['emr_name'] = request.form.get('emr_name', 'EMR')
+        # Update EMR name using new system
+        emr_name = request.form.get('emr_name', 'EMR')
+        emr_config.set_emr_name(emr_name)
+        config['emr_name'] = emr_name  # Also update legacy config
 
         # Handle background image upload
         file = request.files.get('background_image')
         if file and file.filename:
+            print(f"DEBUG: Processing background image upload: {file.filename}")
             allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
             ext = file.filename.rsplit('.', 1)[-1].lower()
             if ext in allowed_extensions:
                 # Ensure USER_MEDIA_FOLDER exists
+                print(f"DEBUG: USER_MEDIA_FOLDER path: {USER_MEDIA_FOLDER}")
                 if not os.path.exists(USER_MEDIA_FOLDER):
                     os.makedirs(USER_MEDIA_FOLDER, exist_ok=True)
+                    print(f"DEBUG: Created user media folder: {USER_MEDIA_FOLDER}")
                 
                 filename = f"background_image.{ext}"
                 save_path = os.path.join(USER_MEDIA_FOLDER, filename)
+                print(f"DEBUG: Saving background image to: {save_path}")
                 try:
                     file.save(save_path)
-                    config['background_image_filename'] = filename
+                    emr_config.set_background_image_filename(filename)  # New system
+                    config['background_image_filename'] = filename  # Legacy system
+                    print(f"DEBUG: Background image saved successfully: {filename}")
                     flash('Background image uploaded successfully.', 'success')
                 except Exception as e:
+                    print(f"DEBUG: Error saving background image: {e}")
                     flash(f'Error saving background image: {e}', 'danger')
             else:
                 flash('Invalid file type for background image. Allowed: png, jpg, jpeg, gif.', 'danger')
@@ -364,4 +378,9 @@ def personalization_settings():
         else:
             flash('Failed to save configuration', 'danger')
         return redirect(url_for('settings.personalization_settings'))
+    
+    # For GET request, ensure config has current values from new system
+    config['emr_name'] = emr_config.get_emr_name()
+    config['background_image_filename'] = emr_config.get_background_image_filename()
+    
     return render_template('settings/personalization.html', title='Personalization Settings', config=config) 

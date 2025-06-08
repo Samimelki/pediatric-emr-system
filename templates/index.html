@@ -12,7 +12,7 @@
 <style>
 .bg-page-color {
     background-image: url('/settings/user_media/{{ config.background_image_filename }}') !important;
-    background-size: cover;
+    background-size: fill;
     background-position: center center;
     background-repeat: no-repeat;
 }
@@ -27,7 +27,7 @@
             {# Image is now set as background via CSS on .bg-page-color #}
             <div class="action-buttons" style="padding-top: 60vh;"> {# Adjusted padding to push buttons down #}
                 <a href="{{ url_for('patient.list_patients') }}" class="btn btn-search btn-lg">Search Patients</a>
-                <a href="{{ url_for('patient.add_patient_form') }}" class="btn btn-add btn-lg">Add New Patient</a>
+                <a href="{{ url_for('demographics.add_patient_form') }}" class="btn btn-add btn-lg">Add New Patient</a>
             </div>
         </div>
     </div>

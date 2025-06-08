@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dossier Vaccinal - {{ patient.nom }} {{ patient.prenom }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pdf_styles.css') }}">
+    <style>
+        @page {
+            margin: 2cm;
+            margin-bottom: 2.5cm;
+            @bottom-center {
+                content: element(pdf_footer_text) "\A Page " counter(page) " of " counter(pages);
+                vertical-align: bottom;
+                padding-bottom: 0.5cm;
+                font-size: 0.8em;
+                line-height: 1.4;
+                text-align: center;
+                white-space: pre-wrap;
+                border-top: 1px solid #000;
+                padding-top: 0.3cm;
+            }
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .footer-content-for-pdf {
+            position: running(pdf_footer_text);
+            font-size: inherit;
+            line-height: inherit;
+        }
+        /* Header Structure */
+        .report-main-header {
+            display: flex;
+            justify-content: space-between; /* Physician left, Logo right */
+            align-items: flex-start; /* Align items to the top of the flex container */
+            margin-bottom: 1.5cm; /* Space before the main report title */
+        }
+        .physician-details-container {
+            flex: 1; /* Allows physician details to take available space */
+            text-align: left; /* Fixed */
+        }
+        .physician-details h2 {
+            font-size: 1.5em;
+            margin-top: 0; /* Remove top margin if any from h2 */
+            margin-bottom: 0.1em;
+        }
+        .physician-details p {
+            margin-bottom: 0.2em;
+            font-size: 0.9em;
+        }
+        .physician-details p:last-child { margin-bottom: 0; }
+        .logo-image-container {
+            text-align: right; /* Fixed */
+            margin-left: 20px; /* Space between physician details and logo */
+        }
+        .logo-image-container img {
+            max-height: 2.5cm; /* Adjust as needed */
+            max-width: 250px; /* Max width for the logo */
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="footer-content-for-pdf">
+        {% if physician.contact_line1 %}{{ physician.contact_line1 }}{% endif %}
+        {% if physician.contact_line1 and physician.contact_line2 %} - {% endif %}
+        {% if physician.contact_line2 %}{{ physician.contact_line2 }}{% endif %}
+        {% if footer_note and footer_note != "Note de bas de page (Défaut)" %}
+            {% if physician.contact_line1 or physician.contact_line2 %} | {% endif %}
+            {{ footer_note }}
+        {% endif %}
+    </div>
+
+    <div class="report-main-header">
+        <div class="physician-details-container">
+            <div class="physician-details">
+                <h2>{{ physician.name }}</h2>
+                <p>{{ physician.specialty }}</p>
+                <p>{{ physician.hospital_name }}</p>
+                <p>{{ physician.faculty_name }}</p>
+                {% if physician.contact_line1 %}
+                <p>{{ physician.contact_line1 }}</p>
+                {% endif %}
+                {% if physician.contact_line2 %}
+                <p>{{ physician.contact_line2 }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% if logo_image_url_for_pdf %}
+        <div class="logo-image-container">
+            <img src="{{ logo_image_url_for_pdf }}" alt="Logo">
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="title-container">
+        <div class="title">Dossier Vaccinal</div>
+    </div>
+
+    <div class="patient-id-header">
+        <p>
+            <strong>{{ patient.prenom }} {{ patient.nom }}</strong> (Dossier: {{ patient.mrn }})<br>
+            Date de naissance: {{ format_date_for_pdf(patient.naissance_date, '%d/%m/%Y') if patient.naissance_date else 'N/A' }}
+            {% if patient.sexe %}| Sexe: {{ patient.sexe }}{% endif %}
+        </p>
+    </div>
+
+    <h2 class="section-title">Informations Démographiques</h2>
+    <div class="patient-info-grid">
+        <strong>Nom de la mère:</strong><span>{{ patient.mere_nom if patient.mere_nom else 'N/A' }}</span>
+        <strong>Nom du père:</strong><span>{{ patient.pere_nom if patient.pere_nom else 'N/A' }}</span>
+        <strong>Pédiatre (initiales):</strong><span>{{ patient.pediatre_initiales if patient.pediatre_initiales else 'N/A' }}</span>
+        <strong>Adresse:</strong><span>{{ patient.domicile if patient.domicile else 'N/A' }}</span>
+        <strong>Téléphone:</strong><span>{{ patient.telephone if patient.telephone else 'N/A' }}</span>
+    </div>
+
+    <h2>Tableau de Vaccination</h2>
+    <p>Note: Ce tableau inclut tous les vaccins enregistrés, y compris ceux ne faisant pas partie du calendrier standard.</p>
+
+    <h3 class="vaccine-section-title">Vaccinations Obligatoires</h3>
+    {% if mandatory_vaccine_table_data %}
+        <table class="vaccine-table">
+            <thead>
+                <tr>
+                    <th>{{ table_column_labels.vaccine_col }}</th>
+                    {% for dose_key in active_dose_keys %}
+                        <th>{{ table_column_labels[dose_key] }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for vaccine_row in mandatory_vaccine_table_data %}
+                <tr>
+                    <td class="vaccine-name-cell">{{ vaccine_row.vaccine_display_name | safe }}</td>
+                    {% for dose_key in active_dose_keys %}
+                        <td class="date-cell">{{ vaccine_row.dose_dates[dose_key] | default('-', true) }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucune vaccination obligatoire enregistrée.</p>
+    {% endif %}
+
+    <h3 class="vaccine-section-title recommended-vaccines-title-pdf">Vaccinations Recommandées</h3>
+    {% if recommended_vaccine_table_data %}
+        <table class="vaccine-table">
+            <thead>
+                <tr>
+                    <th>{{ table_column_labels.vaccine_col }}</th>
+                    {% for dose_key in active_dose_keys %}
+                        <th>{{ table_column_labels[dose_key] }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for vaccine_row in recommended_vaccine_table_data %}
+                <tr>
+                    <td class="vaccine-name-cell">{{ vaccine_row.vaccine_display_name | safe }}</td>
+                    {% for dose_key in active_dose_keys %}
+                        <td class="date-cell">{{ vaccine_row.dose_dates[dose_key] | default('-', true) }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucune vaccination recommandée enregistrée.</p>
+    {% endif %}
+
+    <div class="signature-section">
+        <p>Fait à Beyrouth le {{ current_date }}</p>
+    </div>
+
+    {% if signature_image_url_for_pdf %}
+    <img src="{{ signature_image_url_for_pdf }}" class="signature-stamp-image" alt="Signature/Tampon">
+    {% endif %}
+
+</body>
+</html> 

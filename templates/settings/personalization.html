@@ -25,8 +25,12 @@
                     <small class="form-text text-muted">Upload a new background image for the home page. Recommended: landscape orientation.</small>
                     {% if config.background_image_filename %}
                         <div class="mt-2">
-                            <strong>Current Image:</strong><br>
+                            <strong>Current Image:</strong> {{ config.background_image_filename }}<br>
                             <img src="{{ url_for('settings.get_user_media_file', filename=config.background_image_filename) }}" alt="Current Background" style="max-width: 300px; max-height: 150px; border: 1px solid #ccc;">
+                        </div>
+                    {% else %}
+                        <div class="mt-2">
+                            <small class="text-muted">No background image currently set.</small>
                         </div>
                     {% endif %}
                 </div>

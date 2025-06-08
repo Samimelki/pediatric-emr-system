@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <title>{% block title %}Unified EMR System{% endblock %}</title>
+    <title>{% block title %}{{ config.emr_name if config.emr_name else 'Unified EMR System' }}{% endblock %}</title>
     <style>
         body { padding-top: 5rem; }
         .navbar {
@@ -26,7 +26,10 @@
 </head>
 <body {% block body_attributes %}{% endblock %}>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="{{ url_for('index') }}">Unified EMR System</a>
+        <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='img/EMR logo inverted.png') }}" alt="EMR Logo" height="30" class="mr-2">
+            {{ config.emr_name if config.emr_name else 'Unified EMR System' }}
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -49,10 +52,10 @@
                                                     <a class="dropdown-item {% if request.endpoint == 'emr_settings.profile_settings' %}active{% endif %}" href="{{ url_for('emr_settings.profile_settings') }}"><i class="fas fa-user-cog"></i> Profile Settings</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item {% if request.endpoint in ['import.import_home', 'import.import_xml', 'import.import_documents', 'import.import_legacy_databases'] %}active{% endif %}" href="{{ url_for('import.import_home') }}"><i class="fas fa-file-import"></i> Import Medical Records</a>
-                        <a class="dropdown-item" href="#"><i class="fas fa-file-pdf"></i> PDF Export Settings</a>
-                        <a class="dropdown-item" href="#"><i class="fas fa-user-cog"></i> Custom Patient Fields</a>
+                        <a class="dropdown-item {% if request.endpoint == 'settings.manage_pdf_settings' %}active{% endif %}" href="{{ url_for('settings.manage_pdf_settings') }}"><i class="fas fa-file-pdf"></i> PDF Export Settings</a>
+                        <a class="dropdown-item {% if request.endpoint == 'settings.manage_custom_fields' %}active{% endif %}" href="{{ url_for('settings.manage_custom_fields') }}"><i class="fas fa-user-cog"></i> Custom Patient Fields</a>
                         <a class="dropdown-item" href="#"><i class="fas fa-database"></i> Storage Settings</a>
-                        <a class="dropdown-item" href="#"><i class="fas fa-paint-brush"></i> Personalization</a>
+                        <a class="dropdown-item {% if request.endpoint == 'settings.personalization_settings' %}active{% endif %}" href="{{ url_for('settings.personalization_settings') }}"><i class="fas fa-paint-brush"></i> Personalization</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#"><i class="fas fa-database"></i> Backup Database</a>
                         <a class="dropdown-item" href="#"><i class="fas fa-hdd"></i> Manage/Restore Database</a>

@@ -51,8 +51,8 @@
                                 {{ measurements|join(', ') }}
                             </div>
                             <div class="ml-3">
-                                <a href="{{ url_for('patient.edit_visit_measurements', visit_id=visit.id) }}" class="btn btn-sm btn-outline-secondary">Edit Measurements</a>
-                                <a href="{{ url_for('patient.edit_visit_date', visit_id=visit.id) }}" class="btn btn-sm btn-outline-primary">Edit Date</a>
+                                                <a href="{{ url_for('visit.edit_visit_measurements', visit_id=visit.id) }}" class="btn btn-sm btn-outline-secondary">Edit Measurements</a>
+                <a href="{{ url_for('visit.edit_visit_date', visit_id=visit.id) }}" class="btn btn-sm btn-outline-primary">Edit Date</a>
                             </div>
                         </div>
                         
@@ -82,7 +82,7 @@
                         {% endif %}
                         {# Form to add a new addendum #}
                         <div class="mt-3">
-                            <form method="POST" action="{{ url_for('patient.add_visit_addendum', visit_id=visit.id) }}" class="form-inline">
+                            <form method="POST" action="{{ url_for('visit.add_visit_addendum', visit_id=visit.id) }}" class="form-inline">
                                 <div class="form-group mr-2 flex-grow-1">
                                     <textarea name="addendum_text" class="form-control form-control-sm w-100" rows="2" placeholder="Add an addendum to this visit..." required></textarea>
                                 </div>
@@ -92,7 +92,7 @@
                         {# Media Upload and Display #}
                         <div class="mt-3">
                             <h6>Visit Media</h6>
-                            <form method="POST" action="{{ url_for('patient.upload_visit_media', visit_id=visit.id) }}" enctype="multipart/form-data" class="mb-2">
+                            <form method="POST" action="{{ url_for('visit.upload_visit_media', visit_id=visit.id) }}" enctype="multipart/form-data" class="mb-2">
                                 <div class="form-group">
                                     <input type="file" name="media_files" multiple class="form-control-file">
                                     <input type="text" name="description" class="form-control mt-1" placeholder="Description (optional)">
@@ -116,7 +116,7 @@
                                                 <a href="/settings/user_media/visit_media/{{ media.filename }}" target="_blank">{{ media.filename }}</a>
                                             {% endif %}
                                             {% if media.description %}<div><small>{{ media.description }}</small></div>{% endif %}
-                                            <form method="POST" action="{{ url_for('patient.delete_visit_media', media_id=media.id, visit_id=visit.id) }}" style="display:inline;">
+                                            <form method="POST" action="{{ url_for('visit.delete_visit_media', media_id=media.id, visit_id=visit.id) }}" style="display:inline;">
                                                 <button type="submit" class="btn btn-sm btn-danger mt-1" onclick="return confirm('Delete this media file?');">Delete</button>
                                             </form>
                                             {# Modal for viewing media #}

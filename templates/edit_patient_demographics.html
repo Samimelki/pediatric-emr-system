@@ -20,7 +20,7 @@
         {% endif %}
     {% endwith %}
 
-    <form method="POST" action="{{ url_for('patient.edit_demographics', patient_id=patient.id) }}">
+    <form method="POST" action="{{ url_for('demographics.edit_demographics', patient_id=patient.id) }}">
         {# Loop through the whitelisted editable fields to create form inputs #}
         {% for field_key, field_label in editable_fields.items() %}
             {% if field_key not in ['pmh', 'psh', 'family_history', 'medications', 'allergies', 'smoker', 'smoker_details', 'alcohol', 'alcohol_details'] %}

@@ -33,7 +33,7 @@
             </form>
         </div>
         <div class="col-md-4 text-md-right">
-            <a href="{{ url_for('patient.add_patient_form') }}" class="btn btn-success mb-2">
+            <a href="{{ url_for('demographics.add_patient_form') }}" class="btn btn-success mb-2">
                 <i class="fas fa-plus"></i> Add New Patient
             </a>
         </div>
@@ -91,7 +91,7 @@
                         <td>{{ patient.mrn }}</td>
                         <td>{{ patient.last_name }}</td>
                         <td>{{ patient.first_name }}</td>
-                        <td>{{ patient.date_of_birth if patient.date_of_birth else 'N/A' }}</td>
+                        <td>{{ patient.date_of_birth | format_date_standard }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

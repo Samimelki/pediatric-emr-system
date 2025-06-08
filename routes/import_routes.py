@@ -89,13 +89,18 @@ def import_xml():
                     flash('No patient data found in XML file.', 'warning')
                     return redirect(request.url)
                 
+                # Get format choice from form
+                document_format = request.form.get('document_format', 'md')
+                
                 # Import to unified database
                 patients_added, visits_added, vaccines_added = populate_database_from_parsed_data(
                     parsed_patients, 
-                    target_mode='pediatric' if current_mode == 'pediatric' else 'mixed'
+                    target_mode='pediatric' if current_mode == 'pediatric' else 'mixed',
+                    document_format=document_format
                 )
                 
-                flash(f'XML import completed: {patients_added} patients, {visits_added} visits, {vaccines_added} vaccines imported.', 'success')
+                format_name = "Word documents" if document_format == 'docx' else "Markdown documents"
+                flash(f'XML import completed: {patients_added} patients, {visits_added} visits, {vaccines_added} vaccines imported. {format_name} created in Documents/UnifiedEMR/word_documents/', 'success')
             
             except Exception as e:
                 flash(f"Error during XML import: {str(e)}", 'danger')
@@ -164,10 +169,13 @@ def import_documents():
                 with current_app.app_context():
                     init_db_schema()
 
+            # Get format choice from form
+            document_format = request.form.get('document_format', 'md')
+            
             # Use WordDocumentImporter to parse the documents
             db_path = current_app.config['DATABASE']
             importer = WordDocumentImporter(db_path)
-            results = importer.import_batch(docx_paths)
+            results = importer.import_batch(docx_paths, document_format)
             
             total_success = sum(1 for _, success, _ in results if success)
             total_fail = sum(1 for _, success, _ in results if not success)
@@ -176,8 +184,13 @@ def import_documents():
                 flash(f"{filename}: {'Success' if success else 'Failed'} - {msg}", 
                      'info' if success else 'danger')
             
-            flash(f'Document import completed: {total_success} succeeded, {total_fail} failed.', 
-                 'success' if total_fail == 0 else 'warning')
+            if total_success > 0:
+                format_name = "Word documents" if document_format == 'docx' else "Markdown documents"
+                flash(f'Document import completed: {total_success} succeeded, {total_fail} failed. {format_name} created in Documents/UnifiedEMR/word_documents/', 
+                     'success' if total_fail == 0 else 'warning')
+            else:
+                flash(f'Document import completed: {total_success} succeeded, {total_fail} failed.', 
+                     'success' if total_fail == 0 else 'warning')
             
         except Exception as e:
             flash(f"Error during document import: {str(e)}", 'danger')

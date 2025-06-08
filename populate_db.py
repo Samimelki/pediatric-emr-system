@@ -4,6 +4,8 @@ from xml_parser import parse_excel_xml, parse_date_to_iso, parse_memo_text
 from unified_database import save_patient_unified, get_db
 # from emr_config import EMRMode  # No longer needed with profile-based system
 import datetime
+from word_document_manager import WordDocumentManager
+from emr_config import emr_config
 
 # Header mapping for XML to unified database fields
 HEADER_TO_DB_MAP = {
@@ -157,7 +159,7 @@ def _insert_non_standard_vaccines_unified(patient_id, parsed_vaccines):
     
     return vaccines_added_count
 
-def populate_database_from_parsed_data(all_xml_patients, target_mode='pediatric'):
+def populate_database_from_parsed_data(all_xml_patients, target_mode='pediatric', document_format='md'):
     """Populate unified database from parsed XML data."""
     
     if not all_xml_patients:
@@ -170,6 +172,12 @@ def populate_database_from_parsed_data(all_xml_patients, target_mode='pediatric'
     patients_added = 0
     visits_added = 0
     non_std_vaccines_added = 0
+    
+    # Initialize word document manager for failsafe document creation
+    word_manager = WordDocumentManager(
+        db_path=emr_config.get_database_path(), 
+        documents_folder=emr_config.get_word_docs_folder()
+    )
     
     # Get the highest existing MRN to continue sequence
     cursor = db.execute("SELECT MAX(CAST(mrn AS INTEGER)) FROM Patients WHERE mrn GLOB '[0-9]*'")
@@ -206,6 +214,14 @@ def populate_database_from_parsed_data(all_xml_patients, target_mode='pediatric'
             non_std_vaccines_added += _insert_non_standard_vaccines_unified(
                 patient_id, parsed_autres_vaccins
             )
+
+            # Create/update document for this patient (failsafe feature)
+            try:
+                word_manager.create_or_update_document(patient_id, document_format)
+                format_name = "Word document" if document_format == 'docx' else "Markdown document"
+                print(f"Created {format_name} for patient ID {patient_id} (MRN: {unified_patient_data.get('mrn', 'N/A')})")
+            except Exception as e:
+                print(f"Warning: Failed to create Word document for patient ID {patient_id}: {e}")
 
         except Exception as e:
             print(f"Error processing patient {i+1}: {e}")
