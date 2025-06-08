@@ -1,5 +1,12 @@
 {% if is_feature_enabled('vaccines') %}
-<h4 class="mt-4">Vaccine Records</h4>
+<div class="d-flex justify-content-between align-items-center mt-4">
+    <h4>Vaccine Records</h4>
+    {% if patient.naissance_date %}
+    <a href="{{ url_for('vaccine.vaccine_schedule_timeline', patient_id=patient.id) }}" class="btn btn-outline-primary btn-sm">
+        <i class="fas fa-calendar-alt"></i> View Schedule Timeline
+    </a>
+    {% endif %}
+</div>
 <div class="accordion" id="vaccineRecordsAccordion">
     <div class="card">
         <div class="card-header" id="headingMandatoryVaccines">

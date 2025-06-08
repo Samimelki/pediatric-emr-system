@@ -5,6 +5,8 @@ from statistics_engine.statistics_calculator import calculate_average_vaccines_p
 import sqlite3
 from datetime import datetime
 from word_document_manager import WordDocumentManager
+from utils.vaccine_schedule_engine import get_patient_vaccine_timeline, vaccine_schedule_engine
+from dataclasses import asdict
 
 vaccine_bp = Blueprint('vaccine', __name__, url_prefix='/vaccines')
 
@@ -532,4 +534,62 @@ def update_standard_vaccine(patient_id):
         flash(f'Error updating vaccine record: {e}', 'danger')
     
     return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+
+@vaccine_bp.route('/schedule/<int:patient_id>')
+def vaccine_schedule_timeline(patient_id):
+    """Display color-coded vaccine schedule timeline for a patient"""
+    db = get_db()
+    
+    try:
+        # Get patient data
+        cursor = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,))
+        patient_row = cursor.fetchone()
+        
+        if not patient_row:
+            flash(f'Patient with ID {patient_id} not found.', 'warning')
+            return redirect(url_for('patient.list_patients'))
+        
+        patient = dict(patient_row)
+        
+        # Check if patient has date of birth
+        patient_dob = patient.get('naissance_date')
+        if not patient_dob:
+            flash('Patient must have a date of birth to view vaccine schedule.', 'warning')
+            return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+        
+        # Get patient's vaccine data (non-standard vaccines)
+        vaccine_cursor = db.execute("SELECT * FROM NonStandardVaccines WHERE patient_id = ?", (patient_id,))
+        autres_vaccins = vaccine_cursor.fetchall()
+        
+        # Prepare patient vaccine dictionary for the schedule engine
+        patient_vaccines = dict(patient)
+        
+        # Calculate vaccine timeline with both standard and non-standard vaccine data
+        timeline = get_patient_vaccine_timeline(patient_dob, patient_vaccines, autres_vaccins)
+        
+        # Get summary statistics
+        summary_stats = vaccine_schedule_engine.get_summary_stats(timeline)
+        
+        # Convert dataclasses to dicts for JSON serialization in template
+        timeline_data = []
+        for vaccine_item in timeline:
+            vaccine_data = asdict(vaccine_item)
+            # Convert dose statuses to strings for template
+            for dose in vaccine_data['doses']:
+                dose['status'] = dose['status'].value if hasattr(dose['status'], 'value') else str(dose['status'])
+            if vaccine_data['next_due_dose']:
+                vaccine_data['next_due_dose']['status'] = vaccine_data['next_due_dose']['status'].value if hasattr(vaccine_data['next_due_dose']['status'], 'value') else str(vaccine_data['next_due_dose']['status'])
+            timeline_data.append(vaccine_data)
+        
+        return render_template('vaccine_schedule_timeline.html',
+                             title=f'Vaccine Schedule - {patient["prenom"]} {patient["nom"]}',
+                             patient=patient,
+                             timeline=timeline_data,
+                             summary_stats=summary_stats,
+                             emr_config=emr_config)
+        
+    except Exception as e:
+        current_app.logger.error(f"Error generating vaccine schedule for patient {patient_id}: {e}", exc_info=True)
+        flash(f"Error loading vaccine schedule: {str(e)}", 'danger')
+        return redirect(url_for('patient.patient_detail', patient_id=patient_id))
 
