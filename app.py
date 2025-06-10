@@ -9,7 +9,7 @@ import io
 import zipfile
 import logging
 
-from flask import Flask, render_template, g, request, url_for, flash, redirect, current_app
+from flask import Flask, render_template, g, request, url_for, flash, redirect, current_app, jsonify
 import webview
 from database import get_db, close_connection, init_db_schema, get_all_patient_data_for_export, get_active_custom_demographic_fields
 from xml_exporter import generate_patient_xml
@@ -208,6 +208,71 @@ def index():
                          title='Home', 
                          emr_features=features,
                          emr_config=emr_config)
+
+@app.route('/update_vaccine_date', methods=['POST'])
+def update_vaccine_date():
+    """Update a vaccine date for a patient"""
+    try:
+        data = request.get_json()
+        patient_id = data.get('patient_id')
+        vaccine_name = data.get('vaccine_name')
+        dose_key = data.get('dose_key')
+        date_value = data.get('date')
+        
+        print(f"DEBUG API: Received data - patient_id={patient_id}, vaccine_name='{vaccine_name}', dose_key='{dose_key}', date='{date_value}'")
+        
+        if not patient_id or not vaccine_name or not dose_key:
+            return jsonify({'success': False, 'error': 'Missing required fields'})
+        
+        # Import the vaccine mapping to get the database field name
+        try:
+            from routes.pdf_export_routes import PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_EN
+            print(f"DEBUG API: Successfully imported mapping with {len(PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_EN)} entries")
+        except ImportError as e:
+            print(f"DEBUG API: Import error: {e}")
+            return jsonify({'success': False, 'error': 'Could not import vaccine mappings'})
+        
+        # Find the database field for this vaccine/dose combination
+        db_field = None
+        print(f"DEBUG API: Looking for mapping for vaccine='{vaccine_name}', dose='{dose_key}'")
+        for canonical_name, field_name, dose_map_key in PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_EN:
+            print(f"DEBUG API: Checking: canonical='{canonical_name}', field='{field_name}', dose='{dose_map_key}'")
+            if canonical_name == vaccine_name and dose_map_key == dose_key:
+                db_field = field_name
+                print(f"DEBUG API: Found match! Using field: {db_field}")
+                break
+        
+        if not db_field:
+            print(f"DEBUG API: No database field found for {vaccine_name} {dose_key}")
+            # List all available mappings for debugging
+            print("DEBUG API: Available mappings:")
+            for canonical_name, field_name, dose_map_key in PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_EN:
+                print(f"  '{canonical_name}' -> {field_name} ({dose_map_key})")
+            return jsonify({'success': False, 'error': f'No database field found for {vaccine_name} {dose_key}'})
+        
+        # Update the patient record
+        db = get_db()
+        cursor = db.cursor()
+        
+        if date_value:
+            # Set the date
+            print(f"DEBUG API: Setting {db_field} = '{date_value}' for patient {patient_id}")
+            cursor.execute(f"UPDATE patients SET {db_field} = ? WHERE id = ?", (date_value, patient_id))
+        else:
+            # Clear the date
+            print(f"DEBUG API: Clearing {db_field} for patient {patient_id}")
+            cursor.execute(f"UPDATE patients SET {db_field} = NULL WHERE id = ?", (patient_id,))
+        
+        affected_rows = cursor.rowcount
+        db.commit()
+        print(f"DEBUG API: Update successful, {affected_rows} rows affected")
+        return jsonify({'success': True})
+        
+    except Exception as e:
+        print(f"DEBUG API: Exception occurred: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'success': False, 'error': str(e)})
 
 def run_flask_app():
     logging.info("Flask app thread started.")

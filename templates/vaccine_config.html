@@ -1,0 +1,458 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<style>
+    .vaccine-card {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        background: white;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .vaccine-header {
+        background: #f8f9fa;
+        padding: 8px 12px;
+        border-bottom: 1px solid #ddd;
+        border-radius: 6px 6px 0 0;
+    }
+    
+    .vaccine-body {
+        padding: 10px 12px;
+    }
+    
+    .vaccine-name {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+    
+    .vaccine-mandatory {
+        color: #dc3545;
+    }
+    
+    .vaccine-recommended {
+        color: #007bff;
+    }
+    
+    .dose-input {
+        width: 80px;
+        margin-right: 8px;
+        margin-bottom: 4px;
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+    
+    .add-dose-btn {
+        margin-left: 8px;
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+    
+    .remove-dose-btn {
+        margin-left: 4px;
+        padding: 2px 6px;
+        font-size: 11px;
+    }
+    
+    .category-toggle {
+        margin-left: 10px;
+        font-size: 11px;
+        padding: 2px 8px;
+    }
+    
+    .save-section {
+        background: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 15px;
+        margin-top: 15px;
+    }
+    
+    .age-format-help {
+        font-size: 0.8em;
+        color: #666;
+    }
+    
+    .dose-item {
+        display: inline-block;
+        margin-bottom: 4px;
+    }
+    
+    .add-vaccine-section {
+        background: #e8f5e8;
+        border: 1px solid #c3e6c3;
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .new-vaccine-input {
+        margin-bottom: 8px;
+    }
+    
+    .delete-vaccine-btn {
+        float: right;
+        margin-left: 10px;
+        font-size: 11px;
+        padding: 2px 6px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>Vaccine Schedule Configuration</h4>
+        <a href="{{ url_for('vaccine.vaccine_tracking') }}" class="btn btn-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </div>
+
+    <!-- Add New Vaccine Section -->
+    <div class="add-vaccine-section">
+        <h6><i class="fas fa-plus-circle"></i> Add New Vaccine</h6>
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" id="newVaccineName" class="form-control form-control-sm new-vaccine-input" placeholder="Vaccine name (e.g., Meningitis B)">
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="newVaccineDoses" class="form-control form-control-sm new-vaccine-input" placeholder="Initial doses (e.g., 2M, 4M, 6M)">
+            </div>
+            <div class="col-md-4">
+                <select id="newVaccineCategory" class="form-control form-control-sm new-vaccine-input">
+                    <option value="mandatory">Mandatory</option>
+                    <option value="recommended">Recommended</option>
+                </select>
+                <button type="button" class="btn btn-success btn-sm mt-1" onclick="addNewVaccine()">
+                    <i class="fas fa-plus"></i> Add Vaccine
+                </button>
+            </div>
+        </div>
+        <small class="text-muted">Separate multiple doses with commas (e.g., "2M, 4M, 6M")</small>
+    </div>
+
+    <form id="vaccineConfigForm">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="text-danger mb-2">Mandatory Vaccines</h5>
+                <div id="mandatoryVaccines">
+                    {% for vaccine_name, vaccine_info in schedule_config.items() %}
+                        {% if vaccine_info.category == 'mandatory' %}
+                        <div class="vaccine-card" data-vaccine="{{ vaccine_name }}">
+                            <div class="vaccine-header">
+                                <div class="vaccine-name vaccine-mandatory">
+                                    {{ vaccine_name }}
+                                    <button type="button" class="btn btn-xs btn-outline-primary category-toggle" 
+                                            onclick="toggleCategory('{{ vaccine_name }}', 'recommended')">
+                                        → Recommended
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-outline-danger delete-vaccine-btn" 
+                                            onclick="deleteVaccine('{{ vaccine_name }}')">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="vaccine-body">
+                                <div class="doses-container" data-vaccine="{{ vaccine_name }}">
+                                    {% for dose_key, dose_info in vaccine_info.doses.items() %}
+                                    <div class="dose-item">
+                                        <input type="text" class="form-control dose-input" 
+                                               value="{{ dose_info.age_display }}" 
+                                               data-vaccine="{{ vaccine_name }}" 
+                                               data-dose="{{ dose_key }}">
+                                        <button type="button" class="btn btn-xs btn-outline-danger remove-dose-btn" 
+                                                onclick="removeDose('{{ vaccine_name }}', '{{ dose_key }}')">
+                                            ×
+                                        </button>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <button type="button" class="btn btn-xs btn-outline-success add-dose-btn" 
+                                        onclick="addDose('{{ vaccine_name }}')">
+                                    + Add
+                                </button>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <h5 class="text-primary mb-2">Recommended Vaccines</h5>
+                <div id="recommendedVaccines">
+                    {% for vaccine_name, vaccine_info in schedule_config.items() %}
+                        {% if vaccine_info.category == 'recommended' %}
+                        <div class="vaccine-card" data-vaccine="{{ vaccine_name }}">
+                            <div class="vaccine-header">
+                                <div class="vaccine-name vaccine-recommended">
+                                    {{ vaccine_name }}
+                                    <button type="button" class="btn btn-xs btn-outline-danger category-toggle" 
+                                            onclick="toggleCategory('{{ vaccine_name }}', 'mandatory')">
+                                        → Mandatory
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-outline-danger delete-vaccine-btn" 
+                                            onclick="deleteVaccine('{{ vaccine_name }}')">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="vaccine-body">
+                                <div class="doses-container" data-vaccine="{{ vaccine_name }}">
+                                    {% for dose_key, dose_info in vaccine_info.doses.items() %}
+                                    <div class="dose-item">
+                                        <input type="text" class="form-control dose-input" 
+                                               value="{{ dose_info.age_display }}" 
+                                               data-vaccine="{{ vaccine_name }}" 
+                                               data-dose="{{ dose_key }}">
+                                        <button type="button" class="btn btn-xs btn-outline-danger remove-dose-btn" 
+                                                onclick="removeDose('{{ vaccine_name }}', '{{ dose_key }}')">
+                                            ×
+                                        </button>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <button type="button" class="btn btn-xs btn-outline-success add-dose-btn" 
+                                        onclick="addDose('{{ vaccine_name }}')">
+                                    + Add
+                                </button>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="save-section">
+            <div class="row">
+                <div class="col-md-8">
+                                    <div class="age-format-help">
+                    <strong>Age formats:</strong> Birth, 2M, 1Y, 11Y+6M, 12Y2M, Yearly, 24M
+                </div>
+                </div>
+                <div class="col-md-4 text-right">
+                    <button type="button" class="btn btn-success" onclick="saveConfiguration()">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                    <button type="button" class="btn btn-warning ml-2" onclick="resetToDefaults()">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+function addNewVaccine() {
+    const vaccineName = document.getElementById('newVaccineName').value.trim();
+    const dosesInput = document.getElementById('newVaccineDoses').value.trim();
+    const category = document.getElementById('newVaccineCategory').value;
+    
+    if (!vaccineName) {
+        alert('Please enter a vaccine name');
+        return;
+    }
+    
+    // Check if vaccine already exists
+    if (document.querySelector(`[data-vaccine="${vaccineName}"]`)) {
+        alert('A vaccine with this name already exists');
+        return;
+    }
+    
+    // Parse doses
+    const doses = dosesInput ? dosesInput.split(',').map(d => d.trim()).filter(d => d) : ['2M'];
+    
+    // Create vaccine card
+    const vaccineCard = createVaccineCard(vaccineName, category, doses);
+    
+    // Add to appropriate container
+    const container = category === 'mandatory' ? 
+        document.getElementById('mandatoryVaccines') : 
+        document.getElementById('recommendedVaccines');
+    container.appendChild(vaccineCard);
+    
+    // Clear inputs
+    document.getElementById('newVaccineName').value = '';
+    document.getElementById('newVaccineDoses').value = '';
+    document.getElementById('newVaccineCategory').value = 'mandatory';
+    
+    alert(`Vaccine "${vaccineName}" added successfully! Don't forget to save your configuration.`);
+}
+
+function createVaccineCard(vaccineName, category, doses) {
+    const vaccineCard = document.createElement('div');
+    vaccineCard.className = 'vaccine-card';
+    vaccineCard.setAttribute('data-vaccine', vaccineName);
+    
+    const categoryClass = category === 'mandatory' ? 'vaccine-mandatory' : 'vaccine-recommended';
+    const toggleText = category === 'mandatory' ? '→ Recommended' : '→ Mandatory';
+    const newCategory = category === 'mandatory' ? 'recommended' : 'mandatory';
+    
+    let dosesHtml = '';
+    doses.forEach((dose, index) => {
+        const doseKey = `d${index + 1}`;
+        dosesHtml += `
+            <div class="dose-item">
+                <input type="text" class="form-control dose-input" 
+                       value="${dose}" 
+                       data-vaccine="${vaccineName}" 
+                       data-dose="${doseKey}">
+                <button type="button" class="btn btn-xs btn-outline-danger remove-dose-btn" 
+                        onclick="removeDose('${vaccineName}', '${doseKey}')">
+                    ×
+                </button>
+            </div>
+        `;
+    });
+    
+    vaccineCard.innerHTML = `
+        <div class="vaccine-header">
+            <div class="vaccine-name ${categoryClass}">
+                ${vaccineName}
+                <button type="button" class="btn btn-xs btn-outline-primary category-toggle" 
+                        onclick="toggleCategory('${vaccineName}', '${newCategory}')">
+                    ${toggleText}
+                </button>
+                <button type="button" class="btn btn-xs btn-outline-danger delete-vaccine-btn" 
+                        onclick="deleteVaccine('${vaccineName}')">
+                    Delete
+                </button>
+            </div>
+        </div>
+        <div class="vaccine-body">
+            <div class="doses-container" data-vaccine="${vaccineName}">
+                ${dosesHtml}
+            </div>
+            <button type="button" class="btn btn-xs btn-outline-success add-dose-btn" 
+                    onclick="addDose('${vaccineName}')">
+                + Add
+            </button>
+        </div>
+    `;
+    
+    return vaccineCard;
+}
+
+function deleteVaccine(vaccineName) {
+    if (confirm(`Delete vaccine "${vaccineName}"? This cannot be undone.`)) {
+        const vaccineCard = document.querySelector(`[data-vaccine="${vaccineName}"]`);
+        if (vaccineCard) {
+            vaccineCard.remove();
+        }
+    }
+}
+
+function toggleCategory(vaccineName, newCategory) {
+    const vaccineCard = document.querySelector(`[data-vaccine="${vaccineName}"]`);
+    const targetContainer = newCategory === 'mandatory' ? 
+        document.getElementById('mandatoryVaccines') : 
+        document.getElementById('recommendedVaccines');
+    
+    // Update visual styling
+    const nameElement = vaccineCard.querySelector('.vaccine-name');
+    nameElement.className = `vaccine-name vaccine-${newCategory}`;
+    
+    // Update button
+    const button = vaccineCard.querySelector('.category-toggle');
+    if (newCategory === 'mandatory') {
+        button.textContent = '→ Recommended';
+        button.onclick = () => toggleCategory(vaccineName, 'recommended');
+    } else {
+        button.textContent = '→ Mandatory';
+        button.onclick = () => toggleCategory(vaccineName, 'mandatory');
+    }
+    
+    // Move to appropriate container
+    targetContainer.appendChild(vaccineCard);
+}
+
+function addDose(vaccineName) {
+    const container = document.querySelector(`.doses-container[data-vaccine="${vaccineName}"]`);
+    const doseCount = container.children.length;
+    const doseKey = `d${doseCount + 1}`;
+    
+    const doseDiv = document.createElement('div');
+    doseDiv.className = 'dose-item';
+    doseDiv.innerHTML = `
+        <input type="text" class="form-control dose-input" 
+               placeholder="e.g., 6M" 
+               data-vaccine="${vaccineName}" 
+               data-dose="${doseKey}">
+        <button type="button" class="btn btn-xs btn-outline-danger remove-dose-btn" 
+                onclick="removeDose('${vaccineName}', '${doseKey}')">
+            ×
+        </button>
+    `;
+    
+    container.appendChild(doseDiv);
+}
+
+function removeDose(vaccineName, doseKey) {
+    const doseInput = document.querySelector(`input[data-vaccine="${vaccineName}"][data-dose="${doseKey}"]`);
+    const doseItem = doseInput.parentElement;
+    doseItem.remove();
+}
+
+function saveConfiguration() {
+    const config = {};
+    
+    // Process both mandatory and recommended vaccines
+    document.querySelectorAll('.vaccine-card').forEach(card => {
+        const vaccineName = card.dataset.vaccine;
+        const category = card.querySelector('.vaccine-name').classList.contains('vaccine-mandatory') ? 
+            'mandatory' : 'recommended';
+        
+        const doses = [];
+        card.querySelectorAll('.dose-input').forEach(input => {
+            if (input.value.trim()) {
+                doses.push(input.value.trim());
+            }
+        });
+        
+        config[vaccineName] = {
+            category: category,
+            doses: doses
+        };
+    });
+    
+    // Send to server
+    fetch('{{ url_for("vaccine.update_vaccine_config") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(config)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Configuration saved successfully!');
+        } else {
+            alert('Error saving configuration: ' + data.message);
+        }
+    })
+    .catch(error => {
+        alert('Error saving configuration: ' + error);
+    });
+}
+
+function resetToDefaults() {
+    if (confirm('Reset to default vaccine schedule? This will lose all customizations.')) {
+        fetch('{{ url_for("vaccine.reset_vaccine_config") }}', {
+            method: 'POST'
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Error resetting configuration');
+            }
+        });
+    }
+}
+</script>
+{% endblock %} 
