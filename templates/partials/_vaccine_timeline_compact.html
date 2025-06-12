@@ -1,3 +1,8 @@
+<!-- Inject server-side vaccine mappings -->
+<script>
+window.comprehensiveFieldMapping = {{ vaccine_field_mapping_en | tojson | safe }};
+</script>
+
 <!-- Legend -->
 <div class="legend">
     <div class="legend-item">
@@ -724,15 +729,26 @@ function getVaccineAbbreviation(vaccineName) {
         'Hepatitis A': 'HepA',
         'Hepatitis B': 'HepB',
         'Hib (Haemophilus influenzae b)': 'Hib',
+        'Haemophilus influenzae type b (Hib)': 'Hib',
         'MMR (Measles, Mumps, Rubella)': 'MMR',
+        'Measles - Mumps - Rubella (MMR)': 'MMR',
+        'Measles': 'Meas',
+        'Measles (single)': 'Meas',
         'Pneumococcal PCV': 'PCV',
         'Rotavirus': 'RV',
         'Varicella': 'VZV',
         'Influenza': 'Flu',
         'Meningococcal ACWY': 'MenA',
+        'Meningococcal B': 'MenB',
+        'Meningococcal C': 'MenC',
         'PPD (TB Skin Test)': 'PPD',
-        'Covid 19': 'COV',
-        'HPV': 'HPV'
+        'COVID-19': 'COV',
+        'HPV (Human Papillomavirus)': 'HPV',
+        'BCG (Tuberculosis)': 'BCG',
+        'RSV Prevention': 'RSV',
+        'Rabies': 'Rab',
+        'Typhoid': 'Typh',
+        'Yellow Fever': 'YF'
     };
     
     // Look for exact match first
@@ -1047,6 +1063,38 @@ function createVaccineLabels(range) {
             }
         });
         
+        // Add click event for editing timeline vaccines
+        if (dose.is_editable !== false) {
+            label.style.cursor = 'pointer';
+            label.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                // Check if this vaccine has a standard field mapping
+                const fieldMapping = getTimelineFieldMapping(vaccine, dose);
+                
+                if (fieldMapping.field_name) {
+                    // Standard timeline vaccine - use timeline modal
+                    openTimelineVaccineModal(vaccine, dose);
+                } else {
+                    // Non-standard vaccine - check if it has a vaccine_id for additional modal
+                    const vaccineId = dose.vaccine_id || vaccine.vaccine_id;
+                    if (vaccineId) {
+                        // Route to additional vaccine modal
+                        openAdditionalVaccineModal(
+                            vaccine.vaccine_name,
+                            dose.dose_number || 1,
+                            vaccineId,
+                            dose.completed_date || '',
+                            dose.due_date || ''
+                        );
+                    } else {
+                        // No way to edit this vaccine
+                        alert(`This vaccine (${vaccine.vaccine_name}) cannot be edited from the timeline. It may need to be managed as an additional vaccine.`);
+                    }
+                }
+            });
+        }
+        
         timelineContainer.appendChild(label);
         
         vaccineLabels.push({
@@ -1261,6 +1309,241 @@ function showToast(message, type = 'success') {
         toast.style.opacity = '0';
     }, 3000);
 }
+
+// Timeline Vaccine Modal Functions (different from additional vaccines)
+let currentEditingTimelineVaccine = null;
+let currentEditingTimelineDose = null;
+
+function openTimelineVaccineModal(vaccine, dose) {
+    console.log('openTimelineVaccineModal called with:', {vaccine, dose});
+    
+    currentEditingTimelineVaccine = vaccine;
+    currentEditingTimelineDose = dose;
+    
+    const modal = document.getElementById('timelineVaccineModal');
+    const title = document.getElementById('timelineModalTitle');
+    const dateInput = document.getElementById('timelineModalDateInput');
+    const clearCheckbox = document.getElementById('timelineModalClearCheckbox');
+    
+    title.textContent = `Edit ${vaccine.vaccine_name} - ${dose.label}`;
+    
+    // Pre-fill current date if available
+    if (dose.completed_date && dose.completed_date !== '0001-01-01') {
+        dateInput.value = dose.completed_date.split('T')[0]; // Format for date input
+        clearCheckbox.checked = false;
+    } else {
+        dateInput.value = '';
+        clearCheckbox.checked = false;
+    }
+    
+    modal.style.display = 'block';
+}
+
+function closeTimelineVaccineModal() {
+    const modal = document.getElementById('timelineVaccineModal');
+    modal.style.display = 'none';
+    currentEditingTimelineVaccine = null;
+    currentEditingTimelineDose = null;
+}
+
+function saveTimelineVaccineDate() {
+    console.log('saveTimelineVaccineDate called. Global variables:', {currentEditingTimelineVaccine, currentEditingTimelineDose});
+    
+    if (!currentEditingTimelineVaccine || !currentEditingTimelineDose) {
+        console.error('Missing timeline vaccine data:', {currentEditingTimelineVaccine, currentEditingTimelineDose});
+        return;
+    }
+    
+    const dateInput = document.getElementById('timelineModalDateInput');
+    const clearCheckbox = document.getElementById('timelineModalClearCheckbox');
+    
+    // Get field mapping for timeline vaccines
+    const fieldMapping = getTimelineFieldMapping(currentEditingTimelineVaccine, currentEditingTimelineDose);
+    
+    if (!fieldMapping.field_name) {
+        console.error('Unable to determine database field for this vaccine dose');
+        alert('Unable to determine database field for this vaccine dose');
+        return;
+    }
+    
+    // Prepare data for JSON submission
+    const requestData = {
+        field_name: fieldMapping.field_name,
+        date: clearCheckbox.checked ? null : dateInput.value
+    };
+    
+    console.log('Sending timeline vaccine request:', requestData);
+    console.log('URL:', `/vaccines/patient/{{ patient.id }}/standard/update`);
+    
+    // Send AJAX request to backend
+    fetch(`/vaccines/patient/{{ patient.id }}/standard/update`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Timeline vaccine response data:', data);
+        if (data.success) {
+            // Store values before closing modal (which nullifies them)
+            const vaccine = currentEditingTimelineVaccine;
+            const dose = currentEditingTimelineDose;
+            const newDate = requestData.date;
+            
+            // Close modal
+            closeTimelineVaccineModal();
+            
+            // Update the timeline label using stored values
+            updateTimelineLabel(vaccine, dose, newDate);
+            
+            // Show success message
+            showToast('Vaccine updated successfully!', 'success');
+        } else {
+            console.error('Server returned error:', data);
+            alert('Error updating vaccine: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error saving timeline vaccine:', error);
+        alert('Error saving vaccine date: ' + error.message);
+    });
+}
+
+// Comprehensive field mapping loaded from server
+var comprehensiveFieldMapping = null;
+
+// Function to get field mapping for timeline vaccines
+// Using comprehensive mapping from vaccine_schedule_config.json
+function getTimelineFieldMapping(vaccine, dose) {
+    // Load comprehensive field mapping from server-injected data or fallback
+    if (!comprehensiveFieldMapping) {
+        if (window.comprehensiveFieldMapping) {
+            comprehensiveFieldMapping = window.comprehensiveFieldMapping;
+        } else {
+            // Fallback to hardcoded mapping if server mapping not available
+            comprehensiveFieldMapping = {
+                'DTaP - IPV': {
+                    'd1': 'dtcp1_date',
+                    'd2': 'dtcp2_date', 
+                    'd3': 'dtcp3_date',
+                    'r1': 'dtcp_rappel1_date',
+                    'r2': 'dtcp_rappel2_date',
+                    'r3': 'dtcp_rappel3_date',
+                    'r4': 'dtcp_rappel4_date'
+                },
+                'Hepatitis B': {
+                    'd1': 'hep_b1_date',
+                    'd2': 'hep_b2_date',
+                    'd3': 'hep_b3_date'
+                },
+                'Hib (Haemophilus influenzae b)': {
+                    'd1': 'hib1_date',
+                    'd2': 'hib2_date', 
+                    'd3': 'hib3_date',
+                    'r1': 'hib_rappel_date'
+                },
+                'MMR (Measles, Mumps, Rubella)': {
+                    'd1': 'ror_date'
+                },
+                'Measles (single)': {
+                    'd1': 'rougeole_seule_date'
+                },
+                'PPD (TB Skin Test)': {
+                    'd1': 'monotest1',
+                    'd2': 'monotest2',
+                    'd3': 'monotest3'
+                }
+            };
+        }
+    }
+    const fieldMapping = comprehensiveFieldMapping;
+    
+    // Check direct mapping first
+    let vaccineMapping = fieldMapping[vaccine.vaccine_name];
+    if (vaccineMapping && vaccineMapping[dose.dose_key]) {
+        return {
+            field_name: vaccineMapping[dose.dose_key],
+            vaccine_name: vaccine.vaccine_name,
+            dose_key: dose.dose_key
+        };
+    }
+    
+    // Check brand name aliases from existing database vaccines
+    const brandToCanonical = {
+        'ROTATEQ': 'Rotavirus',
+        'ROTARIX': 'Rotavirus', 
+        'PREVENAR 13': 'Pneumococcal PCV',
+        'PREVENAR': 'Pneumococcal PCV',
+        'SYNFLORIX': 'Pneumococcal PCV',
+        'VARILRIX': 'Varicella',
+        'VARIVAX': 'Varicella',
+        'HEPATITE A': 'Hepatitis A',
+        'HAVRIX': 'Hepatitis A',
+        'VAQTA': 'Hepatitis A',
+        'AVAXIM': 'Hepatitis A',
+        'VAXIGRIP': 'Influenza',
+        'VAXIGRIPTETRA': 'Influenza',
+        'FLUENZ TETRA': 'Influenza',
+        'INFLUVAC': 'Influenza',
+        'MENACTRA': 'Meningococcal ACWY',
+        'MENVEO': 'Meningococcal ACWY',
+        'BEXSERO': 'Meningococcal B',
+        'TRUMENBA': 'Meningococcal B',
+        'NEISVAC': 'Meningococcal C',
+        'NEISSVAC': 'Meningococcal C',
+        'GARDASIL': 'HPV (Human Papillomavirus)',
+        'GARDASIL 9': 'HPV (Human Papillomavirus)',
+        'CERVARIX': 'HPV (Human Papillomavirus)',
+        'ROR': 'MMR (Measles, Mumps, Rubella)',
+        'MMR': 'MMR (Measles, Mumps, Rubella)'
+    };
+    
+    // Check if this is a brand name that maps to a canonical name
+    let canonicalName = brandToCanonical[vaccine.vaccine_name];
+    if (canonicalName) {
+        // Check if the canonical name has a field mapping
+        let canonicalMapping = fieldMapping[canonicalName];
+        if (canonicalMapping && canonicalMapping[dose.dose_key]) {
+            return {
+                field_name: canonicalMapping[dose.dose_key],
+                vaccine_name: canonicalName,
+                dose_key: dose.dose_key
+            };
+        }
+    }
+    
+    console.log(`No standard field mapping found for ${vaccine.vaccine_name} ${dose.dose_key} - routing to additional vaccine modal`);
+    return { field_name: null };  // Route to additional vaccine modal
+}
+
+// Function to update a timeline label without reloading page
+function updateTimelineLabel(vaccine, dose, newDate) {
+    console.log('Updating timeline label for:', vaccine.vaccine_name, dose.label, 'date:', newDate);
+    
+    // Update the dose data
+    dose.completed_date = newDate;
+    if (newDate) {
+        dose.status = 'completed';
+    } else {
+        // Determine new status based on due date
+        if (dose.due_date) {
+            const today = new Date();
+            const dueDate = new Date(dose.due_date);
+            if (dueDate < today) {
+                dose.status = 'overdue';
+            } else {
+                dose.status = 'due';
+            }
+        } else {
+            dose.status = 'upcoming';
+        }
+    }
+    
+    // Refresh the timeline to show updated status
+    updateTimeline(currentAgeRange);
+}
 </script>
 
 <!-- Additional Vaccine Edit Modal -->
@@ -1290,4 +1573,33 @@ function showToast(message, type = 'success') {
         </div>
     </div>
 </div>
+
+<!-- Timeline Vaccine Edit Modal -->
+<div id="timelineVaccineModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="timelineModalTitle">Edit Vaccine Date</h3>
+            <span class="modal-close" onclick="closeTimelineVaccineModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="timelineVaccineForm">
+                <div class="form-group">
+                    <label for="timelineModalDateInput">Vaccination Date:</label>
+                    <input type="date" id="timelineModalDateInput" class="form-control" required>
+                    <small class="form-text text-muted">Leave blank to clear the date</small>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="timelineModalClearCheckbox"> Clear this vaccination date
+                    </label>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeTimelineVaccineModal()">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="saveTimelineVaccineDate()">Save</button>
+        </div>
+    </div>
+</div>
 {% endblock %} 
+ 

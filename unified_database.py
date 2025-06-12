@@ -157,11 +157,31 @@ def init_unified_db_schema():
         patient_id INTEGER NOT NULL,
         vaccine_name TEXT,
         vaccine_date TEXT,
+        dose_number INTEGER DEFAULT 1,
+        interval_months INTEGER,
+        total_doses_planned INTEGER DEFAULT 1,
         batch_number TEXT,
         administrator TEXT,
         reaction_notes TEXT,
         raw_entry TEXT,
         created_date TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (patient_id) REFERENCES Patients (id)
+    );
+    """)
+
+    # UNIFIED IMMUNIZATIONS TABLE (Replaces separate vaccine columns and NonStandardVaccines)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS Immunizations (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        patient_id INTEGER NOT NULL,
+        immunization TEXT NOT NULL,    -- Canonical disease name (e.g., "DTaP - IPV", "Hepatitis A")
+        administered_date TEXT NOT NULL,
+        brand_name TEXT,               -- Original brand name (e.g., "HAVRIX", "SYNFLORIX")
+        dose_number INTEGER,           -- Auto-calculated sequence number for this immunization
+        notes TEXT,                    -- Additional notes including import source
+        source TEXT DEFAULT 'import',  -- Track data source ('import', 'manual', etc.)
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (patient_id) REFERENCES Patients (id)
     );
     """)
@@ -267,6 +287,9 @@ def init_unified_db_schema():
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_visits_date ON Visits(visit_date);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_growth_patient_date ON GrowthMeasurements(patient_id, measurement_date);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_vaccines_patient ON NonStandardVaccines(patient_id);")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_immunizations_patient_id ON Immunizations(patient_id);")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_immunizations_name ON Immunizations(immunization);")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_immunizations_date ON Immunizations(administered_date);")
 
     # Perform any necessary schema upgrades
     _perform_schema_upgrades(db)

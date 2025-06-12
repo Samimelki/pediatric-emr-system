@@ -11,6 +11,14 @@ DEFAULT_DATABASE_PATH = os.path.join(APP_DATA_DIR, DATABASE_NAME)
 UPLOAD_FOLDER = os.path.join(APP_DATA_DIR, 'uploads')  # For temporary XML uploads
 USER_MEDIA_FOLDER = os.path.join(APP_DATA_DIR, 'user_media')  # For user-uploaded images like signatures
 WORD_DOCS_FOLDER = os.path.join(APP_DATA_DIR, 'word_documents')  # For patient Word documents
+USER_CONFIG_FOLDER = os.path.join(APP_DATA_DIR, 'user_config')  # For user-modifiable config files
+SYSTEM_CONFIG_FOLDER = os.path.join(os.path.dirname(__file__), 'system_config')  # For default config files
+
+# Config file paths
+USER_VACCINE_CONFIG = os.path.join(USER_CONFIG_FOLDER, 'vaccine_schedule_config.json')
+SYSTEM_VACCINE_CONFIG = os.path.join(SYSTEM_CONFIG_FOLDER, 'vaccine_schedule_config.json')
+USER_PDF_CONFIG = os.path.join(USER_CONFIG_FOLDER, 'pdf_config.json')
+SYSTEM_PDF_CONFIG = os.path.join(SYSTEM_CONFIG_FOLDER, 'pdf_config.json')
 
 # Default general configuration
 DEFAULT_CONFIG = {
@@ -64,7 +72,8 @@ def ensure_directories_exist():
         APP_DATA_DIR,
         UPLOAD_FOLDER,
         USER_MEDIA_FOLDER,
-        WORD_DOCS_FOLDER
+        WORD_DOCS_FOLDER,
+        USER_CONFIG_FOLDER
     ]
     
     for directory in directories_to_create:
@@ -74,6 +83,34 @@ def ensure_directories_exist():
                 print(f"Created directory: {directory}")
         except Exception as e:
             print(f"Error creating directory {directory}: {e}")
+    
+    # Initialize system config directory and copy defaults if needed
+    initialize_system_configs()
+
+def initialize_system_configs():
+    """Initialize system config directory and copy default configs if needed."""
+    try:
+        # Create system config directory
+        if not os.path.exists(SYSTEM_CONFIG_FOLDER):
+            os.makedirs(SYSTEM_CONFIG_FOLDER, exist_ok=True)
+            print(f"Created system config directory: {SYSTEM_CONFIG_FOLDER}")
+        
+        # Copy current vaccine config to system config as default if it doesn't exist
+        current_vaccine_config = "vaccine_schedule_config.json"
+        if os.path.exists(current_vaccine_config) and not os.path.exists(SYSTEM_VACCINE_CONFIG):
+            import shutil
+            shutil.copy2(current_vaccine_config, SYSTEM_VACCINE_CONFIG)
+            print(f"Copied default vaccine config to: {SYSTEM_VACCINE_CONFIG}")
+        
+        # Copy current PDF config to system config as default if it doesn't exist
+        current_pdf_config = "pdf_config.json"
+        if os.path.exists(current_pdf_config) and not os.path.exists(SYSTEM_PDF_CONFIG):
+            import shutil
+            shutil.copy2(current_pdf_config, SYSTEM_PDF_CONFIG)
+            print(f"Copied default PDF config to: {SYSTEM_PDF_CONFIG}")
+            
+    except Exception as e:
+        print(f"Error initializing system configs: {e}")
 
 def load_config():
     """Load configuration from config.json or create default if not exists."""
@@ -117,4 +154,60 @@ def save_config(config):
         return True
     except Exception as e:
         print(f"Error saving config: {e}")
-        return False 
+        return False
+
+def load_vaccine_config():
+    """Load vaccine schedule configuration with user/system fallback."""
+    # Try user config first
+    if os.path.exists(USER_VACCINE_CONFIG):
+        try:
+            with open(USER_VACCINE_CONFIG, 'r') as f:
+                config = json.load(f)
+                print(f"Loaded user vaccine config from: {USER_VACCINE_CONFIG}")
+                return config
+        except Exception as e:
+            print(f"Error loading user vaccine config: {e}")
+    
+    # Fallback to system config
+    if os.path.exists(SYSTEM_VACCINE_CONFIG):
+        try:
+            with open(SYSTEM_VACCINE_CONFIG, 'r') as f:
+                config = json.load(f)
+                print(f"Loaded system vaccine config from: {SYSTEM_VACCINE_CONFIG}")
+                return config
+        except Exception as e:
+            print(f"Error loading system vaccine config: {e}")
+    
+    # Fallback to current location (for backward compatibility)
+    current_config = "vaccine_schedule_config.json"
+    if os.path.exists(current_config):
+        try:
+            with open(current_config, 'r') as f:
+                config = json.load(f)
+                print(f"Loaded vaccine config from current directory: {current_config}")
+                return config
+        except Exception as e:
+            print(f"Error loading current vaccine config: {e}")
+    
+    print("No vaccine config found!")
+    return {}
+
+def save_vaccine_config(config):
+    """Save vaccine schedule configuration to user config."""
+    try:
+        with open(USER_VACCINE_CONFIG, 'w') as f:
+            json.dump(config, f, indent=2)
+        print(f"Saved user vaccine config to: {USER_VACCINE_CONFIG}")
+        return True
+    except Exception as e:
+        print(f"Error saving user vaccine config: {e}")
+        return False
+
+def get_vaccine_config_path():
+    """Get the path to the vaccine config file (user first, then system fallback)."""
+    if os.path.exists(USER_VACCINE_CONFIG):
+        return USER_VACCINE_CONFIG
+    elif os.path.exists(SYSTEM_VACCINE_CONFIG):
+        return SYSTEM_VACCINE_CONFIG
+    else:
+        return "vaccine_schedule_config.json"  # Backward compatibility 

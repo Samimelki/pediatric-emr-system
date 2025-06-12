@@ -1,0 +1,21 @@
+{
+    "physician_details_fr": {
+        "name": "Dr Roula Merheb Melki",
+        "specialty": "Pédiatre - Néonatologue ",
+        "hospital_name": "Hôtel Dieu de France - Ashrafieh, Beyrouth, Liban",
+        "faculty_name": "Université Saint Joseph, Faculté de Médecine, Beyrouth",
+        "contact_line1": "",
+        "contact_line2": ""
+    },
+    "physician_details_en": {
+        "name": "Dr Roula Merheb Melki",
+        "specialty": "Pediatrics - Neonatology",
+        "hospital_name": "Hôtel Dieu de France - Ashrafieh, Beyrouth, Liban",
+        "faculty_name": "Université Saint Joseph, Faculté de Médecine, Beyrouth",
+        "contact_line1": "",
+        "contact_line2": ""
+    },
+    "footer_note_fr": "Tél Hôpital: 01-604 000 Ext 3280 - Cabinet: 01-885407/01-891109/01-887786 - email: roula.merheb@hotmail.com",
+    "footer_note_en": "Hospital Phone: 01-604 000 Ext 3280 - Clinic: 01-885407/01-891109/01-887786 - email: roula.merheb@hotmail.com",
+    "signature_image_filename": "signature_stamp.png"
+}

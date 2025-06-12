@@ -376,6 +376,22 @@ class Api:
             logging.error("Exception in save_csv_export", exc_info=True)
             return {"status": "error", "message": str(e)}
 
+# Add template filters and context processors after app initialization
+@app.template_filter('vaccine_field_mapping_js')
+def vaccine_field_mapping_js(language='en'):
+    """Template filter to inject vaccine field mapping as JavaScript"""
+    from utils.vaccine_mapping import get_javascript_mapping
+    return get_javascript_mapping(language)
+
+@app.context_processor
+def inject_vaccine_mappings():
+    """Inject vaccine mappings into all templates"""
+    from utils.vaccine_mapping import get_field_mapping_dict
+    return {
+        'vaccine_field_mapping_en': get_field_mapping_dict('en'),
+        'vaccine_field_mapping_fr': get_field_mapping_dict('fr')
+    }
+
 if __name__ == '__main__':
     logging.info("Entering __main__ block.")
     try:

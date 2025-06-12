@@ -6,7 +6,8 @@ import sqlite3
 import json
 from datetime import datetime
 from word_document_manager import WordDocumentManager
-from utils.vaccine_schedule_engine import get_patient_vaccine_timeline, vaccine_schedule_engine, get_vaccine_schedule_config, update_vaccine_schedule_config
+from utils.vaccine_schedule_engine import get_patient_vaccine_timeline, vaccine_schedule_engine, get_vaccine_schedule_config, update_vaccine_schedule_config, reset_vaccine_schedule_to_defaults
+from utils.vaccine_mapping import get_field_mapping_dict, get_comprehensive_mapping
 from dataclasses import asdict
 
 vaccine_bp = Blueprint('vaccine', __name__, url_prefix='/vaccines')
@@ -80,8 +81,15 @@ def edit_standard_vaccine_form(patient_id):
 def update_standard_vaccine_form(patient_id):
     """Update a standard vaccine field for a patient"""
     db = get_db()
-    field_name = request.form.get('vaccine_field_name')
-    vaccine_date_str = request.form.get('vaccine_date')
+    
+    # Check if this is a JSON request (from AJAX) or form request
+    if request.is_json:
+        data = request.get_json()
+        field_name = data.get('field_name')
+        vaccine_date_str = data.get('date')
+    else:
+        field_name = request.form.get('vaccine_field_name')
+        vaccine_date_str = request.form.get('vaccine_date')
 
     # Use the same allowed fields list
     allowed_vaccine_fields = [
@@ -94,7 +102,10 @@ def update_standard_vaccine_form(patient_id):
     ]
 
     if field_name not in allowed_vaccine_fields:
-        flash('Invalid vaccine field specified.', 'danger')
+        error_msg = 'Invalid vaccine field specified.'
+        if request.is_json:
+            return jsonify({'success': False, 'error': error_msg}), 400
+        flash(error_msg, 'danger')
         return redirect(url_for('patient.patient_detail', patient_id=patient_id))
 
     vaccine_date = None
@@ -103,19 +114,34 @@ def update_standard_vaccine_form(patient_id):
             datetime.strptime(vaccine_date_str, '%Y-%m-%d') # Validate format
             vaccine_date = vaccine_date_str
         except ValueError:
-            flash('Invalid date format. Please use YYYY-MM-DD.', 'danger')
+            error_msg = 'Invalid date format. Please use YYYY-MM-DD.'
+            if request.is_json:
+                return jsonify({'success': False, 'error': error_msg}), 400
+            flash(error_msg, 'danger')
             # Redirect back to edit form
             return redirect(url_for('vaccine.edit_standard_vaccine_form', patient_id=patient_id, field_name=field_name))
 
     try:
         db.execute(f"UPDATE Patients SET {field_name} = ? WHERE id = ?", (vaccine_date, patient_id))
         db.commit()
+        
+        if request.is_json:
+            return jsonify({'success': True})
+        
         flash(f'Vaccine updated successfully.', 'success')
     except Exception as e:
         db.rollback()
-        flash(f'Error updating vaccine: {e}', 'danger')
+        error_msg = f'Error updating vaccine: {e}'
+        if request.is_json:
+            return jsonify({'success': False, 'error': error_msg}), 500
+        flash(error_msg, 'danger')
     
-    return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+    # For form requests, redirect as before
+    referrer = request.referrer
+    if referrer and 'vaccine_schedule_timeline' in referrer:
+        return redirect(url_for('vaccine.vaccine_schedule_timeline', patient_id=patient_id))
+    else:
+        return redirect(url_for('patient.patient_detail', patient_id=patient_id))
 
 # =============================================================================
 # NON-STANDARD VACCINE EDITING ROUTES
@@ -135,6 +161,8 @@ def add_other_vaccine(patient_id):
     if request.method == 'POST':
         vaccine_name = request.form.get('other_vaccine_name', '').strip()
         vaccine_date = request.form.get('other_vaccine_date', '').strip()
+        total_doses_planned = request.form.get('total_doses_planned', '1')
+        interval_months = request.form.get('interval_months', '')
         
         if not vaccine_name:
             flash('Vaccine name is required.', 'danger')
@@ -144,11 +172,15 @@ def add_other_vaccine(patient_id):
                                  vaccine={'vaccine_name': vaccine_name, 'vaccine_date': vaccine_date})
         
         try:
+            # Convert to integers and validate
+            total_doses = int(total_doses_planned) if total_doses_planned else 1
+            interval = int(interval_months) if interval_months else None
+            
             # Insert new vaccine record
             db.execute("""
-                INSERT INTO NonStandardVaccines (patient_id, vaccine_name, vaccine_date, created_date)
-                VALUES (?, ?, ?, ?)
-            """, (patient_id, vaccine_name, vaccine_date if vaccine_date else None, datetime.now().isoformat()))
+                INSERT INTO NonStandardVaccines (patient_id, vaccine_name, vaccine_date, dose_number, total_doses_planned, interval_months, created_date)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (patient_id, vaccine_name, vaccine_date if vaccine_date else None, 1, total_doses, interval, datetime.now().isoformat()))
             db.commit()
             
             # Update Word document
@@ -315,35 +347,43 @@ def update_standard_vaccine(patient_id):
 
 @vaccine_bp.route('/schedule/<int:patient_id>')
 def vaccine_schedule_timeline(patient_id):
-    """Display color-coded vaccine schedule timeline for a patient"""
-    db = get_db()
-    
+    """Generate and display the vaccine schedule timeline for a patient"""
     try:
-        # Get patient data
-        cursor = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,))
-        patient_row = cursor.fetchone()
+        db = get_db()
+        # Fetch patient's basic data
+        patient = db.execute(
+            'SELECT id, nom, prenom, mrn, date_of_birth, naissance_date, raw_autres_vaccins_text FROM Patients WHERE id = ?',
+            (patient_id,)
+        ).fetchone()
         
-        if not patient_row:
-            flash(f'Patient with ID {patient_id} not found.', 'warning')
+        if not patient:
+            flash('Patient not found.', 'danger')
             return redirect(url_for('patient.list_patients'))
-        
-        patient = dict(patient_row)
-        
-        # Check if patient has date of birth
-        patient_dob = patient.get('naissance_date')
+
+        patient_dob = patient['date_of_birth'] or patient['naissance_date']
         if not patient_dob:
-            flash('Patient must have a date of birth to view vaccine schedule.', 'warning')
+            flash('Patient has no date of birth, cannot calculate vaccine schedule.', 'warning')
             return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+
+        # 1. Fetch from the new unified Immunizations table
+        immunizations_cursor = db.execute(
+            "SELECT immunization, administered_date, brand_name, dose_number, notes FROM Immunizations WHERE patient_id = ? ORDER BY administered_date ASC",
+            (patient_id,)
+        )
+        unified_immunizations = immunizations_cursor.fetchall()
         
-        # Get patient's vaccine data (non-standard vaccines)
-        vaccine_cursor = db.execute("SELECT * FROM NonStandardVaccines WHERE patient_id = ?", (patient_id,))
-        autres_vaccins = vaccine_cursor.fetchall()
-        
-        # Prepare patient vaccine dictionary for the schedule engine
+        # 2. Fetch standard vaccine data from Patients table for backward compatibility
         patient_vaccines = dict(patient)
-        
-        # Calculate vaccine timeline with both standard and non-standard vaccine data
-        timeline = get_patient_vaccine_timeline(patient_dob, patient_vaccines, autres_vaccins)
+
+        # 3. Fetch from old NonStandardVaccines table for backward compatibility
+        autres_vaccins_cursor = db.execute("SELECT * FROM NonStandardVaccines WHERE patient_id = ?", (patient_id,))
+        autres_vaccins = autres_vaccins_cursor.fetchall()
+
+        # Calculate vaccine timeline using the new unified immunizations data
+        timeline = get_patient_vaccine_timeline(
+            patient_dob=patient_dob,
+            administered_immunizations=unified_immunizations
+        )
         
         # Get summary statistics
         summary_stats = vaccine_schedule_engine.get_summary_stats(timeline)
@@ -365,7 +405,7 @@ def vaccine_schedule_timeline(patient_id):
                              timeline=timeline_data,
                              summary_stats=summary_stats,
                              emr_config=emr_config)
-        
+            
     except Exception as e:
         current_app.logger.error(f"Error generating vaccine schedule for patient {patient_id}: {e}", exc_info=True)
         flash(f"Error loading vaccine schedule: {str(e)}", 'danger')
@@ -374,75 +414,128 @@ def vaccine_schedule_timeline(patient_id):
 @vaccine_bp.route('/config')
 def vaccine_config():
     """Display vaccine schedule configuration management page"""
-    import json
-    
-    schedule_config = get_vaccine_schedule_config()
-    
-    # Convert to JSON format for editing
-    json_format = {}
-    for vaccine_name, vaccine_info in schedule_config.items():
-        dose_list = []
-        for dose_key in sorted(vaccine_info["doses"].keys()):
-            dose_info = vaccine_info["doses"][dose_key]
-            dose_list.append(dose_info["age_display"])
+    try:
+        # Use the centralized function to get the config
+        schedule_config = get_vaccine_schedule_config()
+        schedule_config_json = json.dumps(schedule_config, indent=2)
         
-        json_format[vaccine_name] = {
-            "category": vaccine_info["category"],
-            "doses": dose_list
-        }
-        if "note" in vaccine_info:
-            json_format[vaccine_name]["note"] = vaccine_info["note"]
-    
-    schedule_config_json = json.dumps(json_format, indent=2)
-    
-    return render_template('vaccine_config.html',
-                         title='Vaccine Schedule Configuration',
-                         schedule_config=schedule_config,
-                         schedule_config_json=schedule_config_json,
-                         emr_config=emr_config)
+        return render_template('vaccine_config.html',
+                             title='Vaccine Schedule Configuration',
+                             schedule_config=schedule_config,
+                             schedule_config_json=schedule_config_json,
+                             emr_config=emr_config)
+    except Exception as e:
+        current_app.logger.error(f"Error loading vaccine config page: {e}", exc_info=True)
+        flash(f"Error loading vaccine configuration: {str(e)}", 'danger')
+        return render_template('vaccine_config.html',
+                             title='Vaccine Schedule Configuration',
+                             schedule_config={},
+                             schedule_config_json="{}",
+                             error=str(e),
+                             emr_config=emr_config)
 
 @vaccine_bp.route('/config/update', methods=['POST'])
 def update_vaccine_config():
     """Update vaccine schedule configuration"""
     if not emr_config.is_feature_enabled('vaccines'):
         return jsonify({'error': 'Vaccines not enabled'}), 400
-
+    
     try:
-        # Get JSON data from request
         config_data = request.get_json()
-        
         if not config_data:
             return jsonify({'success': False, 'message': 'No configuration data provided'}), 400
         
-        # Convert form data to engine format
-        engine_config = {}
-        for vaccine_name, vaccine_info in config_data.items():
-            engine_config[vaccine_name] = {
-                'category': vaccine_info['category'],
-                'doses': vaccine_info['doses']
-            }
+        # Use the centralized update function
+        update_vaccine_schedule_config(config_data)
         
-        # Validate and update configuration
-        update_vaccine_schedule_config(json.dumps(engine_config))
         return jsonify({'success': True, 'message': 'Configuration updated successfully'})
         
-    except ValueError as e:
-        return jsonify({'success': False, 'message': f'Invalid configuration: {str(e)}'}), 400
     except Exception as e:
-        current_app.logger.error(f"Error updating vaccine config: {e}")
+        current_app.logger.error(f"Error updating vaccine config: {e}", exc_info=True)
         return jsonify({'success': False, 'message': str(e)}), 500
 
 @vaccine_bp.route('/config/reset', methods=['POST'])
 def reset_vaccine_config():
     """Reset vaccine schedule configuration to defaults"""
     try:
-        # Reset to default configuration
-        vaccine_schedule_engine.schedule_config = vaccine_schedule_engine._load_default_schedule()
-        vaccine_schedule_engine.save_schedule_config()
+        # This will now correctly reset the main config file
+        reset_vaccine_schedule_to_defaults()
         flash('Vaccine schedule configuration reset to defaults successfully!', 'success')
         
     except Exception as e:
         flash(f'Error resetting configuration: {str(e)}', 'danger')
     
     return redirect(url_for('vaccine.vaccine_config'))
+
+@vaccine_bp.route('/patient/<int:patient_id>/additional/update', methods=['POST'])
+def update_additional_vaccine(patient_id):
+    """Update date for a patient-specific vaccine dose"""
+    try:
+        data = request.get_json()
+        vaccine_id = data.get('vaccine_id')
+        dose_number = data.get('dose_number', 1)
+        new_date = data.get('date')
+        
+        db = get_db()
+        
+        if dose_number == 1:
+            # Update the original vaccine record
+            db.execute("""
+                UPDATE NonStandardVaccines 
+                SET vaccine_date = ?
+                WHERE id = ? AND patient_id = ?
+            """, (new_date, vaccine_id, patient_id))
+        else:
+            # For subsequent doses, we need to either create a new record or update existing
+            # Check if a record exists for this dose
+            existing = db.execute("""
+                SELECT id FROM NonStandardVaccines 
+                WHERE patient_id = ? AND vaccine_name = (
+                    SELECT vaccine_name FROM NonStandardVaccines WHERE id = ?
+                ) AND dose_number = ?
+            """, (patient_id, vaccine_id, dose_number)).fetchone()
+            
+            if existing:
+                # Update existing dose record
+                db.execute("""
+                    UPDATE NonStandardVaccines 
+                    SET vaccine_date = ?
+                    WHERE id = ?
+                """, (new_date, existing['id']))
+            else:
+                # Create new dose record
+                base_vaccine = db.execute("""
+                    SELECT vaccine_name, total_doses_planned, interval_months 
+                    FROM NonStandardVaccines WHERE id = ?
+                """, (vaccine_id,)).fetchone()
+                
+                db.execute("""
+                    INSERT INTO NonStandardVaccines 
+                    (patient_id, vaccine_name, vaccine_date, dose_number, total_doses_planned, interval_months)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, (patient_id, base_vaccine['vaccine_name'], new_date, dose_number, 
+                      base_vaccine['total_doses_planned'], base_vaccine['interval_months']))
+        
+        db.commit()
+        return jsonify({'success': True})
+        
+    except Exception as e:
+        current_app.logger.error(f"Error updating additional vaccine: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@vaccine_bp.route('/field-mappings/<language>')
+def get_vaccine_field_mappings(language='en'):
+    """Get vaccine field mappings as JSON for frontend consumption"""
+    try:
+        mapping = get_field_mapping_dict(language)
+        return jsonify({
+            'success': True,
+            'mappings': mapping,
+            'total_vaccines': len(mapping)
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
 

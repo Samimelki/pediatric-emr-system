@@ -14,9 +14,11 @@ import re
 import os
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-from typing import Dict, List, Tuple, Optional, Any
+from typing import Dict, List, Tuple, Optional, Any, Union
 from dataclasses import dataclass, asdict
 from enum import Enum
+from collections import defaultdict
+from emr_config import emr_config
 
 class VaccineStatus(Enum):
     """Vaccine dose status enumeration"""
@@ -39,6 +41,7 @@ class VaccineDose:
     completed_date: Optional[str] = None
     days_until_due: Optional[int] = None
     days_overdue: Optional[int] = None
+    vaccine_id: Optional[int] = None  # For non-standard vaccines
 
 @dataclass
 class VaccineScheduleItem:
@@ -48,29 +51,27 @@ class VaccineScheduleItem:
     doses: List[VaccineDose]
     completion_percentage: float
     next_due_dose: Optional[VaccineDose] = None
+    vaccine_id: Optional[int] = None  # For non-standard vaccines
 
 class VaccineScheduleEngine:
     """Vaccine schedule engine for calculating patient-specific vaccine timelines"""
     
-    def __init__(self, schedule_config: Optional[Dict] = None, config_file_path: Optional[str] = None):
-        self.config_file_path = config_file_path or "vaccine_schedule_config.json"
-        self.schedule_config = schedule_config or self._load_schedule_config()
+    def __init__(self, config_file_path=None):
+        """Initialize the vaccine schedule engine with configuration."""
+        self.config_file_path = config_file_path or emr_config.get_vaccine_config_path()
+        self.config = emr_config.load_vaccine_config()
+        self.debug = True
         self.grace_period_days = 30  # Days after due date before marking overdue
         self.upcoming_window_days = 30  # Days before due date to mark as upcoming
     
     def _load_schedule_config(self) -> Dict:
         """Load vaccine schedule configuration from file or use defaults"""
-        # Try to load from config file first
-        if os.path.exists(self.config_file_path):
-            try:
-                with open(self.config_file_path, 'r') as f:
-                    config_data = json.load(f)
-                    return self._parse_json_schedule(config_data)
-            except (json.JSONDecodeError, KeyError) as e:
-                print(f"Warning: Could not load vaccine config from {self.config_file_path}: {e}")
-        
-        # Fall back to medically accurate default schedule
-        return self._load_default_schedule()
+        config_data = emr_config.load_vaccine_config()
+        if config_data:
+            return self._parse_json_schedule(config_data)
+        else:
+            print("No vaccine config found, using defaults")
+            return self._load_default_schedule()
     
     def _load_default_schedule(self) -> Dict:
         """Load the medically accurate default vaccine schedule configuration"""
@@ -179,7 +180,7 @@ class VaccineScheduleEngine:
         try:
             # Convert internal format back to JSON format for saving
             json_format = {}
-            for vaccine_name, vaccine_info in self.schedule_config.items():
+            for vaccine_name, vaccine_info in self.config.items():
                 dose_list = []
                 sorted_dose_keys = sorted(vaccine_info["doses"].keys())
                 
@@ -223,10 +224,8 @@ class VaccineScheduleEngine:
                 if "flexible" in vaccine_info:
                     json_format[vaccine_name]["flexible"] = vaccine_info["flexible"]
             
-            with open(self.config_file_path, 'w') as f:
-                json.dump(json_format, f, indent=2)
-                
-            print(f"Vaccine schedule configuration saved to {self.config_file_path}")
+            emr_config.save_vaccine_config(json_format)
+            print("Vaccine schedule configuration saved")
         except Exception as e:
             print(f"Error saving vaccine schedule configuration: {e}")
     
@@ -333,6 +332,12 @@ class VaccineScheduleEngine:
                 parsed_schedule[vaccine_name]["note"] = note
             if flexible_config:
                 parsed_schedule[vaccine_name]["flexible"] = flexible_config
+            
+            # Preserve database_fields and brand_names for comprehensive mapping
+            if "database_fields" in vaccine_info:
+                parsed_schedule[vaccine_name]["database_fields"] = vaccine_info["database_fields"]
+            if "brand_names" in vaccine_info:
+                parsed_schedule[vaccine_name]["brand_names"] = vaccine_info["brand_names"]
         
         return parsed_schedule
     
@@ -407,8 +412,9 @@ class VaccineScheduleEngine:
             months = age_months % 12
             return f"{years}Y{months}M"
     
-    def calculate_patient_timeline(self, patient_dob: str, patient_vaccines: Dict, 
-                                 autres_vaccins: List = None, current_date: Optional[str] = None) -> List[VaccineScheduleItem]:
+    def calculate_patient_timeline(self, patient_dob: str,
+                                 administered_immunizations: List[Dict],
+                                 current_date: Optional[str] = None) -> List[VaccineScheduleItem]:
         """Calculate complete vaccine timeline for a patient"""
         if current_date is None:
             current_date = datetime.now().strftime('%Y-%m-%d')
@@ -416,54 +422,39 @@ class VaccineScheduleEngine:
         patient_dob_obj = datetime.strptime(patient_dob, '%Y-%m-%d')
         current_date_obj = datetime.strptime(current_date, '%Y-%m-%d')
         
-        # Import the vaccine mapping constants and data preparation function
-        try:
-            from routes.pdf_export_routes import (
-                PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_EN,
-                VACCINE_ALIAS_MAP_EN,
-                MANDATORY_CANONICAL_VACCINE_NAMES_EN
-            )
-            from utils.patient_utils import prepare_vaccine_data_for_emr
-        except ImportError:
-            print("Warning: Could not import vaccine mapping constants")
-            # Fallback to basic field mapping
-            PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_EN = [
-                ("DTaP - IPV", 'dtcp1_date', 'd1'),
-                ("DTaP - IPV", 'dtcp2_date', 'd2'),
-                ("DTaP - IPV", 'dtcp3_date', 'd3'),
-                ("DTaP - IPV", 'dtcp_rappel1_date', 'r1'),
-                ("Hepatitis B", 'hep_b1_date', 'd1'),
-                ("Hepatitis B", 'hep_b2_date', 'd2'),
-                ("Hepatitis B", 'hep_b3_date', 'd3'),
-                ("Hib (Haemophilus influenzae b)", 'hib1_date', 'd1'),
-                ("Hib (Haemophilus influenzae b)", 'hib2_date', 'd2'),
-                ("Hib (Haemophilus influenzae b)", 'hib3_date', 'd3'),
-                ("MMR (Measles, Mumps, Rubella)", 'ror_date', 'd1'),
-            ]
-            VACCINE_ALIAS_MAP_EN = {}
-            MANDATORY_CANONICAL_VACCINE_NAMES_EN = ["DTaP - IPV", "Hepatitis B", "Hib (Haemophilus influenzae b)", "MMR (Measles, Mumps, Rubella)"]
-            prepare_vaccine_data_for_emr = None
+        # Use shared vaccine name utilities for consistent behavior
+        from utils.vaccine_name_utils import get_canonical_vaccine_name
         
-        # Use the existing vaccine data preparation system
-        if autres_vaccins is None:
-            autres_vaccins = []
+        # Prepare a detailed lookup dictionary for administered immunizations with consolidation
+        administered_lookup = defaultdict(list)
+        for record in administered_immunizations:
+            # Use shared utility to get canonical name
+            canonical_name = get_canonical_vaccine_name(record['immunization'], debug=self.debug)
+            # Store the full record, not just the date
+            administered_lookup[canonical_name].append({
+                'administered_date': record['administered_date'],
+                'dose_number': record['dose_number'] if 'dose_number' in record.keys() else None,
+                'original_name': record['immunization']
+            })
+            if self.debug:
+                print(f"DEBUG ENGINE: '{record['immunization']}' -> '{canonical_name}' on {record['administered_date']}")
         
-        try:
-            if prepare_vaccine_data_for_emr:
-                # Use the same function that patient detail view uses
-                all_vaccine_table_data = prepare_vaccine_data_for_emr(patient_vaccines, autres_vaccins, 0)  # patient_id not needed for this use
-            else:
-                all_vaccine_table_data = []
-        except Exception as e:
-            print(f"Warning: Could not use existing vaccine data preparation: {e}")
-            all_vaccine_table_data = []
-        
+        # Sort administered doses by date for each vaccine
+        for vaccine in administered_lookup:
+            administered_lookup[vaccine].sort(key=lambda x: x['administered_date'] if x['administered_date'] else '1900-01-01')
+            
         timeline = []
         
-        for vaccine_name, vaccine_info in self.schedule_config.items():
+        for vaccine_name, vaccine_info in self.config.items():
+            if vaccine_name == 'name_mappings':  # Skip the name_mappings entry
+                continue
+                
             doses = []
             completed_doses = 0
             next_due_dose = None
+            
+            if self.debug:
+                print(f"DEBUG ENGINE: Processing vaccine '{vaccine_name}' with {len(administered_lookup.get(vaccine_name, []))} administered doses")
             
             # Special handling for HPV vaccine (age-dependent dosing)
             if vaccine_name == "HPV (Human Papillomavirus)":
@@ -471,99 +462,61 @@ class VaccineScheduleEngine:
             else:
                 doses_dict = vaccine_info["doses"]
             
-            # Find and consolidate all patient vaccine data for this vaccine (using same logic as PDF)
-            consolidated_dose_dates = {}
-            all_dates_for_vaccine = []
-            
-            # Collect all dates from all brand entries for this canonical vaccine
-            for vaccine_row in all_vaccine_table_data:
-                if vaccine_row['canonical_name_for_check'] == vaccine_name:
-                    for dose_key, dose_date in vaccine_row['dose_dates'].items():
-                        if dose_date and dose_date != '-':
-                            try:
-                                # Parse date to ensure it's valid and not in the future
-                                if '/' in dose_date:
-                                    # Convert from DD/MM/YYYY to YYYY-MM-DD for parsing
-                                    date_parts = dose_date.split('/')
-                                    if len(date_parts) == 3:
-                                        try:
-                                            parsed_date_obj = datetime.strptime(f"{date_parts[2]}-{date_parts[1].zfill(2)}-{date_parts[0].zfill(2)}", '%Y-%m-%d')
-                                            # Skip future dates beyond a reasonable buffer (1 month)
-                                            if parsed_date_obj > current_date_obj + timedelta(days=30):
-                                                continue
-                                            parsed_date = parsed_date_obj.strftime('%Y-%m-%d')
-                                        except ValueError:
-                                            continue
-                                    else:
-                                        continue
-                                else:
-                                    try:
-                                        parsed_date_obj = datetime.strptime(dose_date, '%Y-%m-%d')
-                                        # Skip future dates beyond a reasonable buffer (1 month)
-                                        if parsed_date_obj > current_date_obj + timedelta(days=30):
-                                            continue
-                                        parsed_date = dose_date
-                                    except ValueError:
-                                        continue
-                                
-                                # Add to list with parsed date for sorting, avoiding duplicates
-                                date_tuple = (parsed_date_obj, dose_date)
-                                if date_tuple not in all_dates_for_vaccine:
-                                    all_dates_for_vaccine.append(date_tuple)
-                            except:
-                                # Skip invalid dates
-                                continue
-            
-            # Sort dates chronologically and assign to dose slots
-            if all_dates_for_vaccine:
-                # Sort by actual date object for proper chronological order
-                all_dates_for_vaccine.sort(key=lambda x: x[0])
-                
-                # Assign to dose slots in chronological order (same as PDF logic)
-                dose_keys = ['d1', 'd2', 'd3', 'r1', 'r2', 'r3', 'r4']
-                for i, (parsed_date_obj, original_date) in enumerate(all_dates_for_vaccine):
-                    if i < len(dose_keys):
-                        consolidated_dose_dates[dose_keys[i]] = original_date
-            
-            # Create a consolidated patient vaccine data structure
-            patient_vaccine_data = None
-            if consolidated_dose_dates:
-                patient_vaccine_data = {
-                    'dose_dates': consolidated_dose_dates,
-                    'canonical_name_for_check': vaccine_name
-                }
-            
             # Track completed doses for interval-based calculation
-            dose_keys_ordered = ['d1', 'd2', 'd3', 'r1', 'r2', 'r3', 'r4']
+            dose_keys_ordered = ['d1', 'd2', 'd3', 'd4', 'r1', 'r2', 'r3', 'r4']
+            administered_records = administered_lookup.get(vaccine_name, [])
+            
+            # Create actual_dose_dates mapping, but also track if we have extra doses
             actual_dose_dates = {}
+            extra_doses = []
             
-            # Sort doses by their original scheduled age to process in order
-            sorted_doses = sorted(doses_dict.items(), key=lambda x: x[1]['age_months'])
+            if self.debug:
+                print(f"DEBUG DOSE ASSIGNMENT: {vaccine_name} has {len(administered_records)} administered doses, {len(dose_keys_ordered)} standard positions")
             
-            for dose_key, dose_info in sorted_doses:
+            for i, record in enumerate(administered_records):
+                date = record['administered_date']
+                if i < len(dose_keys_ordered):
+                    actual_dose_dates[dose_keys_ordered[i]] = date
+                    if self.debug:
+                        print(f"DEBUG DOSE ASSIGNMENT: Dose {i+1} ({date}) -> {dose_keys_ordered[i]}")
+                else:
+                    # This is an extra dose beyond the configured schedule
+                    extra_dose_key = f"extra_{i - len(dose_keys_ordered) + 1}"
+                    extra_doses.append((extra_dose_key, date))
+                    if self.debug:
+                        print(f"DEBUG DOSE ASSIGNMENT: Extra dose {i+1} ({date}) -> {extra_dose_key}")
+            
+            if self.debug and extra_doses:
+                print(f"DEBUG EXTRA DOSES: {vaccine_name} has {len(extra_doses)} extra doses: {extra_doses}")
+            
+            # Process all administered doses instead of just configured schedule positions
+            # This ensures doses assigned to positions like r1, r2, d4+ are included
+            all_dose_keys = set(doses_dict.keys()) | set(actual_dose_dates.keys())
+            sorted_dose_keys = sorted(all_dose_keys, key=lambda k: dose_keys_ordered.index(k) if k in dose_keys_ordered else 999)
+            
+            for dose_key in sorted_dose_keys:
+                # Get dose info from schedule, or create minimal info for extra doses
+                dose_info = doses_dict.get(dose_key, {
+                    'label': f"Dose {dose_keys_ordered.index(dose_key) + 1}" if dose_key in dose_keys_ordered else dose_key,
+                    'age_months': 0  # Will be calculated from actual date
+                })
+                
                 # Check if patient has received this dose from the actual patient data
-                completed_date = None
-                if patient_vaccine_data and dose_key in patient_vaccine_data['dose_dates']:
-                    completed_date = patient_vaccine_data['dose_dates'][dose_key]
-                    if completed_date and completed_date != '-':
-                        # Convert date format if needed
-                        try:
-                            if '/' in completed_date:
-                                # Convert from DD/MM/YYYY to YYYY-MM-DD
-                                date_parts = completed_date.split('/')
-                                if len(date_parts) == 3:
-                                    completed_date = f"{date_parts[2]}-{date_parts[1].zfill(2)}-{date_parts[0].zfill(2)}"
-                        except:
-                            pass
-                        actual_dose_dates[dose_key] = completed_date
-                    else:
-                        completed_date = None
+                completed_date = actual_dose_dates.get(dose_key)
                 
                 # Calculate due date using interval-based logic if available
-                due_date_obj = self._calculate_dose_due_date(
-                    dose_key, dose_info, doses_dict, actual_dose_dates, 
-                    patient_dob_obj, dose_keys_ordered
-                )
+                # For doses not in configured schedule, use the actual administered date as due date
+                if dose_key in doses_dict:
+                    due_date_obj = self._calculate_dose_due_date(
+                        dose_key, dose_info, doses_dict, actual_dose_dates, 
+                        patient_dob_obj, dose_keys_ordered
+                    )
+                elif completed_date:
+                    # For administered doses not in schedule, use administered date as due date
+                    due_date_obj = datetime.strptime(completed_date, '%Y-%m-%d')
+                else:
+                    # Skip doses that are neither in schedule nor administered
+                    continue
                 due_date = due_date_obj.strftime('%Y-%m-%d')
                 
                 # Calculate actual age in months for this dose based on the calculated due date
@@ -602,7 +555,8 @@ class VaccineScheduleEngine:
                     overdue_date=overdue_date,
                     completed_date=completed_date,
                     days_until_due=days_until_due,
-                    days_overdue=days_overdue
+                    days_overdue=days_overdue,
+                    vaccine_id=None  # Use None for standard vaccines
                 )
                 
                 doses.append(dose)
@@ -612,7 +566,41 @@ class VaccineScheduleEngine:
                 elif status in [VaccineStatus.DUE, VaccineStatus.OVERDUE] and next_due_dose is None:
                     next_due_dose = dose
             
-            # Calculate completion percentage
+            # Process extra doses that were administered beyond the configured schedule
+            for extra_dose_key, extra_date in extra_doses:
+                # Calculate dose number for display
+                extra_dose_number = len(doses_dict) + int(extra_dose_key.split('_')[1])
+                
+                # Parse the date
+                try:
+                    extra_date_obj = datetime.strptime(extra_date, '%Y-%m-%d')
+                    # Calculate age at time of vaccination
+                    age_at_vaccination_months = ((extra_date_obj - patient_dob_obj).days / 30.44)
+                    age_at_vaccination_months = round(age_at_vaccination_months)
+                    age_display = self._format_age_display(age_at_vaccination_months)
+                    
+                    extra_dose = VaccineDose(
+                        dose_key=extra_dose_key,
+                        label=f"Dose {extra_dose_number}",
+                        age_months=age_at_vaccination_months,
+                        age_display=age_display,
+                        status=VaccineStatus.COMPLETED,
+                        due_date=extra_date,  # Use the actual date as due date
+                        overdue_date=None,
+                        completed_date=extra_date,
+                        days_until_due=None,
+                        days_overdue=None,
+                        vaccine_id=None
+                    )
+                    
+                    doses.append(extra_dose)
+                    completed_doses += 1
+                    
+                except (ValueError, TypeError):
+                    # Skip invalid dates
+                    continue
+            
+            # Calculate completion percentage (including extra doses)
             completion_percentage = (completed_doses / len(doses)) * 100 if doses else 0
             
             # Sort doses by age
@@ -623,7 +611,8 @@ class VaccineScheduleEngine:
                 category=vaccine_info["category"],
                 doses=doses,
                 completion_percentage=completion_percentage,
-                next_due_dose=next_due_dose
+                next_due_dose=next_due_dose,
+                vaccine_id=None  # Use None for standard vaccines
             )
             
             timeline.append(vaccine_schedule_item)
@@ -790,32 +779,52 @@ class VaccineScheduleEngine:
     
     def export_schedule_config(self) -> str:
         """Export current schedule configuration as JSON"""
-        return json.dumps(self.schedule_config, indent=2)
+        return json.dumps(self.config, indent=2)
     
     def import_schedule_config(self, json_config: str) -> None:
         """Import schedule configuration from JSON"""
         try:
             config = json.loads(json_config)
-            self.schedule_config = self._parse_json_schedule(config)
+            self.config = self._parse_json_schedule(config)
         except (json.JSONDecodeError, KeyError) as e:
             raise ValueError(f"Invalid schedule configuration: {e}")
 
 # Global instance
 vaccine_schedule_engine = VaccineScheduleEngine()
 
-def get_patient_vaccine_timeline(patient_dob: str, patient_vaccines: Dict, 
-                               autres_vaccins: List = None, current_date: Optional[str] = None) -> List[VaccineScheduleItem]:
-    """Get vaccine timeline for a patient using the global engine"""
-    return vaccine_schedule_engine.calculate_patient_timeline(patient_dob, patient_vaccines, autres_vaccins, current_date)
+# Force reload of config to pick up database_fields and brand_names
+vaccine_schedule_engine.config = vaccine_schedule_engine._load_schedule_config()
+
+def get_patient_vaccine_timeline(patient_dob: str,
+                               administered_immunizations: List[Dict],
+                               current_date: Optional[str] = None) -> List[VaccineScheduleItem]:
+    """
+    High-level function to get the vaccine timeline for a patient.
+    
+    This is the primary entry point from the routes.
+    """
+    return vaccine_schedule_engine.calculate_patient_timeline(
+        patient_dob=patient_dob,
+        administered_immunizations=administered_immunizations,
+        current_date=current_date
+    )
 
 def get_vaccine_schedule_config() -> Dict:
     """Get current vaccine schedule configuration"""
-    return vaccine_schedule_engine.schedule_config
+    return vaccine_schedule_engine.config
 
-def update_vaccine_schedule_config(json_config: str) -> None:
-    """Update vaccine schedule configuration"""
-    vaccine_schedule_engine.import_schedule_config(json_config)
-    vaccine_schedule_engine.save_schedule_config()
+def update_vaccine_schedule_config(config_data: dict) -> None:
+    """Saves a dictionary of config data to the config file."""
+    engine = VaccineScheduleEngine()
+    # The new config is parsed and then saved in the correct format by the engine
+    engine.config = engine._parse_json_schedule(config_data)
+    engine.save_schedule_config()
+
+def reset_vaccine_schedule_to_defaults() -> None:
+    """Resets the schedule to the internal default and saves it."""
+    engine = VaccineScheduleEngine()
+    engine.config = engine._load_default_schedule()
+    engine.save_schedule_config()
 
 def save_vaccine_schedule_config() -> None:
     """Save current vaccine schedule configuration to file"""

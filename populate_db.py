@@ -29,7 +29,8 @@ HEADER_TO_DB_MAP = {
     '/fichier/monotest3': {'db_col': 'monotest3', 'type': 'datetime_to_date'},
     '/fichier/r': {'db_col': 'rougeole_seule_date', 'type': 'date'},
     
-    # Vaccine dates
+    # LEGACY: Vaccine dates - These are kept for database column compatibility
+    # but vaccines are now processed by the unified immunization system
     '/fichier/dtcp1': {'db_col': 'dtcp1_date', 'type': 'date'},
     '/fichier/dtcp2': {'db_col': 'dtcp2_date', 'type': 'date'},
     '/fichier/dtcp3': {'db_col': 'dtcp3_date', 'type': 'date'},
@@ -159,6 +160,89 @@ def _insert_non_standard_vaccines_unified(patient_id, parsed_vaccines):
     
     return vaccines_added_count
 
+def _import_vaccines_unified_direct(patient_id: int, patient_xml_data: dict, db_connection) -> int:
+    """Import vaccines using the unified immunization system with the existing database connection."""
+    from immunization_logic.services.config_service import ImmunizationConfigService
+    
+    config_service = ImmunizationConfigService()
+    brand_to_disease = config_service.get_brand_to_disease_mapping()
+    
+    # Standard vaccine column mappings (XML to canonical disease)
+    standard_vaccine_columns = {
+        '/fichier/dtcp1': ('DTaP - IPV', 1),
+        '/fichier/dtcp2': ('DTaP - IPV', 2), 
+        '/fichier/dtcp3': ('DTaP - IPV', 3),
+        '/fichier/rdtcp1': ('DTaP - IPV', 4),
+        '/fichier/rdtcp2': ('DTaP - IPV', 5),
+        '/fichier/rdtcp3': ('DTaP - IPV', 6),
+        '/fichier/rdtcp4': ('DTaP - IPV', 7),
+        '/fichier/hep_b1': ('Hepatitis B', 1),
+        '/fichier/hep_b2': ('Hepatitis B', 2),
+        '/fichier/hep_b3': ('Hepatitis B', 3),
+        '/fichier/hib1': ('Haemophilus influenzae type b (Hib)', 1),
+        '/fichier/hib2': ('Haemophilus influenzae type b (Hib)', 2),
+        '/fichier/hib3': ('Haemophilus influenzae type b (Hib)', 3),
+        '/fichier/hib_rappel': ('Haemophilus influenzae type b (Hib)', 4),
+        '/fichier/ror': ('Measles - Mumps - Rubella (MMR)', 1),
+        '/fichier/r': ('Measles', 1),
+    }
+    
+    total_imported = 0
+    
+    # Import standard vaccines from XML columns
+    for xml_column, (canonical_disease, dose_number) in standard_vaccine_columns.items():
+        vaccine_date = patient_xml_data.get(xml_column)
+        
+        if vaccine_date:
+            try:
+                # Parse date string to YYYY-MM-DD format
+                if 'T' in vaccine_date:
+                    clean_date = vaccine_date.split('T')[0]
+                else:
+                    clean_date = vaccine_date
+                
+                # Insert directly using existing connection
+                db_connection.execute("""
+                    INSERT INTO Immunizations (patient_id, immunization, administered_date, dose_number, notes, source)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, (patient_id, canonical_disease, clean_date, dose_number, 
+                      f"Imported from XML column {xml_column}", 'import'))
+                
+                total_imported += 1
+                
+            except Exception as e:
+                print(f"  ⚠️  Error importing standard vaccine {xml_column} for patient {patient_id}: {str(e)}")
+    
+    # Import non-standard vaccines from parsed data
+    parsed_autres_vaccins = patient_xml_data.get('parsed_autres_vaccins', [])
+    for vaccine_entry in parsed_autres_vaccins:
+        brand_name = vaccine_entry.get('vaccine_name', '').strip()
+        vaccine_date = vaccine_entry.get('vaccine_date')
+        
+        if not brand_name or not vaccine_date:
+            continue
+        
+        # Look up canonical disease name using comprehensive mapping
+        canonical_disease = brand_to_disease.get(brand_name)
+        
+        if canonical_disease:
+            try:
+                # Insert directly using existing connection
+                db_connection.execute("""
+                    INSERT INTO Immunizations (patient_id, immunization, administered_date, brand_name, notes, source)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, (patient_id, canonical_disease, vaccine_date, brand_name,
+                      f"Imported from XML autres_vac: {vaccine_entry.get('raw_entry', '')}", 'import'))
+                
+                total_imported += 1
+                
+            except Exception as e:
+                print(f"    ⚠️  Error importing non-standard vaccine {brand_name} for patient {patient_id}: {str(e)}")
+        else:
+            print(f"    ⚠️  Unmapped vaccine brand: {brand_name}")
+    
+    return total_imported
+
 def populate_database_from_parsed_data(all_xml_patients, target_mode='pediatric', document_format='md'):
     """Populate unified database from parsed XML data."""
     
@@ -209,11 +293,18 @@ def populate_database_from_parsed_data(all_xml_patients, target_mode='pediatric'
             parsed_visits = parsed_dossier.get('parsed_visits', [])
             visits_added += _insert_patient_visits_unified(patient_id, parsed_visits)
             
-            # Insert non-standard vaccines
-            parsed_autres_vaccins = patient_xml.get('parsed_autres_vaccins', [])
-            non_std_vaccines_added += _insert_non_standard_vaccines_unified(
-                patient_id, parsed_autres_vaccins
-            )
+            # Insert ALL vaccines using unified immunization system WITH EXISTING CONNECTION
+            try:
+                vaccines_imported = _import_vaccines_unified_direct(patient_id, patient_xml, db)
+                non_std_vaccines_added += vaccines_imported
+                print(f"  ✅ Imported {vaccines_imported} vaccines to unified Immunizations table")
+            except Exception as e:
+                print(f"  ⚠️  Error importing vaccines for patient {patient_id}: {str(e)}")
+                # Fallback to old system for compatibility
+                parsed_autres_vaccins = patient_xml.get('parsed_autres_vaccins', [])
+                non_std_vaccines_added += _insert_non_standard_vaccines_unified(
+                    patient_id, parsed_autres_vaccins
+                )
 
             # Create/update document for this patient (failsafe feature)
             try:

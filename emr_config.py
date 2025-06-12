@@ -20,9 +20,14 @@ APP_DATA_DIR = os.path.join(USER_DOCUMENTS, APP_NAME)
 DATABASE_NAME = 'unified_emr.db'
 CONFIG_FILE = os.path.join(APP_DATA_DIR, 'emr_config.json')
 DEFAULT_DATABASE_PATH = os.path.join(APP_DATA_DIR, DATABASE_NAME)
-UPLOAD_FOLDER = os.path.join(APP_DATA_DIR, 'uploads')
-USER_MEDIA_FOLDER = os.path.join(APP_DATA_DIR, 'user_media')
-WORD_DOCS_FOLDER = os.path.join(APP_DATA_DIR, 'word_documents')
+UPLOAD_FOLDER = os.path.join(APP_DATA_DIR, 'uploads')  # For temporary XML uploads
+USER_MEDIA_FOLDER = os.path.join(APP_DATA_DIR, 'user_media')  # For user-uploaded images like signatures
+WORD_DOCS_FOLDER = os.path.join(APP_DATA_DIR, 'word_documents')  # For patient Word documents
+USER_CONFIG_FOLDER = os.path.join(APP_DATA_DIR, 'user_config')  # For user-modifiable config files
+
+# Config file paths
+USER_VACCINE_CONFIG = os.path.join(USER_CONFIG_FOLDER, 'vaccine_schedule_config.json')
+USER_PDF_CONFIG = os.path.join(USER_CONFIG_FOLDER, 'pdf_config.json')
 
 # Available EMR Features
 AVAILABLE_FEATURES = {
@@ -250,7 +255,8 @@ class EMRConfig:
             APP_DATA_DIR,
             UPLOAD_FOLDER,
             USER_MEDIA_FOLDER,
-            WORD_DOCS_FOLDER
+            WORD_DOCS_FOLDER,
+            USER_CONFIG_FOLDER
         ]
         
         for directory in directories_to_create:
@@ -457,17 +463,188 @@ class EMRConfig:
         return profile.get('settings', {}).get('date_format', 'dd/mm/yyyy')
     
     def set_date_format(self, date_format: str):
-        """Set the date format for the active profile"""
-        profile_name = self.get_active_profile_name()
-        if 'profiles' not in self.config:
-            self.config['profiles'] = {}
-        if profile_name not in self.config['profiles']:
-            self.config['profiles'][profile_name] = self.get_active_profile()
-        if 'settings' not in self.config['profiles'][profile_name]:
-            self.config['profiles'][profile_name]['settings'] = {}
+        """Set the date format preference"""
+        if date_format in ['dd/mm/yyyy', 'mm/dd/yyyy', 'yyyy-mm-dd']:
+            self.config['date_format'] = date_format
+            self.save_config()
+            return True
+        return False
+
+    def load_vaccine_config(self):
+        """Load vaccine schedule configuration with user/fallback logic."""
+        # Try user config first
+        if os.path.exists(USER_VACCINE_CONFIG):
+            try:
+                with open(USER_VACCINE_CONFIG, 'r') as f:
+                    config = json.load(f)
+                    print(f"Loaded user vaccine config from: {USER_VACCINE_CONFIG}")
+                    return config
+            except Exception as e:
+                print(f"Error loading user vaccine config: {e}")
         
-        self.config['profiles'][profile_name]['settings']['date_format'] = date_format
-        self.save_config()
+        # Fallback to current location (for backward compatibility)
+        current_config = "vaccine_schedule_config.json"
+        if os.path.exists(current_config):
+            try:
+                with open(current_config, 'r') as f:
+                    config = json.load(f)
+                    print(f"Loaded vaccine config from current directory: {current_config}")
+                    # Copy to user config for future use
+                    self.save_vaccine_config(config)
+                    return config
+            except Exception as e:
+                print(f"Error loading current vaccine config: {e}")
+        
+        print("No vaccine config found! Creating default config.")
+        # Create a minimal default config
+        default_config = self._get_default_vaccine_config()
+        self.save_vaccine_config(default_config)
+        return default_config
+
+    def _get_default_vaccine_config(self):
+        """Get default vaccine configuration."""
+        return {
+            "name_mappings": {
+                "Haemophilus influenzae type b (Hib)": "Hib (Haemophilus influenzae b)",
+                "Measles - Mumps - Rubella (MMR)": "MMR (Measles, Mumps, Rubella)",
+                "Measles": "Measles (Single)",
+                "Measles (single)": "Measles (Single)"
+            },
+            "DTaP - IPV": {
+                "category": "mandatory",
+                "doses": [
+                    {"age": "2M", "interval_to_next": "2M"},
+                    {"age": "4M", "interval_to_next": "2M"},
+                    {"age": "6M", "interval_to_next": "1Y"},
+                    {"age": "1Y6M", "interval_to_next": "3Y7M"},
+                    {"age": "5Y", "interval_to_next": "6Y"},
+                    {"age": "11Y", "interval_to_next": "4Y"},
+                    {"age": "15Y", "interval_to_next": None}
+                ]
+            },
+            "Hepatitis B": {
+                "category": "mandatory",
+                "doses": [
+                    {"age": "Birth", "interval_to_next": "2M"},
+                    {"age": "2M", "interval_to_next": "4M"},
+                    {"age": "6M", "interval_to_next": None}
+                ]
+            },
+            "Hib (Haemophilus influenzae b)": {
+                "category": "mandatory",
+                "doses": [
+                    {"age": "2M", "interval_to_next": "2M"},
+                    {"age": "4M", "interval_to_next": "2M"},
+                    {"age": "6M", "interval_to_next": "1Y"},
+                    {"age": "1Y6M", "interval_to_next": None}
+                ]
+            },
+            "MMR (Measles, Mumps, Rubella)": {
+                "category": "mandatory",
+                "doses": [
+                    {"age": "1Y", "interval_to_next": "6M"},
+                    {"age": "1Y6M", "interval_to_next": None}
+                ]
+            },
+            "Measles (Single)": {
+                "category": "recommended",
+                "doses": [
+                    {"age": "1Y", "interval_to_next": None}
+                ]
+            },
+            "PPD (TB Skin Test)": {
+                "category": "mandatory",
+                "doses": [
+                    {"age": "1Y", "interval_to_next": "1Y"},
+                    {"age": "2Y", "interval_to_next": "1Y"},
+                    {"age": "3Y", "interval_to_next": None}
+                ]
+            },
+            "Hepatitis A": {
+                "category": "recommended",
+                "doses": [
+                    {"age": "1Y4M", "interval_to_next": "6M"},
+                    {"age": "1Y10M", "interval_to_next": "5Y"},
+                    {"age": "6Y10M", "interval_to_next": None}
+                ]
+            },
+            "Varicella": {
+                "category": "recommended",
+                "doses": [
+                    {"age": "1Y", "interval_to_next": "6M"},
+                    {"age": "1Y6M", "interval_to_next": None}
+                ]
+            },
+            "Pneumococcal PCV": {
+                "category": "recommended",
+                "doses": [
+                    {"age": "2M", "interval_to_next": "2M"},
+                    {"age": "4M", "interval_to_next": "2M"},
+                    {"age": "6M", "interval_to_next": "6M"},
+                    {"age": "1Y", "interval_to_next": None}
+                ]
+            },
+            "Influenza": {
+                "category": "recommended",
+                "doses": [
+                    {"age": "1Y", "interval_to_next": "1Y", "repeating": True}
+                ]
+            },
+            "Meningococcal ACWY": {
+                "category": "recommended",
+                "doses": [
+                    {"age": "11Y", "interval_to_next": "5Y"},
+                    {"age": "16Y", "interval_to_next": None}
+                ]
+            }
+        }
+
+    def reset_vaccine_config_to_factory_default(self):
+        """Reset vaccine configuration to factory defaults."""
+        try:
+            default_config = self._get_default_vaccine_config()
+            self.save_vaccine_config(default_config)
+            print(f"Reset vaccine config to factory defaults: {USER_VACCINE_CONFIG}")
+            return True
+        except Exception as e:
+            print(f"Error resetting vaccine config to defaults: {e}")
+            return False
+
+    def backup_vaccine_config(self):
+        """Create a backup of the current vaccine configuration."""
+        if os.path.exists(USER_VACCINE_CONFIG):
+            try:
+                import shutil
+                from datetime import datetime
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                backup_path = f"{USER_VACCINE_CONFIG}.backup_{timestamp}"
+                shutil.copy2(USER_VACCINE_CONFIG, backup_path)
+                print(f"Created vaccine config backup: {backup_path}")
+                return backup_path
+            except Exception as e:
+                print(f"Error creating vaccine config backup: {e}")
+                return None
+        return None
+
+    def save_vaccine_config(self, config):
+        """Save vaccine schedule configuration to user config."""
+        try:
+            # Ensure user config directory exists
+            os.makedirs(os.path.dirname(USER_VACCINE_CONFIG), exist_ok=True)
+            with open(USER_VACCINE_CONFIG, 'w') as f:
+                json.dump(config, f, indent=2)
+            print(f"Saved user vaccine config to: {USER_VACCINE_CONFIG}")
+            return True
+        except Exception as e:
+            print(f"Error saving user vaccine config: {e}")
+            return False
+
+    def get_vaccine_config_path(self):
+        """Get the path to the vaccine config file."""
+        if os.path.exists(USER_VACCINE_CONFIG):
+            return USER_VACCINE_CONFIG
+        else:
+            return "vaccine_schedule_config.json"  # Backward compatibility
 
 # Global configuration instance
 emr_config = EMRConfig()

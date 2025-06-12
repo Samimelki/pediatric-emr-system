@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/vaccine-components.css') }}">
+{% endblock %}
+
 {% block content %}
     {% if patient %}
         <div class="d-flex justify-content-between align-items-start mb-3">
@@ -62,7 +66,7 @@
                 </h5>
                 <a href="{{ url_for('patient.edit_patient_history', patient_id=patient.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
             </div>
-            <div id="collapsePatientHistory" class="collapse show" aria-labelledby="headingPatientHistory">
+            <div id="collapsePatientHistory" class="collapse" aria-labelledby="headingPatientHistory">
                 <div class="card-body">
                     <p><strong>Past Medical History:</strong> {{ patient.pmh or 'N/A' }}</p>
                     <p><strong>Past Surgical History:</strong> {{ patient.psh or 'N/A' }}</p>
@@ -79,20 +83,40 @@
             </div>
         </div>
 
-        {# Dynamically render other custom field sections #}
+        <!-- Birth History -->
+        {% if grouped_custom_fields and 'Birth History' in grouped_custom_fields %}
+            <div class="card mt-3">
+                <div class="card-header" id="headingBirthHistory">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseBirthHistory" aria-expanded="false" aria-controls="collapseBirthHistory">
+                            Birth History
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseBirthHistory" class="collapse" aria-labelledby="headingBirthHistory">
+                    <div class="card-body">
+                        {% for field in grouped_custom_fields['Birth History'] %}
+                            <p><strong>{{ field.field_label }}:</strong> {{ patient[field.field_name] if patient[field.field_name] else 'N/A' }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Other Custom Field Sections -->
         {% if grouped_custom_fields %}
             {% set handled_sections = ['Demographics', 'Birth History', 'Contact & Admin Details'] %}
             {% for section_name, fields_in_section in grouped_custom_fields.items() %}
                 {% if section_name not in handled_sections and fields_in_section %}
                     <div class="card mt-3">
-                        <div class="card-header" id="headingCustom{{ section_name|replace(' ', '_')|replace('&', 'And') }}">
+                        <div class="card-header" id="heading{{ section_name|replace(' ', '_')|replace('&', 'And') }}">
                             <h5 class="mb-0">
-                                <button class="btn btn-link custom-section-button" data-toggle="collapse" data-target="#collapseCustom{{ section_name|replace(' ', '_')|replace('&', 'And') }}" aria-expanded="false" aria-controls="collapseCustom{{ section_name|replace(' ', '_')|replace('&', 'And') }}">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse{{ section_name|replace(' ', '_')|replace('&', 'And') }}" aria-expanded="false" aria-controls="collapse{{ section_name|replace(' ', '_')|replace('&', 'And') }}">
                                     {{ section_name }}
                                 </button>
                             </h5>
                         </div>
-                        <div id="collapseCustom{{ section_name|replace(' ', '_')|replace('&', 'And') }}" class="collapse" aria-labelledby="headingCustom{{ section_name|replace(' ', '_')|replace('&', 'And') }}">
+                        <div id="collapse{{ section_name|replace(' ', '_')|replace('&', 'And') }}" class="collapse" aria-labelledby="heading{{ section_name|replace(' ', '_')|replace('&', 'And') }}">
                             <div class="card-body">
                                 {% for field in fields_in_section %}
                                     <p><strong>{{ field.field_label }}:</strong> {{ patient[field.field_name] if patient[field.field_name] else 'N/A' }}</p>
@@ -104,7 +128,32 @@
             {% endfor %}
         {% endif %}
 
-        {% include '_patient_vaccines.html' %}
+        <!-- Vaccine Timeline -->
+        {% if is_feature_enabled('vaccines') %}
+        <div class="card mt-3">
+            <div class="card-header" id="headingVaccineTimeline">
+                <h5 class="mb-0 d-flex justify-content-between align-items-center">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseVaccineTimeline" aria-expanded="false" aria-controls="collapseVaccineTimeline">
+                        Vaccine Schedule
+                    </button>
+                    {% if patient.naissance_date %}
+                    <a href="{{ url_for('vaccine.vaccine_schedule_timeline', patient_id=patient.id) }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-external-link-alt"></i> Detailed View
+                    </a>
+                    {% endif %}
+                </h5>
+            </div>
+            <div id="collapseVaccineTimeline" class="collapse" aria-labelledby="headingVaccineTimeline">
+                <div class="card-body">
+                    {% include 'partials/_vaccine_timeline_compact_simple.html' %}
+                    {% include 'partials/_vaccine_add_form.html' %}
+                </div>
+            </div>
+        </div>
+                        
+        <!-- Include Vaccine Edit Modal -->
+        {% include 'partials/_vaccine_edit_modal.html' %}
+        {% endif %}
 
         {% include '_patient_visits_form.html' %}
 
@@ -124,5 +173,64 @@
 {% endblock %}
 
 {% block scripts %}
-{{ super() }} {# Include scripts from base.html if any #}
+{{ super() }}
+
+<!-- Include Vaccine JavaScript Modules -->
+<script src="{{ url_for('static', filename='js/vaccine-timeline-core.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vaccine-editor-modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vaccine-ajax-handlers.js') }}"></script>
+
+<script>
+// Timeline data from backend
+const timelineData = {{ timeline | tojson | safe }};
+
+// Initialize vaccine components when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize modal handlers
+    if (window.VaccineEditor) {
+        window.VaccineEditor.initializeModalHandlers();
+    }
+    
+    // Initialize AJAX handlers
+    if (window.VaccineAjax) {
+        window.VaccineAjax.initializeSaveHandler({{ patient.id }});
+    }
+    
+    // Initialize timeline if data exists
+    if (timelineData && timelineData.length > 0 && window.VaccineTimeline) {
+        // Initialize with default range
+        window.VaccineTimeline.updateTimelineLabels('0-1');
+        window.VaccineTimeline.updateCurrentAgeMarker('0-1', '{{ patient.naissance_date }}');
+        window.VaccineTimeline.createVaccineLabels('0-1', timelineData);
+        
+        // Initialize age range buttons
+        window.VaccineTimeline.initializeAgeRangeButtons(timelineData, '{{ patient.naissance_date }}');
+    }
+});
+
+// Legacy function names for backward compatibility
+function openVaccineEditModal(vaccine, dose) {
+    if (window.VaccineEditor) {
+        window.VaccineEditor.openVaccineEditModal(vaccine, dose);
+    }
+}
+
+function openAdditionalVaccineModal(vaccineName, doseNumber, vaccineId, completedDate, dueDate) {
+    if (window.VaccineEditor) {
+        window.VaccineEditor.openAdditionalVaccineModal(vaccineName, doseNumber, vaccineId, completedDate, dueDate);
+    }
+}
+
+function closeVaccineEditModal() {
+    if (window.VaccineEditor) {
+        window.VaccineEditor.closeVaccineEditModal();
+    }
+}
+
+function saveVaccineDate() {
+    if (window.VaccineAjax) {
+        window.VaccineAjax.saveVaccineDate({{ patient.id }});
+    }
+}
+</script>
 {% endblock %} 

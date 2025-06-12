@@ -239,54 +239,185 @@ def patient_detail(patient_id):
     
     if emr_config.is_feature_enabled('vaccines'):
         try:
-            # Import vaccine constants
-            from routes.pdf_export_routes import (
-                PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_EN,
-                VACCINE_ALIAS_MAP_EN,
-                MANDATORY_CANONICAL_VACCINE_NAMES_EN,
-                ALL_POSSIBLE_DOSE_KEYS,
-                TABLE_COLUMN_LABELS_EN
-            )
-            
             print(f"DEBUG: Processing vaccines for patient {patient_id}")
             print(f"DEBUG: Patient data keys: {list(patient.keys())}")
-            print(f"DEBUG: Sample vaccine fields: dtcp1_date={patient.get('dtcp1_date')}, hep_b1_date={patient.get('hep_b1_date')}")
             
-            # Get other vaccines data
-            vaccine_cursor = db.execute("SELECT * FROM NonStandardVaccines WHERE patient_id = ? ORDER BY vaccine_date DESC", (patient_id,))
-            autres_vaccins = vaccine_cursor.fetchall()
-            print(f"DEBUG: Found {len(autres_vaccins)} non-standard vaccines")
+            # Get other vaccines data - group by vaccine name to handle multi-dose vaccines
+            vaccine_cursor = db.execute("""
+                SELECT * FROM Immunizations 
+                WHERE patient_id = ? 
+                ORDER BY immunization, dose_number ASC
+            """, (patient_id,))
+            all_vaccine_records = vaccine_cursor.fetchall()
             
-            # Prepare vaccine data using the same logic as foxpro2025
-            # Pass the patient dict directly - the helper function handles both dict and Row access
-            all_vaccines_for_emr_table = prepare_vaccine_data_for_emr(patient, autres_vaccins, patient_id)
-            print(f"DEBUG: Prepared {len(all_vaccines_for_emr_table)} total vaccines for EMR table")
+            # Group vaccines by name to handle multi-dose series
+            vaccine_groups = {}
+            for record in all_vaccine_records:
+                vaccine_name = record['immunization']
+                if vaccine_name not in vaccine_groups:
+                    vaccine_groups[vaccine_name] = []
+                vaccine_groups[vaccine_name].append(dict(record))
             
-            # Separate mandatory and recommended vaccines
-            for vaccine_row in all_vaccines_for_emr_table:
-                print(f"DEBUG: Vaccine {vaccine_row['vaccine_display_name']} - canonical: {vaccine_row['canonical_name_for_check']}")
-                if vaccine_row['canonical_name_for_check'] in MANDATORY_CANONICAL_VACCINE_NAMES_EN:
-                    mandatory_vaccines_emr.append(vaccine_row)
-                    print(f"DEBUG: Added to mandatory: {vaccine_row['vaccine_display_name']}")
+            # Convert to the format expected by the template
+            autres_vaccins = []
+            for vaccine_name, doses in vaccine_groups.items():
+                # Use the first dose as the base record
+                base_vaccine = doses[0]
+                base_vaccine['all_doses'] = doses
+                autres_vaccins.append(base_vaccine)
+            
+            # Use shared vaccine name utilities for consistent behavior
+            from utils.vaccine_name_utils import get_canonical_vaccine_name, is_vaccine_in_standard_schedule
+            
+            # Calculate due dates for patient-specific vaccines
+            from datetime import datetime, timedelta
+            from dateutil.relativedelta import relativedelta
+            
+            autres_vaccins_with_schedule = []
+            for vaccine in autres_vaccins:
+                # Check if this vaccine is in the standard vaccine schedule
+                vaccine_name = vaccine.get('immunization', '')
+                
+                # Use shared utility to check if vaccine is in standard schedule
+                if is_vaccine_in_standard_schedule(vaccine_name, debug=True):
+                    continue  # Skip vaccines that are in the standard schedule (they'll appear in timeline)
+                vaccine_dict = dict(vaccine)
+                vaccine_dict['doses_schedule'] = []
+                vaccine_dict['next_due_dose'] = None
+                
+
+                
+                # Always create at least the first dose
+                total_doses = vaccine.get('total_doses_planned', 1)
+                interval_months = vaccine.get('interval_months')
+                
+                # First dose (always exists if there's a date)
+                if vaccine.get('administered_date'):
+                    try:
+                        first_dose_date = datetime.strptime(vaccine['administered_date'], '%Y-%m-%d')
+                        current_date = datetime.now()
+                        
+                        # Generate schedule for all doses
+                        for dose_num in range(1, total_doses + 1):
+                            if dose_num == 1:
+                                # First dose (already given)
+                                dose_info = {
+                                    'dose_number': dose_num,
+                                    'due_date': first_dose_date.strftime('%Y-%m-%d'),
+                                    'completed_date': first_dose_date.strftime('%Y-%m-%d'),
+                                    'status': 'completed',
+                                    'label': f'Dose {dose_num}',
+                                    'vaccine_id': vaccine.get('id'),
+                                    'is_editable': True
+                                }
+                            else:
+                                # Calculate due date for subsequent doses
+                                if interval_months:
+                                    due_date = first_dose_date + relativedelta(months=(dose_num - 1) * interval_months)
+                                    days_diff = (due_date - current_date).days
+                                    
+                                    if days_diff <= 0:
+                                        status = 'overdue' if days_diff < -30 else 'due'  # 30 day grace period
+                                    elif days_diff <= 30:
+                                        status = 'due'
+                                    else:
+                                        status = 'upcoming'
+                                    
+                                    dose_info = {
+                                        'dose_number': dose_num,
+                                        'due_date': due_date.strftime('%Y-%m-%d'),
+                                        'completed_date': None,
+                                        'status': status,
+                                        'label': f'Dose {dose_num}',
+                                        'days_until_due': days_diff,
+                                        'vaccine_id': vaccine.get('id'),
+                                        'is_editable': True
+                                    }
+                                    
+                                    # Set next due dose (first non-completed dose)
+                                    if not vaccine_dict['next_due_dose'] and status in ['due', 'overdue']:
+                                        vaccine_dict['next_due_dose'] = dose_info
+                                else:
+                                    # No interval specified, just mark as pending
+                                    dose_info = {
+                                        'dose_number': dose_num,
+                                        'due_date': 'TBD',
+                                        'completed_date': None,
+                                        'status': 'pending',
+                                        'label': f'Dose {dose_num}',
+                                        'vaccine_id': vaccine.get('id'),
+                                        'is_editable': True
+                                    }
+                            
+                            vaccine_dict['doses_schedule'].append(dose_info)
+                    
+                    except (ValueError, TypeError) as e:
+                        print(f"Error calculating schedule for vaccine {vaccine['immunization']}: {e}")
                 else:
-                    recommended_vaccines_emr.append(vaccine_row)
-                    print(f"DEBUG: Added to recommended: {vaccine_row['vaccine_display_name']}")
-            
-            # Determine active dose keys for EMR table
-            for key in ALL_POSSIBLE_DOSE_KEYS:
-                if any(vaccine_row['dose_dates'].get(key) for vaccine_row in all_vaccines_for_emr_table):
-                    active_dose_keys_emr.append(key)
-            
-            table_column_labels_emr = TABLE_COLUMN_LABELS_EN
-            print(f"DEBUG: Final counts - Mandatory: {len(mandatory_vaccines_emr)}, Recommended: {len(recommended_vaccines_emr)}")
-            print(f"DEBUG: Active dose keys: {active_dose_keys_emr}")
+                    # No date given yet, just show the planned doses
+                    for dose_num in range(1, total_doses + 1):
+                        dose_info = {
+                            'dose_number': dose_num,
+                            'due_date': 'Not scheduled',
+                            'completed_date': None,
+                            'status': 'pending',
+                            'label': f'Dose {dose_num}',
+                            'vaccine_id': vaccine.get('id'),
+                            'is_editable': True
+                        }
+                        vaccine_dict['doses_schedule'].append(dose_info)
+                
+                autres_vaccins_with_schedule.append(vaccine_dict)
             
         except Exception as e:
             current_app.logger.error(f"Error preparing vaccine data for patient {patient_id}: {e}", exc_info=True)
             flash(f"Error loading vaccine data: {str(e)}", 'warning')
-            print(f"ERROR preparing vaccine data: {e}")
-            import traceback
-            traceback.print_exc()
+
+    # Get vaccine timeline data for the patient if vaccines are enabled and patient has DOB
+    timeline = []
+    summary_stats = {}
+    patient_dob = patient.get('date_of_birth') or patient.get('naissance_date') if patient else None
+    
+    if emr_config.is_feature_enabled('vaccines') and patient_dob:
+        try:
+            from utils.vaccine_schedule_engine import get_patient_vaccine_timeline, vaccine_schedule_engine
+            from dataclasses import asdict
+            
+            # Fetch from the new unified Immunizations table
+            immunizations_cursor = db.execute(
+                "SELECT immunization, administered_date, brand_name, dose_number FROM Immunizations WHERE patient_id = ? ORDER BY administered_date ASC",
+                (patient_id,)
+            )
+            unified_immunizations = immunizations_cursor.fetchall()
+            
+            print(f"DEBUG TIMELINE: Found {len(unified_immunizations)} immunizations in database")
+            for i, imm in enumerate(unified_immunizations[:5]):  # Show first 5
+                print(f"  {i+1}. {imm['immunization']} on {imm['administered_date']}")
+            if len(unified_immunizations) > 5:
+                print(f"  ... and {len(unified_immunizations) - 5} more")
+            
+            # Get vaccine timeline using the new unified data source
+            timeline_items = get_patient_vaccine_timeline(
+                patient_dob=patient_dob,
+                administered_immunizations=unified_immunizations
+            )
+            
+            print(f"DEBUG TIMELINE: Generated {len(timeline_items)} timeline items")
+            
+            summary_stats = vaccine_schedule_engine.get_summary_stats(timeline_items)
+            
+            # Convert dataclasses to dicts for JSON serialization in template
+            for vaccine_item in timeline_items:
+                vaccine_data = asdict(vaccine_item)
+                # Convert dose statuses to strings for template
+                for dose in vaccine_data['doses']:
+                    dose['status'] = dose['status'].value if hasattr(dose['status'], 'value') else str(dose['status'])
+                if vaccine_data['next_due_dose']:
+                    vaccine_data['next_due_dose']['status'] = vaccine_data['next_due_dose']['status'].value if hasattr(vaccine_data['next_due_dose']['status'], 'value') else str(vaccine_data['next_due_dose']['status'])
+                timeline.append(vaccine_data)
+            
+        except Exception as e:
+            current_app.logger.error(f"Error generating vaccine timeline for patient {patient_id}: {e}", exc_info=True)
 
     # Prepare growth chart data for pediatric patients
     visit_ages_in_months = []
@@ -344,7 +475,11 @@ def patient_detail(patient_id):
                            recommended_vaccines_emr=recommended_vaccines_emr,
                            active_dose_keys_emr=active_dose_keys_emr,
                            table_column_labels_emr=table_column_labels_emr,
-
+                           # Patient-specific vaccines
+                           autres_vaccins=autres_vaccins_with_schedule if 'autres_vaccins_with_schedule' in locals() else [],
+                           # Vaccine timeline data
+                           timeline=timeline,
+                           summary_stats=summary_stats,
                            emr_config=emr_config,
                            grouped_custom_fields=dict(grouped_custom_fields),
                            # Growth chart data

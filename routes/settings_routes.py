@@ -5,7 +5,7 @@ import json
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import shutil
-from config_manager import save_config, load_config, USER_MEDIA_FOLDER, DEFAULT_PDF_CONFIG
+from emr_config import USER_MEDIA_FOLDER
 
 settings_bp = Blueprint('settings', __name__, url_prefix='/settings')
 
@@ -21,9 +21,37 @@ def allowed_file(filename, allowed_extensions):
 
 @settings_bp.route('/pdf', methods=['GET', 'POST'])
 def manage_pdf_settings():
-    app_config = load_config() # Load main application config
-    # Ensure pdf_settings exists, initialized with defaults if not (handled by load_config)
-    pdf_settings = app_config.setdefault('pdf_settings', DEFAULT_PDF_CONFIG.copy()) 
+    # Use emr_config instance
+    from emr_config import emr_config
+    
+    pdf_settings = emr_config.get_pdf_settings()
+    
+    # Default PDF config structure for fallback
+    DEFAULT_PDF_CONFIG = {
+        "physician_details_fr": {
+            "name": "Dr. Votre Nom",
+            "specialty": "Votre Spécialité",
+            "hospital_name": "Nom de l'Hôpital/Clinique",
+            "faculty_name": "Nom de la Faculté/Université",
+            "contact_line1": "Ligne de contact 1",
+            "contact_line2": "Ligne de contact 2"
+        },
+        "physician_details_en": {
+            "name": "Dr. Your Name",
+            "specialty": "Your Specialty",
+            "hospital_name": "Hospital/Clinic Name",
+            "faculty_name": "Faculty/University Name",
+            "contact_line1": "Contact Line 1",
+            "contact_line2": "Contact Line 2"
+        },
+        "footer_note_fr": "Note de bas de page",
+        "footer_note_en": "Footer note",
+        "signature_image_filename": None,
+        "report_title_fr": "Rapport Médical Complet",
+        "report_title_en": "Complete Medical Report",
+        "logo_image_filename": None,
+        "footer_alignment": "center"
+    }
 
     if request.method == 'POST':
         # Update physician details and footers
@@ -43,7 +71,7 @@ def manage_pdf_settings():
         pdf_settings['report_title_fr'] = request.form.get('report_title_fr', DEFAULT_PDF_CONFIG['report_title_fr'])
 
         # Update footer alignment
-        pdf_settings['footer_alignment'] = request.form.get('footer_alignment', DEFAULT_PDF_CONFIG.get('footer_alignment', 'center')) # Ensure fallback if key missing in new DEFAULT_PDF_CONFIG
+        pdf_settings['footer_alignment'] = request.form.get('footer_alignment', DEFAULT_PDF_CONFIG.get('footer_alignment', 'center'))
 
         # Handle Logo Image
         if request.form.get('remove_logo') == 'true':
@@ -58,13 +86,13 @@ def manage_pdf_settings():
         elif 'logo_image' in request.files:
             file = request.files['logo_image']
             if file and file.filename != '' and allowed_file(file.filename, ALLOWED_IMAGE_EXTENSIONS):
-                # Remove old logo if it exists and has a different extension or just to replace
+                # Remove old logo if it exists
                 old_logo_filename = pdf_settings.get('logo_image_filename')
                 if old_logo_filename:
                     try:
                         os.remove(os.path.join(USER_MEDIA_FOLDER, old_logo_filename))
                     except OSError:
-                        pass # Ignore if old file cannot be removed
+                        pass
                 
                 # Ensure USER_MEDIA_FOLDER exists
                 if not os.path.exists(USER_MEDIA_FOLDER):
@@ -81,8 +109,8 @@ def manage_pdf_settings():
             elif file.filename != '':
                 flash(f'Invalid file type for logo. Allowed: {", ".join(ALLOWED_IMAGE_EXTENSIONS)}', 'danger')
 
-        # Handle Signature Image (similar to logo)
-        if request.form.get('remove_signature') == 'true': # Name from pdf_settings.html was 'remove_signature'
+        # Handle Signature Image
+        if request.form.get('remove_signature') == 'true':
             old_sig_filename = pdf_settings.get('signature_image_filename')
             if old_sig_filename:
                 try:
@@ -106,7 +134,7 @@ def manage_pdf_settings():
                     os.makedirs(USER_MEDIA_FOLDER, exist_ok=True)
                 
                 ext = file.filename.rsplit('.', 1)[1].lower()
-                new_sig_filename = f"signature_stamp.{ext}" # Keep original naming convention somewhat
+                new_sig_filename = f"signature_stamp.{ext}"
                 try:
                     file.save(os.path.join(USER_MEDIA_FOLDER, new_sig_filename))
                     pdf_settings['signature_image_filename'] = new_sig_filename
@@ -116,8 +144,9 @@ def manage_pdf_settings():
             elif file.filename != '':
                  flash(f'Invalid file type for signature. Allowed: {", ".join(ALLOWED_IMAGE_EXTENSIONS)}', 'danger')
 
-        app_config['pdf_settings'] = pdf_settings # Assign updated pdf_settings back to main config
-        if save_config(app_config):
+        # Update the config with new PDF settings
+        emr_config.config['pdf_settings'] = pdf_settings
+        if emr_config.save_config():
             flash('PDF settings updated successfully.', 'success')
         else:
             flash('Error saving PDF settings.', 'danger')
@@ -125,10 +154,9 @@ def manage_pdf_settings():
         return redirect(url_for('settings.manage_pdf_settings'))
 
     # GET request: Load current config and display form
-    # app_config is already loaded, pdf_settings is extracted
     signature_image_url = None
     logo_image_url = None
-    cache_buster = str(datetime.now().timestamp()) # Ensure it's always set
+    cache_buster = str(datetime.now().timestamp())
 
     if pdf_settings.get('signature_image_filename'):
         if os.path.exists(os.path.join(USER_MEDIA_FOLDER, pdf_settings['signature_image_filename'])):
@@ -138,12 +166,11 @@ def manage_pdf_settings():
         if os.path.exists(os.path.join(USER_MEDIA_FOLDER, pdf_settings['logo_image_filename'])):
             logo_image_url = url_for('settings.get_user_media_file', filename=pdf_settings['logo_image_filename']) + "?v=" + cache_buster
     
-    # Pass the main app_config and the specific pdf_settings part, plus defaults for pdf_settings
     return render_template('settings/pdf_settings.html', 
                            title='PDF Export Settings', 
-                           config=app_config,  # For base.html or other general settings
-                           pdf_settings=pdf_settings, # For direct access to PDF specific settings
-                           default_pdf_config=DEFAULT_PDF_CONFIG, # For default values in the form
+                           config=emr_config.config,
+                           pdf_settings=pdf_settings,
+                           default_pdf_config=DEFAULT_PDF_CONFIG,
                            signature_image_url=signature_image_url,
                            logo_image_url=logo_image_url)
 

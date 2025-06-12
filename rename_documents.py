@@ -1,44 +1,66 @@
+from emr_config import emr_config
 import os
-from config_manager import load_config, WORD_DOCS_FOLDER
-from database_operations import DatabaseOperations
+import sqlite3
 
-def main():
-    # Load configuration
-    config = load_config()
+def rename_documents():
+    """Rename all Word documents to use the new naming convention."""
     
-    # Initialize database operations with Word document management
-    db_ops = DatabaseOperations(
-        db_path=config['database_path'],
-        documents_folder=config['word_docs_folder']
-    )
+    # Get paths from emr_config
+    word_docs_folder = emr_config.get_word_docs_folder()
+    database_path = emr_config.get_database_path()
     
-    # Rename existing documents
-    print("Renaming existing documents...")
-    renamed_files = db_ops.rename_all_documents()
+    if not os.path.exists(word_docs_folder):
+        print(f"Word documents folder does not exist: {word_docs_folder}")
+        return
     
-    if renamed_files:
-        print("\nRenamed files:")
-        for old_name, new_name in renamed_files:
-            print(f"  {old_name} -> {new_name}")
-    else:
-        print("No files were renamed.")
+    if not os.path.exists(database_path):
+        print(f"Database does not exist: {database_path}")
+        return
     
-    # Create Word documents for all patients
-    print("\nCreating/updating Word documents for all patients...")
-    conn = db_ops._get_connection()
+    # Connect to database
+    conn = sqlite3.connect(database_path)
+    conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
+    
     try:
-        cursor.execute("SELECT id FROM Patients")
-        patient_ids = [row['id'] for row in cursor.fetchall()]
+        # Get all patients
+        cursor.execute("SELECT id, prenom, nom FROM Patients")
+        patients = cursor.fetchall()
         
-        for patient_id in patient_ids:
-            try:
-                doc_path = db_ops.word_manager.create_or_update_patient_document(patient_id)
-                print(f"Created/updated document for patient {patient_id}: {os.path.basename(doc_path)}")
-            except Exception as e:
-                print(f"Error creating document for patient {patient_id}: {str(e)}")
+        renamed_count = 0
+        
+        for patient in patients:
+            patient_id = patient['id']
+            prenom = patient['prenom'] or 'Unknown'
+            nom = patient['nom'] or 'Unknown'
+            
+            # Old filename pattern
+            old_filename = f"patient_{patient_id}.docx"
+            old_path = os.path.join(word_docs_folder, old_filename)
+            
+            # New filename pattern
+            new_filename = f"{prenom}_{nom}_{patient_id}.docx"
+            new_path = os.path.join(word_docs_folder, new_filename)
+            
+            # Check if old file exists and new file doesn't
+            if os.path.exists(old_path) and not os.path.exists(new_path):
+                try:
+                    os.rename(old_path, new_path)
+                    print(f"Renamed: {old_filename} -> {new_filename}")
+                    renamed_count += 1
+                except OSError as e:
+                    print(f"Error renaming {old_filename}: {e}")
+            elif os.path.exists(new_path):
+                print(f"New filename already exists: {new_filename}")
+            else:
+                print(f"Old file not found: {old_filename}")
+        
+        print(f"\nRenamed {renamed_count} documents successfully.")
+        
+    except Exception as e:
+        print(f"Database error: {e}")
     finally:
         conn.close()
 
 if __name__ == "__main__":
-    main() 
+    rename_documents() 

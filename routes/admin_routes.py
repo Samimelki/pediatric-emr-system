@@ -10,7 +10,8 @@ import shutil # For database restore
 import glob
 
 # Import PDF config functions from pdf_export_routes
-from routes.pdf_export_routes import load_pdf_config, clear_pdf_config_cache, DEFAULT_PDF_CONFIG
+from routes.pdf_export_routes import load_pdf_config, clear_pdf_config_cache
+# PDF config is now handled by emr_config
 
 # Import for XML Export & DB Management
 from database import get_all_patient_data_for_export, get_active_custom_demographic_fields, close_connection as close_db_connection_util # Added get_active_custom_demographic_fields for CSV and db close util
@@ -313,4 +314,68 @@ def manage_database_route():
     # For GET request, pass the database path to the template
     db_path_for_template = current_app.config.get('DATABASE', 'Not Configured')
     print(f"[DEBUG] db_path_for_template in manage_database_route (GET): '{db_path_for_template}'") # DEBUG PRINT
-    return render_template('admin/manage_database.html', title="Manage Database", current_db_path=db_path_for_template) 
+    return render_template('admin/manage_database.html', title="Manage Database", current_db_path=db_path_for_template)
+
+@admin_bp.route('/vaccine_config_management')
+def vaccine_config_management():
+    """Vaccine configuration management page."""
+    from emr_config import emr_config
+    
+    config_path = emr_config.get_vaccine_config_path()
+    config_exists = os.path.exists(config_path)
+    
+    # Get backup files
+    backup_files = []
+    if config_exists:
+        config_dir = os.path.dirname(config_path)
+        try:
+            for file in os.listdir(config_dir):
+                if file.startswith('vaccine_schedule_config.json.backup_'):
+                    backup_files.append(file)
+            backup_files.sort(reverse=True)  # Most recent first
+        except Exception:
+            pass
+    
+    return render_template('admin/vaccine_config_management.html',
+                         title='Vaccine Configuration Management',
+                         config_path=config_path,
+                         config_exists=config_exists,
+                         backup_files=backup_files[:10])  # Show last 10 backups
+
+@admin_bp.route('/vaccine_config_reset', methods=['POST'])
+def vaccine_config_reset():
+    """Reset vaccine configuration to factory defaults."""
+    from emr_config import emr_config
+    
+    try:
+        # Create backup first
+        backup_path = emr_config.backup_vaccine_config()
+        if backup_path:
+            flash(f'Backup created: {os.path.basename(backup_path)}', 'info')
+        
+        # Reset to factory defaults
+        success = emr_config.reset_vaccine_config_to_factory_default()
+        if success:
+            flash('Vaccine configuration reset to factory defaults successfully!', 'success')
+        else:
+            flash('Error resetting vaccine configuration.', 'danger')
+    except Exception as e:
+        flash(f'Error resetting vaccine configuration: {str(e)}', 'danger')
+    
+    return redirect(url_for('admin.vaccine_config_management'))
+
+@admin_bp.route('/vaccine_config_backup', methods=['POST'])
+def vaccine_config_backup():
+    """Create a backup of the current vaccine configuration."""
+    from emr_config import emr_config
+    
+    try:
+        backup_path = emr_config.backup_vaccine_config()
+        if backup_path:
+            flash(f'Backup created successfully: {os.path.basename(backup_path)}', 'success')
+        else:
+            flash('No vaccine configuration found to backup.', 'warning')
+    except Exception as e:
+        flash(f'Error creating backup: {str(e)}', 'danger')
+    
+    return redirect(url_for('admin.vaccine_config_management')) 

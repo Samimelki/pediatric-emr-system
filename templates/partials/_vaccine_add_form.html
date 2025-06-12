@@ -1,0 +1,233 @@
+<!-- Add Vaccine Form - Extracted from compact timeline -->
+
+<!-- Clean Additional/Travel Vaccines Section -->
+
+<hr class="mt-4 mb-3">
+
+<!-- Additional Vaccines in Clean Format -->
+{% if autres_vaccins %}
+<div class="card">
+    <div class="card-header bg-info text-white">
+        <h6 class="mb-0">
+            <i class="fas fa-plane"></i> Additional/Travel Vaccines ({{ autres_vaccins|length }})
+        </h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            {% for vaccine in autres_vaccins %}
+            <div class="col-md-6 col-lg-4 mb-3">
+                <div class="additional-vaccine-card">
+                    <div class="vaccine-header">
+                        <strong class="vaccine-name">{{ vaccine.vaccine_name }}</strong>
+                        <small class="badge badge-info">Additional</small>
+                    </div>
+                    <div class="vaccine-doses mt-2">
+                        {% if vaccine.doses_schedule %}
+                            {% for dose in vaccine.doses_schedule %}
+                            <div class="dose-row">
+                                <span class="dose-badge dose-{{ dose.status }}" 
+                                      onclick="openAdditionalVaccineModal('{{ vaccine.vaccine_name }}', {{ dose.dose_number }}, '{{ vaccine.id }}', '{{ dose.completed_date or '' }}', '{{ dose.due_date }}')" 
+                                      title="Click to edit">
+                                    {{ dose.label }}
+                                </span>
+                                <span class="dose-date">
+                                    {% if dose.completed_date %}
+                                        {{ dose.completed_date }}
+                                    {% elif dose.due_date != 'TBD' and dose.due_date != 'Not scheduled' %}
+                                        Due: {{ dose.due_date }}
+                                    {% else %}
+                                        Not scheduled
+                                    {% endif %}
+                                </span>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <!-- Fallback for old single-dose format -->
+                            <div class="dose-row">
+                                <span class="dose-badge dose-completed" 
+                                      onclick="openAdditionalVaccineModal('{{ vaccine.vaccine_name }}', 1, '{{ vaccine.id }}', '{{ vaccine.vaccine_date or '' }}', '')" 
+                                      title="Click to edit">
+                                    Dose 1
+                                </span>
+                                <span class="dose-date">
+                                    {% if vaccine.vaccine_date %}
+                                        {{ vaccine.vaccine_date }}
+                                    {% else %}
+                                        Not recorded
+                                    {% endif %}
+                                </span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Add New Additional Vaccine Form -->
+        <div class="mt-4 pt-3 border-top">
+            <h6><i class="fas fa-plus"></i> Add New Vaccine</h6>
+            <form method="POST" action="{{ url_for('vaccine.add_other_vaccine', patient_id=patient.id) }}" class="row">
+                <div class="col-md-4 mb-2">
+                    <label class="form-label">Vaccine Name</label>
+                    <input type="text" class="form-control form-control-sm" name="other_vaccine_name" placeholder="e.g., Yellow Fever" required>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label class="form-label">Date Given</label>
+                    <input type="date" class="form-control form-control-sm" name="other_vaccine_date">
+                </div>
+                <div class="col-md-2 mb-2">
+                    <label class="form-label">Total Doses</label>
+                    <select class="form-control form-control-sm" name="total_doses_planned">
+                        <option value="1">1 dose</option>
+                        <option value="2">2 doses</option>
+                        <option value="3">3 doses</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb-2">
+                    <label class="form-label">Interval</label>
+                    <select class="form-control form-control-sm" name="interval_months">
+                        <option value="">No interval</option>
+                        <option value="1">1 month</option>
+                        <option value="3">3 months</option>
+                        <option value="6">6 months</option>
+                        <option value="12">12 months</option>
+                    </select>
+                </div>
+                <div class="col-md-1 mb-2">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-success btn-sm d-block">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <div class="card-header bg-info text-white">
+        <h6 class="mb-0"><i class="fas fa-plane"></i> Additional/Travel Vaccines</h6>
+    </div>
+    <div class="card-body">
+        <p class="text-muted mb-3">No additional vaccines recorded.</p>
+        
+        <!-- Add New Additional Vaccine Form -->
+        <h6><i class="fas fa-plus"></i> Add New Vaccine</h6>
+        <form method="POST" action="{{ url_for('vaccine.add_other_vaccine', patient_id=patient.id) }}" class="row">
+            <div class="col-md-4 mb-2">
+                <label class="form-label">Vaccine Name</label>
+                <input type="text" class="form-control form-control-sm" name="other_vaccine_name" placeholder="e.g., Yellow Fever" required>
+            </div>
+            <div class="col-md-3 mb-2">
+                <label class="form-label">Date Given</label>
+                <input type="date" class="form-control form-control-sm" name="other_vaccine_date">
+            </div>
+            <div class="col-md-2 mb-2">
+                <label class="form-label">Total Doses</label>
+                <select class="form-control form-control-sm" name="total_doses_planned">
+                    <option value="1">1 dose</option>
+                    <option value="2">2 doses</option>
+                    <option value="3">3 doses</option>
+                </select>
+            </div>
+            <div class="col-md-2 mb-2">
+                <label class="form-label">Interval</label>
+                <select class="form-control form-control-sm" name="interval_months">
+                    <option value="">No interval</option>
+                    <option value="1">1 month</option>
+                    <option value="3">3 months</option>
+                    <option value="6">6 months</option>
+                    <option value="12">12 months</option>
+                </select>
+            </div>
+            <div class="col-md-1 mb-2">
+                <label class="form-label">&nbsp;</label>
+                <button type="submit" class="btn btn-success btn-sm d-block">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<style>
+/* Clean Additional Vaccine Styles */
+.additional-vaccine-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 12px;
+    background: #f8f9fa;
+    height: 100%;
+}
+
+.vaccine-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.vaccine-name {
+    color: #333;
+    font-size: 0.9em;
+}
+
+.dose-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    padding: 4px 0;
+}
+
+.dose-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-width: 50px;
+    text-align: center;
+}
+
+.dose-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.dose-date {
+    font-size: 0.75em;
+    color: #666;
+}
+
+.dose-completed {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.dose-due {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.dose-overdue {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.dose-upcoming {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.form-label {
+    font-size: 0.8em;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 2px;
+}
+</style> 

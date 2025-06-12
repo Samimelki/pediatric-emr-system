@@ -11,7 +11,10 @@ import inspect # ADDED for debugging
 from database import get_db # Assuming database.py is in the parent directory
 from utils import format_date_for_pdf # Assuming utils.py is in the parent directory
 from routes.patient_routes import calculate_age_at_visit # Import the age calculation function
-from config_manager import load_config, USER_MEDIA_FOLDER, DEFAULT_PDF_CONFIG as CM_DEFAULT_PDF_CONFIG # MODIFIED: Added DEFAULT_PDF_CONFIG
+from emr_config import USER_MEDIA_FOLDER
+
+# Import unified vaccine system
+from utils.vaccine_schedule_engine import get_vaccine_schedule_config
 
 pdf_export_bp = Blueprint('pdf_export', __name__, url_prefix='/patient/<int:patient_id>/export')
 
@@ -22,270 +25,233 @@ TABLE_COLUMN_LABELS_FR = {
     "vaccine_col": "Vaccin", "d1": "Dose 1", "d2": "Dose 2", "d3": "Dose 3",
     "r1": "Rappel 1", "r2": "Rappel 2", "r3": "Rappel 3", "r4": "Rappel 4"
 }
-VACCINE_ALIAS_MAP_FR = {
-    "VARILRIX": "Varicelle", "VARIVAX": "Varicelle",
-    "ROTATEQ": "Rotavirus", "ROTARIX": "Rotavirus",
-    "PREVENAR 13": "Pneumocoque PCV", "PREVENAR": "Pneumocoque PCV", "SYNFLORIX": "Pneumocoque PCV",
-    "MMR": "ROR (Rougeole, Oreillons, Rubéole)", "ROR": "ROR (Rougeole, Oreillons, Rubéole)",
-    "MENACTRA": "Méningocoque ACWY", "VAXIGRIP": "Grippe", "VAXIGRIPTETRA": "Grippe",
-    "FLUENZ TETRA": "Grippe", "INFLUVAC": "Grippe",
-    "HAVRIX": "Hépatite A", "VAQTA": "Hépatite A", "HEPATITE A": "Hépatite A", "AVAXIM": "Hépatite A",
-    "ENGERIX B": "Hépatite B", "RECOMBIVAX HB": "Hépatite B",
-    "BEXSERO": "Méningocoque B", "TRUMENBA": "Méningocoque B",
-    "GARDASIL": "HPV (Papillomavirus humain)", "GARDASIL 9": "HPV (Papillomavirus humain)", "CERVARIX": "HPV (Papillomavirus humain)",
-    "NEISVAC": "Méningocoque C", "NEISSVAC": "Méningocoque C"
-}
-PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_FR = [ # Renamed for clarity (was PATIENT_FIELD_TO_CANONICAL_DOSE_MAP)
-    ("DTCP (Diphtérie,Tétanos,Polio,Coqueluche)", 'dtcp1_date', 'd1'),
-    ("DTCP (Diphtérie,Tétanos,Polio,Coqueluche)", 'dtcp2_date', 'd2'),
-    ("DTCP (Diphtérie,Tétanos,Polio,Coqueluche)", 'dtcp3_date', 'd3'),
-    ("DTCP (Diphtérie,Tétanos,Polio,Coqueluche)", 'dtcp_rappel1_date', 'r1'),
-    ("DTCP (Diphtérie,Tétanos,Polio,Coqueluche)", 'dtcp_rappel2_date', 'r2'),
-    ("DTCP (Diphtérie,Tétanos,Polio,Coqueluche)", 'dtcp_rappel3_date', 'r3'),
-    ("DTCP (Diphtérie,Tétanos,Polio,Coqueluche)", 'dtcp_rappel4_date', 'r4'),
-    ("Hib (Hæmophilus influenzæ b)", 'hib1_date', 'd1'),
-    ("Hib (Hæmophilus influenzæ b)", 'hib2_date', 'd2'),
-    ("Hib (Hæmophilus influenzæ b)", 'hib3_date', 'd3'),
-    ("Hib (Hæmophilus influenzæ b)", 'hib_rappel_date', 'r1'),
-    ("Hépatite B", 'hep_b1_date', 'd1'), ("Hépatite B", 'hep_b2_date', 'd2'), ("Hépatite B", 'hep_b3_date', 'd3'),
-    ("ROR (Rougeole, Oreillons, Rubéole)", 'ror_date', 'd1'),
-    ("Anti-Rougeole (seule)", 'rougeole_seule_date', 'd1'),
-    ("IDR (Test Tuberculinique)", 'monotest1', 'd1'),
-    ("IDR (Test Tuberculinique)", 'monotest2', 'd2'),
-    ("IDR (Test Tuberculinique)", 'monotest3', 'd3'),
-]
 
 TABLE_COLUMN_LABELS_EN = {
     "vaccine_col": "Vaccine", "d1": "Dose 1", "d2": "Dose 2", "d3": "Dose 3",
     "r1": "Booster 1", "r2": "Booster 2", "r3": "Booster 3", "r4": "Booster 4"
 }
-VACCINE_ALIAS_MAP_EN = {
-    "VARILRIX": "Varicella", "VARIVAX": "Varicella",
-    "ROTATEQ": "Rotavirus", "ROTARIX": "Rotavirus",
-    "PREVENAR 13": "Pneumococcal PCV", "PREVENAR": "Pneumococcal PCV", "SYNFLORIX": "Pneumococcal PCV",
-    "MMR": "MMR (Measles, Mumps, Rubella)", "ROR": "MMR (Measles, Mumps, Rubella)",
-    "MENACTRA": "Meningococcal ACWY", "VAXIGRIP": "Influenza", "VAXIGRIPTETRA": "Influenza",
-    "FLUENZ TETRA": "Influenza", "INFLUVAC": "Influenza",
-    "HAVRIX": "Hepatitis A", "VAQTA": "Hepatitis A", "HEPATITE A": "Hepatitis A", "AVAXIM": "Hepatitis A",
-    "ENGERIX-B": "Hepatitis B", "RECOMBIVAX HB": "Hepatitis B",
-    "BEXSERO": "Meningococcal B", "TRUMENBA": "Meningococcal B",
-    "GARDASIL": "HPV (Human Papillomavirus)", "GARDASIL 9": "HPV (Human Papillomavirus)", "CERVARIX": "HPV (Human Papillomavirus)",
-    "NEISVAC": "Meningococcal C", "NEISSVAC": "Meningococcal C"
-}
-PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_EN = [
-    ("DTaP - IPV", 'dtcp1_date', 'd1'),
-    ("DTaP - IPV", 'dtcp2_date', 'd2'),
-    ("DTaP - IPV", 'dtcp3_date', 'd3'),
-    ("DTaP - IPV", 'dtcp_rappel1_date', 'r1'),
-    ("DTaP - IPV", 'dtcp_rappel2_date', 'r2'),
-    ("DTaP - IPV", 'dtcp_rappel3_date', 'r3'),
-    ("DTaP - IPV", 'dtcp_rappel4_date', 'r4'),
-    ("Hib (Haemophilus influenzae b)", 'hib1_date', 'd1'),
-    ("Hib (Haemophilus influenzae b)", 'hib2_date', 'd2'),
-    ("Hib (Haemophilus influenzae b)", 'hib3_date', 'd3'),
-    ("Hib (Haemophilus influenzae b)", 'hib_rappel_date', 'r1'),
-    ("Hepatitis B", 'hep_b1_date', 'd1'),
-    ("Hepatitis B", 'hep_b2_date', 'd2'),
-    ("Hepatitis B", 'hep_b3_date', 'd3'),
-    ("MMR (Measles, Mumps, Rubella)", 'ror_date', 'd1'),
-    ("Measles (single)", 'rougeole_seule_date', 'd1'),
-    ("PPD (TB Skin Test)", 'monotest1', 'd1'),
-    ("PPD (TB Skin Test)", 'monotest2', 'd2'),
-    ("PPD (TB Skin Test)", 'monotest3', 'd3'),
-]
-
-# Define which canonical vaccine names are considered "Mandatory"
-# These are typically the ones mapped directly from patient record fields.
-MANDATORY_CANONICAL_VACCINE_NAMES_FR = list(set([item[0] for item in PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_FR]))
-MANDATORY_CANONICAL_VACCINE_NAMES_EN = list(set([item[0] for item in PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_EN]))
 
 # --- END OF CENTRALIZED VACCINE CONSTANTS ---
 
 # Global cache for PDF configuration
 PDF_CONFIG_CACHE = {}
 
-# Default configuration (used if file is missing or corrupt)
-# REMOVING ARABIC physician_details_ar and footer_note_ar
-DEFAULT_PDF_CONFIG = {
-    "physician_details_fr": {
-        "name": "Dr. Prénom Nom (Défaut)", 
-        "specialty": "Pédiatre (Défaut)", 
-        "hospital_name": "Hôpital/Clinique (Défaut)",
-        "faculty_name": "Faculté/Université (Défaut)",
-        "contact_line1": "Contact 1 (Défaut)", 
-        "contact_line2": "Contact 2 (Défaut)"
-    },
-    "physician_details_en": {
-        "name": "Dr. Firstname Lastname (Default)", 
-        "specialty": "Pediatrician (Default)", 
-        "hospital_name": "Hospital/Clinic (Default)",
-        "faculty_name": "Faculty/University (Default)",
-        "contact_line1": "Contact 1 (Default)", 
-        "contact_line2": "Contact 2 (Default)"
-    },
-    "footer_note_fr": "Note de bas de page (Défaut)",
-    "footer_note_en": "Footer note (Default)",
-    "signature_image_filename": ""
-}
-
 def load_pdf_config(force_reload=False):
-    """Load PDF configuration from the unified settings system"""
-    # Use the new unified config system instead of hardcoded pdf_config.json
-    config = load_config()
-    pdf_settings = config.get('pdf_settings', {})
+    """Load PDF configuration with caching"""
+    global PDF_CONFIG_CACHE
     
-    # If pdf_settings is empty or missing, use defaults from config_manager
-    if not pdf_settings:
-        pdf_settings = CM_DEFAULT_PDF_CONFIG.copy()
+    if force_reload or not PDF_CONFIG_CACHE:
+        config = load_config()
+        PDF_CONFIG_CACHE = config.get('pdf_settings', {})
     
-    return pdf_settings
+    return PDF_CONFIG_CACHE
 
 def clear_pdf_config_cache():
+    """Clear the PDF configuration cache"""
     global PDF_CONFIG_CACHE
     PDF_CONFIG_CACHE = {}
-    print("PDF Config Cache Cleared")
 
 # --- HELPER FUNCTION FOR VACCINE DATA PREPARATION ---
-def _prepare_vaccine_table_data(patient_data_row, autres_vaccins_query_results, 
-                                patient_field_map, vaccine_alias_map, mandatory_canonical_names,
-                                non_standard_date_format=None):
-    all_vaccine_doses_by_canonical_name = {}
-
-    # 1. Process defined patient fields
-    for canonical_name, patient_field, dose_key in patient_field_map:
-        date_val = format_date_for_pdf(patient_data_row[patient_field])
-        if date_val:
-            if canonical_name not in all_vaccine_doses_by_canonical_name:
-                all_vaccine_doses_by_canonical_name[canonical_name] = {}
-            if dose_key not in all_vaccine_doses_by_canonical_name[canonical_name]:
-                 all_vaccine_doses_by_canonical_name[canonical_name][dose_key] = date_val
-
-    # 2. Process non-standard vaccine entries
-    dose_keys_for_filling = ['d1', 'd2', 'd3', 'r1', 'r2', 'r3', 'r4'] # Order for filling general doses
-    temp_non_standard_dates = {}
-    for v_row in autres_vaccins_query_results:
-        original_name = v_row['vaccine_name']
-        # Use .upper() for robust alias matching
-        canonical_name = vaccine_alias_map.get(original_name.upper(), original_name) 
+def _consolidate_vaccine_name(vaccine_name):
+    """
+    Consolidate similar vaccine names to avoid duplicates in PDF export
+    """
+    # Define consolidation mappings
+    consolidation_map = {
+        # MMR variants
+        'MMR (Measles, Mumps, Rubella)': 'MMR (Measles, Mumps, Rubella)',
+        'Measles - Mumps - Rubella (MMR)': 'MMR (Measles, Mumps, Rubella)',
+        'Measles': 'MMR (Measles, Mumps, Rubella)',  # Single measles goes to MMR
+        'Measles (single)': 'MMR (Measles, Mumps, Rubella)',
         
-        date_val = format_date_for_pdf(v_row['vaccine_date'], non_standard_date_format) if non_standard_date_format else format_date_for_pdf(v_row['vaccine_date'])
+        # Hib variants
+        'Hib (Haemophilus influenzae b)': 'Haemophilus influenzae type b (Hib)',
+        'Haemophilus influenzae type b (Hib)': 'Haemophilus influenzae type b (Hib)',
         
-        if date_val:
-            if canonical_name not in temp_non_standard_dates:
-                temp_non_standard_dates[canonical_name] = []
-            # Avoid adding duplicate dates from the non-standard source for the same canonical vaccine
-            if date_val not in temp_non_standard_dates[canonical_name]:
-                temp_non_standard_dates[canonical_name].append(date_val)
+        # HPV variants
+        'HPV (Human Papillomavirus)': 'HPV (Human Papillomavirus)',
+        'Human Papillomavirus (HPV)': 'HPV (Human Papillomavirus)',
+        
+        # BCG variants
+        'BCG (Tuberculosis)': 'BCG (Tuberculosis)',
+        'Tuberculosis (BCG)': 'BCG (Tuberculosis)',
+        
+        # Keep others as-is
+    }
     
-    for canonical_name, dates_list in temp_non_standard_dates.items():
-        if canonical_name not in all_vaccine_doses_by_canonical_name:
-            all_vaccine_doses_by_canonical_name[canonical_name] = {}
+    return consolidation_map.get(vaccine_name, vaccine_name)
+
+def _prepare_vaccine_table_data_unified(patient_id, language='en'):
+    """
+    Prepare vaccine table data using the unified Immunizations table and vaccine configuration
+    """
+    db = get_db()
+    
+    # Get all immunizations for this patient, ordered by date
+    immunizations_cursor = db.execute(
+        "SELECT immunization, administered_date, brand_name, dose_number FROM Immunizations WHERE patient_id = ? ORDER BY immunization, administered_date ASC",
+        (patient_id,)
+    )
+    immunizations = immunizations_cursor.fetchall()
+    
+    # Get vaccine configuration to determine categories
+    vaccine_config = get_vaccine_schedule_config()
+    
+    # Group immunizations by vaccine name and organize by dose
+    vaccine_data = {}
+    
+    # First, group by vaccine name (with consolidation)
+    vaccine_groups = {}
+    for imm in immunizations:
+        original_vaccine_name = imm['immunization']
+        consolidated_vaccine_name = _consolidate_vaccine_name(original_vaccine_name)
+        date_str = format_date_for_pdf(imm['administered_date'])
         
-        current_doses_for_vaccine = all_vaccine_doses_by_canonical_name[canonical_name]
-        existing_dates_for_this_vaccine = set(current_doses_for_vaccine.values())
-
-        for date_to_add in dates_list:
-            if date_to_add in existing_dates_for_this_vaccine:
-                continue 
-
-            assigned_to_slot = False
-            for dose_key_to_fill in dose_keys_for_filling:
-                if dose_key_to_fill not in current_doses_for_vaccine:
-                    current_doses_for_vaccine[dose_key_to_fill] = date_to_add
-                    existing_dates_for_this_vaccine.add(date_to_add) # Track added date
-                    assigned_to_slot = True
+        if not date_str:
+            continue
+            
+        if consolidated_vaccine_name not in vaccine_groups:
+            vaccine_groups[consolidated_vaccine_name] = []
+        vaccine_groups[consolidated_vaccine_name].append({
+            'date': date_str,
+            'dose_number': imm['dose_number'],
+            'administered_date': imm['administered_date']
+        })
+    
+    # Now process each vaccine group
+    for vaccine_name, doses in vaccine_groups.items():
+        if not doses:
+            continue
+            
+        vaccine_data[vaccine_name] = {}
+        
+        # Sort doses by date to ensure chronological order
+        doses.sort(key=lambda x: x['administered_date'] if x['administered_date'] else '1900-01-01')
+        
+        # Assign dose keys
+        for i, dose_info in enumerate(doses):
+            # Use actual dose_number if available, otherwise use chronological order
+            if dose_info['dose_number'] is not None:
+                dose_number = dose_info['dose_number']
+            else:
+                dose_number = i + 1  # Start from 1 for chronological order
+            
+            # Create dose key
+            if dose_number <= 3:
+                dose_key = f"d{dose_number}"
+            else:
+                dose_key = f"r{dose_number - 3}"
+            
+            # Avoid overwriting - if key exists, find next available key
+            original_dose_key = dose_key
+            counter = 1
+            while dose_key in vaccine_data[vaccine_name]:
+                if dose_number <= 3:
+                    new_dose_number = dose_number + counter
+                    if new_dose_number <= 3:
+                        dose_key = f"d{new_dose_number}"
+                    else:
+                        dose_key = f"r{new_dose_number - 3}"
+                else:
+                    dose_key = f"r{dose_number - 3 + counter}"
+                counter += 1
+                
+                # Safety check to avoid infinite loop
+                if counter > 10:
                     break
+            
+            vaccine_data[vaccine_name][dose_key] = dose_info['date']
     
-    # 3. Convert to template format
-    final_table_data = []
-    for canonical_name, dose_dates_dict in all_vaccine_doses_by_canonical_name.items():
-        if dose_dates_dict: 
-            display_name = canonical_name
-            if canonical_name == "DTCP (Diphtérie,Tétanos,Polio,Coqueluche)":
-                display_name = "DTCP <small><i>(Diphtérie,Tétanos,Polio,Coqueluche)</i></small>"
-            elif canonical_name == "DTaP - IPV":
-                # Assuming DTaP - IPV is the English equivalent and should be treated similarly if too long
-                # Or find the full English expansion if needed for the parenthetical part
-                # For now, let's assume it's okay, or apply a similar logic if its full form is problematic.
-                # Example if it also had a long form in parentheses:
-                # display_name = "DTaP - IPV <small><i>(Diphtheria, Tetanus, acellular Pertussis, Inactivated Polio Vaccine)</i></small>"
-                pass # No change for DTaP - IPV for now, unless specified it's too long
-            elif canonical_name == "Hib (Hæmophilus influenzæ b)":
-                 display_name = "Hib <small><i>(Hæmophilus influenzæ b)</i></small>"
-            elif canonical_name == "ROR (Rougeole, Oreillons, Rubéole)":
-                 display_name = "ROR <small><i>(Rougeole, Oreillons, Rubéole)</i></small>"
-            elif canonical_name == "MMR (Measles, Mumps, Rubella)":
-                 display_name = "MMR <small><i>(Measles, Mumps, Rubella)</i></small>"
-
-            final_table_data.append({
-                'vaccine_display_name': display_name,
-                'dose_dates': dose_dates_dict,
-                'canonical_name': canonical_name
-            })
-    
-    # Optional: Sort by display name
-    final_table_data.sort(key=lambda x: x['vaccine_display_name'])
-
-    # 4. Categorize into Mandatory and Recommended
+    # Convert to template format and categorize
     mandatory_vaccine_table_data = []
     recommended_vaccine_table_data = []
-    for vaccine_row in final_table_data:
-        if vaccine_row['canonical_name'] in mandatory_canonical_names:
+    
+    for vaccine_name, dose_dates in vaccine_data.items():
+        if not dose_dates:  # Skip if no doses
+            continue
+            
+        # Get category from configuration
+        vaccine_info = vaccine_config.get(vaccine_name, {})
+        category = vaccine_info.get('category', 'recommended')
+        
+        # Format display name with shorter DTaP description
+        display_name = vaccine_name
+        if vaccine_name == "DTaP - IPV":
+            display_name = "DTaP - IPV<br/><small><i>(Diphtheria, Tetanus,<br/>Pertussis, Polio)</i></small>"
+        elif vaccine_name == "Haemophilus influenzae type b (Hib)":
+            display_name = "Hib<br/><small><i>(Haemophilus<br/>influenzae type b)</i></small>"
+        elif vaccine_name == "MMR (Measles, Mumps, Rubella)":
+            display_name = "MMR<br/><small><i>(Measles, Mumps,<br/>Rubella)</i></small>"
+        elif vaccine_name == "PPD (TB Skin Test)":
+            display_name = "PPD<br/><small><i>(TB Skin Test)</i></small>"
+        elif vaccine_name == "HPV (Human Papillomavirus)":
+            display_name = "HPV<br/><small><i>(Human<br/>Papillomavirus)</i></small>"
+        elif vaccine_name == "BCG (Tuberculosis)":
+            display_name = "BCG<br/><small><i>(Tuberculosis)</i></small>"
+        elif vaccine_name == "RSV Prevention":
+            display_name = "RSV<br/><small><i>(Respiratory Syncytial<br/>Virus Prevention)</i></small>"
+        
+        vaccine_row = {
+            'vaccine_display_name': display_name,
+            'dose_dates': dose_dates,
+            'canonical_name': vaccine_name
+        }
+        
+        if category == 'mandatory':
             mandatory_vaccine_table_data.append(vaccine_row)
         else:
             recommended_vaccine_table_data.append(vaccine_row)
-
-    # 5. Determine active dose keys (based on all vaccines, so columns are consistent if both tables shown)
-    active_dose_keys = []
-    for key in ALL_POSSIBLE_DOSE_KEYS: # ALL_POSSIBLE_DOSE_KEYS is now global
-        if any(vaccine_row['dose_dates'].get(key) for vaccine_row in final_table_data):
-            active_dose_keys.append(key)
-            
-    return mandatory_vaccine_table_data, recommended_vaccine_table_data, active_dose_keys
-# --- END OF HELPER FUNCTION ---
-
-# --- NEW HELPER FUNCTION TO LOAD PDF STYLESHEETS ---
-def _get_pdf_stylesheets():
-    stylesheets = []
     
-    # Load main weasyprint_styles.css (if it exists - it might be phased out or be empty)
-    # This path seems to be what was intended before, but might be legacy.
-    # For now, let's assume it could exist for base styling.
-    main_css_path = os.path.join(current_app.root_path, 'static', 'css', 'weasyprint_styles.css')
-    if os.path.exists(main_css_path):
-        try:
-            with open(main_css_path, 'r', encoding='utf-8') as f_main:
-                stylesheets.append(CSS(string=f_main.read()))
-        except Exception as e:
-            print(f"WARNING: Could not read main CSS file at {main_css_path}: {e}")
-            
-    # Load new pdf_styles.css
-    pdf_specific_css_path = os.path.join(current_app.root_path, 'static', 'css', 'pdf_styles.css')
-    if os.path.exists(pdf_specific_css_path):
-        try:
-            with open(pdf_specific_css_path, 'r', encoding='utf-8') as f_pdf:
-                stylesheets.append(CSS(string=f_pdf.read()))
-        except Exception as e:
-            print(f"WARNING: Could not read PDF specific CSS file at {pdf_specific_css_path}: {e}")
-    else:
-        print(f"WARNING: PDF specific CSS file not found at {pdf_specific_css_path}. PDFs might not be styled correctly.")
-        
-    if not stylesheets:
-        print("WARNING: No CSS stylesheets loaded for PDF generation. Using WeasyPrint defaults.")
-        # Optionally, add a very basic default CSS string here if pdf_styles.css is critical and missing
-        # default_minimal_css = "body { font-family: sans-serif; margin: 1cm; } table { border-collapse: collapse; width: 100%; } td, th { border: 1px solid black; padding: 0.5em; }"
-        # stylesheets.append(CSS(string=default_minimal_css))
-        
-    return stylesheets
+    # Sort by display name
+    mandatory_vaccine_table_data.sort(key=lambda x: x['vaccine_display_name'])
+    recommended_vaccine_table_data.sort(key=lambda x: x['vaccine_display_name'])
+    
+    # Determine active dose keys (columns to show)
+    active_dose_keys = []
+    all_vaccine_data = mandatory_vaccine_table_data + recommended_vaccine_table_data
+    
+    for key in ALL_POSSIBLE_DOSE_KEYS:
+        if any(vaccine_row['dose_dates'].get(key) for vaccine_row in all_vaccine_data):
+            active_dose_keys.append(key)
+    
+    return mandatory_vaccine_table_data, recommended_vaccine_table_data, active_dose_keys
 
-# --- COMMON PDF CSS (This might be deprecated if pdf_styles.css covers everything) ---
-# Keeping COMMON_PDF_CSS and TOTAL_HISTORY_PDF_CSS_EXTENSION for now,
-# in case they are used by something or if pdf_styles.css doesn't cover all cases yet.
-# Ideally, all styling should move to pdf_styles.css.
-COMMON_PDF_CSS = """""" # Correctly emptied
+def _get_pdf_stylesheets():
+    """Get PDF stylesheets"""
+    try:
+        # Try to load custom stylesheet
+        css_path = os.path.join(current_app.static_folder, 'css', 'pdf_styles.css')
+        if os.path.exists(css_path):
+            return [CSS(filename=css_path)]
+        else:
+            # Fallback to basic styling
+            return [CSS(string="""
+                body { font-family: Arial, sans-serif; font-size: 12px; }
+                .vaccine-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+                .vaccine-table th, .vaccine-table td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+                .vaccine-table th { background-color: #f5f5f5; font-weight: bold; }
+                .vaccine-name-cell { font-weight: bold; }
+                .date-cell { text-align: center; }
+                h2, h3 { color: #333; margin-top: 20px; }
+                .patient-info { margin-bottom: 20px; }
+            """)]
+    except Exception as e:
+        current_app.logger.error(f"Error loading PDF stylesheets: {e}")
+        return []
 
-TOTAL_HISTORY_PDF_CSS_EXTENSION = """""" # Correctly emptied
-# --- END COMMON PDF CSS ---
+def get_media_file_path(filename):
+    """Get the full path for a media file"""
+    if not filename:
+        return None
+    
+    try:
+        full_path = os.path.join(current_app.config['USER_MEDIA_FOLDER'], filename)
+        if os.path.exists(full_path):
+            return f"file://{os.path.abspath(full_path)}"
+    except Exception as e:
+        current_app.logger.error(f"Error getting media file path for {filename}: {e}")
+    
+    return None
 
 # --- PDF EXPORT ROUTES ---
 
@@ -294,7 +260,6 @@ def export_vaccination_record_fr(patient_id):
     db = get_db()
     config = load_pdf_config()
     patient = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,)).fetchone()
-    autres_vaccins_query = db.execute("SELECT * FROM NonStandardVaccines WHERE patient_id = ? ORDER BY vaccine_date ASC", (patient_id,)).fetchall()
     if not patient: return "Patient not found", 404
 
     physician_details = config.get('physician_details_fr', {})
@@ -307,13 +272,9 @@ def export_vaccination_record_fr(patient_id):
 
     current_date = datetime.datetime.now().strftime("%d/%m/%Y")
 
-    # Use centralized constants and helper
-    mandatory_vaccine_table_data, recommended_vaccine_table_data, active_dose_keys = _prepare_vaccine_table_data(
-        patient, autres_vaccins_query,
-        PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_FR, 
-        VACCINE_ALIAS_MAP_FR,
-        MANDATORY_CANONICAL_VACCINE_NAMES_FR, 
-        non_standard_date_format='%d/%m/%Y'
+    # Use unified vaccine data preparation
+    mandatory_vaccine_table_data, recommended_vaccine_table_data, active_dose_keys = _prepare_vaccine_table_data_unified(
+        patient_id, language='fr'
     )
 
     html_out = render_template('vaccination_record_fr.html',
@@ -342,7 +303,6 @@ def export_vaccination_record_en(patient_id):
     db = get_db()
     config = load_pdf_config()
     patient = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,)).fetchone()
-    autres_vaccins_query = db.execute("SELECT * FROM NonStandardVaccines WHERE patient_id = ? ORDER BY vaccine_date ASC", (patient_id,)).fetchall()
     if not patient: return "Patient not found", 404
 
     physician_details = config.get('physician_details_en', {})
@@ -355,12 +315,9 @@ def export_vaccination_record_en(patient_id):
 
     current_date_en = datetime.datetime.now().strftime("%Y-%m-%d")
 
-    # Use centralized constants and helper
-    mandatory_vaccine_table_data, recommended_vaccine_table_data, active_dose_keys = _prepare_vaccine_table_data(
-        patient, autres_vaccins_query,
-        PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_EN, 
-        VACCINE_ALIAS_MAP_EN,
-        MANDATORY_CANONICAL_VACCINE_NAMES_EN
+    # Use unified vaccine data preparation
+    mandatory_vaccine_table_data, recommended_vaccine_table_data, active_dose_keys = _prepare_vaccine_table_data_unified(
+        patient_id, language='en'
     )
 
     html_out = render_template('vaccination_record_en.html',
@@ -390,7 +347,6 @@ def export_total_history_fr(patient_id):
     config = load_pdf_config()
     patient = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,)).fetchone()
     visites = db.execute("SELECT * FROM Visits WHERE patient_id = ? ORDER BY visit_date DESC", (patient_id,)).fetchall()
-    autres_vaccins_query = db.execute("SELECT * FROM NonStandardVaccines WHERE patient_id = ? ORDER BY vaccine_date ASC", (patient_id,)).fetchall()
     if not patient: return "Patient not found", 404
 
     physician_details = config.get('physician_details_fr', {})
@@ -404,12 +360,9 @@ def export_total_history_fr(patient_id):
     
     current_date_fr = datetime.datetime.now().strftime("%d/%m/%Y")
 
-    mandatory_vaccine_table_data, recommended_vaccine_table_data, active_dose_keys = _prepare_vaccine_table_data(
-        patient, autres_vaccins_query,
-        PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_FR, 
-        VACCINE_ALIAS_MAP_FR,
-        MANDATORY_CANONICAL_VACCINE_NAMES_FR,
-        non_standard_date_format='%d/%m/%Y'
+    # Use unified vaccine data preparation
+    mandatory_vaccine_table_data, recommended_vaccine_table_data, active_dose_keys = _prepare_vaccine_table_data_unified(
+        patient_id, language='fr'
     )
 
     html_out = render_template('total_history_fr.html', 
@@ -435,7 +388,6 @@ def export_total_history_en(patient_id):
     config = load_pdf_config()
     patient = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,)).fetchone()
     visites = db.execute("SELECT * FROM Visits WHERE patient_id = ? ORDER BY visit_date DESC", (patient_id,)).fetchall()
-    autres_vaccins_query = db.execute("SELECT * FROM NonStandardVaccines WHERE patient_id = ? ORDER BY vaccine_date ASC", (patient_id,)).fetchall()
     if not patient: return "Patient not found", 404
 
     physician_details = config.get('physician_details_en', {})
@@ -449,11 +401,9 @@ def export_total_history_en(patient_id):
 
     current_date_en = datetime.datetime.now().strftime("%Y-%m-%d")
     
-    mandatory_vaccine_table_data, recommended_vaccine_table_data, active_dose_keys = _prepare_vaccine_table_data(
-        patient, autres_vaccins_query,
-        PATIENT_FIELD_TO_CANONICAL_DOSE_MAP_EN, 
-        VACCINE_ALIAS_MAP_EN,
-        MANDATORY_CANONICAL_VACCINE_NAMES_EN
+    # Use unified vaccine data preparation
+    mandatory_vaccine_table_data, recommended_vaccine_table_data, active_dose_keys = _prepare_vaccine_table_data_unified(
+        patient_id, language='en'
     )
 
     html_out = render_template('total_history_en.html', 
@@ -518,76 +468,41 @@ def export_complete_report(patient_id):
     app_config = load_config()
     pdf_settings_base = CM_DEFAULT_PDF_CONFIG.copy() # Starts with new, simplified defaults
     loaded_pdf_settings = app_config.get('pdf_settings', {})
-    if isinstance(loaded_pdf_settings, dict):
-        # Only update with keys that exist in loaded_pdf_settings to avoid re-adding old ones
-        for key in pdf_settings_base:
-            if key in loaded_pdf_settings:
-                pdf_settings_base[key] = loaded_pdf_settings[key]
-        # And add any other valid keys from loaded that might not be in current simple default (e.g. physician details)
-        for key, value in loaded_pdf_settings.items():
-            if key not in pdf_settings_base: # e.g. if a key was removed from DEFAULT_PDF_CONFIG but still in user's JSON
-                 # We only care about settings that are still relevant for the template
-                 if key in ["physician_details_en", "physician_details_fr", "footer_note_en", "footer_note_fr", 
-                             "report_title_en", "report_title_fr", "signature_image_filename", "logo_image_filename", "footer_alignment"]:
-                    pdf_settings_base[key] = value
-    pdf_settings = pdf_settings_base
+    pdf_settings_base.update(loaded_pdf_settings)
 
-    physician_details = pdf_settings.get('physician_details_en', CM_DEFAULT_PDF_CONFIG.get('physician_details_en', {}))
-    footer_note = pdf_settings.get('footer_note_en', CM_DEFAULT_PDF_CONFIG.get('footer_note_en', ''))
-    report_title_text = pdf_settings.get('report_title_en', CM_DEFAULT_PDF_CONFIG.get('report_title_en', 'Complete Medical Report'))
-    
-    signature_filename = pdf_settings.get('signature_image_filename') # Already uses .get(), or default from CM_DEFAULT_PDF_CONFIG if not found
-    logo_filename = pdf_settings.get('logo_image_filename')
-    
+    physician_details = pdf_settings_base.get('physician_details_en', {})
+    footer_note = pdf_settings_base.get('footer_note_en', '')
+    signature_filename = pdf_settings_base.get('signature_image_filename')
+    logo_filename = pdf_settings_base.get('logo_image_filename')
+
     signature_image_url_for_pdf = get_media_file_path(signature_filename)
     logo_image_url_for_pdf = get_media_file_path(logo_filename)
-    
-    # Debug output for logo issues
-    current_app.logger.info(f"DEBUG: Logo filename: {logo_filename}")
-    current_app.logger.info(f"DEBUG: Logo URL for PDF: {logo_image_url_for_pdf}")
-    
-    footer_alignment_setting = pdf_settings.get('footer_alignment', CM_DEFAULT_PDF_CONFIG.get('footer_alignment', 'center'))
 
-    default_physician_details_en_for_template = CM_DEFAULT_PDF_CONFIG.get('physician_details_en', {})
+    current_date_en = datetime.datetime.now().strftime("%Y-%m-%d")
 
-    html_out = render_template(
-        'complete_report.html',
-        patient=patient,
-        visites=visites_processed,
-        physician=physician_details,
-        footer_note=footer_note,
-        current_date=datetime.datetime.now().strftime("%Y-%m-%d"),
-        signature_image_url_for_pdf=signature_image_url_for_pdf,
-        report_title=report_title_text,
-        logo_image_url_for_pdf=logo_image_url_for_pdf,
-        footer_alignment=footer_alignment_setting,
-        default_physician_details_en_for_template=default_physician_details_en_for_template
+    # Use unified vaccine data preparation
+    mandatory_vaccine_table_data, recommended_vaccine_table_data, active_dose_keys = _prepare_vaccine_table_data_unified(
+        patient_id, language='en'
     )
-    
-    pdf_stylesheets = _get_pdf_stylesheets()
-    
-    # Create PDF with proper error handling
-    try:
-        pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
-        response = make_response(pdf)
-        response.headers['Content-Type'] = 'application/pdf'
-        
-        # Sanitize filename to avoid special characters that could cause header issues
-        safe_first_name = ''.join(c for c in patient["first_name"] if c.isalnum() or c in (' ', '-', '_')).strip()
-        safe_last_name = ''.join(c for c in patient["last_name"] if c.isalnum() or c in (' ', '-', '_')).strip()
-        filename = f'{safe_first_name}_{safe_last_name}_complete_report.pdf'.replace(' ', '_')
-        response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
-        return response
-    except Exception as e:
-        current_app.logger.error(f"Error generating complete report PDF: {e}")
-        return f"Error generating PDF: {str(e)}", 500
 
-# Helper function to get absolute path for media files for WeasyPrint
-def get_media_file_path(filename):
-    if filename:
-        full_path = os.path.join(current_app.config['USER_MEDIA_FOLDER'], filename)
-        if os.path.exists(full_path):
-            return f"file://{os.path.abspath(full_path)}"
-        else:
-            current_app.logger.warning(f"File {filename} not found at {full_path}")
-    return None
+    html_out = render_template('complete_report.html',
+                               patient=patient,
+                               visites=visites_processed,
+                               mandatory_vaccine_table_data=mandatory_vaccine_table_data,
+                               recommended_vaccine_table_data=recommended_vaccine_table_data,
+                               active_dose_keys=active_dose_keys,
+                               table_column_labels=TABLE_COLUMN_LABELS_EN,
+                               physician=physician_details,
+                               current_date=current_date_en,
+                               format_date_for_pdf=format_date_for_pdf,
+                               footer_note=footer_note,
+                               signature_image_url_for_pdf=signature_image_url_for_pdf,
+                               logo_image_url_for_pdf=logo_image_url_for_pdf)
+
+    pdf_stylesheets = _get_pdf_stylesheets()
+
+    pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=complete_report_{patient["id"]}.pdf'
+    return response

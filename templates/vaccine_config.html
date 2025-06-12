@@ -229,9 +229,10 @@
         <div class="save-section">
             <div class="row">
                 <div class="col-md-8">
-                                    <div class="age-format-help">
-                    <strong>Age formats:</strong> Birth, 2M, 1Y, 11Y+6M, 12Y2M, Yearly, 24M
-                </div>
+                    <div class="age-format-help">
+                        <strong>Age formats:</strong> Birth, 2M, 1Y, 11Y+6M, 12Y2M, Yearly, 24M<br>
+                        <strong>Categories:</strong> Mandatory (core childhood), Recommended (standard care)
+                    </div>
                 </div>
                 <div class="col-md-4 text-right">
                     <button type="button" class="btn btn-success" onclick="saveConfiguration()">
@@ -337,15 +338,6 @@ function createVaccineCard(vaccineName, category, doses) {
     return vaccineCard;
 }
 
-function deleteVaccine(vaccineName) {
-    if (confirm(`Delete vaccine "${vaccineName}"? This cannot be undone.`)) {
-        const vaccineCard = document.querySelector(`[data-vaccine="${vaccineName}"]`);
-        if (vaccineCard) {
-            vaccineCard.remove();
-        }
-    }
-}
-
 function toggleCategory(vaccineName, newCategory) {
     const vaccineCard = document.querySelector(`[data-vaccine="${vaccineName}"]`);
     const targetContainer = newCategory === 'mandatory' ? 
@@ -395,6 +387,13 @@ function removeDose(vaccineName, doseKey) {
     const doseInput = document.querySelector(`input[data-vaccine="${vaccineName}"][data-dose="${doseKey}"]`);
     const doseItem = doseInput.parentElement;
     doseItem.remove();
+}
+
+function deleteVaccine(vaccineName) {
+    if (confirm(`Are you sure you want to delete "${vaccineName}"? This will remove it from all patient schedules.`)) {
+        const vaccineCard = document.querySelector(`[data-vaccine="${vaccineName}"]`);
+        vaccineCard.remove();
+    }
 }
 
 function saveConfiguration() {

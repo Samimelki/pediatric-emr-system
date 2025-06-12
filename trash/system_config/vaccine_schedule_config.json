@@ -1,0 +1,370 @@
+{
+  "DTaP - IPV": {
+    "category": "mandatory",
+    "doses": [
+      {
+        "age": "2M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "4M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "6M",
+        "interval_to_next": "1Y"
+      },
+      {
+        "age": "1Y6M",
+        "interval_to_next": "3Y7M"
+      },
+      {
+        "age": "5Y",
+        "interval_to_next": "6Y"
+      },
+      {
+        "age": "11Y",
+        "interval_to_next": "4Y"
+      },
+      {
+        "age": "15Y",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "Hepatitis B": {
+    "category": "mandatory",
+    "doses": [
+      {
+        "age": "Birth",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "2M",
+        "interval_to_next": "4M"
+      },
+      {
+        "age": "6M",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "Hib (Haemophilus influenzae b)": {
+    "category": "mandatory",
+    "doses": [
+      {
+        "age": "2M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "4M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "6M",
+        "interval_to_next": "1Y"
+      },
+      {
+        "age": "1Y6M",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "Haemophilus influenzae type b (Hib)": {
+    "category": "mandatory",
+    "alias_for": "Hib (Haemophilus influenzae b)",
+    "doses": [
+      {
+        "age": "2M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "4M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "6M",
+        "interval_to_next": "1Y"
+      },
+      {
+        "age": "1Y6M",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "MMR (Measles, Mumps, Rubella)": {
+    "category": "mandatory",
+    "doses": [
+      {
+        "age": "1Y",
+        "interval_to_next": "6M"
+      },
+      {
+        "age": "1Y6M",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "Measles - Mumps - Rubella (MMR)": {
+    "category": "mandatory",
+    "alias_for": "MMR (Measles, Mumps, Rubella)",
+    "doses": [
+      {
+        "age": "1Y",
+        "interval_to_next": "6M"
+      },
+      {
+        "age": "1Y6M",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "Measles": {
+    "category": "mandatory",
+    "alias_for": "MMR (Measles, Mumps, Rubella)",
+    "doses": [
+      {
+        "age": "9M",
+        "interval_to_next": null
+      }
+    ],
+    "note": "Historical single measles vaccine given at 9M before MMR series started"
+  },
+  "Measles (single)": {
+    "category": "mandatory",
+    "alias_for": "MMR (Measles, Mumps, Rubella)",
+    "doses": [
+      {
+        "age": "9M",
+        "interval_to_next": null
+      }
+    ],
+    "note": "Historical single measles vaccine given at 9M before MMR series started"
+  },
+  "PPD (TB Skin Test)": {
+    "category": "mandatory",
+    "doses": [
+      {
+        "age": "1Y",
+        "interval_to_next": "1Y"
+      },
+      {
+        "age": "2Y",
+        "interval_to_next": "1Y"
+      },
+      {
+        "age": "3Y",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "Hepatitis A": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "1Y4M",
+        "interval_to_next": "6M"
+      },
+      {
+        "age": "1Y10M",
+        "interval_to_next": "5Y"
+      },
+      {
+        "age": "6Y10M",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "Varicella": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "1Y",
+        "interval_to_next": "6M"
+      },
+      {
+        "age": "1Y6M",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "Pneumococcal PCV": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "2M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "4M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "6M",
+        "interval_to_next": "6M"
+      },
+      {
+        "age": "1Y",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "Rotavirus": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "2M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "4M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "6M",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "Influenza": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "1Y",
+        "interval_to_next": "1Y",
+        "repeating": true
+      }
+    ]
+  },
+  "Meningococcal ACWY": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "11Y",
+        "interval_to_next": "5Y"
+      },
+      {
+        "age": "16Y",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "Meningococcal B": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "16Y",
+        "interval_to_next": "1M"
+      },
+      {
+        "age": "1Y5M",
+        "interval_to_next": "14Y7M"
+      }
+    ]
+  },
+  "Meningococcal C": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "1Y",
+        "interval_to_next": "5Y"
+      },
+      {
+        "age": "6Y",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "HPV (Human Papillomavirus)": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "11Y",
+        "interval_to_next": "6M"
+      },
+      {
+        "age": "11Y6M",
+        "interval_to_next": null
+      }
+    ],
+    "note": "Age-dependent dosing: 2-dose series if <15Y, 3-dose series if ≥15Y"
+  },
+  "Typhoid": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "2Y",
+        "interval_to_next": "3Y"
+      },
+      {
+        "age": "5Y",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "Yellow Fever": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "9M",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "Rabies": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "1Y",
+        "interval_to_next": "1M"
+      },
+      {
+        "age": "1Y1M",
+        "interval_to_next": "1M"
+      },
+      {
+        "age": "1Y2M",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "BCG (Tuberculosis)": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "Birth",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "RSV Prevention": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "Birth",
+        "interval_to_next": "1M"
+      },
+      {
+        "age": "1M",
+        "interval_to_next": "1M"
+      },
+      {
+        "age": "2M",
+        "interval_to_next": null
+      }
+    ]
+  },
+  "COVID-19": {
+    "category": "recommended",
+    "doses": [
+      {
+        "age": "6M",
+        "interval_to_next": "1M"
+      },
+      {
+        "age": "7M",
+        "interval_to_next": null
+      }
+    ]
+  }
+} 

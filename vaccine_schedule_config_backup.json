@@ -1,0 +1,649 @@
+{
+  "DTaP - IPV": {
+    "category": "mandatory",
+    "database_fields": [
+      "dtcp1_date",
+      "dtcp2_date",
+      "dtcp3_date",
+      "dtcp_rappel1_date",
+      "dtcp_rappel2_date",
+      "dtcp_rappel3_date",
+      "dtcp_rappel4_date"
+    ],
+    "doses": [
+      {
+        "age": "2M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "4M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "6M",
+        "interval_to_next": "1Y"
+      },
+      {
+        "age": "1Y6M",
+        "interval_to_next": "3Y6M"
+      },
+      {
+        "age": "5Y",
+        "interval_to_next": "6Y"
+      },
+      {
+        "age": "11Y",
+        "interval_to_next": "4Y"
+      },
+      {
+        "age": "15Y",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "dTCaP",
+      "dTCP",
+      "dTCa",
+      "dTcaP"
+    ]
+  },
+  "Hepatitis B": {
+    "category": "mandatory",
+    "database_fields": [
+      "hep_b1_date",
+      "hep_b2_date",
+      "hep_b3_date"
+    ],
+    "doses": [
+      {
+        "age": "Birth",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "2M",
+        "interval_to_next": "4M"
+      },
+      {
+        "age": "6M",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "ENGERIX B",
+      "GEN-HEVAC B",
+      "HEPATITE B",
+      "ENGERIX",
+      "ENGERIX B 20",
+      "ANTI-HEPATITE B",
+      "GEN-HEVAC",
+      "HEP B",
+      "ENGERIX   B",
+      "HBVax",
+      "HEPATITIS B",
+      "ENGERIX  B",
+      "ENGERIX B 20 mcg",
+      "ENGERIX B 20 ¬µg",
+      "ENGERIX B 20¬µg",
+      "ENGERIXB",
+      "GEN-HEVAC-B",
+      "HBvax",
+      "Hep B"
+    ]
+  },
+  "Haemophilus influenzae type b (Hib)": {
+    "category": "mandatory",
+    "database_fields": [
+      "hib1_date",
+      "hib2_date",
+      "hib3_date",
+      "hib_rappel_date"
+    ],
+    "doses": [
+      {
+        "age": "2M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "4M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "6M",
+        "interval_to_next": "1Y"
+      },
+      {
+        "age": "1Y6M",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "HB+HIb (HEXAXIM)",
+      "HB+hiB (HEXAXIM)",
+      "TETRACT-HIB+OPV"
+    ]
+  },
+  "MMR (Measles, Mumps, Rubella)": {
+    "category": "mandatory",
+    "database_fields": [
+      "ror_date"
+    ],
+    "doses": [
+      {
+        "age": "9M",
+        "interval_to_next": "3M"
+      },
+      {
+        "age": "1Y",
+        "interval_to_next": "6M"
+      },
+      {
+        "age": "1Y6M",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "ROR",
+      "PRIORIX",
+      "MMR",
+      "ANTI-OURLIEN",
+      "ANTI-RUBEOLE",
+      "OREILLONS",
+      "RUBEOLE",
+      "MMR II",
+      "IMOVAX-OREILLONS",
+      "ROR (MMR)",
+      "ANTI-ROUGEOLE",
+      "ROUGEOLE",
+      "VERORAB",
+      "ANTI-OREILLONS",
+      "MMR (SII)",
+      "PRIORIX\t\t\t:",
+      "RORARIX"
+    ]
+  },
+  "Measles (single)": {
+    "category": "mandatory",
+    "database_fields": [
+      "rougeole_seule_date"
+    ],
+    "doses": [
+      {
+        "age": "9M",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "ANTI-ROUGEOLE",
+      "ROUGEOLE"
+    ]
+  },
+  "PPD (TB Skin Test)": {
+    "category": "mandatory",
+    "database_fields": [
+      "monotest1",
+      "monotest2",
+      "monotest3"
+    ],
+    "doses": [
+      {
+        "age": "Birth",
+        "interval_to_next": "1Y"
+      },
+      {
+        "age": "1Y",
+        "interval_to_next": "1Y"
+      },
+      {
+        "age": "2Y",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "IDR 5 UI",
+      "MONOTEST",
+      "IDR 5UI",
+      "PPD",
+      "IDR  5 UI",
+      "IDR",
+      "IDR UI",
+      "IDR\t 5 UI",
+      "IDR 5 UI (PPD)",
+      "IDR\t5 UI",
+      "IDR  UI",
+      "IDR 5 Ui",
+      "MONOTEST (PPD)",
+      "*IDR 5 UI",
+      "IDR   5 UI",
+      "IDR  5UI",
+      "IDR 10 UI",
+      "IDR 5\tUI",
+      "IDR 5  UI",
+      "IDR 5 UI\t (PPD)",
+      "IDR 5U",
+      "IDR M5 UI",
+      "IIDR 5 UI"
+    ]
+  },
+  "Hepatitis A": {
+    "category": "recommended",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "1Y4M",
+        "interval_to_next": "6M"
+      },
+      {
+        "age": "1Y10M",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "HAVRIX",
+      "AVAXIM",
+      "EPAXAL",
+      "HEPATITE A",
+      "HEP A",
+      "VAQTA",
+      "Hep A",
+      "HAVRIX 1440",
+      "HAVRIX 720",
+      "HEPATITIS A",
+      "ANTI-HEPATITE A",
+      "Hepatite A",
+      "TWIMIX (HEP A+B)",
+      "AVAXIM 1440",
+      "HAVRIX A",
+      "HEp A",
+      "AVAXIM\t`",
+      "AVAXIM 80",
+      "EPAXAl",
+      "VAQTA (hep A)"
+    ]
+  },
+  "Varicella": {
+    "category": "recommended",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "1Y",
+        "interval_to_next": "6M"
+      },
+      {
+        "age": "1Y6M",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "VARILRIX",
+      "VARIVAX",
+      "VARICELLE",
+      "VARIVAX III",
+      "CHICKENPOX",
+      "Varicella",
+      "VARIVAXX",
+      "Varicelle",
+      "Varilrix"
+    ]
+  },
+  "Influenza": {
+    "category": "recommended",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "6M",
+        "interval_to_next": "1Y",
+        "repeating": true
+      }
+    ],
+    "brand_names": [
+      "VAXIGRIP",
+      "INFLEXAL V",
+      "INFLEXAL",
+      "INFLUVAC",
+      "INFLUVAC TETRA",
+      "FLUARIX",
+      "FLUORIX",
+      "'VAXIGRIP",
+      "FLU VAC",
+      "GRIPPE GSK",
+      "INFLEXALV",
+      "VAXIGRIPO",
+      "Vaxigrip"
+    ]
+  },
+  "Pneumococcal PCV": {
+    "category": "recommended",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "2M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "4M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "6M",
+        "interval_to_next": "6M"
+      },
+      {
+        "age": "1Y",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "SYNFLORIX",
+      "PNEUMO 23",
+      "PREVENAR",
+      "PREVENAR 13",
+      "PCV",
+      "PCV 13",
+      "PNEUMO",
+      "PCV 10",
+      "PCV 7",
+      "PCV7",
+      "PREVENAR\t13",
+      "PREVENAR 20",
+      "PNEUMO23",
+      "PNEUMOCOQUE",
+      "PREVENAR 10",
+      "PCV1",
+      "PCV13",
+      "PNEUMO 7",
+      "PREVENAR !3",
+      "PREVENAR13",
+      "Pneumo",
+      "SYNFLORIX 9",
+      "PNEUMOVAX 23",
+      "PREVENAR \t13",
+      "PREVENAR  13",
+      "PREVENART 13",
+      "Prevenar 13",
+      "SYNFlORIX"
+    ]
+  },
+  "Rotavirus": {
+    "category": "recommended",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "2M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "4M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "6M",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "ROTARIX",
+      "ROTATEQ",
+      "ROTAVIRUS",
+      "Rotarix",
+      "ROTATEQ`"
+    ]
+  },
+  "Meningococcal ACWY": {
+    "category": "recommended",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "11Y",
+        "interval_to_next": "5Y"
+      },
+      {
+        "age": "16Y",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "MENACTRA",
+      "MENCEVAX ACWY",
+      "NIMENRIX",
+      "MENCEVAX",
+      "MENINGO A+C",
+      "MENINGO",
+      "MENINGO C",
+      "MENINGO ACWY",
+      "ANTI-MENINGO A+C",
+      "MENVEO",
+      "MENINGO AC",
+      "MENINGOVAX",
+      "ANTI-MENINGOCOQUE A+C",
+      "MENCEVAX A+C",
+      "MENCEVAX AC",
+      "MENCEVAX ACW",
+      "MENINGO B",
+      "ANTI-MENINGO\t A+C",
+      "MENINGO A + C",
+      "MENINGO A +C",
+      "MENINGO A/C",
+      "MENINGOCOQUE A + C",
+      "Menactra",
+      "NEISVAC (meningo C)",
+      "Nimenrix"
+    ]
+  },
+  "Meningococcal B": {
+    "category": "recommended",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "2M",
+        "interval_to_next": "2M"
+      },
+      {
+        "age": "4M",
+        "interval_to_next": "8M"
+      },
+      {
+        "age": "1Y",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "BEXSERO"
+    ]
+  },
+  "Meningococcal C": {
+    "category": "recommended",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "1Y",
+        "interval_to_next": "10Y"
+      },
+      {
+        "age": "11Y",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "MENINGITEC",
+      "NEISVAC",
+      "MENINGITEC C",
+      "NEISVAC (meningo C)"
+    ]
+  },
+  "HPV (Human Papillomavirus)": {
+    "category": "recommended",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "11Y",
+        "interval_to_next": "6M"
+      },
+      {
+        "age": "11Y6M",
+        "interval_to_next": "6M"
+      },
+      {
+        "age": "1Y",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "GARDASIL",
+      "GARDASIL 9",
+      "CERVARIX",
+      "GARDASIL\t 9",
+      "HPV"
+    ]
+  },
+  "Typhoid": {
+    "category": "recommended",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "2Y",
+        "interval_to_next": "3Y"
+      },
+      {
+        "age": "5Y",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "TYPHIM VI",
+      "TYPHIM Vi",
+      "TYPHIM",
+      "TYPHOIDE",
+      "TYPHIM V",
+      "TYPHIM IV",
+      "VIVOTIF",
+      "ANTI-TYPHOIDE",
+      "TYPHIM V1",
+      "TYPHIMVi",
+      "Typhim Vi"
+    ]
+  },
+  "Yellow Fever": {
+    "category": "travel",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "9M",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "STAMARIL",
+      "ANTI-AMARILE",
+      "STAMARILE"
+    ]
+  },
+  "Rabies": {
+    "category": "travel",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "Birth",
+        "interval_to_next": "7D"
+      },
+      {
+        "age": "7D",
+        "interval_to_next": "14D"
+      },
+      {
+        "age": "21D",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "ANTI-RABIQUE",
+      "VERORAB"
+    ]
+  },
+  "Japanese Encephalitis": {
+    "category": "travel",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "1Y",
+        "interval_to_next": "1M"
+      },
+      {
+        "age": "1Y1M",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": []
+  },
+  "BCG (Tuberculosis)": {
+    "category": "recommended",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "Birth",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "BCG",
+      "BCG ID",
+      "MONOVAX (BCG)",
+      "BCG S",
+      "BCG(MONOVAX)",
+      "BCG-ID",
+      "bcg"
+    ]
+  },
+  "RSV Prevention": {
+    "category": "recommended",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "Birth",
+        "interval_to_next": "1M"
+      },
+      {
+        "age": "1M",
+        "interval_to_next": "1M"
+      },
+      {
+        "age": "2M",
+        "interval_to_next": "1M"
+      },
+      {
+        "age": "3M",
+        "interval_to_next": "1M"
+      },
+      {
+        "age": "4M",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "SYNAGIS"
+    ]
+  },
+  "COVID-19": {
+    "category": "recommended",
+    "database_fields": [],
+    "doses": [
+      {
+        "age": "6M",
+        "interval_to_next": "3W"
+      },
+      {
+        "age": "6M3W",
+        "interval_to_next": "8W"
+      },
+      {
+        "age": "8M",
+        "interval_to_next": null
+      }
+    ],
+    "brand_names": [
+      "PFIZER COVID 19",
+      "COVID 19 vaccine\tpfizer",
+      "COVID 19 vaccine pfizer",
+      "PFIZER"
+    ]
+  }
+}

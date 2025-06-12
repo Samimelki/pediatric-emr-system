@@ -761,17 +761,25 @@
             </div>
             
             <!-- Vaccine Date Edit Modal -->
-            <div id="vaccine-edit-modal" class="modal">
+            <div id="vaccine-edit-modal" class="modal" style="display: none;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 id="modal-title">Edit Vaccine Date</h3>
                         <span class="modal-close">&times;</span>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="vaccine-date-input">Vaccination Date:</label>
-                            <input type="date" id="vaccine-date-input" class="form-control">
-                        </div>
+                        <form id="vaccine-edit-form">
+                            <div class="form-group">
+                                <label for="vaccine-date-input">Vaccination Date:</label>
+                                <input type="date" id="vaccine-date-input" class="form-control" required>
+                                <small class="form-text text-muted">Leave blank to clear the date</small>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="clear-date-checkbox"> Clear this vaccination date
+                                </label>
+                            </div>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="modal-cancel">Cancel</button>
@@ -797,15 +805,26 @@ function getVaccineAbbreviation(vaccineName) {
         'Hepatitis A': 'HepA',
         'Hepatitis B': 'HepB',
         'Hib (Haemophilus influenzae b)': 'Hib',
+        'Haemophilus influenzae type b (Hib)': 'Hib',
         'MMR (Measles, Mumps, Rubella)': 'MMR',
+        'Measles - Mumps - Rubella (MMR)': 'MMR',
+        'Measles': 'Meas',
+        'Measles (single)': 'Meas',
         'Pneumococcal PCV': 'PCV',
         'Rotavirus': 'RV',
         'Varicella': 'VZV',
         'Influenza': 'Flu',
         'Meningococcal ACWY': 'MenA',
+        'Meningococcal B': 'MenB',
+        'Meningococcal C': 'MenC',
         'PPD (TB Skin Test)': 'PPD',
-        'Covid 19': 'COV',
-        'HPV': 'HPV'
+        'COVID-19': 'COV',
+        'HPV (Human Papillomavirus)': 'HPV',
+        'BCG (Tuberculosis)': 'BCG',
+        'RSV Prevention': 'RSV',
+        'Rabies': 'Rab',
+        'Typhoid': 'Typh',
+        'Yellow Fever': 'YF'
     };
     
     // Look for exact match first
@@ -1129,13 +1148,10 @@ function createVaccineLabels(range) {
             globalTooltip.classList.remove('show');
         });
         
-        // Add click event for editing - redirect to existing edit form
+        // Add click event for editing - open modal
         label.addEventListener('click', function(e) {
             e.stopPropagation();
-            const editUrl = getVaccineEditUrl(vaccine, dose);
-            if (editUrl) {
-                window.location.href = editUrl;
-            }
+            openVaccineEditModal(vaccine, dose);
         });
         
         timelineContainer.appendChild(label);
@@ -1170,10 +1186,92 @@ document.addEventListener('DOMContentLoaded', function() {
             updateTimeline(currentAgeRange);
         });
     });
+    
+    // Modal event handlers
+    document.querySelector('.modal-close').addEventListener('click', closeVaccineEditModal);
+    document.getElementById('modal-cancel').addEventListener('click', closeVaccineEditModal);
+    document.getElementById('modal-save').addEventListener('click', saveVaccineDate);
+    
+    // Close modal when clicking outside
+    document.getElementById('vaccine-edit-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeVaccineEditModal();
+        }
+    });
 });
 
-// Function to generate edit URL for existing vaccine edit forms
-function getVaccineEditUrl(vaccine, dose) {
+// Modal functionality
+let currentEditingVaccine = null;
+let currentEditingDose = null;
+
+function openVaccineEditModal(vaccine, dose) {
+    currentEditingVaccine = vaccine;
+    currentEditingDose = dose;
+    currentEditingVaccine = vaccine;
+    currentEditingDose = dose;
+    
+    const modal = document.getElementById('vaccine-edit-modal');
+    const title = document.getElementById('modal-title');
+    const dateInput = document.getElementById('vaccine-date-input');
+    
+    title.textContent = `Edit ${vaccine.vaccine_name} - ${dose.label}`;
+    
+    // Pre-fill current date if available
+    if (dose.date_given) {
+        dateInput.value = dose.date_given.split('T')[0]; // Format for date input
+    } else {
+        dateInput.value = '';
+    }
+    
+    modal.style.display = 'block';
+}
+
+function closeVaccineEditModal() {
+    const modal = document.getElementById('vaccine-edit-modal');
+    modal.style.display = 'none';
+    currentEditingVaccine = null;
+    currentEditingDose = null;
+}
+
+function saveVaccineDate() {
+    if (!currentEditingVaccine || !currentEditingDose) return;
+    
+    const dateInput = document.getElementById('vaccine-date-input');
+    const clearCheckbox = document.getElementById('clear-date-checkbox');
+    const fieldName = getFieldNameFromVaccineAndDose(currentEditingVaccine, currentEditingDose);
+    
+    if (!fieldName) {
+        alert('Unable to determine database field for this vaccine');
+        return;
+    }
+    
+    // Create a hidden form to submit to existing backend
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/vaccines/patient/{{ patient.id }}/standard/update`;
+    
+    // Add field name
+    const fieldInput = document.createElement('input');
+    fieldInput.type = 'hidden';
+    fieldInput.name = 'vaccine_field_name';
+    fieldInput.value = fieldName;
+    form.appendChild(fieldInput);
+    
+    // Add date value (empty if clearing)
+    const dateValue = clearCheckbox.checked ? '' : dateInput.value;
+    const dateInputField = document.createElement('input');
+    dateInputField.type = 'hidden';
+    dateInputField.name = 'vaccine_date';
+    dateInputField.value = dateValue;
+    form.appendChild(dateInputField);
+    
+    // Submit form
+    document.body.appendChild(form);
+    form.submit();
+}
+
+function getFieldNameFromVaccineAndDose(vaccine, dose) {
+    // Use the exact same field mapping that was working in getVaccineEditUrl
     const patientId = {{ patient.id }};
     
     // Map vaccine names and dose keys to database field names
@@ -1214,108 +1312,12 @@ function getVaccineEditUrl(vaccine, dose) {
     const vaccineMapping = fieldMapping[vaccine.vaccine_name];
     if (vaccineMapping && vaccineMapping[dose.dose_key]) {
         const fieldName = vaccineMapping[dose.dose_key];
-        return `/vaccines/patient/${patientId}/standard/edit?field_name=${fieldName}`;
+        console.log(`DEBUG: Found field ${fieldName} for ${vaccine.vaccine_name} ${dose.dose_key}`);
+        return fieldName;
     }
     
+    console.log(`DEBUG: No field found for ${vaccine.vaccine_name} ${dose.dose_key}`);
     return null;
 }
-
-function openVaccineEditModal(vaccine, dose) {
-    currentEditingVaccine = vaccine;
-    currentEditingDose = dose;
-    
-    const modal = document.getElementById('vaccine-edit-modal');
-    const title = document.getElementById('modal-title');
-    const dateInput = document.getElementById('vaccine-date-input');
-    
-    title.textContent = `${vaccine.vaccine_name} - ${dose.label}`;
-    
-    // Set current date if available
-    if (dose.completed_date) {
-        dateInput.value = dose.completed_date;
-    } else {
-        dateInput.value = '';
-    }
-    
-    modal.style.display = 'block';
-}
-
-function closeVaccineEditModal() {
-    const modal = document.getElementById('vaccine-edit-modal');
-    modal.style.display = 'none';
-    currentEditingVaccine = null;
-    currentEditingDose = null;
-}
-
-function saveVaccineDate() {
-    if (!currentEditingVaccine || !currentEditingDose) return;
-    
-    const dateInput = document.getElementById('vaccine-date-input');
-    
-    const vaccineData = {
-        vaccine_name: currentEditingVaccine.vaccine_name,
-        dose_key: currentEditingDose.dose_key,
-        date: dateInput.value,
-        patient_id: {{ patient.id }}
-    };
-    
-    // Send to backend
-    fetch('/update_vaccine_date', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(vaccineData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Reload the page to show updated data
-            window.location.reload();
-        } else {
-            alert('Error updating vaccine date: ' + (data.error || 'Unknown error'));
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error updating vaccine date');
-    });
-    
-    closeVaccineEditModal();
-}
-
-    // Modal event handlers - add to existing DOMContentLoaded above
-    document.querySelector('.modal-close').addEventListener('click', closeVaccineEditModal);
-    document.getElementById('modal-cancel').addEventListener('click', closeVaccineEditModal);
-    document.getElementById('modal-save').addEventListener('click', saveVaccineDate);
-    
-    // Close modal when clicking outside
-    document.getElementById('vaccine-edit-modal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeVaccineEditModal();
-        }
-    });
-    
-    // Add click handlers to dose items in summary cards
-    document.querySelectorAll('.dose-item').forEach(item => {
-        item.addEventListener('click', function() {
-            // Extract vaccine and dose info from the DOM
-            const vaccineCard = this.closest('.vaccine-card');
-            const vaccineName = vaccineCard.querySelector('.vaccine-name').textContent;
-            const doseText = this.querySelector('span').textContent;
-            
-            // Find the corresponding vaccine and dose from timeline data
-            const vaccine = timelineData.find(v => v.vaccine_name === vaccineName);
-            if (vaccine) {
-                const dose = vaccine.doses.find(d => doseText.includes(d.label));
-                if (dose) {
-                    const editUrl = getVaccineEditUrl(vaccine, dose);
-                    if (editUrl) {
-                        window.location.href = editUrl;
-                    }
-                }
-            }
-        });
-    });
 </script>
 {% endblock %} 
