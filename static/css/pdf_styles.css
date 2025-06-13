@@ -88,19 +88,37 @@ body {
 }
 
 .vaccine-table td.vaccine-name-cell {
-    min-width: 150px; /* Adjust as needed */
+    width: 120px; /* Narrower column for vaccine names */
+    max-width: 120px;
+    font-weight: normal; /* Let the <strong> tags handle bold */
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: normal;
+    -webkit-hyphens: none;
+    hyphens: none;
+    vertical-align: top; /* Align content to top of cell */
+    line-height: 1; /* Tighter line spacing for multi-line names */
+}
+
+.vaccine-table td.vaccine-name-cell strong {
     font-weight: bold;
-    white-space: normal; /* Ensure it's not pre or nowrap */
-    overflow-wrap: break-word; /* Standard: break long words that would overflow */
-    word-break: normal; /* Default: break at spaces/hyphens unless overflow-wrap kicks in */
-    -webkit-hyphens: none; /* Disable hyphenation */
-    hyphens: none; /* Disable hyphenation */
+    /*display: block; /* Make vaccine name a block element */
+}
+
+.vaccine-table td.vaccine-name-cell em {
+    font-style: italic;
+    font-size: 7pt; /* Smaller font for descriptions */
+    color: #666; /* Slightly lighter color for descriptions */
+    line-height: 1;
 }
 
 .vaccine-table td.date-cell {
     text-align: center;
-    min-width: 60px; /* Adjust as needed */
-    padding: 0;
+    width: 70px; /* More space for dates */
+    min-width: 70px;
+    padding: 4px 2px;
+    vertical-align: middle;
+    font-size: 8pt;
 }
 
 .vaccine-table tr {

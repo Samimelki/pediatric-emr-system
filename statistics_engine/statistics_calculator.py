@@ -1,9 +1,14 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import sqlite3
-from flask import g, current_app # Added for get_db compatibility
+from flask import g
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-import numpy as np
+from typing import List, Dict, Tuple, Optional, Any
+import emr_config
 
 def convert_weight_to_kg(weight_raw):
     """
@@ -37,21 +42,20 @@ def convert_weight_to_kg(weight_raw):
     except (ValueError, TypeError):
         return None
 
-# This is a simplified get_db for the standalone statistics module.
-# It assumes a Flask app context is not always available.
-# For direct script execution, you might need to pass the db path explicitly.
-# When integrated into the Flask app, this should ideally use the app's get_db.
-def get_db_standalone(db_path='emr_database.db'):
-    db = getattr(g, '_database', None)
-    if db is None:
-        try:
-            # Try to use Flask's current_app if available (e.g., when called from a route)
-            db_path = current_app.config['DATABASE']
-        except RuntimeError: # No app context
-            # Fallback to the provided db_path or default if not in app context
-            pass # db_path is already set by default argument
-        db = g._database = sqlite3.connect(db_path)
-        db.row_factory = sqlite3.Row
+def get_db_standalone(db_path=None):
+    """
+    Get database connection for standalone use (outside Flask context)
+    """
+    if db_path is None:
+        # Use the configured database path
+        config = emr_config.EMRConfig()
+        db_path = config.get_database_path()
+    
+    if hasattr(g, '_database') and g._database is not None:
+        return g._database
+    
+    db = g._database = sqlite3.connect(db_path)
+    db.row_factory = sqlite3.Row
     return db
 
 def close_db_standalone(exception=None):
@@ -61,18 +65,13 @@ def close_db_standalone(exception=None):
         g._database = None # Ensure it's removed from g
 
 def calculate_average_vaccines_per_child(db_path=None):
-    """Calculates the average number of vaccines administered per child."""
-    # Use current_app.config['DATABASE'] if db_path is None and app context exists
+    """Calculate average number of vaccines per child"""
     if db_path is None:
-        try:
-            # This will work if called within a Flask request context
-            conn = get_db_standalone() 
-        except RuntimeError: 
-            # This is a fallback if not in a Flask app context (e.g. running as a script)
-            # You might want to make 'emr_database.db' a configurable default
-            conn = get_db_standalone(db_path='emr_database.db') 
-    else:
-        conn = get_db_standalone(db_path=db_path)
+        config = emr_config.EMRConfig()
+        db_path = config.get_database_path()
+    
+    # You might want to make the database path configurable
+    conn = get_db_standalone(db_path=db_path)
 
     cursor = conn.cursor()
 
@@ -385,12 +384,10 @@ def find_measurement_outliers(db_path=None, std_dev_threshold=4.0, age_limit_mon
               }
     """
     if db_path is None:
-        try:
-            conn = get_db_standalone()
-        except RuntimeError:
-            conn = get_db_standalone(db_path='emr_database.db')
-    else:
-        conn = get_db_standalone(db_path=db_path)
+        config = emr_config.EMRConfig()
+        db_path = config.get_database_path()
+    
+    conn = get_db_standalone(db_path=db_path)
     
     cursor = conn.cursor()
     outliers_list = []
@@ -519,40 +516,35 @@ def find_measurement_outliers(db_path=None, std_dev_threshold=4.0, age_limit_mon
             close_db_standalone()
 
 if __name__ == '__main__':
-    # This is an example of how to run it standalone.
-    # You'll need to ensure emr_database.db is in the same directory or provide the correct path.
-    # Also, this example doesn't set up a Flask app context, so get_db_standalone relies on its default path.
-    print("Attempting to calculate average vaccines per child...")
-    # avg_vaccines = calculate_average_vaccines_per_child(db_path='../emr_database.db') # Adjusted path for being inside statistics_engine
-    avg_vaccines = calculate_average_vaccines_per_child(db_path='emr_database.db') 
-    if avg_vaccines is not None:
-        print(f"Average vaccines per child: {avg_vaccines:.2f}")
-    else:
-        print("Could not calculate average vaccines.")
-
-    print("\nAttempting to calculate local growth percentiles...")
-    # local_percentiles = calculate_percentiles(db_path='../emr_database.db')
-    local_percentiles = calculate_percentiles(db_path='emr_database.db', smoothing_window=3)
-    if local_percentiles:
-        print("Calculated local percentiles successfully.")
-        # Example: Print WFA for boys
-        if local_percentiles.get('wfa', {}).get('boys'):
-            print("\nWeight-for-Age (Boys) - Local Percentiles:")
-            wfa_boys = local_percentiles['wfa']['boys']
-            if wfa_boys.get('Month'):
-                for i, month in enumerate(wfa_boys['Month']):
-                    p_values_str = ", ".join([f"{key}: {wfa_boys[key][i] if i < len(wfa_boys[key]) else 'N/A'}" for key in EXPECTED_PERCENTILES_KEYS_STATS])
-                    print(f"Month {month}: {p_values_str}")
-            else:
-                print("No 'Month' data for WFA Boys.")
-        else:
-            print("No WFA data for boys found.")
-        # You can add more detailed printouts for other measurements/sexes here for testing
-    else:
-        print("Could not calculate local percentiles or no data available.")
-
-    print("\nAttempting to find measurement outliers (SD > 4, up to 60 months)...")
-    outliers = find_measurement_outliers(db_path='emr_database.db', std_dev_threshold=4.0, age_limit_months=60)
+    # Get the configured database path
+    config = emr_config.EMRConfig()
+    db_path = config.get_database_path()
+    
+    # You'll need to ensure the database exists or provide the correct path.
+    print("Calculating average vaccines per child...")
+    # avg_vaccines = calculate_average_vaccines_per_child(db_path='../unified_emr.db') # Adjusted path for being inside statistics_engine
+    avg_vaccines = calculate_average_vaccines_per_child(db_path=db_path)
+    print(f"Average vaccines per child: {avg_vaccines}")
+    
+    print("\nCalculating percentiles...")
+    # Smoothing window of 3 means we'll average over 3-month windows
+    # local_percentiles = calculate_percentiles(db_path='../unified_emr.db')
+    local_percentiles = calculate_percentiles(db_path=db_path, smoothing_window=3)
+    
+    print("\nWeight percentiles (sample):")
+    for age_months in [6, 12, 24, 36]:
+        if age_months in local_percentiles['weight']:
+            percentiles = local_percentiles['weight'][age_months]
+            print(f"  {age_months} months: P10={percentiles['p10']:.1f}kg, P50={percentiles['p50']:.1f}kg, P90={percentiles['p90']:.1f}kg")
+    
+    print("\nHeight percentiles (sample):")
+    for age_months in [6, 12, 24, 36]:
+        if age_months in local_percentiles['height']:
+            percentiles = local_percentiles['height'][age_months]
+            print(f"  {age_months} months: P10={percentiles['p10']:.1f}cm, P50={percentiles['p50']:.1f}cm, P90={percentiles['p90']:.1f}cm")
+    
+    print("\nFinding outliers...")
+    outliers = find_measurement_outliers(db_path=db_path, std_dev_threshold=4.0, age_limit_months=60)
     if outliers:
         print(f"Found {len(outliers)} outliers:")
         for i, outlier in enumerate(outliers[:5]): # Print top 5 outliers

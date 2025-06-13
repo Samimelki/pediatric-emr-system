@@ -1,6 +1,9 @@
 import sqlite3
+import emr_config
 
-DB_PATH = 'emr_database.db'
+# Get the configured database path
+config = emr_config.EMRConfig()
+DB_PATH = config.get_database_path()
 
 def init_schema():
     conn = sqlite3.connect(DB_PATH)

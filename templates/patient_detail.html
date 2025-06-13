@@ -131,28 +131,15 @@
         <!-- Vaccine Timeline -->
         {% if is_feature_enabled('vaccines') %}
         <div class="card mt-3">
-            <div class="card-header" id="headingVaccineTimeline">
-                <h5 class="mb-0 d-flex justify-content-between align-items-center">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseVaccineTimeline" aria-expanded="false" aria-controls="collapseVaccineTimeline">
-                        Vaccine Schedule
-                    </button>
-                    {% if patient.naissance_date %}
-                    <a href="{{ url_for('vaccine.vaccine_schedule_timeline', patient_id=patient.id) }}" class="btn btn-outline-primary btn-sm">
-                        <i class="fas fa-external-link-alt"></i> Detailed View
-                    </a>
-                    {% endif %}
-                </h5>
-            </div>
-            <div id="collapseVaccineTimeline" class="collapse" aria-labelledby="headingVaccineTimeline">
-                <div class="card-body">
-                    {% include 'partials/_vaccine_timeline_compact_simple.html' %}
-                    {% include 'partials/_vaccine_add_form.html' %}
-                </div>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Vaccines</h5>
+                {% if patient.naissance_date %}
+                <a href="{{ url_for('vaccine.vaccine_schedule_timeline', patient_id=patient.id) }}" class="btn btn-primary">
+                    <i class="fas fa-syringe"></i> View Vaccines
+                </a>
+                {% endif %}
             </div>
         </div>
-                        
-        <!-- Include Vaccine Edit Modal -->
-        {% include 'partials/_vaccine_edit_modal.html' %}
         {% endif %}
 
         {% include '_patient_visits_form.html' %}
@@ -175,62 +162,5 @@
 {% block scripts %}
 {{ super() }}
 
-<!-- Include Vaccine JavaScript Modules -->
-<script src="{{ url_for('static', filename='js/vaccine-timeline-core.js') }}"></script>
-<script src="{{ url_for('static', filename='js/vaccine-editor-modal.js') }}"></script>
-<script src="{{ url_for('static', filename='js/vaccine-ajax-handlers.js') }}"></script>
 
-<script>
-// Timeline data from backend
-const timelineData = {{ timeline | tojson | safe }};
-
-// Initialize vaccine components when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize modal handlers
-    if (window.VaccineEditor) {
-        window.VaccineEditor.initializeModalHandlers();
-    }
-    
-    // Initialize AJAX handlers
-    if (window.VaccineAjax) {
-        window.VaccineAjax.initializeSaveHandler({{ patient.id }});
-    }
-    
-    // Initialize timeline if data exists
-    if (timelineData && timelineData.length > 0 && window.VaccineTimeline) {
-        // Initialize with default range
-        window.VaccineTimeline.updateTimelineLabels('0-1');
-        window.VaccineTimeline.updateCurrentAgeMarker('0-1', '{{ patient.naissance_date }}');
-        window.VaccineTimeline.createVaccineLabels('0-1', timelineData);
-        
-        // Initialize age range buttons
-        window.VaccineTimeline.initializeAgeRangeButtons(timelineData, '{{ patient.naissance_date }}');
-    }
-});
-
-// Legacy function names for backward compatibility
-function openVaccineEditModal(vaccine, dose) {
-    if (window.VaccineEditor) {
-        window.VaccineEditor.openVaccineEditModal(vaccine, dose);
-    }
-}
-
-function openAdditionalVaccineModal(vaccineName, doseNumber, vaccineId, completedDate, dueDate) {
-    if (window.VaccineEditor) {
-        window.VaccineEditor.openAdditionalVaccineModal(vaccineName, doseNumber, vaccineId, completedDate, dueDate);
-    }
-}
-
-function closeVaccineEditModal() {
-    if (window.VaccineEditor) {
-        window.VaccineEditor.closeVaccineEditModal();
-    }
-}
-
-function saveVaccineDate() {
-    if (window.VaccineAjax) {
-        window.VaccineAjax.saveVaccineDate({{ patient.id }});
-    }
-}
-</script>
 {% endblock %} 

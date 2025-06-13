@@ -84,23 +84,31 @@
     <p>Note: Ce tableau inclut tous les vaccins enregistrés, y compris ceux ne faisant pas partie du calendrier standard.</p>
 
     <h3 class="vaccine-section-title">Vaccinations Obligatoires</h3>
-    {% if mandatory_vaccine_table_data %}
+    {% if vaccine_data.mandatory_vaccines %}
         <table class="vaccine-table">
             <thead>
                 <tr>
                     <th>{{ table_column_labels.vaccine_col }}</th>
-                    {% for dose_key in active_dose_keys %}
-                        <th>{{ table_column_labels[dose_key] }}</th>
-                    {% endfor %}
+                    <th>Dose 1</th>
+                    <th>Dose 2</th>
+                    <th>Dose 3</th>
+                    <th>Rappel 1</th>
+                    <th>Rappel 2</th>
+                    <th>Rappel 3</th>
+                    <th>Rappel 4</th>
                 </tr>
             </thead>
             <tbody>
-                {% for vaccine_row in mandatory_vaccine_table_data %}
+                {% for vaccine_name, doses in vaccine_data.mandatory_vaccines %}
                 <tr>
-                    <td class="vaccine-name-cell">{{ vaccine_row.vaccine_display_name | safe }}</td>
-                    {% for dose_key in active_dose_keys %}
-                        <td class="date-cell">{{ vaccine_row.dose_dates[dose_key] | default('-', true) }}</td>
-                    {% endfor %}
+                    <td class="vaccine-name-cell">{{ vaccine_name }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 1', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 2', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 3', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 4', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 5', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 6', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 7', '-') }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -110,29 +118,69 @@
     {% endif %}
 
     <h3 class="vaccine-section-title recommended-vaccines-title-pdf">Vaccinations Recommandées</h3>
-    {% if recommended_vaccine_table_data %}
+    {% if vaccine_data.recommended_vaccines %}
         <table class="vaccine-table">
             <thead>
                 <tr>
                     <th>{{ table_column_labels.vaccine_col }}</th>
-                    {% for dose_key in active_dose_keys %}
-                        <th>{{ table_column_labels[dose_key] }}</th>
-                    {% endfor %}
+                    <th>Dose 1</th>
+                    <th>Dose 2</th>
+                    <th>Dose 3</th>
+                    <th>Rappel 1</th>
+                    <th>Rappel 2</th>
+                    <th>Rappel 3</th>
+                    <th>Rappel 4</th>
                 </tr>
             </thead>
             <tbody>
-                {% for vaccine_row in recommended_vaccine_table_data %}
+                {% for vaccine_name, doses in vaccine_data.recommended_vaccines %}
                 <tr>
-                    <td class="vaccine-name-cell">{{ vaccine_row.vaccine_display_name | safe }}</td>
-                    {% for dose_key in active_dose_keys %}
-                        <td class="date-cell">{{ vaccine_row.dose_dates[dose_key] | default('-', true) }}</td>
-                    {% endfor %}
+                    <td class="vaccine-name-cell">{{ vaccine_name }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 1', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 2', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 3', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 4', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 5', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 6', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 7', '-') }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% else %}
         <p>Aucune vaccination recommandée enregistrée.</p>
+    {% endif %}
+
+    {% if vaccine_data.other_vaccines %}
+    <h3 class="vaccine-section-title">Autres Vaccinations</h3>
+        <table class="vaccine-table">
+            <thead>
+                <tr>
+                    <th>{{ table_column_labels.vaccine_col }}</th>
+                    <th>Dose 1</th>
+                    <th>Dose 2</th>
+                    <th>Dose 3</th>
+                    <th>Rappel 1</th>
+                    <th>Rappel 2</th>
+                    <th>Rappel 3</th>
+                    <th>Rappel 4</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vaccine_name, doses in vaccine_data.other_vaccines %}
+                <tr>
+                    <td class="vaccine-name-cell">{{ vaccine_name }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 1', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 2', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 3', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 4', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 5', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 6', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 7', '-') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% endif %}
 
     <h2 class="section-title">Historique des Consultations</h2>

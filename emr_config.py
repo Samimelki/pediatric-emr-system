@@ -504,12 +504,7 @@ class EMRConfig:
     def _get_default_vaccine_config(self):
         """Get default vaccine configuration."""
         return {
-            "name_mappings": {
-                "Haemophilus influenzae type b (Hib)": "Hib (Haemophilus influenzae b)",
-                "Measles - Mumps - Rubella (MMR)": "MMR (Measles, Mumps, Rubella)",
-                "Measles": "Measles (Single)",
-                "Measles (single)": "Measles (Single)"
-            },
+            
             "DTaP - IPV": {
                 "category": "mandatory",
                 "doses": [
@@ -539,17 +534,27 @@ class EMRConfig:
                     {"age": "1Y6M", "interval_to_next": None}
                 ]
             },
+            "Rotavirus": {
+                "category": "mandatory",
+                "doses": [
+                    {"age": "2M", "interval_to_next": "2M"},
+                    {"age": "4M", "interval_to_next": "2M"},
+                    {"age": "6M", "interval_to_next": None},
+                    
+                ]
+            },
             "MMR (Measles, Mumps, Rubella)": {
                 "category": "mandatory",
                 "doses": [
-                    {"age": "1Y", "interval_to_next": "6M"},
-                    {"age": "1Y6M", "interval_to_next": None}
+                    {"age": "9M", "interval_to_next": "3M"},
+                    {"age": "12M", "interval_to_next": "6M"},
+                    {"age": "18M", "interval_to_next": None}
                 ]
             },
             "Measles (Single)": {
-                "category": "recommended",
+                "category": "mandatory",
                 "doses": [
-                    {"age": "1Y", "interval_to_next": None}
+                    {"age": "9M", "interval_to_next": None}
                 ]
             },
             "PPD (TB Skin Test)": {

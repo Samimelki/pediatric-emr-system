@@ -259,12 +259,12 @@ def patient_detail(patient_id):
                 vaccine_groups[vaccine_name].append(dict(record))
             
             # Convert to the format expected by the template
-            autres_vaccins = []
+            additional_vaccines = []
             for vaccine_name, doses in vaccine_groups.items():
                 # Use the first dose as the base record
                 base_vaccine = doses[0]
                 base_vaccine['all_doses'] = doses
-                autres_vaccins.append(base_vaccine)
+                additional_vaccines.append(base_vaccine)
             
             # Use shared vaccine name utilities for consistent behavior
             from utils.vaccine_name_utils import get_canonical_vaccine_name, is_vaccine_in_standard_schedule
@@ -273,13 +273,14 @@ def patient_detail(patient_id):
             from datetime import datetime, timedelta
             from dateutil.relativedelta import relativedelta
             
-            autres_vaccins_with_schedule = []
-            for vaccine in autres_vaccins:
+            additional_vaccines_with_schedule = []
+            for vaccine in additional_vaccines:
                 # Check if this vaccine is in the standard vaccine schedule
-                vaccine_name = vaccine.get('immunization', '')
+                vaccine_name = vaccine['immunization'] if 'immunization' in vaccine.keys() else ''
                 
                 # Use shared utility to check if vaccine is in standard schedule
-                if is_vaccine_in_standard_schedule(vaccine_name, debug=True):
+                is_standard = is_vaccine_in_standard_schedule(vaccine_name)
+                if is_standard:
                     continue  # Skip vaccines that are in the standard schedule (they'll appear in timeline)
                 vaccine_dict = dict(vaccine)
                 vaccine_dict['doses_schedule'] = []
@@ -287,12 +288,13 @@ def patient_detail(patient_id):
                 
 
                 
-                # Always create at least the first dose
-                total_doses = vaccine.get('total_doses_planned', 1)
-                interval_months = vaccine.get('interval_months')
+                # For Immunizations table, we don't have total_doses_planned or interval_months
+                # Just show the doses that were actually given
+                total_doses = len(vaccine.get('all_doses', [vaccine])) if 'all_doses' in vaccine else 1
+                interval_months = None  # Not available in Immunizations table
                 
                 # First dose (always exists if there's a date)
-                if vaccine.get('administered_date'):
+                if vaccine['administered_date']:
                     try:
                         first_dose_date = datetime.strptime(vaccine['administered_date'], '%Y-%m-%d')
                         current_date = datetime.now()
@@ -307,7 +309,7 @@ def patient_detail(patient_id):
                                     'completed_date': first_dose_date.strftime('%Y-%m-%d'),
                                     'status': 'completed',
                                     'label': f'Dose {dose_num}',
-                                    'vaccine_id': vaccine.get('id'),
+                                    'vaccine_id': vaccine['id'],
                                     'is_editable': True
                                 }
                             else:
@@ -330,7 +332,7 @@ def patient_detail(patient_id):
                                         'status': status,
                                         'label': f'Dose {dose_num}',
                                         'days_until_due': days_diff,
-                                        'vaccine_id': vaccine.get('id'),
+                                        'vaccine_id': vaccine['id'],
                                         'is_editable': True
                                     }
                                     
@@ -345,14 +347,15 @@ def patient_detail(patient_id):
                                         'completed_date': None,
                                         'status': 'pending',
                                         'label': f'Dose {dose_num}',
-                                        'vaccine_id': vaccine.get('id'),
+                                        'vaccine_id': vaccine['id'],
                                         'is_editable': True
                                     }
                             
                             vaccine_dict['doses_schedule'].append(dose_info)
                     
                     except (ValueError, TypeError) as e:
-                        print(f"Error calculating schedule for vaccine {vaccine['immunization']}: {e}")
+                        vaccine_name = vaccine.get('immunization') or vaccine.get('vaccine_name', 'Unknown')
+                        print(f"Error calculating schedule for vaccine {vaccine_name}: {e}")
                 else:
                     # No date given yet, just show the planned doses
                     for dose_num in range(1, total_doses + 1):
@@ -362,12 +365,14 @@ def patient_detail(patient_id):
                             'completed_date': None,
                             'status': 'pending',
                             'label': f'Dose {dose_num}',
-                            'vaccine_id': vaccine.get('id'),
+                            'vaccine_id': vaccine['id'],
                             'is_editable': True
                         }
                         vaccine_dict['doses_schedule'].append(dose_info)
                 
-                autres_vaccins_with_schedule.append(vaccine_dict)
+                additional_vaccines_with_schedule.append(vaccine_dict)
+            
+            # Additional vaccines processed successfully
             
         except Exception as e:
             current_app.logger.error(f"Error preparing vaccine data for patient {patient_id}: {e}", exc_info=True)
@@ -476,7 +481,7 @@ def patient_detail(patient_id):
                            active_dose_keys_emr=active_dose_keys_emr,
                            table_column_labels_emr=table_column_labels_emr,
                            # Patient-specific vaccines
-                           autres_vaccins=autres_vaccins_with_schedule if 'autres_vaccins_with_schedule' in locals() else [],
+                           additional_vaccines=additional_vaccines_with_schedule if 'additional_vaccines_with_schedule' in locals() else [],
                            # Vaccine timeline data
                            timeline=timeline,
                            summary_stats=summary_stats,

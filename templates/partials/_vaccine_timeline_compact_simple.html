@@ -1,4 +1,4 @@
-<!-- Simplified Vaccine Timeline - Compact View -->
+<!-- Compact Vaccine Timeline - Same as Detailed View but without Vaccine Cards -->
 
 <!-- Legend -->
 <div class="legend">
@@ -80,12 +80,40 @@
         <!-- Vaccine Labels will be added by JavaScript -->
     </div>
     
-    <!-- Global tooltip -->
+    <!-- Global tooltip at top of page -->
     <div id="global-tooltip" class="global-tooltip"></div>
 </div>
 {% endif %}
 
+<!-- NOTE: Vaccine Summary Cards section is omitted in compact view -->
 
+<!-- Vaccine Date Edit Modal -->
+<div id="vaccine-edit-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modal-title">Edit Vaccine Date</h3>
+            <span class="modal-close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="vaccine-edit-form">
+                <div class="form-group">
+                    <label for="vaccine-date-input">Vaccination Date:</label>
+                    <input type="date" id="vaccine-date-input" class="form-control" required>
+                    <small class="form-text text-muted">Leave blank to clear the date</small>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="clear-date-checkbox"> Clear this vaccination date
+                    </label>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="modal-cancel">Cancel</button>
+            <button type="button" class="btn btn-primary" id="modal-save">Save</button>
+        </div>
+    </div>
+</div>
 
 {% if not timeline %}
 <div class="alert alert-warning">
@@ -93,8 +121,564 @@
 </div>
 {% endif %}
 
+<script>
+// Function to get abbreviated vaccine name
+function getVaccineAbbreviation(vaccineName) {
+    const abbreviations = {
+        'DTaP - IPV': 'DTaP',
+        'Hepatitis A': 'HepA',
+        'Hepatitis B': 'HepB',
+        'Hib (Haemophilus influenzae b)': 'Hib',
+        'Haemophilus influenzae type b (Hib)': 'Hib',
+        'MMR (Measles, Mumps, Rubella)': 'MMR',
+        'Measles - Mumps - Rubella (MMR)': 'MMR',
+        'Measles': 'Meas',
+        'Measles (single)': 'Meas',
+        'Pneumococcal PCV': 'PCV',
+        'Rotavirus': 'RV',
+        'Varicella': 'VZV',
+        'Influenza': 'Flu',
+        'Meningococcal ACWY': 'MenA',
+        'Meningococcal B': 'MenB',
+        'Meningococcal C': 'MenC',
+        'PPD (TB Skin Test)': 'PPD',
+        'COVID-19': 'COV',
+        'HPV (Human Papillomavirus)': 'HPV',
+        'BCG (Tuberculosis)': 'BCG',
+        'RSV Prevention': 'RSV',
+        'Rabies': 'Rab',
+        'Typhoid': 'Typh',
+        'Yellow Fever': 'YF'
+    };
+    
+    // Look for exact match first
+    if (abbreviations[vaccineName]) {
+        return abbreviations[vaccineName];
+    }
+    
+    // Look for partial matches
+    for (const [full, abbrev] of Object.entries(abbreviations)) {
+        if (vaccineName.includes(full) || full.includes(vaccineName)) {
+            return abbrev;
+        }
+    }
+    
+    // Fallback: create abbreviation from first letters of significant words
+    return vaccineName
+        .split(/[\s\-\(\)]+/)
+        .filter(word => word.length > 2 && !['and', 'the', 'of', 'or'].includes(word.toLowerCase()))
+        .map(word => word.charAt(0).toUpperCase())
+        .join('')
+        .substring(0, 4);
+}
+
+// Vaccine timeline data from backend (compact view)
+const compactTimelineData = {{ timeline | tojson }};
+let compactVaccineLabels = [];
+let compactCurrentAgeRange = '0-1';
+
+// Function to get age range configuration
+function getCompactAgeRangeConfig(range) {
+    switch(range) {
+        case '0-1':
+            return {
+                minMonths: 0,
+                maxMonths: 12,
+                labels: [
+                    { months: 0, label: 'Birth' },
+                    { months: 2, label: '2M' },
+                    { months: 4, label: '4M' },
+                    { months: 6, label: '6M' },
+                    { months: 9, label: '9M' },
+                    { months: 12, label: '1Y' }
+                ]
+            };
+        case '1-2':
+            return {
+                minMonths: 12,
+                maxMonths: 24,
+                labels: [
+                    { months: 12, label: '1Y' },
+                    { months: 15, label: '15M' },
+                    { months: 18, label: '18M' },
+                    { months: 21, label: '21M' },
+                    { months: 24, label: '2Y' }
+                ]
+            };
+        case '2-10':
+            return {
+                minMonths: 24,
+                maxMonths: 120,
+                labels: [
+                    { months: 24, label: '2Y' },
+                    { months: 36, label: '3Y' },
+                    { months: 48, label: '4Y' },
+                    { months: 60, label: '5Y' },
+                    { months: 72, label: '6Y' },
+                    { months: 84, label: '7Y' },
+                    { months: 96, label: '8Y' },
+                    { months: 108, label: '9Y' },
+                    { months: 120, label: '10Y' }
+                ]
+            };
+        case '10-18':
+            return {
+                minMonths: 120,
+                maxMonths: 216,
+                labels: [
+                    { months: 120, label: '10Y' },
+                    { months: 132, label: '11Y' },
+                    { months: 144, label: '12Y' },
+                    { months: 156, label: '13Y' },
+                    { months: 168, label: '14Y' },
+                    { months: 180, label: '15Y' },
+                    { months: 192, label: '16Y' },
+                    { months: 204, label: '17Y' },
+                    { months: 216, label: '18Y' }
+                ]
+            };
+        case 'all':
+        default:
+            return {
+                minMonths: 0,
+                maxMonths: 300, // Extended to 25 years to accommodate far-future vaccines
+                labels: [
+                    { months: 0, label: 'Birth' },
+                    { months: 24, label: '2Y' },
+                    { months: 48, label: '4Y' },
+                    { months: 72, label: '6Y' },
+                    { months: 96, label: '8Y' },
+                    { months: 120, label: '10Y' },
+                    { months: 144, label: '12Y' },
+                    { months: 168, label: '14Y' },
+                    { months: 192, label: '16Y' },
+                    { months: 216, label: '18Y' },
+                    { months: 240, label: '20Y' },
+                    { months: 264, label: '22Y' },
+                    { months: 288, label: '24Y' }
+                ]
+            };
+    }
+}
+
+// Function to get staggered position class
+function getCompactPositionClass(index, total) {
+    const levels = 3; // 3 levels above and below
+    const side = index % 2 === 0 ? 'above' : 'below';
+    const level = Math.floor(index / 2) % levels + 1;
+    return `${side}-${level}`;
+}
+
+// Function to update timeline labels with overlap prevention
+function updateCompactTimelineLabels(range) {
+    const labelsContainer = document.getElementById('timeline-labels');
+    if (!labelsContainer) return;
+    
+    labelsContainer.innerHTML = '';
+    const config = getCompactAgeRangeConfig(range);
+    const rangeSpan = config.maxMonths - config.minMonths;
+    
+    // Calculate positions and filter out overlapping labels
+    const labelPositions = [];
+    const minSpacing = 8; // Minimum percentage spacing between labels
+    
+    config.labels.forEach(labelData => {
+        const position = ((labelData.months - config.minMonths) / rangeSpan) * 100;
+        
+        // Check if this position would overlap with existing labels
+        const hasOverlap = labelPositions.some(existingPos => 
+            Math.abs(position - existingPos) < minSpacing
+        );
+        
+        if (!hasOverlap) {
+            labelPositions.push(position);
+            
+            const labelDiv = document.createElement('div');
+            labelDiv.className = 'age-label';
+            labelDiv.style.left = `${position}%`;
+            labelDiv.textContent = labelData.label;
+            labelsContainer.appendChild(labelDiv);
+        }
+    });
+}
+
+// Function to update current age marker
+function updateCompactCurrentAgeMarker(range) {
+    const birthDate = new Date('{{ patient.naissance_date }}');
+    const today = new Date();
+    const currentAgeMonths = (today.getFullYear() - birthDate.getFullYear()) * 12 + (today.getMonth() - birthDate.getMonth());
+    
+    const config = getCompactAgeRangeConfig(range);
+    const currentAgeMarker = document.querySelector('.current-age-marker');
+    
+    if (!currentAgeMarker) return;
+    
+    if (currentAgeMonths >= config.minMonths && currentAgeMonths <= config.maxMonths) {
+        const position = ((currentAgeMonths - config.minMonths) / (config.maxMonths - config.minMonths)) * 100;
+        currentAgeMarker.style.left = `${position}%`;
+        currentAgeMarker.style.display = 'block';
+    } else {
+        currentAgeMarker.style.display = 'none';
+    }
+}
+
+// Function to create vaccine labels for current range with smart positioning
+function createCompactVaccineLabels(range) {
+    const timelineContainer = document.querySelector('.timeline-container');
+    if (!timelineContainer || !compactTimelineData) return;
+    
+    // Clear existing labels
+    compactVaccineLabels.forEach(labelData => {
+        if (labelData.element.parentNode) {
+            labelData.element.parentNode.removeChild(labelData.element);
+        }
+    });
+    compactVaccineLabels = [];
+    
+    const config = getCompactAgeRangeConfig(range);
+    const rangeSpan = config.maxMonths - config.minMonths;
+    const birthDate = new Date('{{ patient.naissance_date }}');
+    
+    // Helper function to calculate age in months from completion date
+    function calculateAgeAtCompletion(completedDateStr) {
+        if (!completedDateStr) return null;
+        try {
+            const completedDate = new Date(completedDateStr);
+            const ageAtCompletion = (completedDate.getFullYear() - birthDate.getFullYear()) * 12 + 
+                                   (completedDate.getMonth() - birthDate.getMonth());
+            return ageAtCompletion;
+        } catch (e) {
+            return null;
+        }
+    }
+    
+    // Collect all vaccines in this range and sort by age
+    const vaccinesInRange = [];
+    compactTimelineData.forEach(vaccine => {
+        vaccine.doses.forEach(dose => {
+            let ageMonths = dose.age_months;  // Default to scheduled age
+            let position;
+            
+            // For completed vaccines, use actual completion age instead of scheduled age
+            if (dose.status === 'completed' && dose.completed_date) {
+                const completionAge = calculateAgeAtCompletion(dose.completed_date);
+                if (completionAge !== null) {
+                    ageMonths = completionAge;
+                }
+            }
+            // For non-completed vaccines, always use scheduled age (for planning purposes)
+            // This ensures future vaccines show up in their planned age ranges
+            
+            // Check if this vaccine falls within the current age range
+            // For completed vaccines: check actual completion age
+            // For scheduled vaccines: check scheduled age
+            // Include ALL vaccines (completed, due, overdue, upcoming, and future) for planning purposes
+            if (ageMonths >= config.minMonths && ageMonths <= config.maxMonths) {
+                position = ((ageMonths - config.minMonths) / rangeSpan) * 100;
+                vaccinesInRange.push({
+                    vaccine,
+                    dose,
+                    position,
+                    ageMonths: ageMonths
+                });
+            }
+        });
+    });
+    
+    // Sort by age (position)
+    vaccinesInRange.sort((a, b) => a.ageMonths - b.ageMonths);
+    
+    // Track occupied positions by level
+    const occupiedPositions = {
+        'above-1': [],
+        'above-2': [],
+        'above-3': [],
+        'below-1': [],
+        'below-2': [],
+        'below-3': []
+    };
+    
+    const minSpacing = 6; // Minimum percentage spacing between labels
+    
+    vaccinesInRange.forEach((vaccineData, index) => {
+        const { vaccine, dose, position } = vaccineData;
+        
+        // Find the best level for this vaccine
+        let bestLevel = null;
+        let bestDistance = Infinity;
+        
+        const levels = ['above-1', 'below-1', 'above-2', 'below-2', 'above-3', 'below-3'];
+        
+        for (const level of levels) {
+            let hasCollision = false;
+            let maxDistance = 0;
+            
+            // Check for collisions at this level
+            for (const occupiedPos of occupiedPositions[level]) {
+                const distance = Math.abs(position - occupiedPos);
+                if (distance < minSpacing) {
+                    hasCollision = true;
+                    break;
+                }
+                maxDistance = Math.max(maxDistance, distance);
+            }
+            
+            // If no collision and this level gives better spacing
+            if (!hasCollision && maxDistance < bestDistance) {
+                bestLevel = level;
+                bestDistance = maxDistance;
+            }
+        }
+        
+        // Fallback to first available level
+        if (!bestLevel) {
+            bestLevel = levels[index % levels.length];
+        }
+        
+        // Add to occupied positions
+        occupiedPositions[bestLevel].push(position);
+        
+        // Create the label
+        const label = document.createElement('div');
+        const abbreviation = getVaccineAbbreviation(vaccine.vaccine_name);
+        
+        label.className = `vaccine-label ${dose.status} ${bestLevel}`;
+        label.style.left = `${position}%`;
+        label.textContent = abbreviation;
+        
+        // Create tooltip text
+        let tooltipText = `${vaccine.vaccine_name} - ${dose.label} (${dose.age_display})`;
+        if (dose.status === 'completed' && dose.completed_date) {
+            tooltipText += ` ✓ ${dose.completed_date}`;
+        } else if (dose.status === 'due' && dose.due_date) {
+            tooltipText += ` - Due: ${dose.due_date}`;
+        } else if (dose.status === 'overdue' && dose.days_overdue) {
+            tooltipText += ` - ${dose.days_overdue}d late`;
+        } else if (dose.status === 'upcoming' && dose.days_until_due) {
+            tooltipText += ` - In ${dose.days_until_due}d`;
+        } else if (dose.due_date) {
+            tooltipText += ` - ${dose.due_date}`;
+        }
+        
+        // Add hover events for global tooltip
+        label.addEventListener('mouseenter', function() {
+            const globalTooltip = document.getElementById('global-tooltip');
+            globalTooltip.textContent = tooltipText;
+            globalTooltip.classList.add('show');
+        });
+        
+        label.addEventListener('mouseleave', function() {
+            const globalTooltip = document.getElementById('global-tooltip');
+            globalTooltip.classList.remove('show');
+        });
+        
+        // Add click event for editing - open modal
+        label.addEventListener('click', function(e) {
+            e.stopPropagation();
+            window.openVaccineEditModal(vaccine, dose);
+        });
+        
+        timelineContainer.appendChild(label);
+        
+        compactVaccineLabels.push({
+            element: label,
+            ageMonths: dose.age_months,
+            vaccine: vaccine.vaccine_name,
+            dose: dose.label
+        });
+    });
+}
+
+// Function to update entire timeline for selected range
+function updateCompactTimeline(range) {
+    updateCompactTimelineLabels(range);
+    updateCompactCurrentAgeMarker(range);
+    createCompactVaccineLabels(range);
+}
+
+// Initialize timeline on page load
+document.addEventListener('DOMContentLoaded', function() {
+    if (compactTimelineData && compactTimelineData.length > 0) {
+        updateCompactTimeline(compactCurrentAgeRange);
+        updateCompactCurrentAgeMarker();
+        
+        // Add event listeners for age range buttons
+        document.querySelectorAll('.age-range-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.age-range-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Update current range
+                compactCurrentAgeRange = this.dataset.range;
+                
+                // Update timeline
+                updateCompactTimeline(compactCurrentAgeRange);
+            });
+        });
+        
+        // Modal event handlers
+        const modalCloseButton = document.querySelector('.modal-close');
+        const modalCancelButton = document.getElementById('modal-cancel');
+        const modalSaveButton = document.getElementById('modal-save');
+        
+        if (modalCloseButton) {
+            modalCloseButton.addEventListener('click', function() {
+                window.closeVaccineEditModal();
+            });
+        }
+        
+        if (modalCancelButton) {
+            modalCancelButton.addEventListener('click', function() {
+                window.closeVaccineEditModal();
+            });
+        }
+        
+        if (modalSaveButton) {
+            modalSaveButton.addEventListener('click', function() {
+                window.saveVaccineDate();
+            });
+        }
+        
+        // Close modal when clicking outside
+        const modal = document.getElementById('vaccine-edit-modal');
+        if (modal) {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    window.closeVaccineEditModal();
+                }
+            });
+        }
+    }
+});
+
+// Modal functionality - make functions global for access from patient_detail.html
+let compactCurrentEditingVaccine = null;
+let compactCurrentEditingDose = null;
+
+window.openVaccineEditModal = function(vaccine, dose) {
+    compactCurrentEditingVaccine = vaccine;
+    compactCurrentEditingDose = dose;
+    
+    const modal = document.getElementById('vaccine-edit-modal');
+    const title = document.getElementById('modal-title');
+    const dateInput = document.getElementById('vaccine-date-input');
+    
+    title.textContent = `Edit ${vaccine.vaccine_name} - ${dose.label}`;
+    
+    // Pre-fill current date if available
+    if (dose.completed_date) {
+        dateInput.value = dose.completed_date.split('T')[0]; // Format for date input
+    } else {
+        dateInput.value = '';
+    }
+    
+    modal.style.display = 'block';
+}
+
+window.closeVaccineEditModal = function() {
+    const modal = document.getElementById('vaccine-edit-modal');
+    modal.style.display = 'none';
+    compactCurrentEditingVaccine = null;
+    compactCurrentEditingDose = null;
+}
+
+window.saveVaccineDate = function() {
+    if (!compactCurrentEditingVaccine || !compactCurrentEditingDose) return;
+    
+    const dateInput = document.getElementById('vaccine-date-input');
+    const clearCheckbox = document.getElementById('clear-date-checkbox');
+    const saveButton = document.getElementById('modal-save');
+    
+    // Disable save button during request
+    saveButton.disabled = true;
+    saveButton.textContent = 'Saving...';
+    
+    // Prepare data for AJAX request
+    const requestData = {
+        vaccine_name: compactCurrentEditingVaccine.vaccine_name,
+        dose_key: compactCurrentEditingDose.dose_key,
+        administered_date: clearCheckbox.checked ? null : dateInput.value,
+        clear_date: clearCheckbox.checked
+    };
+    
+    // Make AJAX request to save to Immunizations table
+    fetch(`/vaccines/patient/{{ patient.id }}/immunization/save`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show success message
+            showCompactNotification(`Vaccine ${data.action} successfully!`, 'success');
+            
+            // Close modal
+            window.closeVaccineEditModal();
+            
+            // Refresh the timeline without page reload
+            refreshCompactTimeline();
+        } else {
+            // Show error message
+            showCompactNotification(`Error: ${data.error}`, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error saving vaccine:', error);
+        showCompactNotification('Error saving vaccine. Please try again.', 'error');
+    })
+    .finally(() => {
+        // Re-enable save button
+        saveButton.disabled = false;
+        saveButton.textContent = 'Save';
+    });
+}
+
+// Notification system
+function showCompactNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <span>${message}</span>
+        <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+// Function to refresh timeline without page reload
+function refreshCompactTimeline() {
+    // Show loading indicator
+    const timelineContainer = document.querySelector('.age-timeline');
+    if (timelineContainer) {
+        timelineContainer.style.opacity = '0.6';
+        timelineContainer.style.pointerEvents = 'none';
+    }
+    
+    // Reload the page to refresh data
+    // In the future, this could be made more sophisticated by fetching just the timeline data
+    setTimeout(() => {
+        window.location.reload();
+    }, 1000);
+}
+</script>
+
 <style>
-/* Simplified Timeline Styles */
+/* Timeline Styles - Same as Detailed View */
 .legend {
     display: flex;
     flex-wrap: wrap;
@@ -386,6 +970,179 @@
     opacity: 1;
 }
 
+/* Modal styles for compact view */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 0;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.1em;
+    color: #333;
+}
+
+.modal-close {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #999;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #545b62;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Clickable vaccine labels */
+.vaccine-label.clickable {
+    cursor: pointer !important;
+    transition: transform 0.1s ease;
+}
+
+.vaccine-label.clickable:hover {
+    transform: scale(1.1);
+    z-index: 10;
+}
+
+/* Notification styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 16px;
+    border-radius: 6px;
+    color: white;
+    font-weight: 500;
+    font-size: 0.9em;
+    z-index: 10000;
+    min-width: 200px;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: slideIn 0.3s ease-out;
+}
+
+.notification-success {
+    background: #28a745;
+}
+
+.notification-error {
+    background: #dc3545;
+}
+
+.notification-info {
+    background: #17a2b8;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
 /* Clickable vaccine elements */
 .vaccine-label:hover {
     transform: scale(1.1);
@@ -446,10 +1203,10 @@ function getVaccineAbbreviation(vaccineName) {
         .substring(0, 4);
 }
 
-// Vaccine timeline data from backend
-const timelineData = {{ timeline | tojson }};
-let vaccineLabels = [];
-let currentAgeRange = '0-1';
+// Vaccine timeline data from backend (compact view)
+const compactTimelineData = {{ timeline | tojson }};
+let compactVaccineLabels = [];
+let compactCurrentAgeRange = '0-1';
 
 // Function to get age range configuration
 function getAgeRangeConfig(range) {
@@ -535,12 +1292,12 @@ function getAgeRangeConfig(range) {
     }
 }
 
-// Initialize timeline on page load
+// Initialize compact timeline on page load
 document.addEventListener('DOMContentLoaded', function() {
-    if (timelineData && timelineData.length > 0) {
-        updateTimelineLabels(currentAgeRange);
-        updateCurrentAgeMarker(currentAgeRange);
-        createVaccineLabels(currentAgeRange);
+    if (compactTimelineData && compactTimelineData.length > 0) {
+        updateCompactTimelineLabels(compactCurrentAgeRange);
+        updateCompactCurrentAgeMarker(compactCurrentAgeRange);
+        createCompactVaccineLabels(compactCurrentAgeRange);
         
         // Add event listeners for age range buttons
         document.querySelectorAll('.age-range-btn').forEach(btn => {
@@ -551,19 +1308,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.classList.add('active');
                 
                 // Update current range
-                currentAgeRange = this.dataset.range;
+                compactCurrentAgeRange = this.dataset.range;
                 
                 // Update timeline
-                updateTimelineLabels(currentAgeRange);
-                updateCurrentAgeMarker(currentAgeRange);
-                createVaccineLabels(currentAgeRange);
+                updateCompactTimelineLabels(compactCurrentAgeRange);
+                updateCompactCurrentAgeMarker(compactCurrentAgeRange);
+                createCompactVaccineLabels(compactCurrentAgeRange);
             });
         });
     }
 });
 
 // Function to update timeline labels
-function updateTimelineLabels(range) {
+function updateCompactTimelineLabels(range) {
     const labelsContainer = document.getElementById('timeline-labels');
     if (!labelsContainer) return;
     
@@ -583,7 +1340,7 @@ function updateTimelineLabels(range) {
 }
 
 // Function to update current age marker
-function updateCurrentAgeMarker(range) {
+function updateCompactCurrentAgeMarker(range) {
     {% if patient.naissance_date %}
     const birthDate = new Date('{{ patient.naissance_date }}');
     const today = new Date();
@@ -605,24 +1362,24 @@ function updateCurrentAgeMarker(range) {
 }
 
 // Function to create vaccine labels with smart positioning and tooltips
-function createVaccineLabels(range) {
+function createCompactVaccineLabels(range) {
     const timelineContainer = document.querySelector('.timeline-container');
-    if (!timelineContainer || !timelineData) return;
+    if (!timelineContainer || !compactTimelineData) return;
     
     // Clear existing labels
-    vaccineLabels.forEach(labelData => {
+    compactVaccineLabels.forEach(labelData => {
         if (labelData.element.parentNode) {
             labelData.element.parentNode.removeChild(labelData.element);
         }
     });
-    vaccineLabels = [];
+    compactVaccineLabels = [];
     
     const config = getAgeRangeConfig(range);
     const rangeSpan = config.maxMonths - config.minMonths;
     
     // Collect vaccines in range and sort by age
     const vaccinesInRange = [];
-    timelineData.forEach(vaccine => {
+    compactTimelineData.forEach(vaccine => {
         vaccine.doses.forEach(dose => {
             if (dose.age_months >= config.minMonths && dose.age_months <= config.maxMonths) {
                 const position = ((dose.age_months - config.minMonths) / rangeSpan) * 100;
@@ -726,9 +1483,23 @@ function createVaccineLabels(range) {
             }
         });
         
+        // Add click event to make doses clickable (same as detailed view)
+        labelDiv.addEventListener('click', function() {
+            // Only allow editing of non-completed doses
+            if (dose.status !== 'completed') {
+                openVaccineEditModal(vaccine, dose);
+            }
+        });
+        
+        // Add visual feedback for clickable items
+        if (dose.status !== 'completed') {
+            labelDiv.style.cursor = 'pointer';
+            labelDiv.classList.add('clickable');
+        }
+        
         timelineContainer.appendChild(labelDiv);
         
-        vaccineLabels.push({
+        compactVaccineLabels.push({
             element: labelDiv,
             ageMonths: dose.age_months,
             vaccine: vaccine.vaccine_name,
@@ -737,9 +1508,193 @@ function createVaccineLabels(range) {
     });
 }
 
-// Modal functions (if needed)
-function openVaccineEditModal(vaccineName, doseLabel) {
-    // This would open a modal for editing vaccine dates
-    console.log('Edit vaccine:', vaccineName, doseLabel);
+// Modal functionality for compact view (make global)
+window.currentEditingVaccine = null;
+window.currentEditingDose = null;
+
+window.openVaccineEditModal = function(vaccine, dose) {
+    console.log('Opening modal for:', vaccine, dose); // Debug log
+    
+    window.currentEditingVaccine = vaccine;
+    window.currentEditingDose = dose;
+    
+    // Check if modal exists on the page (from detailed view)
+    let modal = document.getElementById('vaccine-edit-modal');
+    if (!modal) {
+        // Create modal if it doesn't exist
+        createVaccineEditModal();
+        modal = document.getElementById('vaccine-edit-modal');
+    }
+    
+    const title = document.getElementById('modal-title');
+    const dateInput = document.getElementById('vaccine-date-input');
+    const clearCheckbox = document.getElementById('clear-date-checkbox');
+    
+    // Make sure we have valid vaccine name
+    const vaccineName = vaccine.vaccine_name || vaccine.name || 'Unknown Vaccine';
+    title.textContent = `Edit ${vaccineName} - ${dose.label}`;
+    
+    // Pre-fill current date if available
+    if (dose.completed_date) {
+        dateInput.value = dose.completed_date.split('T')[0];
+        clearCheckbox.checked = false;
+    } else {
+        dateInput.value = '';
+        clearCheckbox.checked = false;
+    }
+    
+    modal.style.display = 'block';
 }
+
+window.closeVaccineEditModal = function() {
+    console.log('closeVaccineEditModal called');
+    const modal = document.getElementById('vaccine-edit-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        console.log('Modal hidden');
+    } else {
+        console.log('Modal not found');
+    }
+    window.currentEditingVaccine = null;
+    window.currentEditingDose = null;
+}
+
+function createVaccineEditModal() {
+    // Create modal HTML if it doesn't exist
+    const modalHTML = `
+        <div id="vaccine-edit-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modal-title">Edit Vaccine</h3>
+                    <span class="modal-close" onclick="console.log('X clicked'); window.closeVaccineEditModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="vaccine-date-input">Vaccination Date:</label>
+                        <input type="date" id="vaccine-date-input" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="clear-date-checkbox"> Clear this vaccination date
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modal-cancel" class="btn btn-secondary">Cancel</button>
+                    <button type="button" id="modal-save" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Add event listeners for buttons
+    document.getElementById('modal-cancel').addEventListener('click', function() {
+        console.log('Cancel button clicked');
+        window.closeVaccineEditModal();
+    });
+    
+    document.getElementById('modal-save').addEventListener('click', function() {
+        console.log('Save button clicked');
+        window.saveVaccineDate();
+    });
+    
+    // Add background click listener
+    document.getElementById('vaccine-edit-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            console.log('Background clicked');
+            window.closeVaccineEditModal();
+        }
+    });
+}
+
+window.saveVaccineDate = function() {
+    console.log('saveVaccineDate called');
+    console.log('Current editing vaccine:', window.currentEditingVaccine);
+    console.log('Current editing dose:', window.currentEditingDose);
+    
+    if (!window.currentEditingVaccine || !window.currentEditingDose) {
+        console.error('Missing vaccine or dose data');
+        alert('Error: Missing vaccine or dose data');
+        return;
+    }
+    
+    const dateInput = document.getElementById('vaccine-date-input');
+    const clearCheckbox = document.getElementById('clear-date-checkbox');
+    const saveButton = document.getElementById('modal-save');
+    
+    console.log('Saving vaccine:', window.currentEditingVaccine, window.currentEditingDose); // Debug log
+    
+    saveButton.disabled = true;
+    saveButton.textContent = 'Saving...';
+    
+    // Get the vaccine name correctly
+    const vaccineName = window.currentEditingVaccine.vaccine_name || window.currentEditingVaccine.name || 'Unknown';
+    
+    const requestData = {
+        vaccine_name: vaccineName,
+        dose_key: window.currentEditingDose.dose_key,
+        administered_date: clearCheckbox.checked ? null : dateInput.value,
+        clear_date: clearCheckbox.checked
+    };
+    
+    console.log('Request data:', requestData); // Debug log
+    
+    fetch(`/vaccines/patient/{{ patient.id }}/immunization/save`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification(`Vaccine ${data.action} successfully!`, 'success');
+            window.closeVaccineEditModal();
+            refreshTimeline();
+        } else {
+            showNotification(`Error: ${data.error}`, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error saving vaccine:', error);
+        showNotification('Error saving vaccine. Please try again.', 'error');
+    })
+    .finally(() => {
+        saveButton.disabled = false;
+        saveButton.textContent = 'Save';
+    });
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <span>${message}</span>
+        <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+function refreshTimeline() {
+    setTimeout(() => {
+        window.location.reload();
+    }, 1000);
+}
+
+// Debug: Test function availability
+console.log('Compact view functions loaded:');
+console.log('openVaccineEditModal:', typeof window.openVaccineEditModal);
+console.log('closeVaccineEditModal:', typeof window.closeVaccineEditModal);
+console.log('saveVaccineDate:', typeof window.saveVaccineDate);
 </script> 

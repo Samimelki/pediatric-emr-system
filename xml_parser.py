@@ -193,7 +193,7 @@ def _process_row(row_element, headers, ns):
             if header_name == memo_header_key:
                 patient_data['parsed_dossier_content'] = parse_memo_text(data_value)
             elif header_name == autres_vac_header_key:
-                patient_data['parsed_autres_vaccins'] = parse_autres_vac_text(data_value)
+                patient_data['parsed_additional_vaccines'] = parse_autres_vac_text(data_value)
         
         logical_col_idx += 1
     return patient_data

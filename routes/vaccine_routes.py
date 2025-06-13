@@ -149,7 +149,7 @@ def update_standard_vaccine_form(patient_id):
 
 @vaccine_bp.route('/patient/<int:patient_id>/other/add', methods=['GET', 'POST'])
 def add_other_vaccine(patient_id):
-    """Add a new non-standard vaccine for a patient"""
+    """Add a new vaccine for a patient - saves to unified Immunizations table"""
     db = get_db()
     patient_cursor = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,))
     patient = patient_cursor.fetchone()
@@ -161,8 +161,8 @@ def add_other_vaccine(patient_id):
     if request.method == 'POST':
         vaccine_name = request.form.get('other_vaccine_name', '').strip()
         vaccine_date = request.form.get('other_vaccine_date', '').strip()
-        total_doses_planned = request.form.get('total_doses_planned', '1')
-        interval_months = request.form.get('interval_months', '')
+        brand_name = request.form.get('brand_name', '').strip()
+        dose_number = request.form.get('dose_number', '1')
         
         if not vaccine_name:
             flash('Vaccine name is required.', 'danger')
@@ -172,23 +172,26 @@ def add_other_vaccine(patient_id):
                                  vaccine={'vaccine_name': vaccine_name, 'vaccine_date': vaccine_date})
         
         try:
-            # Convert to integers and validate
-            total_doses = int(total_doses_planned) if total_doses_planned else 1
-            interval = int(interval_months) if interval_months else None
+            # Convert dose number to integer
+            dose_num = int(dose_number) if dose_number else 1
             
-            # Insert new vaccine record
+            # Insert new vaccine record into the UNIFIED Immunizations table
             db.execute("""
-                INSERT INTO NonStandardVaccines (patient_id, vaccine_name, vaccine_date, dose_number, total_doses_planned, interval_months, created_date)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            """, (patient_id, vaccine_name, vaccine_date if vaccine_date else None, 1, total_doses, interval, datetime.now().isoformat()))
+                INSERT INTO Immunizations (patient_id, immunization, administered_date, brand_name, dose_number, source)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (patient_id, vaccine_name, vaccine_date if vaccine_date else None, brand_name, dose_num, 'manual'))
             db.commit()
             
             # Update Word document
-            word_manager = WordDocumentManager(db_path=emr_config.get_database_path(), documents_folder=emr_config.get_word_docs_folder())
-            word_manager.create_or_update_document(patient_id)
+            try:
+                word_manager = WordDocumentManager(db_path=emr_config.get_database_path(), documents_folder=emr_config.get_word_docs_folder())
+                word_manager.create_or_update_document(patient_id)
+            except Exception as word_error:
+                # Don't fail the whole operation if Word document update fails
+                current_app.logger.warning(f"Failed to update Word document for patient {patient_id}: {word_error}")
             
             flash('Vaccine added successfully!', 'success')
-            return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+            return redirect(url_for('vaccine.vaccine_schedule_timeline', patient_id=patient_id))
         except Exception as e:
             db.rollback()
             flash(f'Error adding vaccine: {e}', 'danger')
@@ -375,9 +378,36 @@ def vaccine_schedule_timeline(patient_id):
         # 2. Fetch standard vaccine data from Patients table for backward compatibility
         patient_vaccines = dict(patient)
 
-        # 3. Fetch from old NonStandardVaccines table for backward compatibility
-        autres_vaccins_cursor = db.execute("SELECT * FROM NonStandardVaccines WHERE patient_id = ?", (patient_id,))
-        autres_vaccins = autres_vaccins_cursor.fetchall()
+        # 3. Get non-standard vaccines from Immunizations table (vaccines not in config)
+        from utils.vaccine_schedule_engine import get_vaccine_schedule_config
+        vaccine_config = get_vaccine_schedule_config()
+        standard_vaccine_names = set(vaccine_config.keys())
+        
+        # Get all unique vaccines for this patient
+        all_vaccines_cursor = db.execute(
+            "SELECT DISTINCT immunization FROM Immunizations WHERE patient_id = ? ORDER BY immunization",
+            (patient_id,)
+        )
+        all_patient_vaccines = [row['immunization'] for row in all_vaccines_cursor.fetchall()]
+        
+        # Find non-standard vaccines (not in config)
+        non_standard_vaccines = [v for v in all_patient_vaccines if v not in standard_vaccine_names]
+        
+        # Get details for non-standard vaccines
+        additional_vaccines = []
+        for vaccine_name in non_standard_vaccines:
+            vaccine_doses_cursor = db.execute(
+                "SELECT id, immunization as vaccine_name, administered_date as vaccine_date, brand_name, dose_number FROM Immunizations WHERE patient_id = ? AND immunization = ? ORDER BY administered_date",
+                (patient_id, vaccine_name)
+            )
+            doses = vaccine_doses_cursor.fetchall()
+            if doses:
+                # Use first dose as the main record, but include all doses
+                main_record = dict(doses[0])
+                main_record['all_doses'] = [dict(d) for d in doses]
+                additional_vaccines.append(main_record)
+        
+        # Note: NonStandardVaccines table has been removed - all data now in Immunizations table
 
         # Calculate vaccine timeline using the new unified immunizations data
         timeline = get_patient_vaccine_timeline(
@@ -404,6 +434,7 @@ def vaccine_schedule_timeline(patient_id):
                              patient=patient,
                              timeline=timeline_data,
                              summary_stats=summary_stats,
+                             additional_vaccines=additional_vaccines,
                              emr_config=emr_config)
             
     except Exception as e:
@@ -538,4 +569,80 @@ def get_vaccine_field_mappings(language='en'):
             'success': False,
             'error': str(e)
         }), 500
+
+@vaccine_bp.route('/patient/<int:patient_id>/immunization/save', methods=['POST'])
+def save_immunization_record(patient_id):
+    """Save or update immunization record in the Immunizations table"""
+    if not request.is_json:
+        return jsonify({'success': False, 'error': 'JSON request required'}), 400
+    
+    data = request.get_json()
+    vaccine_name = data.get('vaccine_name')
+    dose_key = data.get('dose_key')
+    administered_date = data.get('administered_date')
+    clear_date = data.get('clear_date', False)
+    
+    if not vaccine_name or not dose_key:
+        return jsonify({'success': False, 'error': 'Vaccine name and dose key required'}), 400
+    
+    db = get_db()
+    
+    try:
+        # Convert dose_key to dose_number for database storage
+        dose_number_map = {
+            'd1': 1, 'd2': 2, 'd3': 3, 'd4': 4,
+            'r1': 5, 'r2': 6, 'r3': 7, 'r4': 8
+        }
+        dose_number = dose_number_map.get(dose_key, 1)
+        
+        if clear_date or not administered_date:
+            # Delete the immunization record
+            db.execute("""
+                DELETE FROM Immunizations 
+                WHERE patient_id = ? AND immunization = ? AND dose_number = ?
+            """, (patient_id, vaccine_name, dose_number))
+            
+            if db.execute("SELECT changes()").fetchone()[0] > 0:
+                db.commit()
+                return jsonify({'success': True, 'action': 'deleted'})
+            else:
+                # No record found to delete
+                return jsonify({'success': True, 'action': 'no_change'})
+        else:
+            # Validate date format
+            try:
+                datetime.strptime(administered_date, '%Y-%m-%d')
+            except ValueError:
+                return jsonify({'success': False, 'error': 'Invalid date format'}), 400
+            
+            # Check if record exists
+            existing = db.execute("""
+                SELECT id FROM Immunizations 
+                WHERE patient_id = ? AND immunization = ? AND dose_number = ?
+            """, (patient_id, vaccine_name, dose_number)).fetchone()
+            
+            if existing:
+                # Update existing record
+                db.execute("""
+                    UPDATE Immunizations 
+                    SET administered_date = ?, updated_at = CURRENT_TIMESTAMP
+                    WHERE patient_id = ? AND immunization = ? AND dose_number = ?
+                """, (administered_date, patient_id, vaccine_name, dose_number))
+                action = 'updated'
+            else:
+                # Insert new record
+                db.execute("""
+                    INSERT INTO Immunizations 
+                    (patient_id, immunization, administered_date, dose_number, source, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, 'manual', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                """, (patient_id, vaccine_name, administered_date, dose_number))
+                action = 'created'
+            
+            db.commit()
+            return jsonify({'success': True, 'action': action})
+            
+    except Exception as e:
+        db.rollback()
+        current_app.logger.error(f"Error saving immunization: {e}")
+        return jsonify({'success': False, 'error': f'Database error: {str(e)}'}), 500
 

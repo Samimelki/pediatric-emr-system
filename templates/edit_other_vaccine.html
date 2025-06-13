@@ -18,19 +18,31 @@
         {% endif %}
     {% endwith %}
 
+    {% if vaccine.id %}
     <form method="POST" action="{{ url_for('vaccine.update_other_vaccine', vaccine_id=vaccine.id) }}">
+    {% else %}
+    <form method="POST">
+    {% endif %}
         <input type="hidden" name="patient_id" value="{{ patient.id }}">
         <div class="form-group row">
             <label for="vaccine_name" class="col-sm-3 col-form-label"><strong>Vaccine Name:</strong></label>
             <div class="col-sm-9">
+                {% if vaccine.id %}
                 <input type="text" class="form-control" id="vaccine_name" name="vaccine_name" value="{{ vaccine.vaccine_name }}" required>
+                {% else %}
+                <input type="text" class="form-control" id="vaccine_name" name="other_vaccine_name" value="{{ vaccine.vaccine_name }}" required>
+                {% endif %}
             </div>
         </div>
 
         <div class="form-group row">
             <label for="vaccine_date" class="col-sm-3 col-form-label"><strong>Vaccine Date:</strong></label>
             <div class="col-sm-9">
+                {% if vaccine.id %}
                 <input type="date" class="form-control" id="vaccine_date" name="vaccine_date" value="{{ vaccine.vaccine_date if vaccine.vaccine_date else '' }}">
+                {% else %}
+                <input type="date" class="form-control" id="vaccine_date" name="other_vaccine_date" value="{{ vaccine.vaccine_date if vaccine.vaccine_date else '' }}">
+                {% endif %}
                 <small class="form-text text-muted">Leave blank to clear the date. Format: YYYY-MM-DD</small>
             </div>
         </div>

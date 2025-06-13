@@ -432,6 +432,64 @@
         opacity: 1;
     }
     
+    /* Notification system styles */
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 16px;
+        border-radius: 6px;
+        color: white;
+        font-weight: 500;
+        font-size: 0.9em;
+        z-index: 10000;
+        min-width: 200px;
+        max-width: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease-out;
+    }
+    
+    .notification-success {
+        background: #28a745;
+    }
+    
+    .notification-error {
+        background: #dc3545;
+    }
+    
+    .notification-info {
+        background: #17a2b8;
+    }
+    
+    .notification-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2em;
+        cursor: pointer;
+        margin-left: 10px;
+        padding: 0;
+        line-height: 1;
+    }
+    
+    .notification-close:hover {
+        opacity: 0.7;
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
     /* Vaccine Summary Cards */
     .vaccine-summary {
         display: grid;
@@ -759,6 +817,9 @@
                 </div>
                 {% endfor %}
             </div>
+            
+            <!-- Additional/Rare Vaccines Section -->
+            {% include 'partials/_vaccine_add_form.html' %}
             
             <!-- Vaccine Date Edit Modal -->
             <div id="vaccine-edit-modal" class="modal" style="display: none;">
@@ -1217,8 +1278,8 @@ function openVaccineEditModal(vaccine, dose) {
     title.textContent = `Edit ${vaccine.vaccine_name} - ${dose.label}`;
     
     // Pre-fill current date if available
-    if (dose.date_given) {
-        dateInput.value = dose.date_given.split('T')[0]; // Format for date input
+    if (dose.completed_date) {
+        dateInput.value = dose.completed_date.split('T')[0]; // Format for date input
     } else {
         dateInput.value = '';
     }
@@ -1238,86 +1299,91 @@ function saveVaccineDate() {
     
     const dateInput = document.getElementById('vaccine-date-input');
     const clearCheckbox = document.getElementById('clear-date-checkbox');
-    const fieldName = getFieldNameFromVaccineAndDose(currentEditingVaccine, currentEditingDose);
+    const saveButton = document.getElementById('modal-save');
     
-    if (!fieldName) {
-        alert('Unable to determine database field for this vaccine');
-        return;
-    }
+    // Disable save button during request
+    saveButton.disabled = true;
+    saveButton.textContent = 'Saving...';
     
-    // Create a hidden form to submit to existing backend
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = `/vaccines/patient/{{ patient.id }}/standard/update`;
-    
-    // Add field name
-    const fieldInput = document.createElement('input');
-    fieldInput.type = 'hidden';
-    fieldInput.name = 'vaccine_field_name';
-    fieldInput.value = fieldName;
-    form.appendChild(fieldInput);
-    
-    // Add date value (empty if clearing)
-    const dateValue = clearCheckbox.checked ? '' : dateInput.value;
-    const dateInputField = document.createElement('input');
-    dateInputField.type = 'hidden';
-    dateInputField.name = 'vaccine_date';
-    dateInputField.value = dateValue;
-    form.appendChild(dateInputField);
-    
-    // Submit form
-    document.body.appendChild(form);
-    form.submit();
-}
-
-function getFieldNameFromVaccineAndDose(vaccine, dose) {
-    // Use the exact same field mapping that was working in getVaccineEditUrl
-    const patientId = {{ patient.id }};
-    
-    // Map vaccine names and dose keys to database field names
-    const fieldMapping = {
-        'DTaP - IPV': {
-            'd1': 'dtcp1_date',
-            'd2': 'dtcp2_date', 
-            'd3': 'dtcp3_date',
-            'r1': 'dtcp_rappel1_date',
-            'r2': 'dtcp_rappel2_date',
-            'r3': 'dtcp_rappel3_date',
-            'r4': 'dtcp_rappel4_date'
-        },
-        'Hepatitis B': {
-            'd1': 'hep_b1_date',
-            'd2': 'hep_b2_date',
-            'd3': 'hep_b3_date'
-        },
-        'Hib (Haemophilus influenzae b)': {
-            'd1': 'hib1_date',
-            'd2': 'hib2_date', 
-            'd3': 'hib3_date',
-            'r1': 'hib_rappel_date'
-        },
-        'MMR (Measles, Mumps, Rubella)': {
-            'd1': 'ror_date'
-        },
-        'Measles (single)': {
-            'd1': 'rougeole_seule_date'
-        },
-        'PPD (TB Skin Test)': {
-            'd1': 'monotest1',
-            'd2': 'monotest2',
-            'd3': 'monotest3'
-        }
+    // Prepare data for AJAX request
+    const requestData = {
+        vaccine_name: currentEditingVaccine.vaccine_name,
+        dose_key: currentEditingDose.dose_key,
+        administered_date: clearCheckbox.checked ? null : dateInput.value,
+        clear_date: clearCheckbox.checked
     };
     
-    const vaccineMapping = fieldMapping[vaccine.vaccine_name];
-    if (vaccineMapping && vaccineMapping[dose.dose_key]) {
-        const fieldName = vaccineMapping[dose.dose_key];
-        console.log(`DEBUG: Found field ${fieldName} for ${vaccine.vaccine_name} ${dose.dose_key}`);
-        return fieldName;
+    // Make AJAX request to save to Immunizations table
+    fetch(`/vaccines/patient/{{ patient.id }}/immunization/save`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show success message
+            showNotification(`Vaccine ${data.action} successfully!`, 'success');
+            
+            // Close modal
+            closeVaccineEditModal();
+            
+            // Refresh the timeline without page reload
+            refreshTimeline();
+        } else {
+            // Show error message
+            showNotification(`Error: ${data.error}`, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error saving vaccine:', error);
+        showNotification('Error saving vaccine. Please try again.', 'error');
+    })
+    .finally(() => {
+        // Re-enable save button
+        saveButton.disabled = false;
+        saveButton.textContent = 'Save';
+    });
+}
+
+// Notification system
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <span>${message}</span>
+        <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+// Function to refresh timeline without page reload
+function refreshTimeline() {
+    // Show loading indicator
+    const timelineContainer = document.querySelector('.vaccine-timeline');
+    if (timelineContainer) {
+        timelineContainer.style.opacity = '0.6';
+        timelineContainer.style.pointerEvents = 'none';
     }
     
-    console.log(`DEBUG: No field found for ${vaccine.vaccine_name} ${dose.dose_key}`);
-    return null;
+    // Reload the page to refresh data
+    // In the future, this could be made more sophisticated by fetching just the timeline data
+    setTimeout(() => {
+        window.location.reload();
+    }, 1000);
 }
 </script>
 {% endblock %} 

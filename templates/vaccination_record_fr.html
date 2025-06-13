@@ -123,23 +123,45 @@
     <p>Note: Ce tableau inclut tous les vaccins enregistrés, y compris ceux ne faisant pas partie du calendrier standard.</p>
 
     <h3 class="vaccine-section-title">Vaccinations Obligatoires</h3>
-    {% if mandatory_vaccine_table_data %}
+    {% if vaccine_data.mandatory_vaccines %}
         <table class="vaccine-table">
             <thead>
                 <tr>
-                    <th>{{ table_column_labels.vaccine_col }}</th>
-                    {% for dose_key in active_dose_keys %}
-                        <th>{{ table_column_labels[dose_key] }}</th>
-                    {% endfor %}
+                    <th>Vaccin</th>
+                    <th>Dose 1</th>
+                    <th>Dose 2</th>
+                    <th>Dose 3</th>
+                    <th>Rappel 1</th>
+                    <th>Rappel 2</th>
+                    <th>Rappel 3</th>
                 </tr>
             </thead>
             <tbody>
-                {% for vaccine_row in mandatory_vaccine_table_data %}
+                {% for vaccine_name, doses in vaccine_data.mandatory_vaccines %}
                 <tr>
-                    <td class="vaccine-name-cell">{{ vaccine_row.vaccine_display_name | safe }}</td>
-                    {% for dose_key in active_dose_keys %}
-                        <td class="date-cell">{{ vaccine_row.dose_dates[dose_key] | default('-', true) }}</td>
-                    {% endfor %}
+                    <td class="vaccine-name-cell">
+                        {% if vaccine_name == 'DTaP - IPV' %}
+                            <strong>DTaP - IPV</strong><br><em>(Diphtérie, Tétanos,<br>Coqueluche, Polio)</em>
+                        {% elif vaccine_name == 'MMR (Measles, Mumps, Rubella)' %}
+                            <strong>ROR</strong><br><em>(Rougeole, Oreillons,<br>Rubéole)</em>
+                        {% elif vaccine_name == 'Hib (Haemophilus influenzae b)' %}
+                            <strong>Hib</strong><br><em>(Haemophilus<br>influenzae type b)</em>
+                        {% elif vaccine_name == 'PPD (TB Skin Test)' %}
+                            <strong>PPD</strong><br><em>(Test cutané<br>tuberculinique)</em>
+                        {% elif vaccine_name == 'Hepatitis B' %}
+                            <strong>Hépatite B</strong>
+                        {% elif vaccine_name == 'Measles (Single)' %}
+                            <strong>Rougeole</strong><br><em>(Simple)</em>
+                        {% else %}
+                            <strong>{{ vaccine_name }}</strong>
+                        {% endif %}
+                    </td>
+                    <td class="date-cell">{{ doses.get('Dose 1', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 2', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 3', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 4', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 5', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 6', '-') }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -149,29 +171,79 @@
     {% endif %}
 
     <h3 class="vaccine-section-title recommended-vaccines-title-pdf">Vaccinations Recommandées</h3>
-    {% if recommended_vaccine_table_data %}
+    {% if vaccine_data.recommended_vaccines %}
         <table class="vaccine-table">
             <thead>
                 <tr>
-                    <th>{{ table_column_labels.vaccine_col }}</th>
-                    {% for dose_key in active_dose_keys %}
-                        <th>{{ table_column_labels[dose_key] }}</th>
-                    {% endfor %}
+                    <th>Vaccin</th>
+                    <th>Dose 1</th>
+                    <th>Dose 2</th>
+                    <th>Dose 3</th>
+                    <th>Rappel 1</th>
+                    <th>Rappel 2</th>
+                    <th>Rappel 3</th>
                 </tr>
             </thead>
             <tbody>
-                {% for vaccine_row in recommended_vaccine_table_data %}
+                {% for vaccine_name, doses in vaccine_data.recommended_vaccines %}
                 <tr>
-                    <td class="vaccine-name-cell">{{ vaccine_row.vaccine_display_name | safe }}</td>
-                    {% for dose_key in active_dose_keys %}
-                        <td class="date-cell">{{ vaccine_row.dose_dates[dose_key] | default('-', true) }}</td>
-                    {% endfor %}
+                    <td class="vaccine-name-cell">
+                        {% if vaccine_name == 'Pneumococcal PCV' %}
+                            <strong>Pneumocoque PCV</strong><br><em>(Pneumocoque)</em>
+                        {% elif vaccine_name == 'Varicella' %}
+                            <strong>Varicelle</strong><br><em>(Varicelle)</em>
+                        {% elif vaccine_name == 'Hepatitis A' %}
+                            <strong>Hépatite A</strong>
+                        {% elif vaccine_name == 'Influenza' %}
+                            <strong>Grippe</strong><br><em>(Influenza)</em>
+                        {% elif vaccine_name == 'Meningococcal ACWY' %}
+                            <strong>Méningocoque ACWY</strong><br><em>(Méningocoque)</em>
+                        {% else %}
+                            <strong>{{ vaccine_name }}</strong>
+                        {% endif %}
+                    </td>
+                    <td class="date-cell">{{ doses.get('Dose 1', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 2', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 3', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 4', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 5', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 6', '-') }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% else %}
         <p>Aucune vaccination recommandée enregistrée.</p>
+    {% endif %}
+
+    {% if vaccine_data.other_vaccines %}
+    <h3 class="vaccine-section-title">Autres Vaccinations</h3>
+        <table class="vaccine-table">
+            <thead>
+                <tr>
+                    <th>Vaccin</th>
+                    <th>Dose 1</th>
+                    <th>Dose 2</th>
+                    <th>Dose 3</th>
+                    <th>Rappel 1</th>
+                    <th>Rappel 2</th>
+                    <th>Rappel 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vaccine_name, doses in vaccine_data.other_vaccines %}
+                <tr>
+                    <td class="vaccine-name-cell"><strong>{{ vaccine_name }}</strong></td>
+                    <td class="date-cell">{{ doses.get('Dose 1', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 2', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 3', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 4', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 5', '-') }}</td>
+                    <td class="date-cell">{{ doses.get('Dose 6', '-') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% endif %}
 
     <div class="signature-section">
