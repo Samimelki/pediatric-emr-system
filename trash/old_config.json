@@ -1,0 +1,33 @@
+{
+    "database_path": "/Users/samimelki/Documents/UnifiedEMR/unified_emr.db",
+    "storage_type": "local",
+    "cloud_path": null,
+    "word_docs_folder": "/Users/samimelki/Documents/UnifiedEMR/word_documents",
+    "emr_name": "Sami\u2019s Awesomest EMR",
+    "background_image_filename": "background_image.jpg",
+    "pdf_settings": {
+        "physician_details_fr": {
+            "name": "Sami Melki, MD",
+            "specialty": "Otorhinolaryngologie - Chirurgie de la t\u00eate et du cou",
+            "hospital_name": "AUBMC",
+            "faculty_name": "American University in Beirut",
+            "contact_line1": "",
+            "contact_line2": ""
+        },
+        "physician_details_en": {
+            "name": "Sami Melki, MD",
+            "specialty": "Otolaryngology - Head and Neck Surgery",
+            "hospital_name": "AUBMC",
+            "faculty_name": "AUB",
+            "contact_line1": "",
+            "contact_line2": ""
+        },
+        "footer_note_fr": "Email: Sami.melki@aub.edu.lb - Mobile: 81-610010",
+        "footer_note_en": "Email: Sami.melki@aub.edu.lb - Mobile: 81-610010",
+        "signature_image_filename": "signature_stamp.png",
+        "report_title_fr": "Rapport M\u00e9dical Complet",
+        "report_title_en": "Complete Medical Report",
+        "logo_image_filename": "logo_image.jpg",
+        "footer_alignment": "center"
+    }
+}

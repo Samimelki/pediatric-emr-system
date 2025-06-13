@@ -1,10 +1,4 @@
 {
-  "name_mappings": {
-    "Haemophilus influenzae type b (Hib)": "Hib (Haemophilus influenzae b)",
-    "Measles - Mumps - Rubella (MMR)": "MMR (Measles, Mumps, Rubella)",
-    "Measles": "MMR (Measles, Mumps, Rubella)",
-    "Measles (single)": "MMR (Measles, Mumps, Rubella)"
-  },
   "DTaP - IPV": {
     "category": "mandatory",
     "doses": [
@@ -88,6 +82,16 @@
         "interval_to_next": null
       }
     ]
+  },
+  "Measles": {
+    "category": "mandatory",
+    "doses": [
+      {
+        "age": "9M",
+        "interval_to_next": null
+      }
+    ],
+    "note": "Historical single measles vaccine given at 9M before MMR series started"
   },
   "PPD (TB Skin Test)": {
     "category": "mandatory",
@@ -235,7 +239,7 @@
         "interval_to_next": null
       }
     ],
-    "note": "Age-dependent dosing: 2-dose series if <15Y, 3-dose series if ≥15Y"
+    "note": "Age-dependent dosing: 2-dose series if <15Y, 3-dose series if \u226515Y"
   },
   "Typhoid": {
     "category": "recommended",
