@@ -3,6 +3,7 @@
     <!-- Debug: Patient ID: {{ patient.id if patient else 'No Patient Object' }} -->
     <a href="{{ url_for('demographics.edit_demographics', patient_id=patient.id) }}" class="btn btn-outline-primary btn-sm ml-2">Edit Demographics</a>
 </h4>
+{% if is_feature_enabled('parental_info') %}
 <div class="row mb-2">
     <div class="col-md-6">
         <p><strong>Mother's Name:</strong> {{ patient.mere_nom if patient.mere_nom else 'N/A' }}</p>
@@ -11,6 +12,7 @@
         <p><strong>Father's Name:</strong> {{ patient.pere_nom if patient.pere_nom else 'N/A' }}</p>
     </div>
 </div>
+{% endif %}
 
 {# Render custom fields assigned to 'Demographics' section #}
 {% if grouped_custom_fields and 'Demographics' in grouped_custom_fields %}
@@ -32,7 +34,9 @@
     <div class="card card-body mb-3">
         <div class="row">
             <div class="col-md-6">
+                {% if is_feature_enabled('parental_info') %}
                 <p><strong>Pediatrician Initials:</strong> {{ patient.pediatre_initiales if patient.pediatre_initiales else 'N/A' }}</p>
+                {% endif %}
                 <p><strong>Address:</strong> {{ patient.domicile if patient.domicile else 'N/A' }}</p>
             </div>
             <div class="col-md-6">

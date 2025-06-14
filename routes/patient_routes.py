@@ -376,7 +376,8 @@ def patient_detail(patient_id):
             
         except Exception as e:
             current_app.logger.error(f"Error preparing vaccine data for patient {patient_id}: {e}", exc_info=True)
-            flash(f"Error loading vaccine data: {str(e)}", 'warning')
+            # Don't flash error to user, just log it and continue with empty vaccine data
+            additional_vaccines_with_schedule = []
 
     # Get vaccine timeline data for the patient if vaccines are enabled and patient has DOB
     timeline = []
@@ -401,37 +402,48 @@ def patient_detail(patient_id):
             if len(unified_immunizations) > 5:
                 print(f"  ... and {len(unified_immunizations) - 5} more")
             
-            # Get vaccine timeline using the new unified data source
-            timeline_items = get_patient_vaccine_timeline(
-                patient_dob=patient_dob,
-                administered_immunizations=unified_immunizations
-            )
-            
-            print(f"DEBUG TIMELINE: Generated {len(timeline_items)} timeline items")
-            
-            summary_stats = vaccine_schedule_engine.get_summary_stats(timeline_items)
-            
-            # Convert dataclasses to dicts for JSON serialization in template
-            for vaccine_item in timeline_items:
-                vaccine_data = asdict(vaccine_item)
-                # Convert dose statuses to strings for template
-                for dose in vaccine_data['doses']:
-                    dose['status'] = dose['status'].value if hasattr(dose['status'], 'value') else str(dose['status'])
-                if vaccine_data['next_due_dose']:
-                    vaccine_data['next_due_dose']['status'] = vaccine_data['next_due_dose']['status'].value if hasattr(vaccine_data['next_due_dose']['status'], 'value') else str(vaccine_data['next_due_dose']['status'])
-                timeline.append(vaccine_data)
+            # Check if vaccine schedule configuration exists and is appropriate for current profile
+            try:
+                # Get vaccine timeline using the new unified data source
+                timeline_items = get_patient_vaccine_timeline(
+                    patient_dob=patient_dob,
+                    administered_immunizations=unified_immunizations
+                )
+                
+                print(f"DEBUG TIMELINE: Generated {len(timeline_items)} timeline items")
+                
+                summary_stats = vaccine_schedule_engine.get_summary_stats(timeline_items)
+                
+                # Convert dataclasses to dicts for JSON serialization in template
+                for vaccine_item in timeline_items:
+                    vaccine_data = asdict(vaccine_item)
+                    # Convert dose statuses to strings for template
+                    for dose in vaccine_data['doses']:
+                        dose['status'] = dose['status'].value if hasattr(dose['status'], 'value') else str(dose['status'])
+                    if vaccine_data['next_due_dose']:
+                        vaccine_data['next_due_dose']['status'] = vaccine_data['next_due_dose']['status'].value if hasattr(vaccine_data['next_due_dose']['status'], 'value') else str(vaccine_data['next_due_dose']['status'])
+                    timeline.append(vaccine_data)
+                    
+            except Exception as timeline_error:
+                print(f"DEBUG TIMELINE: Error generating timeline: {timeline_error}")
+                # If timeline generation fails, just show empty timeline but don't crash
+                timeline = []
+                summary_stats = {}
             
         except Exception as e:
-            current_app.logger.error(f"Error generating vaccine timeline for patient {patient_id}: {e}", exc_info=True)
+            current_app.logger.error(f"Error processing vaccine data for patient {patient_id}: {e}", exc_info=True)
+            # Don't let vaccine processing errors crash the entire patient view
+            timeline = []
+            summary_stats = {}
 
-    # Prepare growth chart data for pediatric patients
+    # Prepare growth chart data for pediatric patients (only if growth charts are enabled)
     visit_ages_in_months = []
     weight_data = []
     height_data = []
     hc_data = []
     who_chart_data = {}
     
-    if not dob_missing and patient and visits_with_addenda:
+    if emr_config.is_feature_enabled('growth_charts') and not dob_missing and patient and visits_with_addenda:
         # Calculate age at each visit in months and extract measurements
         patient_dob = patient.get('naissance_date')
         if patient_dob:
@@ -471,8 +483,15 @@ def patient_detail(patient_id):
         if patient_sex:
             who_chart_data = who_loader.prepare_chart_data_for_patient(patient_sex)
 
+    # Get patient name safely - try French fields first, then English fields
+    patient_first_name = ''
+    patient_last_name = ''
+    if patient:
+        patient_first_name = patient.get('prenom') or patient.get('first_name') or 'N/A'
+        patient_last_name = patient.get('nom') or patient.get('last_name') or ''
+    
     return render_template('patient_detail.html', 
-                           title=f"Patient Details - {patient['prenom'] if patient and patient['prenom'] else 'N/A'} {patient['nom'] if patient and patient['nom'] else ''}", 
+                           title=f"Patient Details - {patient_first_name} {patient_last_name}", 
                            patient=patient, 
                            visits=visits_with_addenda,
                            dob_missing=dob_missing, # Pass dob_missing to template

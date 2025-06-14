@@ -5,7 +5,7 @@ import json
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import shutil
-from emr_config import USER_MEDIA_FOLDER
+from emr_config import USER_MEDIA_FOLDER, load_config, save_config
 
 settings_bp = Blueprint('settings', __name__, url_prefix='/settings')
 

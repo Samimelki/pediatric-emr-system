@@ -9,10 +9,10 @@
         <div class="d-flex justify-content-between align-items-start mb-3">
             <div>
                 <h2>
-                    {{ patient.first_name }} {{ patient.last_name }} (MRN: {{ patient.mrn }})
-                    {% if patient.sex %}({{ patient.sex }}){% endif %}<br>
-                    {% if patient.date_of_birth %}
-                        <small class="text-muted">DOB: {{ patient.date_of_birth }}</small><br>
+                    {{ patient.prenom or patient.first_name or 'N/A' }} {{ patient.nom or patient.last_name or '' }} (MRN: {{ patient.mrn }})
+                    {% if patient.sexe or patient.sex %}({{ patient.sexe or patient.sex }}){% endif %}<br>
+                    {% if patient.naissance_date or patient.date_of_birth %}
+                        <small class="text-muted">DOB: {{ patient.naissance_date or patient.date_of_birth }}</small><br>
                     {% else %}
                         <small class="text-muted">DOB: Not Recorded</small><br>
                     {% endif %}
@@ -84,7 +84,7 @@
         </div>
 
         <!-- Birth History -->
-        {% if grouped_custom_fields and 'Birth History' in grouped_custom_fields %}
+        {% if is_feature_enabled('birth_measurements') and grouped_custom_fields and 'Birth History' in grouped_custom_fields %}
             <div class="card mt-3">
                 <div class="card-header" id="headingBirthHistory">
                     <h5 class="mb-0">

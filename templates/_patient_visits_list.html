@@ -23,32 +23,38 @@
                             <div class="flex-grow-1">
                                 <strong>Measurements:</strong>
                                 {% set measurements = [] %}
-                                {% if visit.weight_g %}
-                                    {% set weight_display = (visit.weight_g / 1000) if visit.weight_g >= 500 else visit.weight_g %}
-                                    {% set _ = measurements.append('W: ' + weight_display|string + 'kg') %}
-                                {% elif visit.vital_signs and visit.vital_signs.weight_kg %}
-                                    {% set _ = measurements.append('W: ' + visit.vital_signs.weight_kg|string + 'kg') %}
-                                {% else %}
-                                    {% set _ = measurements.append('W: N/A') %}
+                                {% if is_feature_enabled('weight_tracking') %}
+                                    {% if visit.weight_g %}
+                                        {% set weight_display = (visit.weight_g / 1000) if visit.weight_g >= 500 else visit.weight_g %}
+                                        {% set _ = measurements.append('W: ' + weight_display|string + 'kg') %}
+                                    {% elif visit.vital_signs and visit.vital_signs.weight_kg %}
+                                        {% set _ = measurements.append('W: ' + visit.vital_signs.weight_kg|string + 'kg') %}
+                                    {% else %}
+                                        {% set _ = measurements.append('W: N/A') %}
+                                    {% endif %}
                                 {% endif %}
                                 
-                                {% if visit.height_cm %}
-                                    {% set _ = measurements.append('H: ' + visit.height_cm|string + 'cm') %}
-                                {% elif visit.vital_signs and visit.vital_signs.height_cm %}
-                                    {% set _ = measurements.append('H: ' + visit.vital_signs.height_cm|string + 'cm') %}
-                                {% else %}
-                                    {% set _ = measurements.append('H: N/A') %}
+                                {% if is_feature_enabled('height_tracking') %}
+                                    {% if visit.height_cm %}
+                                        {% set _ = measurements.append('H: ' + visit.height_cm|string + 'cm') %}
+                                    {% elif visit.vital_signs and visit.vital_signs.height_cm %}
+                                        {% set _ = measurements.append('H: ' + visit.vital_signs.height_cm|string + 'cm') %}
+                                    {% else %}
+                                        {% set _ = measurements.append('H: N/A') %}
+                                    {% endif %}
                                 {% endif %}
                                 
-                                {% if visit.head_circumference_cm %}
-                                    {% set _ = measurements.append('HC: ' + visit.head_circumference_cm|string + 'cm') %}
-                                {% elif visit.vital_signs and visit.vital_signs.head_circumference_cm %}
-                                    {% set _ = measurements.append('HC: ' + visit.vital_signs.head_circumference_cm|string + 'cm') %}
-                                {% else %}
-                                    {% set _ = measurements.append('HC: N/A') %}
+                                {% if is_feature_enabled('head_circumference') %}
+                                    {% if visit.head_circumference_cm %}
+                                        {% set _ = measurements.append('HC: ' + visit.head_circumference_cm|string + 'cm') %}
+                                    {% elif visit.vital_signs and visit.vital_signs.head_circumference_cm %}
+                                        {% set _ = measurements.append('HC: ' + visit.vital_signs.head_circumference_cm|string + 'cm') %}
+                                    {% else %}
+                                        {% set _ = measurements.append('HC: N/A') %}
+                                    {% endif %}
                                 {% endif %}
                                 
-                                {{ measurements|join(', ') }}
+                                {% if measurements %}{{ measurements|join(', ') }}{% else %}No measurements recorded{% endif %}
                             </div>
                             <div class="ml-3">
                                                 <a href="{{ url_for('visit.edit_visit_measurements', visit_id=visit.id) }}" class="btn btn-sm btn-outline-secondary">Edit Measurements</a>
@@ -60,11 +66,12 @@
                             <h6>Additional Vitals</h6>
                             <ul class="mb-2">
                                 {% set vs = visit.vital_signs %}
-                                {% if vs.bp %}<li>BP: {{ vs.bp }}</li>{% endif %}
-                                {% if vs.temperature %}<li>Temperature: {{ vs.temperature }}&#8451;</li>{% endif %}
-                                {% if vs.hr %}<li>HR: {{ vs.hr }}</li>{% endif %}
+                                {% if vs.bp and is_feature_enabled('blood_pressure') %}<li>BP: {{ vs.bp }}</li>{% endif %}
+                                {% if vs.temperature and is_feature_enabled('temperature') %}<li>Temperature: {{ vs.temperature }}&#8451;</li>{% endif %}
+                                {% if vs.hr and is_feature_enabled('heart_rate') %}<li>HR: {{ vs.hr }}</li>{% endif %}
                                 {% if vs.spo2 and is_feature_enabled('pulse_oximetry') %}<li>SpO2: {{ vs.spo2 }}%</li>{% endif %}
-                                {% if not vs.bp and not vs.temperature and not vs.hr and not (vs.spo2 and is_feature_enabled('pulse_oximetry')) %}<li>No additional vitals recorded.</li>{% endif %}
+                                {% set has_vitals = (vs.bp and is_feature_enabled('blood_pressure')) or (vs.temperature and is_feature_enabled('temperature')) or (vs.hr and is_feature_enabled('heart_rate')) or (vs.spo2 and is_feature_enabled('pulse_oximetry')) %}
+                                {% if not has_vitals %}<li>No additional vitals recorded.</li>{% endif %}
                             </ul>
                         {% endif %}
                         <h6>Note</h6>

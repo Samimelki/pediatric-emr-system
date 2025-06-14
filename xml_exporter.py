@@ -19,7 +19,7 @@ def generate_patient_xml(patients_data):
         patient_element = ET.SubElement(root_element, "Patient")
         
         # Add standard patient fields as sub-elements
-        standard_fields = {k: v for k, v in patient_dict.items() if k not in ['custom_fields', 'visits', 'non_standard_vaccines']}
+        standard_fields = {k: v for k, v in patient_dict.items() if k not in ['custom_fields', 'visits', 'immunizations']}
         for key, value in standard_fields.items():
             field_element = ET.SubElement(patient_element, key.replace("_", "-")) # Use hyphens for XML tags
             field_element.text = _get_text(value)
@@ -43,13 +43,13 @@ def generate_patient_xml(patients_data):
                     field_element = ET.SubElement(visit_el, key.replace("_", "-"))
                     field_element.text = _get_text(value)
         
-        # Add non-standard vaccines
-        if patient_dict.get('non_standard_vaccines'):
-            non_std_vaccines_element = ET.SubElement(patient_element, "NonStandardVaccines")
-            for vaccine_data in patient_dict['non_standard_vaccines']:
-                vaccine_el = ET.SubElement(non_std_vaccines_element, "Vaccine")
-                for key, value in vaccine_data.items():
-                    field_element = ET.SubElement(vaccine_el, key.replace("_", "-"))
+        # Add immunizations
+        if patient_dict.get('immunizations'):
+            immunizations_element = ET.SubElement(patient_element, "Immunizations")
+            for immunization_data in patient_dict['immunizations']:
+                immunization_el = ET.SubElement(immunizations_element, "Immunization")
+                for key, value in immunization_data.items():
+                    field_element = ET.SubElement(immunization_el, key.replace("_", "-"))
                     field_element.text = _get_text(value)
 
     # Convert ElementTree to a string

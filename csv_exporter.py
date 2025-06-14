@@ -80,29 +80,33 @@ def generate_patient_csvs(patients_data, active_custom_fields_metadata):
     csv_files['visits.csv'] = visits_output.getvalue()
     visits_output.close()
 
-    # --- Generate non_standard_vaccines.csv ---
-    vaccines_output = io.StringIO()
-    # Define vaccine headers (ensure patient_id or mrn is first)
-    vaccine_headers = ['patient_id', 'patient_mrn', 'id', 'vaccine_name', 'vaccine_date', 'raw_entry']
-    vaccines_csv_writer = csv.writer(vaccines_output)
-    vaccines_csv_writer.writerow(vaccine_headers)
+    # --- Generate immunizations.csv ---
+    immunizations_output = io.StringIO()
+    # Define immunization headers (ensure patient_id or mrn is first)
+    immunization_headers = ['patient_id', 'patient_mrn', 'id', 'immunization', 'administered_date', 'brand_name', 'dose_number', 'notes', 'source', 'created_at']
+    immunizations_csv_writer = csv.writer(immunizations_output)
+    immunizations_csv_writer.writerow(immunization_headers)
 
     for p_dict in patients_data:
         patient_id = p_dict.get('id')
         patient_mrn = p_dict.get('mrn')
-        for vaccine in p_dict.get('non_standard_vaccines', []):
+        for immunization in p_dict.get('immunizations', []):
             row = [
                 patient_id,
                 patient_mrn,
-                vaccine.get('id'),
-                vaccine.get('vaccine_name'),
-                vaccine.get('vaccine_date'),
-                vaccine.get('raw_entry')
+                immunization.get('id'),
+                immunization.get('immunization'),
+                immunization.get('administered_date'),
+                immunization.get('brand_name'),
+                immunization.get('dose_number'),
+                immunization.get('notes'),
+                immunization.get('source'),
+                immunization.get('created_at')
             ]
-            vaccines_csv_writer.writerow(row)
+            immunizations_csv_writer.writerow(row)
 
-    csv_files['non_standard_vaccines.csv'] = vaccines_output.getvalue()
-    vaccines_output.close()
+    csv_files['immunizations.csv'] = immunizations_output.getvalue()
+    immunizations_output.close()
 
     return csv_files
 

@@ -167,6 +167,7 @@ def inject_emr_config():
         'emr_mode': emr_config.get_emr_mode(),  # Temporary backward compatibility for templates
         'active_profile': emr_config.get_active_profile(),
         'emr_features': emr_config.get_enabled_features(),
+        'enabled_features': emr_config.get_enabled_features(),  # For template compatibility
         'is_feature_enabled': emr_config.is_feature_enabled,
         'practice_info': emr_config.get_practice_info(),
         'date_format': emr_config.get_date_format()
@@ -276,7 +277,7 @@ def update_vaccine_date():
 
 def run_flask_app():
     logging.info("Flask app thread started.")
-    app.run(debug=False, port=9999, host='127.0.0.1', use_reloader=False)
+    app.run(debug=True, port=9999, host='127.0.0.1', use_reloader=False)
 
 class Api:
     def __init__(self):

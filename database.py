@@ -142,6 +142,18 @@ def get_all_patient_data_for_export():
         visits_by_patient_id[pid].append(dict(visit_row))
     print(f"[DB get_all_patient_data_for_export] Fetched and grouped {len(all_visits)} visits for {len(visits_by_patient_id)} patients.", flush=True)
 
+    # 3. Fetch all immunizations and group by patient_id
+    print("[DB get_all_patient_data_for_export] Fetching all immunizations...", flush=True)
+    immunizations_cursor = db.execute("SELECT * FROM Immunizations ORDER BY patient_id, administered_date ASC")
+    all_immunizations = immunizations_cursor.fetchall()
+    immunizations_by_patient_id = {}
+    for immunization_row in all_immunizations:
+        pid = immunization_row['patient_id']
+        if pid not in immunizations_by_patient_id:
+            immunizations_by_patient_id[pid] = []
+        immunizations_by_patient_id[pid].append(dict(immunization_row))
+    print(f"[DB get_all_patient_data_for_export] Fetched and grouped {len(all_immunizations)} immunizations for {len(immunizations_by_patient_id)} patients.", flush=True)
+
     # 4. Fetch active custom field metadata
     print("[DB get_all_patient_data_for_export] Fetching active custom field metadata...", flush=True)
     custom_fields_meta = get_active_custom_demographic_fields(db_conn=db)
@@ -171,6 +183,9 @@ def get_all_patient_data_for_export():
 
         # Add pre-fetched visits
         patient_dict['visits'] = visits_by_patient_id.get(patient_id, [])
+        
+        # Add pre-fetched immunizations
+        patient_dict['immunizations'] = immunizations_by_patient_id.get(patient_id, [])
         
         patients_data.append(patient_dict)
     
