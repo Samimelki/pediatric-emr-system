@@ -70,6 +70,8 @@ def list_patients():
     search_first_name = request.args.get('first_name', '').strip()
     search_date_of_birth = request.args.get('date_of_birth', '').strip()
     search_mrn = request.args.get('mrn', '').strip()
+    search_father_name = request.args.get('father_name', '').strip()
+    search_mother_name = request.args.get('mother_name', '').strip()
 
     sort_by = request.args.get('sort_by', 'last_name')
     sort_order = request.args.get('sort_order', 'asc')
@@ -102,6 +104,12 @@ def list_patients():
     if search_mrn:
         conditions.append("mrn LIKE :mrn")
         params['mrn'] = f"%{search_mrn}%"
+    if search_father_name:
+        conditions.append("pere_nom LIKE :father_name")
+        params['father_name'] = f"%{search_father_name}%"
+    if search_mother_name:
+        conditions.append("mere_nom LIKE :mother_name")
+        params['mother_name'] = f"%{search_mother_name}%"
 
     if conditions:
         where_clause = " WHERE " + " AND ".join(conditions)
@@ -138,7 +146,9 @@ def list_patients():
                            search_last_name=search_last_name,
                            search_first_name=search_first_name,
                            search_date_of_birth=search_date_of_birth,
-                           search_mrn=search_mrn, 
+                           search_mrn=search_mrn,
+                           search_father_name=search_father_name,
+                           search_mother_name=search_mother_name,
                            sort_by=sort_by, 
                            sort_order=sort_order, 
                            title="Patients")

@@ -17,19 +17,42 @@
 
     <div class="row mb-3">
         <div class="col-md-8">
-            <form method="GET" action="{{ url_for('patient.list_patients') }}" class="form-inline">
+            <form method="GET" action="{{ url_for('patient.list_patients') }}">
                 <input type="hidden" name="sort_by" value="{{ sort_by }}">
                 <input type="hidden" name="sort_order" value="{{ sort_order }}">
-                <label for="search_mrn" class="sr-only">Search MRN</label>
-                <input type="text" id="search_mrn" name="mrn" class="form-control mr-sm-2 mb-2" placeholder="Search MRN..." value="{{ search_mrn }}">
-                <label for="search_last_name" class="sr-only">Search Last Name</label>
-                <input type="text" id="search_last_name" name="last_name" class="form-control mr-sm-2 mb-2" placeholder="Search Last Name..." value="{{ search_last_name }}">
-                <label for="search_first_name" class="sr-only">Search First Name</label>
-                <input type="text" id="search_first_name" name="first_name" class="form-control mr-sm-2 mb-2" placeholder="Search First Name..." value="{{ search_first_name }}">
-                <label for="search_date_of_birth" class="sr-only">Search Date of Birth</label>
-                <input type="date" id="search_date_of_birth" name="date_of_birth" class="form-control mr-sm-2 mb-2" value="{{ search_date_of_birth }}" title="Search Date of Birth">
-                <button type="submit" class="btn btn-primary mb-2">Search</button>
-                <a href="{{ url_for('patient.list_patients') }}" class="btn btn-secondary mb-2 ml-2">Clear</a>
+                
+                <div class="form-row">
+                    <div class="col-md-2 mb-2">
+                        <label for="search_mrn" class="sr-only">Search MRN</label>
+                        <input type="text" id="search_mrn" name="mrn" class="form-control" placeholder="MRN..." value="{{ search_mrn }}">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label for="search_last_name" class="sr-only">Search Last Name</label>
+                        <input type="text" id="search_last_name" name="last_name" class="form-control" placeholder="Last Name..." value="{{ search_last_name }}">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label for="search_first_name" class="sr-only">Search First Name</label>
+                        <input type="text" id="search_first_name" name="first_name" class="form-control" placeholder="First Name..." value="{{ search_first_name }}">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label for="search_father_name" class="sr-only">Search Father Name</label>
+                        <input type="text" id="search_father_name" name="father_name" class="form-control" placeholder="Father Name..." value="{{ search_father_name }}">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label for="search_mother_name" class="sr-only">Search Mother Name</label>
+                        <input type="text" id="search_mother_name" name="mother_name" class="form-control" placeholder="Mother Name..." value="{{ search_mother_name }}">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label for="search_date_of_birth" class="sr-only">Search Date of Birth</label>
+                        <input type="date" id="search_date_of_birth" name="date_of_birth" class="form-control" value="{{ search_date_of_birth }}" title="Date of Birth">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2">Search</button>
+                        <a href="{{ url_for('patient.list_patients') }}" class="btn btn-secondary mb-2 ml-2">Clear</a>
+                    </div>
+                </div>
             </form>
         </div>
         <div class="col-md-4 text-md-right">
@@ -44,7 +67,7 @@
             <thead>
                 <tr>
                     <th>
-                        <a href="{{ url_for('patient.list_patients', page=page, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, sort_by='mrn', sort_order='desc' if sort_by == 'mrn' and sort_order == 'asc' else 'asc') }}">
+                        <a href="{{ url_for('patient.list_patients', page=page, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, father_name=search_father_name, mother_name=search_mother_name, sort_by='mrn', sort_order='desc' if sort_by == 'mrn' and sort_order == 'asc' else 'asc') }}">
                             MRN
                             {% if sort_by == 'mrn' %}
                                 <i class="fas fa-sort-{{ 'up' if sort_order == 'asc' else 'down' }}"></i>
@@ -54,7 +77,7 @@
                         </a>
                     </th>
                     <th>
-                        <a href="{{ url_for('patient.list_patients', page=page, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, sort_by='last_name', sort_order='desc' if sort_by == 'last_name' and sort_order == 'asc' else 'asc') }}">
+                        <a href="{{ url_for('patient.list_patients', page=page, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, father_name=search_father_name, mother_name=search_mother_name, sort_by='last_name', sort_order='desc' if sort_by == 'last_name' and sort_order == 'asc' else 'asc') }}">
                             Last Name
                             {% if sort_by == 'last_name' %}
                                 <i class="fas fa-sort-{{ 'up' if sort_order == 'asc' else 'down' }}"></i>
@@ -64,7 +87,7 @@
                         </a>
                     </th>
                     <th>
-                        <a href="{{ url_for('patient.list_patients', page=page, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, sort_by='first_name', sort_order='desc' if sort_by == 'first_name' and sort_order == 'asc' else 'asc') }}">
+                        <a href="{{ url_for('patient.list_patients', page=page, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, father_name=search_father_name, mother_name=search_mother_name, sort_by='first_name', sort_order='desc' if sort_by == 'first_name' and sort_order == 'asc' else 'asc') }}">
                             First Name
                             {% if sort_by == 'first_name' %}
                                 <i class="fas fa-sort-{{ 'up' if sort_order == 'asc' else 'down' }}"></i>
@@ -74,7 +97,7 @@
                         </a>
                     </th>
                     <th>
-                        <a href="{{ url_for('patient.list_patients', page=page, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, sort_by='date_of_birth', sort_order='desc' if sort_by == 'date_of_birth' and sort_order == 'asc' else 'asc') }}">
+                        <a href="{{ url_for('patient.list_patients', page=page, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, father_name=search_father_name, mother_name=search_mother_name, sort_by='date_of_birth', sort_order='desc' if sort_by == 'date_of_birth' and sort_order == 'asc' else 'asc') }}">
                             Date of Birth
                             {% if sort_by == 'date_of_birth' %}
                                 <i class="fas fa-sort-{{ 'up' if sort_order == 'asc' else 'down' }}"></i>
@@ -102,7 +125,7 @@
                 {# Previous Page Link #}
                 {% if page > 1 %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('patient.list_patients', page=page-1, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, sort_by=sort_by, sort_order=sort_order) }}">Previous</a>
+                        <a class="page-link" href="{{ url_for('patient.list_patients', page=page-1, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, father_name=search_father_name, mother_name=search_mother_name, sort_by=sort_by, sort_order=sort_order) }}">Previous</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled">
@@ -120,7 +143,7 @@
                             </li>
                         {% else %}
                             <li class="page-item">
-                                <a class="page-link" href="{{ url_for('patient.list_patients', page=p, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, sort_by=sort_by, sort_order=sort_order) }}">{{ p }}</a>
+                                <a class="page-link" href="{{ url_for('patient.list_patients', page=p, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, father_name=search_father_name, mother_name=search_mother_name, sort_by=sort_by, sort_order=sort_order) }}">{{ p }}</a>
                             </li>
                         {% endif %}
                     {% elif loop.index == page - page_window -1 or loop.index == page + page_window + 1 %}
@@ -131,7 +154,7 @@
                 {# Next Page Link #}
                 {% if page < total_pages %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('patient.list_patients', page=page+1, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, sort_by=sort_by, sort_order=sort_order) }}">Next</a>
+                        <a class="page-link" href="{{ url_for('patient.list_patients', page=page+1, last_name=search_last_name, first_name=search_first_name, date_of_birth=search_date_of_birth, mrn=search_mrn, father_name=search_father_name, mother_name=search_mother_name, sort_by=sort_by, sort_order=sort_order) }}">Next</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled">
