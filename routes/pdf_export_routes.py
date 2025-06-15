@@ -292,6 +292,117 @@ def _determine_vaccine_category(vaccine_name, vaccine_config):
     print(f"DEBUG PDF: Vaccine '{vaccine_name}' not found in config, defaulting to 'other'")
     return 'other'
 
+# Vaccine display mappings for PDF templates
+VACCINE_DISPLAY_MAPPING_EN = {
+    'DTaP - IPV': {
+        'short_name': 'DTaP - IPV',
+        'description': '(Diphtheria, Tetanus,<br>Pertussis, Polio)'
+    },
+    'MMR (Measles, Mumps, Rubella)': {
+        'short_name': 'MMR',
+        'description': '(Measles, Mumps,<br>Rubella)'
+    },
+    'Hib (Haemophilus influenzae b)': {
+        'short_name': 'Hib',
+        'description': '(Haemophilus<br>influenzae type b)'
+    },
+    'Hepatitis B': {
+        'short_name': 'Hepatitis B',
+        'description': ''
+    },
+    'Hepatitis A': {
+        'short_name': 'Hepatitis A',
+        'description': ''
+    },
+    'PPD (TB Skin Test)': {
+        'short_name': 'PPD',
+        'description': '(TB Skin Test)'
+    },
+    'Measles (single)': {
+        'short_name': 'Measles',
+        'description': '(single)'
+    },
+    'Pneumococcal PCV': {
+        'short_name': 'Pneumococcal PCV',
+        'description': '(Pneumococcal)'
+    },
+    'Varicella': {
+        'short_name': 'Varicella',
+        'description': '(Chickenpox)'
+    },
+    'Influenza': {
+        'short_name': 'Influenza',
+        'description': '(Flu)'
+    },
+    'Meningococcal ACWY': {
+        'short_name': 'Meningococcal ACWY',
+        'description': '(Meningococcal)'
+    },
+    'Rotavirus': {
+        'short_name': 'Rotavirus',
+        'description': ''
+    }
+}
+
+VACCINE_DISPLAY_MAPPING_FR = {
+    'DTaP - IPV': {
+        'short_name': 'DTaP - IPV',
+        'description': '(Diphtérie, Tétanos,<br>Coqueluche, Polio)'
+    },
+    'MMR (Measles, Mumps, Rubella)': {
+        'short_name': 'ROR',
+        'description': '(Rougeole, Oreillons,<br>Rubéole)'
+    },
+    'Hib (Haemophilus influenzae b)': {
+        'short_name': 'Hib',
+        'description': '(Haemophilus<br>influenzae type b)'
+    },
+    'Hepatitis B': {
+        'short_name': 'Hépatite B',
+        'description': ''
+    },
+    'Hepatitis A': {
+        'short_name': 'Hépatite A',
+        'description': ''
+    },
+    'PPD (TB Skin Test)': {
+        'short_name': 'PPD',
+        'description': '(Test cutané TB)'
+    },
+    'Measles (single)': {
+        'short_name': 'Rougeole',
+        'description': '(seule)'
+    },
+    'Pneumococcal PCV': {
+        'short_name': 'Pneumocoque PCV',
+        'description': '(Pneumocoque)'
+    },
+    'Varicella': {
+        'short_name': 'Varicelle',
+        'description': ''
+    },
+    'Influenza': {
+        'short_name': 'Grippe',
+        'description': ''
+    },
+    'Meningococcal ACWY': {
+        'short_name': 'Méningocoque ACWY',
+        'description': '(Méningocoque)'
+    },
+    'Rotavirus': {
+        'short_name': 'Rotavirus',
+        'description': ''
+    }
+}
+
+def get_vaccine_display_info(vaccine_name, language='en'):
+    """Get display information for a vaccine name"""
+    mapping = VACCINE_DISPLAY_MAPPING_EN if language == 'en' else VACCINE_DISPLAY_MAPPING_FR
+    return mapping.get(vaccine_name, {
+        'short_name': vaccine_name,
+        'description': ''
+    })
+
 # --- PDF EXPORT ROUTES ---
 
 @pdf_export_bp.route('/vaccination_record_fr/<int:patient_id>')
@@ -323,7 +434,8 @@ def export_vaccination_record_fr(patient_id):
                                format_date_for_pdf=format_date_for_pdf,
                                footer_note=footer_note, 
                                signature_image_url_for_pdf=signature_image_url_for_pdf,
-                               logo_image_url_for_pdf=logo_image_url_for_pdf)
+                               logo_image_url_for_pdf=logo_image_url_for_pdf,
+                               get_vaccine_display_info=get_vaccine_display_info)
     
     pdf_stylesheets = _get_pdf_stylesheets()
     
@@ -362,7 +474,8 @@ def export_vaccination_record_en(patient_id):
                                format_date_for_pdf=format_date_for_pdf,
                                footer_note=footer_note, 
                                signature_image_url_for_pdf=signature_image_url_for_pdf,
-                               logo_image_url_for_pdf=logo_image_url_for_pdf)
+                               logo_image_url_for_pdf=logo_image_url_for_pdf,
+                               get_vaccine_display_info=get_vaccine_display_info)
     
     pdf_stylesheets = _get_pdf_stylesheets()
     
@@ -399,7 +512,8 @@ def export_total_history_fr(patient_id):
                                vaccine_data=vaccine_data,
                                table_column_labels=TABLE_COLUMN_LABELS_FR,
                                physician=physician_details, footer_note=footer_note, signature_image_url_for_pdf=signature_image_url_for_pdf,
-                               format_date_for_pdf=format_date_for_pdf, current_date=current_date_fr)
+                               format_date_for_pdf=format_date_for_pdf, current_date=current_date_fr,
+                               get_vaccine_display_info=get_vaccine_display_info)
     
     pdf_stylesheets = _get_pdf_stylesheets()
     
@@ -436,7 +550,8 @@ def export_total_history_en(patient_id):
                                vaccine_data=vaccine_data,
                                table_column_labels=TABLE_COLUMN_LABELS_EN, 
                                physician=physician_details, footer_note=footer_note, signature_image_url_for_pdf=signature_image_url_for_pdf,
-                               format_date_for_pdf=format_date_for_pdf, current_date=current_date_en)
+                               format_date_for_pdf=format_date_for_pdf, current_date=current_date_en,
+                               get_vaccine_display_info=get_vaccine_display_info)
     
     pdf_stylesheets = _get_pdf_stylesheets()
     
@@ -514,7 +629,8 @@ def export_complete_report(patient_id):
                                format_date_for_pdf=format_date_for_pdf,
                                footer_note=footer_note,
                                signature_image_url_for_pdf=signature_image_url_for_pdf,
-                               logo_image_url_for_pdf=logo_image_url_for_pdf)
+                               logo_image_url_for_pdf=logo_image_url_for_pdf,
+                               get_vaccine_display_info=get_vaccine_display_info)
 
     pdf_stylesheets = _get_pdf_stylesheets()
 

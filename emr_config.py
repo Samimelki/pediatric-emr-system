@@ -289,8 +289,10 @@ class EMRConfig:
         try:
             with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
                 json.dump(self.config, f, indent=2, ensure_ascii=False)
+            return True
         except Exception as e:
             print(f"Error saving config: {e}")
+            return False
 
     def deep_merge(self, dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, Any]:
         """Deep merge two dictionaries"""

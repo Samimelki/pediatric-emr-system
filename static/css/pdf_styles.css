@@ -1,7 +1,7 @@
 /* static/css/pdf_styles.css */
 @page {
     size: A4;
-    margin: 1cm 1.5cm 2.5cm 1.5cm; /* Top, Right, Bottom, Left margins - Increased bottom margin for footer */
+    margin: 1cm 1.5cm 3.5cm 1.5cm; /* Increased bottom margin for footer */
     
     /* @bottom-left {
         content: element(physician_footer);
@@ -10,12 +10,16 @@
     /* } */
 
     @bottom-center {
-        content: element(physician_footer) "Page " counter(page) " of " counter(pages);
-        font-size: 9pt; /* Slightly smaller */
+        content: element(physician_footer) "\A Page " counter(page) " of " counter(pages);
+        font-size: 8pt;
         color: #555;
-        vertical-align: top; /* Align physician_footer to top, then page number */
-        padding-top: 5px; /* Match old @bottom-left padding */
-        /* padding-bottom: 2mm; /* Small padding from edge */ /* This might push content up */
+        vertical-align: top;
+        padding-top: 8px;
+        text-align: center;
+        white-space: pre-wrap;
+        line-height: 1.3;
+        border-top: 0.5pt solid #aaa;
+        padding-bottom: 5px;
     }
 }
 
@@ -188,31 +192,15 @@ body {
     position: running(physician_footer);
     font-size: 8pt;
     color: #555;
-    text-align: center; /* Center the block now that it's in @bottom-center */
-    width: 100%; 
-    margin-bottom: 5px; /* Add some space between this block and page number if they stack */
-}
-
-.footer-content-for-pdf p {
-    margin: 0;
-    padding: 0;
-    text-align: left; /* Keep the paragraph text left-aligned within the centered block */
-}
-
-/* Ensure a line above the physician_footer if desired, can be done in @bottom-left or on the element */
-/* @page :first { */ /* No top border for physician footer on first page if header is different */
-    /* @bottom-left { border-top: none; } */
-/* } */
-/* @page { */ /* Default for all pages */
-    /* @bottom-left { border-top: 0.5pt solid #aaa; padding-top: 2mm; } */ /* Example of adding border in @page */
-/* } */
-
-.footer-content-for-pdf::before { /* Add border using pseudo-element if preferred */
-    content: "";
-    display: block;
-    border-top: 0.5pt solid #aaa;
-    margin-bottom: 2mm;
+    text-align: center;
     width: 100%;
+    line-height: 1.3;
+    margin-bottom: 3px;
+}
+
+.footer-content-for-pdf::before {
+    content: "";
+    display: none; /* Remove duplicate border since @bottom-center has one */
 }
 
 /* Utility class for spacing if needed */

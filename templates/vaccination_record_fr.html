@@ -6,21 +6,6 @@
     <title>Dossier Vaccinal - {{ patient.nom }} {{ patient.prenom }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/pdf_styles.css') }}">
     <style>
-        @page {
-            margin: 2cm;
-            margin-bottom: 2.5cm;
-            @bottom-center {
-                content: element(pdf_footer_text) "\A Page " counter(page) " of " counter(pages);
-                vertical-align: bottom;
-                padding-bottom: 0.5cm;
-                font-size: 0.8em;
-                line-height: 1.4;
-                text-align: center;
-                white-space: pre-wrap;
-                border-top: 1px solid #000;
-                padding-top: 0.3cm;
-            }
-        }
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -29,9 +14,10 @@
             color: #333;
         }
         .footer-content-for-pdf {
-            position: running(pdf_footer_text);
-            font-size: inherit;
-            line-height: inherit;
+            position: running(physician_footer);
+            font-size: 8pt;
+            color: #555;
+            line-height: 1.3;
         }
         /* Header Structure */
         .report-main-header {
@@ -114,11 +100,10 @@
     <div class="patient-info-grid">
         <strong>Nom de la mère:</strong><span>{{ patient.mere_nom if patient.mere_nom else 'N/A' }}</span>
         <strong>Nom du père:</strong><span>{{ patient.pere_nom if patient.pere_nom else 'N/A' }}</span>
-        <strong>Pédiatre (initiales):</strong><span>{{ patient.pediatre_initiales if patient.pediatre_initiales else 'N/A' }}</span>
         <strong>Adresse:</strong><span>{{ patient.domicile if patient.domicile else 'N/A' }}</span>
         <strong>Téléphone:</strong><span>{{ patient.telephone if patient.telephone else 'N/A' }}</span>
     </div>
-
+    <p>Je, {{physician.name}}, médecin, certifie que les informations ci-dessus sont correctes à la meilleure de ma connaissance et que j'ai examiné le calendrier vaccinal du patient et que le patient a reçu tous les vaccins recommandés. En outre, {{patient.prenom}} {{patient.nom}} est en bonne santé.</p>
     <h2>Tableau de Vaccination</h2>
     <p>Note: Ce tableau inclut tous les vaccins enregistrés, y compris ceux ne faisant pas partie du calendrier standard.</p>
 
@@ -140,20 +125,10 @@
                 {% for vaccine_name, doses in vaccine_data.mandatory_vaccines %}
                 <tr>
                     <td class="vaccine-name-cell">
-                        {% if vaccine_name == 'DTaP - IPV' %}
-                            <strong>DTaP - IPV</strong><br><em>(Diphtérie, Tétanos,<br>Coqueluche, Polio)</em>
-                        {% elif vaccine_name == 'MMR (Measles, Mumps, Rubella)' %}
-                            <strong>ROR</strong><br><em>(Rougeole, Oreillons,<br>Rubéole)</em>
-                        {% elif vaccine_name == 'Hib (Haemophilus influenzae b)' %}
-                            <strong>Hib</strong><br><em>(Haemophilus<br>influenzae type b)</em>
-                        {% elif vaccine_name == 'PPD (TB Skin Test)' %}
-                            <strong>PPD</strong><br><em>(Test cutané<br>tuberculinique)</em>
-                        {% elif vaccine_name == 'Hepatitis B' %}
-                            <strong>Hépatite B</strong>
-                        {% elif vaccine_name == 'Measles (Single)' %}
-                            <strong>Rougeole</strong><br><em>(Simple)</em>
-                        {% else %}
-                            <strong>{{ vaccine_name }}</strong>
+                        {% set display_info = get_vaccine_display_info(vaccine_name, 'fr') %}
+                        <strong>{{ display_info.short_name }}</strong>
+                        {% if display_info.description %}
+                            <br><em>{{ display_info.description|safe }}</em>
                         {% endif %}
                     </td>
                     <td class="date-cell">{{ doses.get('Dose 1', '-') }}</td>
@@ -188,18 +163,10 @@
                 {% for vaccine_name, doses in vaccine_data.recommended_vaccines %}
                 <tr>
                     <td class="vaccine-name-cell">
-                        {% if vaccine_name == 'Pneumococcal PCV' %}
-                            <strong>Pneumocoque PCV</strong><br><em>(Pneumocoque)</em>
-                        {% elif vaccine_name == 'Varicella' %}
-                            <strong>Varicelle</strong><br><em>(Varicelle)</em>
-                        {% elif vaccine_name == 'Hepatitis A' %}
-                            <strong>Hépatite A</strong>
-                        {% elif vaccine_name == 'Influenza' %}
-                            <strong>Grippe</strong><br><em>(Influenza)</em>
-                        {% elif vaccine_name == 'Meningococcal ACWY' %}
-                            <strong>Méningocoque ACWY</strong><br><em>(Méningocoque)</em>
-                        {% else %}
-                            <strong>{{ vaccine_name }}</strong>
+                        {% set display_info = get_vaccine_display_info(vaccine_name, 'fr') %}
+                        <strong>{{ display_info.short_name }}</strong>
+                        {% if display_info.description %}
+                            <br><em>{{ display_info.description|safe }}</em>
                         {% endif %}
                     </td>
                     <td class="date-cell">{{ doses.get('Dose 1', '-') }}</td>

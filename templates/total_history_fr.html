@@ -6,25 +6,11 @@
     <title>Dossier Médical Complet - {{ patient.nom }} {{ patient.prenom }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/pdf_styles.css') }}">
     <style>
-        @page {
-            margin: 2cm;
-            margin-bottom: 2.5cm;
-            @bottom-center {
-                content: element(pdf_footer_text) "\A Page " counter(page) " of " counter(pages);
-                vertical-align: bottom;
-                padding-bottom: 0.5cm;
-                font-size: 0.8em;
-                line-height: 1.4;
-                text-align: center;
-                white-space: pre-wrap;
-                border-top: 1px solid #000;
-                padding-top: 0.3cm;
-            }
-        }
         .footer-content-for-pdf {
-            position: running(pdf_footer_text);
-            font-size: inherit;
-            line-height: inherit;
+            position: running(physician_footer);
+            font-size: 8pt;
+            color: #555;
+            line-height: 1.3;
         }
     </style>
 </head>

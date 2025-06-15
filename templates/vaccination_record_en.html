@@ -6,21 +6,6 @@
     <title>Vaccination Record - {{ patient.nom }} {{ patient.prenom }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/pdf_styles.css') }}">
     <style>
-        @page {
-            margin: 2cm;
-            margin-bottom: 2.5cm;
-            @bottom-center {
-                content: element(pdf_footer_text) "\A Page " counter(page) " of " counter(pages);
-                vertical-align: bottom;
-                padding-bottom: 0.5cm;
-                font-size: 0.8em;
-                line-height: 1.4;
-                text-align: center;
-                white-space: pre-wrap;
-                border-top: 1px solid #000;
-                padding-top: 0.3cm;
-            }
-        }
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -29,9 +14,10 @@
             color: #333;
         }
         .footer-content-for-pdf {
-            position: running(pdf_footer_text);
-            font-size: inherit;
-            line-height: inherit;
+            position: running(physician_footer);
+            font-size: 8pt;
+            color: #555;
+            line-height: 1.3;
         }
         /* Header Structure */
         .report-main-header {
@@ -114,11 +100,12 @@
     <div class="patient-info-grid">
         <strong>Mother's First Name:</strong><span>{{ patient.mere_nom if patient.mere_nom else 'N/A' }}</span>
         <strong>Father's First Name:</strong><span>{{ patient.pere_nom if patient.pere_nom else 'N/A' }}</span>
-        <strong>Pediatrician Initials:</strong><span>{{ patient.pediatre_initiales if patient.pediatre_initiales else 'N/A' }}</span>
         <strong>Address:</strong><span>{{ patient.domicile if patient.domicile else 'N/A' }}</span>
         <strong>Telephone:</strong><span>{{ patient.telephone if patient.telephone else 'N/A' }}</span>
     </div>
-
+    
+    <p>I, the undersigned, {{physician.name}}, hereby certify that the information provided above is correct to the best of my knowledge and that I have reviewed the vaccination schedule for the child and that the child has received all the recommended vaccinations. Furthermore, {{patient.prenom}} {{patient.nom}} is in good health.</p>
+    
     <h2>Vaccination Table</h2>
     <p>Note: This table includes all recorded vaccines, including those not part of the standard schedule.</p>
 
@@ -131,29 +118,19 @@
                     <th>Dose 1</th>
                     <th>Dose 2</th>
                     <th>Dose 3</th>
-                    <th>Rappel 1</th>
-                    <th>Rappel 2</th>
-                    <th>Rappel 3</th>
+                    <th>Booster 1</th>
+                    <th>Booster 2</th>
+                    <th>Booster 3</th>
                 </tr>
             </thead>
             <tbody>
                 {% for vaccine_name, doses in vaccine_data.mandatory_vaccines %}
                 <tr>
                     <td class="vaccine-name-cell">
-                        {% if vaccine_name == 'DTaP - IPV' %}
-                            <strong>DTaP - IPV</strong><br><em>(Diphtheria, Tetanus,<br>Pertussis, Polio)</em>
-                        {% elif vaccine_name == 'MMR (Measles, Mumps, Rubella)' %}
-                            <strong>MMR</strong><br><em>(Measles, Mumps,<br>Rubella)</em>
-                        {% elif vaccine_name == 'Hib (Haemophilus influenzae b)' %}
-                            <strong>Hib</strong><br><em>(Haemophilus<br>influenzae type b)</em>
-                        {% elif vaccine_name == 'PPD (TB Skin Test)' %}
-                            <strong>PPD</strong><br><em>(TB Skin Test)</em>
-                        {% elif vaccine_name == 'Hepatitis B' %}
-                            <strong>Hepatitis B</strong>
-                        {% elif vaccine_name == 'Measles (Single)' %}
-                            <strong>Measles</strong><br><em>(Single)</em>
-                        {% else %}
-                            <strong>{{ vaccine_name }}</strong>
+                        {% set display_info = get_vaccine_display_info(vaccine_name, 'en') %}
+                        <strong>{{ display_info.short_name }}</strong>
+                        {% if display_info.description %}
+                            <br><em>{{ display_info.description|safe }}</em>
                         {% endif %}
                     </td>
                     <td class="date-cell">{{ doses.get('Dose 1', '-') }}</td>
@@ -179,27 +156,19 @@
                     <th>Dose 1</th>
                     <th>Dose 2</th>
                     <th>Dose 3</th>
-                    <th>Rappel 1</th>
-                    <th>Rappel 2</th>
-                    <th>Rappel 3</th>
+                    <th>Booster 1</th>
+                    <th>Booster 2</th>
+                    <th>Booster 3</th>
                 </tr>
             </thead>
             <tbody>
                 {% for vaccine_name, doses in vaccine_data.recommended_vaccines %}
                 <tr>
                     <td class="vaccine-name-cell">
-                        {% if vaccine_name == 'Pneumococcal PCV' %}
-                            <strong>Pneumococcal PCV</strong><br><em>(Pneumococcal)</em>
-                        {% elif vaccine_name == 'Varicella' %}
-                            <strong>Varicella</strong><br><em>(Chickenpox)</em>
-                        {% elif vaccine_name == 'Hepatitis A' %}
-                            <strong>Hepatitis A</strong>
-                        {% elif vaccine_name == 'Influenza' %}
-                            <strong>Influenza</strong><br><em>(Flu)</em>
-                        {% elif vaccine_name == 'Meningococcal ACWY' %}
-                            <strong>Meningococcal ACWY</strong><br><em>(Meningococcal)</em>
-                        {% else %}
-                            <strong>{{ vaccine_name }}</strong>
+                        {% set display_info = get_vaccine_display_info(vaccine_name, 'en') %}
+                        <strong>{{ display_info.short_name }}</strong>
+                        {% if display_info.description %}
+                            <br><em>{{ display_info.description|safe }}</em>
                         {% endif %}
                     </td>
                     <td class="date-cell">{{ doses.get('Dose 1', '-') }}</td>
@@ -225,9 +194,9 @@
                     <th>Dose 1</th>
                     <th>Dose 2</th>
                     <th>Dose 3</th>
-                    <th>Rappel 1</th>
-                    <th>Rappel 2</th>
-                    <th>Rappel 3</th>
+                    <th>Booster 1</th>
+                    <th>Booster 2</th>
+                    <th>Booster 3</th>
                 </tr>
             </thead>
             <tbody>
