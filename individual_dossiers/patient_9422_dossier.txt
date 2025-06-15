@@ -1,0 +1,59 @@
+2640/47/31.5
+*09-04-13* 2950/48/35.5 EN.AM.
+*21-05-13* 4800/53/38.5 EN.Allaitement mixte.
+*18-06-13* 5600/58/40 EN.Allaitement mixte.RHD.
+*16-07-13* 6150/61/40.5 EN.Fruit.RHN.
+*13-08-13* 6900/63.5/41.5 EN.L.
+*10-09-13* 7400/65.5/42.5 EN.RV.Fluor.
+*08-10-13* 7750/67.5/43 EN.
+*05-11-13* 8250/69.5/43.5 EN.
+*10-12-13* 8600/70.5/44 EN.
+*20-12-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-01-14* 9000/72.5/44.5 EN.
+*04-02-14* 9400/73/45.5 EN.
+*25-03-14* 9800/75/46 EN.
+*29-04-14* 10.2/76.5/46.5 EN.
+*02-05-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*27-05-14* 10.4/77.5/47 EN.
+*01-07-14* 10.8/80/47 EN.
+*22-07-14* 10.9/81/47 EN.
+*19-08-14* 11.1/81.5/47.5 EN.
+*18-11-14* 11.7/84.5/48 EN.
+*15-12-14* Rhume.Tousse.EN.SPH.
+*10-02-15* 12.3/87/48.5 EN.
+*15-04-15* 12.7/89/49 EN.
+*30-04-15* 12.4/ Rhino-pharyngite purulente fébrile.Amoxy.
+*17-06-15* 12.4/ Rhume depuis 2 semaines, toux productive et fièvre à 40 ce jour.OMA à gauche et angine érythemateuse.Amoxy-clav (CM).
+*02-07-15* Petit trauma frontal il y a 22h de temps.A vomi 5-6 fois dans la duxième partie de la nuit écoulée.Rien depuis 8 heurs de temps.EN.Virose probable.
+*21-07-15* 12.7/95/49 EN.Rume.SPH.
+*11-08-15* Tousse.
+*06-10-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*15-10-15* Laryngite aiguë banale.EN.Humidifications.
+*17-11-15* Rhume.EN.
+*09-02-16* 14.2/96.5/49.5 EN.
+*16-02-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*24-03-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*30-03-16* Baisse puis reprise d'1 fébricule ce jour.EN.Virose ss-jacente probable.Persévérer.
+*01-04-16* Fièvre encore.EN en dehors de 2 petites ADP SAM.
+*07-06-16* 15/ Fievre depuis 24h. Laryngotracheobronchite. Amoxy-clav.
+*07-09-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*11-11-16* Tousse.EN.
+*30-12-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*18-04-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*22-05-17* 17/ Fièvre ce matin.EN.Virose.AT (RM).
+*24-05-17* Fièvre tj.Angine.Amoxy (RM).
+*21-06-17* 16.4/105.5/ EN.
+*18-08-17* Fièvre. Début d'angine pultacée à droite.
+*05-01-18* Synd grippal subfébrile.EN en dehors d'1 pharyngite.Virose probable.
+*19-03-18* 17.4/ Rhino-pharyngite purulente fébrile.
+*16-04-18* 18/108.5 EN.
+*18-04-18* Angine.Amoxy-clav.
+*21-05-18* 17.4/109/ EN.
+*14-11-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*25-02-19* vomissements et fievre depuis hier.Nuque souple.EN en dehors d'une pharyngite.Virose probable.AT.
+*28-03-19* 19.2/115.5 EN.
+*11-12-19* 21.4/119 EN.
+*10-02-20* Syndrome grippal febrile depuis 48 heures.Nuque souple.Pharyngite.Virose probable.AT.
+*26-02-20* Syndrome grippal febrile depuis hier.Bon EG.Nuque souple.Phrayngite.Virose.AT.
+*28-02-20* Toujours febrile avec arthralgies.Excellent etat general.Nuque souple.Virose probable.AT.
+*10-04-20* Toux et rhinorrhee avec cernes oculaires d'allure allergique.Flixonase et aerius.

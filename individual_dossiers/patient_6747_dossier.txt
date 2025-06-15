@@ -1,0 +1,80 @@
+3550/52/35.5
+*27-07-06* 4350/54.5/39 EN.Allaitement mixte.
+*24-08-06* 5900/60/41.5 EN.Allaitement mixte.
+*25-09-06* 7200/64/43 EN.RHD.
+*26-10-06* 8400/68/44.5 EN.Fruit.RHN.
+*07-12-06* 9200/72/45.8 Grippe.EN.SPH.
+*04-01-07* 9700/73/46 EN.RV.Fluor.
+*01-02-07* 10.2/74.5/47 EN.
+*09-02-07* Synd grippal subfébrile.EN en dehors d'1 discrète pharyngite.Virose probable.
+*12-02-07* Grippe.EN.
+*01-03-07* 10.2/75/47.2 EN.
+*02-04-07* 10.5/76.5/48.5 EN.
+*04-05-07* 11/78/48.5 EN.
+*04-06-07* 11.5/79.5/48.5 EN.
+*04-07-07* 11.8/80/49.5 EN.
+*01-08-07* 12/81.5/49.5 EN.
+*17-08-07* Fièvre+frissons ce matin.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*20-08-07* La fièvre a disparu.Toux rauque.EN.Humidifications.
+*22-08-07* Toux tj rauque.Ne dort pas la nuit.EN.Pas de fièvre.Dexa pour 2j.
+*05-09-07* 12/83/49.5 EN.
+*05-10-07* 12.3/83.5/49.5 EN.
+*18-10-07* Tousse depuis la nuit passée.Voix 1 peu rauque.EN.
+*05-11-07* 12.8/85/49.5 EN.
+*03-01-08* 13.1/87.5/49.5 Synd grippal subfébrile.EN.SPH.
+*08-02-08* Tousserait depuis plusieurs semaines de façon incte.Pas de fièvre.La mère note 1 rhinorrhée claire.La toux est essentiellement nocturne. L'EG est bon. EN.C'est l'hiver.
+*25-02-08* 13.1/90/ Petite grippe subfébrile.EN + conjonctivite purulente.Fucithalmic.
+*11-04-08* 13.2/91/49.5 EN.
+*13-05-08* Tousserait depuis 1-2 mois.EN.Allergie?OSM D.Loratadine+Nasonex.
+*27-05-08* 12.6/ A fait de la fiévre il y a 2j.Ce jour,selles molles + 1 vomissement.EN.RAD.
+*27-06-08* Fièvre + selles molles.EN en dehors d'1 belle pharyngite + 1 rash cutané débutant sur le tronc.Virose probable.AT.
+*18-09-08* Rhino-pharyngite purulente fébrile.Amoxy.
+*14-10-08* 14.4/95/49.5 EN.
+*10-11-08* Tousse 1 peu.EN.
+*17-11-08* Rhino-pharyngite purulente fébrile.Amoxy.
+*10-12-08* Fièvre depuis 48h.EN (BE).
+*12-01-09* Amené pour découverte fortuite d'ADP SAM.EN en dehors d'ADP SAM bilatérale d'allure banale.Pas d'autres ADP suspectes dans les autres aires.Pas d'HSM.A priori virose.Rassurer les parents + surveillance.
+*19-01-09* Les ADP ont quasiment disparu.
+*06-02-09* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*10-03-09* 15/ Otite G.Amoxy-Clav.A fait 1 chute dans les escaliers il y a 2 sem avec fissuration du rocher à D avec hémorragie dans le CAE.Le tympan,vu ultérieurement,est intact (SR).
+*19-05-09* 15.1/100/50.5 EN.Suspicion d'1 discret strabisme convergent.Hypermétrope.Cons ophtalmo (ID).
+*16-06-09* Tousse 1 peu.EN.
+*18-06-09* 15.3/101/50.5 EN.
+*13-10-09* 16.3/103/51 EN.
+*09-12-09* 16.3/103 EN.
+*09-03-10* 17/104/ Otite ext.Otisedol-Advil.
+*14-04-10* 17.5/107/
+*01-07-10* 18/ Diarrhée. RAD.
+*12-08-10* Fébricules + céphalées depuis cet apres midi.Pasd evomissements ni de photophobie.EN.Nuque souple.Surveiller.
+*27-09-10* Fièvre depuis 3-4j + 1 selle diarrhéique+toux.EN.Virose probable.AT.
+*29-09-10* 18/112/ La fièvre persiste.Toux.Excellent EG.EN.CAT:ECBU,NFP,Widal,EBV,Rx Thorax.
+*27-10-10* Odynophagie.Pas de fièvre.EN en dehors d'amygdales modéremment hypertrophiées.Rassurer les parents.
+*26-01-11* 19/112.5/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*31-01-11* La fièvre a oscillé jusqu'à hier avec 24h libres.Pas de fièvre ce jour.EN.
+*25-03-11* Otalgie G.EN en dehors d'1 OSM.Nasonex.
+*07-04-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*26-05-11* 20/115.5/ EN.
+*01-06-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*02-06-11* Fièvre tj.Excellent EG.EN.AT.
+*03-06-11* Idem.
+*13-07-11* 20/116/ EN.
+*18-11-11* Otite D.Amoxy-Clav.
+*19-03-12* 23/119/ EN.
+*09-05-12* 23/121/ EN.
+*24-09-12* Angine.Amoxy.
+*18-10-12* EN.
+*16-11-12* 25/124/ EN.
+*22-03-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-03-13* La fièvre a oscillé juqu'à hier.Pas de fièvre ce jour.EN.
+*20-06-13* 26/127/ EN.
+*17-07-13* EN.
+*20-06-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*16-04-15* 32/138.5/ EN.
+*16-09-15* 33/141/ EN.
+*18-12-15* Grippe.EN.
+*30-06-16* 37.5/145/ EN.
+*06-09-16* 37.5/146.5/ EN.
+*28-12-16* EN.
+*18-09-17* 41/151.5/ EN.Duvet pubien.
+*03-11-17* 41.7/151.5/ EN.
+*12-09-18* 43.6/157.5/ EN.P1.

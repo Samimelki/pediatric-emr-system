@@ -1,0 +1,59 @@
+3450/50/36
+*03-05-04* 4400/55/38.5 EN.AM.
+*01-06-04* 5300/58/40 EN.Allaitement mixte.
+*01-07-04* 6300/61/41 EN.Allaitement mixte.RHD.Dépistage néonatal:Déficit en G6PD??A recontrôler.
+*02-08-04* 6800/64/42 EN.Fruit.Allaitement mixte.
+*12-08-04* RHN.
+*29-09-04* 7500/ Pleurs inhabituels ce jour.Ils n'évoquent pas 1 IIA.A vomit 1 fois.Pas de fièvre.EN.Dents?
+*04-10-04* 7500/68/43.5 EN.RV.Fluor.
+*08-11-04* 8000/69.5/44.5 EN.
+*10-12-04* Fièvre depuis hier avec selles diarrhéiques.EN.Virose probable.RAD+AT(B.Eid).
+*10-01-05* 8700/72/45.5 EN.
+*03-02-05* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*16-02-05* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-03-05* 9200/74/46.5 EN.
+*11-04-05* 9700/75/47 EN.
+*02-06-05* 10.1/77.5/47.5 EN.
+*03-08-05* 10.5/80/47.5 EN.
+*06-10-05* EN.
+*09-11-05* 11.1/82.5/48.5 EN.
+*12-04-06* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*11-08-06* 13.5/90.5/50.5 EN.
+*21-11-06* Otite D.Amoxy-Clav.
+*08-12-06* 13.6/95.5/50.5 EN.
+*23-03-07* Synd grippal fébrile.EN.Virose probable.AT.
+*11-04-07* Synd grippal.AT (B.Eid). 
+*23-04-07* 14.5/98/50.5 EN.
+*29-08-07* GEA fébrile.EN en dehors d'1 pharyngite.Virose probable.RAD+AT.
+*28-09-07* Rhino-pharyngite purulente fébrile.Amoxy.
+*29-04-08* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*01-05-08* Rhino-pharyngite purulente fébrile.Amoxy.
+*19-05-08* Fait 1 fièvre ce jour après 2j de rash cutané prurigineux.EN en dehors d'1 pharyngite.Virose probable.AT.
+*20-05-08* La fiévre continue.Apparition de 2 ADP SAM d'allure inflammatoire.Apparition d'1 tache rouge à la base de la nuque à D.EN en dehors d'1 pharyngite.Virose tj probable.
+*21-05-08* La fièvre persiste.Le rash morbilliforme est plus important.Les ADP SAM sont plus volumineuses et plus sensibles.Virose.
+*23-05-08* Fièvre encore mais plus espacée.EN en dehors d'1 ADP SAM D.Virose.
+*27-05-08* La fièvre a disparu.Elle aurait duré 5j.Actuellement il y a 1 desquamation générale avec 1 furoncle qui s'est constitué à la base du cou à D.Amoxy-Clav.
+*05-05-09*18.3/111/ EN.
+*22-06-09* Fièvre + douleurs abdominales ce jour à type de coliques + vomissements muqueux.EN en dehors d'1 pharyngite.Pas de raideur méningée. Virose probable.AT.
+*21-07-09* 18.5/112/ EN.
+*28-09-09* 19.5/ EN.
+*17-11-09* A fait 1 synd grippal fébrile il y a 2j.Pas de fièvre ce jour.EN en dehors d'1 pharyngite.Virose probable.
+*29-04-10* 20/118/ EN.
+*01-11-10* EN.
+*21-09-11* 23/125.5/ EN.
+*22-02-12* 23.5/127.5/ EN.
+*27-04-12* GEA fébrile.EN.RAD.
+*14-05-12* 23.5/128.5/ EN.
+*31-08-12* 25/130/ EN.
+*15-10-13* 28/136.5/ EN.
+*24-04-14* 28/138.5/ EN.
+*08-07-14* EN.
+*31-03-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*30-04-15* 30/144/ EN.
+*11-09-15* 35.5/147.5/ EN.
+*22-02-16* GEA fébrile.EN en dehors d'1 pharyngite.RAD + AT.
+*08-04-16* 37/154/ EN.P3.
+*17-05-17* 44/162.5/ EN.P4
+*22-12-17* 44/165/ EN.P4.
+*10-10-18* 45.3/168/ EN.
+*28-02-20* 50.1/169 EN.

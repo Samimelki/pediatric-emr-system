@@ -1,0 +1,57 @@
+3080/51/34
+*02-03-06* 4700/54/38 EN.AM.
+*04-04-06* 6400/58.5/40.5 EN.AM.
+*25-04-06* Grippe+conjonctivite purulente.EN.SPH+Fucithalmic.
+*02-05-06* 7200/61.5/41.5 EN.RHD.
+*02-06-06* 7900/65/43.5 EN.Fruit.RHN.
+*31-07-06* 9100/68.5/45 EN.RV.Fluor.
+*05-09-06* 9800/ GEA fébrile.EN.RAD+AT.
+*11-09-06* 9800/72/46.5 EN.
+*08-11-06* Synd grippal fébrile depuis 2j.Excellent EG.EN.Virose probable.AT.
+*17-11-06* 10.3/76.5/46.5 EN.
+*24-01-07* 10.7/78/48 EN.
+*31-01-07* Rhino-pharyngite purulente fébrile.Amoxy.
+*14-02-07* 10.9/78.5/49 EN.
+*23-02-07* GEA fébrile.EN.RAD+AT.
+*03-04-07* Rhino-pharyngite purulente fébrile+conjonctivite purulente.Amoxy-Clav.
+*08-05-07* 11.4/82.5/49.5 EN.
+*01-06-07* Vomissements+fièvre depuis hier.Pas de diarrhée.EN en dehors d'1 pharyngite.Pas de raideur meningée.Virose probable.AT.
+*07-06-07* 11.3/83/49.5 EN.
+*06-07-07* 11.5/83.5/50 EN.
+*03-01-08* 12.7/88.5/50 EN.
+*25-01-08* Otite bilatérale.Cefdinir.
+*14-02-08* 12.7/90/50 EN.
+*07-07-08* GEA.EN.RAD.
+*22-07-08* Fait 1 rash type érythème polymorphe depuis 4-5j.EN.Virose probable.
+*05-01-09* 14.2/97/51 EN.
+*06-02-09* 14.8/98.5/ EN.
+*16-02-09* Rhino-pharyngite purulente fébrile.Amoxy.
+*28-05-09* Otite bilatérale.Amoxy-Clav.
+*29-09-09* 15.6/103/ EN.
+*11-03-10* Fièvre + toux et douleur abdominale depuis 4 jours.EN.Radio thorax.
+*16-11-10* 17.8/110/ EN.
+*22-12-10* EN.
+*18-02-11* 17.7/111/ EN.
+*14-06-11* GEA fébrile.EN.
+*14-10-11* 18/115.5/ EN.
+*17-02-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*08-03-12* 19/118/ EN.
+*08-08-12* 19/120.5/ EN.
+*17-10-12* EN.
+*26-11-12* 21.5/121.5/ EN.
+*21-02-13* 21/122.5/ EN.
+*13-06-13* 21.5/124.5/ EN.
+*14-10-13* EN.
+*19-03-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*13-10-14* 24.5/131.5/ EN.
+*03-12-14* EN.
+*31-08-15* 26/136/ EN.
+*22-09-15* EN.
+*27-01-16* 29/137.5 EN.
+*14-09-16* EN.
+*01-11-16* 29.5/142/ EN.
+*08-02-17* 31/143/ EN.
+*13-07-17* 30/145/ Selles glaireuses avec traces de sang. Pas de fièvre. EN.Virose probable.
+*10-11-17* 32.2/145/ EN.
+*04-01-18* 33.1/146/ EN.
+*21-11-18* 35.2/149.5/ EN.

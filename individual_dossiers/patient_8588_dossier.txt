@@ -1,0 +1,50 @@
+4523/57/36.5 41,5 SA.
+*21-12-10* 5500/60.5/40 EN.AM.
+*20-01-11* 6000/62.5/41.5 EN.AM.
+*21-02-11* 6400/66/42.5 EN.AM.RHD.
+*22-03-11* 7050/67/43 EN.AM.RHN.Fruit.
+*15-04-11* 7500/69/44 EN.AM.L.
+*10-05-11* 7950/70/45 EN.AM.RV.Fluor.
+*20-05-11* GEA fébrile.EN en dehors d'1 pharyngite.RAD+AT.
+*14-06-11* 8200/71/45.5 EN.
+*12-07-11* 8400/72/46 EN.
+*09-08-11* 8500/73.5/46.5 EN.
+*23-08-11* Fièvre depuis 2j.Coryza clair.EN.Virose possible.ECBU de principe.
+*13-09-11* 8700/75/47.5 EN.
+*14-09-11* Otite bilatérale (G>D).Amoxy-clav.
+*27-09-11* Laryngite aiguë fébrile.EN.Humidifications.
+*18-10-11* 9300/75.5/47.5 EN.
+*15-11-11* 9500/77.5/47.5 EN.
+*03-01-12* 10.2/79.5/48.5 EN.
+*07-02-12* 10.6/81/48.5 EN.
+*06-03-12* 10.8/82/49 EN.
+*03-04-12* 10.9/83/49.5 EN.
+*17-07-12* 11.6/87.5/50 EN.
+*15-10-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*17-10-12* Otite bilatérale.Amoxy-Clav.
+*05-12-12* 13/ Otite G.Amoxy-Clav.
+*14-12-12* Fièvre ce jour,au neuvième jour d'amoxy-clav.EN en dehors d'1 pharyngite.Tympan G nettement amélioré.Virose intercurrente probable.AT.
+*26-02-13* 13.6/92/50.5 EN.
+*26-03-13* 13.7/93.5/51 EN.
+*21-06-13* Otite D.Amoxy-Clav.
+*21-01-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*05-02-14* 16/101.5/ Otite D.Amoxy-Clav.
+*21-03-14* 16.5/102/51.5 EN.
+*10-04-14* Synd grippal fébrileSelles fréquentes mais pas molles.EN en dehors d'1 pharyngite.Virose probable.AT.
+*22-04-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*12-05-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*16-10-14* Otite ext D probablement traumatique.Cipro plus.
+*21-12-15* 20/116.5/ EN.
+*21-01-16* 21/117/ EN.
+*18-02-16* 21/118 EN.
+*04-03-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-03-16* Idem.
+*10-03-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*14-04-16* 21/118.5/ EN.
+*17-11-16* 23/122/  EN.
+*04-04-18* 27.7/131.5/ EN.
+*30-05-18* Céphalées récidivantes depuis 2 mois environ avec nausées intermittentes.Le matin, la mère note une mauvaise haleine, mais Lynn n'a pas un mauvais arrière-goût dans la gorge.EN:somato et neuro.CAT: Scan des sinus de la face + cérébral.
+*29-01-19* syndrome grippal febrile depuis hier.Bon EG.Nuque souple.EN.Virose probable.AT.
+*12-04-19* 31.5 Nausees et fievre depuis hier.Bon EG.Nuque souple.Virose probable.Hydratation.
+*01-11-19* 33/143 EN.
+*17-04-20* 34.4/145 EN.

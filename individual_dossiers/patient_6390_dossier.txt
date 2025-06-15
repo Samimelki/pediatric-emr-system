@@ -1,0 +1,69 @@
+3930/51/36.5
+*15-09-05* 4800/56/39 EN.AM.
+*14-10-05* 6100/59/41 EN.AM.
+*16-11-05* 6800/63.5/42.5 EN.AM.RHD.
+*16-12-05* 7300/65.5/43.7 EN.RHN.A fait 1 IPLV.Mis sous Pregomin.
+*09-01-06* Grippe.EN.SPH.
+*17-02-06* 9200/71.5/46.5 EN.RV.Fluor.Tj sous Pregomin.
+*14-03-06* 9650/73/47 EN.
+*01-05-06* Quatrième jour de fièvre.Selles molles.EN.Virose probabale.Si persistance de la fièvre,ECBU.
+*08-05-06* La fièvre a persisté jusqu'à hier,date à laquelle il fait 1 rash fin.EN ce jour en dehors d'1 rash évanescent.Virose.
+*15-05-06* 10.5/75/48.5 EN.
+*03-07-06* GEA fébrile.EN en dehors d'1 petite pharyngite.Virose probable.RAD+AT.
+*17-07-06* 11.1/78.5/49 EN.
+*23-08-06* 11.5/79.5/49.5 EN.
+*26-09-06* Rhino-pharyngite purulente fébrile.Amoxy.
+*20-10-06* 12.1/84.5/50.5 EN.
+*11-12-06* 12.6/86/50.5 EN.
+*15-01-07* 12.8/86.5/50.5 EN.
+*08-02-07* A fait 1j de fièvre il y a 3j.Depuis il a 1 rhume et sa paupière sup D a enflé depuis hier.Pas de conjonctivite purulente ni d'otite. Conjonctivite probable.EN par ailleurs en dehors d'1 angine d'allure virale.Sofradex.
+*15-02-07* 12.7/87/51 EN.
+*21-05-07* Grippe subfébrile.EN.
+*18-10-07* 15.2/94/51 EN.
+*22-10-07* Synd grippal fébrile.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*19-11-07* 15.8/96/51 EN.
+*12-02-08* Rhino-pharyngite purulente fébrile.Amoxy.
+*01-04-08* 16.6/100.5/51.5 EN.
+*21-04-08* Rhino-pharyngite purulente fébrile.Amoxy.
+*19-06-08* GEA fébrile.EN en dehors d'1 pharyngite.RAD.
+*15-07-08* 16.8/103/51.5 EN.
+*04-09-08* 17/104/51.5 EN.
+*19-01-09* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*29-01-09* Rhino-pharyngite purulente fébrile.Amoxy.
+*19-03-09* 18.6/108.5/ EN.
+*04-05-09* Synd grippal fébrile.EN en dehors d'1 pharyngite.Pas de raideur méningée.Virose probable.AT.
+*02-06-09* Rhino-pharyngite purulente fébrile.Amoxy.
+*07-07-09* Angine.Amoxy.
+*10-08-09* Angine.Amoxy-Clav.
+*24-08-09* Rhume.EN.
+*01-10-09* Rhume.EN.
+*14-01-10* 21/ Fièvre depuis 48 heures.Bon EG.Angine.Nuque souple.Amoxy.
+*09-07-10* 20.5/119/ EN.
+*15-07-10* Fièvre 5j + Toux (comme son frère).Klacid debuté.Rx Thorax demande.
+*09-08-10* 22/119/ EN.
+*21-10-10* Bilan lipidique et général N.
+*28-12-10* Rhino-pharyngite purulente fébrile.Histoire de rhino-sinusite.Amoxy-Clav + Nasonex.
+*02-02-11* Angine.Amoxy.
+*11-03-11* Angine à pseudo-membranes.Bon EG.ADP cervicales multiples d'allure inflammatoire.Amoxy-Clav.Si persistance de la fièvre,sérologie EBV.
+*26-07-11* 24/126/ EN.
+*01-11-11* Angine.Amoxy.
+*03-01-12* 26.5/129.5/ EN.
+*31-01-12* Rhino-pharyngite purulente fébrile.Points blancs rares sur les amygdales.Pas de fièvre pour l'instant.Si refièvre,amoxy.
+*16-03-12* 28/130.5/ EN.
+*11-09-12* 28/134.5/ EN.
+*04-01-13* 30/136/ EN.
+*06-02-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-02-14* Fièvre depuis 2j.Mis sous amoxy depuis lors pour angine.Fièvre tj élevée.EN en dehors d'1 très belle angine menbraneuses,d'allure virale.
+*21-02-14* 33/ Angine.Amoxy.
+*31-10-14* 37/147/ EN.
+*13-11-14* Laryngite banale.EN.Humidifications.
+*02-04-15* 37/149/ EN
+*05-02-16* 43/154.5/ EN.
+*03-08-16* Rougeur du prépuce.RAS par ailleurs.
+*26-09-16* 45/158.5/ EN.Puberté 0.
+*27-12-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*22-06-17* 49.5/163/ EN.OGE augmentés de vol.
+*05-09-17* 48/165/ EN.
+*02-10-17* Douleurs abdominales vagues isolées depuis 3j.EN.
+*08-03-18* 53.9/168.5/ EN.P2.
+*04-10-19* 67.1/178 EN.

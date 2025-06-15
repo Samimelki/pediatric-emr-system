@@ -1,0 +1,62 @@
+3600/52/37
+*14-09-04* 5050/57/39.5 EN.Allaitement mixte.
+*12-10-04* 6400/60.5/40 EN.Allaitement mixte.
+*12-11-04* 7000/64/41 EN.AM.RHD.
+*10-12-04* 7500/66.5/41.7 EN.AM.Fruit.RHN.
+*11-02-05* 8650/71/44.5 EN.Allaitement mixte.RV.Fluor.
+*02-03-05* Rhino-pharyngite purulente fébrile.Tympans ternes.Amoxy-Clav.
+*04-03-05* La fièvre persiste.EN.Persévérer.
+*11-03-05* 9800/73.5/45.5 EN.
+*24-03-05* Fébricule+voix enrouée.Excellent EG.EN.Virose probable.Humidifications.
+*31-03-05* Fièvre depuis 2j.EN e4n dehors d'1 otite G débutante.Cefuroxim.
+*11-05-05* 11.2/76.5/47 EN.
+*13-06-05* Fièvre depuis hier+coryza clair.EN en dehors d'1 pharyngite.Virose probable.AT.
+*11-07-05* Roséole.
+*20-07-05* 11.8/79.5/48.5 EN.
+*18-08-05* 12.6/81/49 EN.
+*20-10-05* 13.5/84/49.5 EN.
+*21-11-05* Rhino-pharyngite purulente fébrile.Amoxy.
+*21-12-05* 14.1/87/50 EN.
+*18-01-06* Rhino-pharyngite purulente fébrile.Amoxy.
+*17-02-06* Rhino-pharyngite purulente fébrile+conjonctivite purulente.Amoxy-Clav.
+*12-04-06* Angine+jetage purulent post.Selles diarrhéiques.Amoxy.
+*21-04-06* Synd grippal fébrile.EN en dehors d'1 pharyngite et d'1 conjonctivite purulente.AT+Fucithalmic.
+*25-04-06* La fièvre persiste.ECBU:30.000 col/ml avec 6 GB/ml.Rx thorax:suspicion d'1 image hilaire G.Mis sous Clarithro,mais ne prend pas bien le médicament.EN en dehors d'1 rash maculaire au niveau du cou.Virose possible.Continuer le ttt.
+*02-06-06* A fait 1j de fièvre il y a 3j.Reprise de la fièvre ce jour.EN en dehors d'1 coryza clair.Est sous Nasonex (AH) pour hypertrophie des cornets probablement.AT.
+*27-07-06* GEA fébrile.EN.RAD+AT.
+*09-11-06* 17.4/100/51.5 EN.
+*14-11-06* Synd grippal subfébrile.EN.SP.
+*03-01-07* Rhino-pharyngite purulente fébrile.Les parents signalent des difficultes respiratoires noctures,même en dehors du synd grippal.VA ou cornets?Re Cons AH+Amoxy.
+*10-01-07* Fièvre hier+vomissements.EN.Virose intercurrente.
+*24-03-07* Fièvre depuis hier+petite toux.EN en dehors d'1 jetage purulent post.Amoxy-Clav.
+*06-06-07* 18/ Otite D.Amoxy-Clav.
+*09-07-07* 18/105/51.5 EN.
+*16-11-07* Fièvre depuis 2j.Rash ce jour mais reprise de la fièvre ce jour.EN en dehors d'1 jetage purulent post.Amoxy.
+*11-12-07* Rhinite purulente.Cebemyxin dans le nez(BE).
+*24-12-07* Rhino-pharyngite purulente fébrile+toux laryngée.Amoxy.
+*26-12-07* Va mieux bien que la température n'ait pas encore totalement disparu.EN.Persévérer.
+*18-02-08* Synd grippal fébrile+diarrhée.EN en dehors d'1 pharyngite et d'1 otite ext D.RAD+Cipro.
+*21-02-08* Six jours de fièvre déjà avec diarrhée imp,avec suspicion de sang dans les selles.Excellent EG.EN en dehors d'1 pharyngite.Widal.
+*24-04-08* Otalgie depuis 2-3j sans fièvre.Ex:tympan D 1 peu opaque,sans collection.Pharyngite.Cipro-dexa.Si fièvre,amoxy-clav.
+*08-05-08* 22/111.5/ EN.
+*22-12-08* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*22-01-09* Rhino-pharyngite purulente fébrile.Amoxy.
+*18-06-09* 25/121/ EN.
+*15-07-09* EN.
+*19-08-09* 25.5/122.5/ EN.
+*06-09-10* 26/129/ EN.
+*20-12-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*25-01-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*20-07-11* 29/135/ EN.
+*07-11-11* 30/136.5/ EN.
+*30-01-13* Fièvre depuis 3j.Ex:Toux aboyante + frissons.Coryza purulent.Amoxy.
+*13-03-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*01-08-13* 35/147/ EN.
+*11-08-14* 38/153.5/ EN.
+*08-07-15* 42/157/ EN.Duvet pubien.
+*13-08-15* 44.5/158.5/ EN.P1.
+*29-06-17* 58/170/ EN.P2.
+*04-09-17* 56/172/ EN.
+*04-05-18* 59/177.5/ EN.P4.
+*28-01-19* Syndrome grippal febrile.Bon EG.EN.Nuque souple.Virose probable.AT.
+*10-07-19* 72/183.5 EN.

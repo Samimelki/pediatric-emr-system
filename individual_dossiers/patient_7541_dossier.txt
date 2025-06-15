@@ -1,0 +1,64 @@
+3310/50/34
+*24-04-08* 4300/53/38 EN.Tachyaérophagie.Conseils.
+*26-05-08* 5500/55.5/40 EN.
+*30-06-08* 6400/59.5/41 EN.RHD.
+*30-07-08* 7000/62.5/43 EN.Fruit.RHN.
+*01-09-08* 7400/65.5/43.5 EN.L.
+*01-10-08* 7750/67/44.5 EN.RV.Fluor.
+*10-11-08* 8200/68/45.5 EN.
+*31-12-08* 9100/70/47 EN.
+*05-02-09* 9600/71.5/47.5 EN.
+*09-03-09* 9600/73/48 EN.
+*11-05-09* 10/76.5/48 EN.
+*15-05-09* Fièvre isolée depuis ce matin.EN en dehors d'1 pharyngite.Virose probable.AT.
+*15-06-09* 10.4/78/48.5 EN.
+*06-08-09* 10.4/79.5/49 EN.
+*09-09-09* 10.9/81/49 EN.
+*16-10-09* 11.1/82.5/49.5 EN.
+*18-11-09* 11.7/83/49.5 EN.
+*12-02-10* 12.6/86/50/EN.
+*14-04-10* 13/88/50 EN.
+*14-10-10* Rhinite purulente + toux.Pas de fièvre.EN par ailleurs.
+*15-11-10* GEA fébrile au début.Pas de fièvre ce jour.EN.RAD.
+*16-11-10* Reprise de la fièvre.EN en dehors d'1 jetage purulent post.Persistance de la diarrhée.Amoxy.
+*24-12-10* Otite G.Amoxy-Clav.
+*07-01-11* 14/ Rhino-pharyngite purulente fébrile.Cefdinir.
+*21-02-11* Rhino-pharyngite purulente fébrile conjonctivite purulente.Amoxy-Clav.
+*03-03-11* 14.1/97.5/51 EN.
+*04-04-11* Otalgie G.Synd grippal subfébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-04-11* Fièvre oscillante tj.Excellent EG.Pharyngite.AT.
+*14-04-11* 14.5/98/51 EN.
+*11-05-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*13-05-11* Fièvre encore.Meilleur EG.EN.Persévérer.
+*26-07-11* Fièvre depuis 2j.EN en dehors d'1 pharyngite aphteuse.Virose.Medijel.
+*09-11-11* Tousse depuis 6 sem.Pas de fièvre.Toux à l'endormissement et au lever,s'accompagnant fréquemment par 1 vomissement.EN.RGO possible ou rhino-sinusite.CAT: Omeprazole + Nasonex.
+*23-01-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*26-03-12* 17/ Rhino-pharyngite purulente fébrile.Amoxy.Tousse à l'effort depuis tout petit.Indication de montelukast.
+*10-04-12- Excellent effet du montelukast.Persévérer.
+*27-08-12* NFP: Hb=11 - VGM=69- GB=8100 (58/33) - plq=363.000.Fe=8,8. Ferritine=37 (Limite inf de la N).Electrophorèse de l'Hb à faire.
+*01-10-12* 17.3/ Rhino-pharyngite purulente fébrile.Rx thorax (hier aux urgences-HDF):comblement broncho-alvéolaire rétro-cardiaque G.Amoxy-Clav.
+*26-03-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*11-04-13* 19/111/51 EN.
+*10-05-13* 19.3/111.5/ EN.
+*13-06-13* 19.6/112/ EN.
+*25-03-14* 23/118/ EN.
+*12-05-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*21-11-14* 27/122.5/ Toux.EN.
+*08-12-14* Toux + rhinorrhée opaque.EN.Cipro.
+*04-06-15* 33/126.5/ EN.
+*18-11-15* 36/130/ EN.
+*22-01-16* Synd grippal.
+*25-01-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*16-02-16* Fièvre + Céphalées + vomissements depuis le petit matin.a eu des selles liquidiennes.EN en dehors d'1 pharyngite.Nuque souple.
+*13-05-16* 40.5/133/ EN.
+*24-10-16* Tousse.EN.
+*21-06-17* 50/139.5/ EN.
+*31-01-18* A fait un synd grippal fébrile.Pas de fièvre ce jour.EN en dehors d'1 pharyngite.Virose probable.
+*23-04-18* Toux sans fièvre.Virose.EN.Physiomer.
+*03-05-18* 59.4/144/ EN.
+*20-02-19* Rhume sans fievre.ADP cervicale G douloureuse et hypertrophie de l'amygdale G.A surveiller et revoir dans 1 semaine.Virose probable avec ADP reactionnelle.
+*15-03-19* Syndrome grippal afebrile.toux irritative.Toplexil.SpO2 98%
+*10-06-19* 69/Syndrome grippal febrile depuis hier.Bon EG.Nuque souple.EN.Virose probable.AT.
+*24-06-19* 71.7/150.5 EN.Puberte 0
+*20-12-19* Mal de gorge.Frissons?Nuque souple.Pharyngite virale.AT.
+*22-01-20* 74.2/152 EN.

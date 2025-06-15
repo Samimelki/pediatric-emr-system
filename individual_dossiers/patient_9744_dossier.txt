@@ -1,0 +1,51 @@
+2750/48/34PREMA 35 SA + 5j.
+*11-04-14* 3250/ EN.AM.
+*29-04-14* 4050/53/36.5 EN.AM.
+*20-05-14* 4650/54/38 EN.AM.
+*17-06-14* 5300/58.5/39.5 EN.AM.RHD.
+*15-07-14* 5700/60.5/40.5 EN.Allaitement mixte.Fruit.RHN.
+*19-08-14* 6500/64.5/41 EN.Allaitement mixte.L.
+*23-09-14* 7000/68/42 EN.Allaitement mixte.RV.Fluor.
+*16-10-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*21-10-14* 7100/70/42.5 EN.
+*20-11-14* Otite bilatérale.Amoxy-Clav.
+*25-11-14* 7500/70.5/43 EN.Allaitement mixte.
+*13-01-15* 8400/73.5/44  EN.Allaitement mixte.
+*10-02-15* 8400/75/44.5 Synd grippal subfébrile.EN en dehors d'1 pharyngite.Virose probable.
+*17-02-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*24-02-15* 8250/75/44.5 EN.
+*17-03-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*24-03-15* 8600/76/44.5 EN.
+*10-04-15* Rhume.EN.SPH.
+*21-04-15* 8800/77/45 EN.
+*19-05-15* 9400/79/45.5 EN.
+*21-05-15* Vomissements imp la nuit passée.EN en dehors d'1 pharyngite.
+*23-06-15* 9600/80/45.5 EN.
+*03-07-15* Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*21-07-15* 9800/80/45.5 EN.
+*03-08-15* Gengivo-stomatite aphteuse fébrile.Medijel.AT.
+*25-08-15* 10.3/82/46.5 EN.
+*10-09-15* Fièvre de 2j + selles diarrhéiques.EN en dehors d'1 rash débutant + pharyngite.RAD.
+*22-09-15* 10.4/82.5/46.5 EN.
+*20-10-15* 10.5/84/46.5 EN.
+*17-11-15* 10.5/84.5/46.5 EN.
+*15-12-15* 10.6/85.5/46.5 EN.
+*06-01-16* Tousse.EN.SPH.
+*19-01-16* 10.8/86/46.5 EN.
+*01-04-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*05-08-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*15-11-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.Chute sur le MSG.Membre sensible à la mobilisation.Rx des MS:Fracture métaphysaire radiale G non déplacée.
+*28-07-17* 14/ Fièvre depuis 4 jours avec GEA depuis hier. Angine. Amoxicilline.
+*26-09-17* 14.1/100.5/ EN.
+*16-01-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*22-03-18* A fait 1 GEA fébrile.La diarrhée persiste.EN.
+*21-08-18* A fait 3j de fièvre.Rien depuis hier après-midi.EN en dehors d'1 angine.A surveiller.
+*04-10-18* 16.5 Fievre et douleur de gorge.Angine.Amoxy.
+*23-04-19* Fievre de 24h.EN.Virose.
+*14-05-19* 17.9/ Angine.Amoxy.
+*22-05-19* 17.3/111 EN.
+*04-06-18* Angine.Amoxy-clav.
+*16-07-19* Angine.fievre resolue en 72 heures sans antibio.
+*23-07-19* 18.6/113 EN.
+*03-09-19* 20.4/113 EN.
+*26-12-19* Syndrome grippal febrile depuis ce matin.Bon EG.Nuque souple.EN.Virose probable.AT.

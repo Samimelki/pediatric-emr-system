@@ -1,0 +1,71 @@
+3014/51.5/33
+*06-04-10* 4350/54.5/36.5 EN.
+*27-04-10* 5100/57/37 EN.
+*26-05-10* 6350/60/39 EN.RHD.
+*17-06-10* RHN.
+*24-06-10* 6950/62.5/40 EN.Fruits.
+*19-07-10* 7100/64/41 EN.L.
+*27-07-10* Rhinite purulente.Cebemyxin.
+*17-08-10* 7300/66/42 Fièvre. EN.
+*20-08-10* Bronchiolite Aigue.Kiné resp.
+*25-08-10* Rhinite purulente.Cebemyxin.
+*15-09-10* 7350/66/42 Otite G.Amoxy-Clav.
+*29-09-10* Fièvre ce jour.EN.Virose probable.AT.
+*01-10-10* 7700/69.5/42 EN.RV.
+*01-11-10* 8100/70/43 EN.
+*01-12-10* 8500/71.5/43.5 EN.
+*20-12-10* IU à E.Coli (160 GB/ml et 1.000.000 col/ml).Cefixime déjà débutée.Imagerie.
+*07-01-11* Echo rénale N.Cysto RAS.
+*12-01-11* 9150/73/44 EN.
+*24-01-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*31-01-11* EN.
+*10-02-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*25-02-11* 9500/ Otite G.Amoxy-Clav.
+*02-03-11* 9600/74.5/44.5 EN.
+*26-04-11* Fièvre isolée depuis hier.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*28-04-11* 9900/77/45.5 EN.
+*24-05-11* Fièvre depuis hier + coryza clair.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*30-05-11* 9900/78/45.5 Gengivo-stomatite imp.Fièvre au départ.Medijel.
+*01-06-11* Va nettement mieux.
+*03-06-11* EN.Raucité de la voix.Pas de fièvre.
+*21-07-11* 10.3/79/45.5 EN.
+*18-08-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*12-10-11* EN.
+*02-11-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*17-11-11* 11.2/83/46.5 EN.
+*28-11-11* Synd grippal subfébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*05-12-11* Fièvre trainante.EN.ECBU (BE).
+*10-02-12* Boîte ce jour.EN.Trauma?A suivre.
+*01-03-12* 12/ Otite bilatérale + jetage purulent post.Amoxy-Clav.
+*29-03-12* 12.4/85.5/ EN.
+*13-04-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*26-04-12* VARICELLE possible.
+*26-05-12* 12.4/87.5/ EN.
+*23-07-12* Fièvre + vomissements depuis 2j.EN en dehors d'1 pharyngite.Toux aboyante (d'après la mère).Virose probable.AT.Humidifications.
+*25-07-12* Persistance de la fièvre.La toux est moins aboyante.EN en dehors d'1 jetage purulent post.Amoxy.
+*21-08-12* A fait 1 synd grippal fébrile.Rien ce jour.EN.
+*04-10-12* EN.
+*15-10-12* Rhume.EN.SPH.
+*29-10-12* GEA fébrile.EN.RAD + AT.
+*09-11-12* Tousse depuis 2-3 sem.Fièvre hier.EN.Allergie.Desloratadine.
+*10-01-13* 13.7/92.5/48.5 EN.
+*20-02-13* Rhinite purulente sans fièvre.Rash d'allure virale.EN en dehors d'1 OSM D.Cipro.
+*11-10-13* EN.
+*21-03-14* Fièvre depuis 2j.Vésiculettes autour la bouche.EN en dehors d'1 pharyngite.Virose probable.
+*14-08-14* 17/ Rhino-pharyngite purulente fébrile.Amoxy.
+*01-10-14* EN.
+*03-12-14* Petite vulvite.Panderm.
+*04-02-15* 19/108.5/ EN.
+*25-02-15* EN.
+*19-08-15* 21.5/110/ EN.
+*10-09-15* EN.
+*15-10-15* 22/112/ EN.
+*02-12-15* Rhino-pharyngite purulente fébrile.Cefpodoxim.
+*03-03-16* 22.5/116.5/ EN.
+*02-11-16* 26/120/ EN.
+*02-12-16* A fait 1 laryngite fébrile ce matin.Crachats purulents.EN.Clarithro.
+*21-04-17* 26.5/120.5/ EN.
+*27-09-17* Otite ext G.Cipro plus.
+*15-04-19* 35/130/ EN.
+*08-11-19* 35.8/134 EN.S1P1
+*28-02-20* 37.3/136.5 EN.S2P2.

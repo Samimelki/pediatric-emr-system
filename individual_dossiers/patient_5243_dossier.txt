@@ -1,0 +1,74 @@
+3050/51/34.5
+*13-02-03* 4600/53.5/37.5 EN.AM.
+*13-03-03* 5850/56.5/39.5 EN.AM.Fruit.
+*15-04-03* 6700/60.5/41 EN.AM.L.RHD.
+*15-05-03* 7200/63.5/42 EN.AM.LV.RHN.
+*08-07-03* Fébricule depuis 2j.EN en dehors d'1 pharyngite.Virose probable.
+*15-07-03* 8050/67/43.5 EN.RV.Fluor.
+*01-08-03* Synd grippal sub-fébrile.EN en dehors d'1 petite pharyngite.Virose probable.Medijel.
+*18-08-03* 8350/68.5/44.5 EN.
+*21-11-03* 9200/73/46 EN.
+*15-12-03* GEA il y a 5j.Guérie par RAD.Rechute.Pas de fièvre.EN.Motilium.Pedialyte.RAD(B.Eid).
+*23-12-03* 9200/74/46 EN.
+*15-03-04* 10/76.5/47 EN.
+*15-04-04* Angine.Amoxy.
+*12-05-04* 10.1/79.5/47.5 EN.
+*14-06-04* 10.2/80/48 EN.
+*14-07-04* 10.6/81/48.5 EN.
+*07-10-04* 11/84/48.5 EN.
+*15-10-04* Dérangé depuis ce matin.EN en dehors d'1 discrète pharyngite.
+*08-11-04* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-12-04* Trauma crânien pariétal G il y a 20j environ.Pas de PC ou de vomissements.EN.Il persiste une masse fluctuante à la place du trauma.Certainement 1 hématome sous-périosté. Surveillance.
+*21-01-05* Grippe.EN.
+*27-01-05* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*25-02-05* Stomatite aphteuse fébrile.EN par ailleurs.Medijel.
+*30-06-05* 13.3/ Angine.Amoxy.
+*04-10-05* Fièvre+douleurs abdominales depuis hier.Les douleurs abdominales traînent depuis qques jours.EN en dehors d'1 pharyngite et de 2 minuscules aphtes sur la lèvre inférieure. Virose probable.Echo abdominale devant l'angoisse maternelle.
+*06-10-05* EN.Petit rash.
+*09-11-05* Synd grippal fébrile+otalgie.EN.Virose probable.AT.
+*12-12-05* 13.5/ Otite droite + Angine. Amoxy-Clav(B.Eid).
+*15-12-05* Va mieux.EN.
+*16-02-06* Pustules vésiculeuses prurigineuses.Cuir chevelu +.Varicelle?Dejà Vacciné(B.Eid).
+*17-02-06* VARICELLE.
+*05-05-06* 15/100/51 EN.
+*14-11-06* 16/ Otite D.Pas de fièvre.A reçu de la cefuroxim il y a 10j.Amoxy-Clav si persistance des symptômes.
+*19-02-07* Rhino-pharyngite purulente fébrile.Amoxy.
+*14-05-07* Synd grippal fébrile.Selles molles.EN en dehors d'1 pharyngite.Virose probable.AT.
+*22-05-07* Otite ext D.Locacorten-vioform.
+*19-09-07* Otalgie D il y a 2-3j.EN ce jour.
+*22-10-07* 18/110/ EN.
+*23-01-08* 18/111/ EN.
+*18-02-08* Otalgie migratrice d'1 côté à l'autre depuis 1 sem.EN en dehors d'1 pharyngite.Virose probable.
+*05-03-08* Rhino-pharyngite purulente fébrile.Amoxy.
+*29-05-08* 19.5/113/ EN.
+*06-01-09* 21/117/ EN.
+*20-07-09* Otite ext D.Cipro plus.
+*27-04-10* 24/125/ EN.
+*13-09-10* 25.5/126/ EN.
+*18-11-10* 26/127.5/ EN.
+*03-01-11* Douleurs abdominales depuis plusieurs semaines sans caractère ni horaire défini,n'évoquant rien du tout.EN.Bilan éventuel.
+*06-01-11* NFP RAS en dehors d'1 VGM à73,4. Biochimie RAS.ECBU en cours.
+*17-01-11* Bilan (-) en dehors de qques ggl mésentériques.Ttt martial.
+*28-02-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*01-04-11* Fièvre depuis hier.EN en dehors d'1 angine,possiblement virale.Si persistance de la fièvre demain,amoxy.
+*21-09-11* 26.5/131/
+*29-12-11* A fait 2j de fièvre.Pas de fièvre ce jour.EN en dehors d'1 pharyngite.
+*29-03-12* 30.5/134.5/ EN.
+*30-10-12* 32.5/138/ EN.
+*16-01-13* 34/140/ EN.
+*05-04-13* Synd grippal sans fièvre,avec vertige.EN.Pas de tr neuro.Virose probable.
+*28-11-13* 37/144/ EN.Puberté 0.
+*29-01-14* 39.5/144.5/ EN.
+*02-04-14* 40/146/ EN.
+*28-10-14* 40.5/148.5/ EN.
+*04-02-15* Otalgie D sur rhume.EN.Antalgiques.
+*05-01-16* 49.5/155.5/ EN.OGE augmentés de vol.
+*18-07-06* Otalgie D.Otite ext.Est déjà sous Cetraxal plus.Sensibilité mammaire:bougeon G sensible.Rassurer.
+*31-10-16* 54/159/ EN.P1.
+*14-03-17* GEA.EN.RAD.
+*31-10-17* 66.9/169.5/ EN.
+*02-03-18* 69.3/170/ EN.P5.
+*25-05-18* Otite ext D.Cipro plus.
+*27-07-18* Otite ext G.Cipro plus.
+*01-08-18* 67.3/172.5/ EN.
+*27-01-20* Febricules depuis hier avec courbatures et douleur thoracique a la toux.Cephalees+++.Nuque souple.EN en dehors d'une diminution du MV a G.adio thorax

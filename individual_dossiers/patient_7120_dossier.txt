@@ -1,0 +1,75 @@
+2600/47/31 Hospitalisée à H 35 pour malaise et convulsions.Naissance avec VE.Exploration:Hémorragie méningée.EEG N.Bonne évolution sous Phénobarbital.
+*07-06-07* 3900/52.5/38 EN.Aucun problème à domicile.AM.Stop phénobarbital.Scan de contrôle.
+*06-07-07* 4500/55.5/39.5 EN.Scan cérébral de contrôle N.
+*06-08-07* 5300/59.5/41 EN.Allaitement mixte.RHD.
+*07-09-07* 5950/63/42.5 EN.Allaitement mixte.Fruit.RHN.
+*05-10-07* 6400/65/42.5 EN.Allaitement mixte.L.
+*09-11-07* 7100/67/43 EN.RV.Allaitement mixte.Fluor.
+*13-12-07* 7700/69/43.5 EN.Allaitement mixte.
+*11-01-08* 8000/70.5/44.5 EN.Allaitement mixte.
+*08-02-08* 8300/72.5/44.5 EN.Allaitement mixte.
+*10-03-08* A fait 1 fébricule isolé ce matin.EN.A suivre.
+*12-03-08* 9000/74/45.3 EN.Allaitement mixte.
+*18-04-08* 10/75.5/46 EN.Allaitement mixte.
+*25-04-08* Otite bilatérale.Amoxy-Clav (vue à l'HDF).
+*15-05-08* 9900/76.5/46 EN.
+*26-05-08* Toux imp,parfois émétisante.EN.
+*20-06-08* 10.6/77.5/46.5 EN.La toux reste gênante.Avis ORL (SR).
+*23-07-08* 10.1/78/46.5 EN. A fait 1 otite D il y a 5j (vue par 1 collègue et mise sous amoxy-clav).
+*15-08-08* Fièvre isolée depuis hier soir.EN en dehors d'1 pharyngite.Virose probable.AT.
+*25-08-08* 9800/81.5/47 EN.
+*09-09-08* Fièvre isolée depuis 2j.EN en dehors d'1 vague pharyngite.A fait 2j de fièvre isolée il y a 1 semaine aussi.
+*03-10-08* 10.8/82/47 EN.
+*03-11-08* 11.4/82.5/47.5 EN.
+*08-01-09* 12.1/86/48 EN.
+*26-02-09* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*09-03-09* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*11-03-09* La fièvre a persisté jusqu'à ce matin.Pas de fièvre ce soir.EN.
+*13-03-09* Otite D.Amoxy-clav.
+*08-04-09* Fièvre depuis 2j + 1 selle diarrhéique.EN en dehors d'1 belle pharyngite + qques traînées blanchâtres sur les amygdales,d'allure virale. Virose probable.AT.
+*10-04-09* Fièvre + frissons hier soir.Ex idem.La toux a augmenté.Rx thorax et éventuellement ECBU.
+*15-05-09* 14/90/49 EN.
+*18-05-09* Fièvre depuis 2j.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*19-06-09* 13.6/91/49 EN.
+*10-08-09* Otite D.Amoxy-Clav.
+*01-10-09* 13.6/93/49 EN.
+*23-10-09* Rhino-pharyngite purulente fébrile.Amoxy.
+*11-11-09* Otite bilatérale.Amoxy-clav.
+*24-11-09* 14.5/ Arrêt de l' AB il y a 3 jours.Reprise de la fièvre hier matin.Bon EG.Otite gauche.Amoxy-clav.
+*11-12-09* Syndrome grippal fébrile depuis ce matin.Nuque souple.Bon EG.EN en dehors d'une pharyngite.Virose probable.AT.
+*05-03-10* 15/ Fièvre.EN.
+*29-04-10* 15/98/49.5 EN.
+*28-05-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*07-09-10* 15/99/ EN.
+*26-01-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.SS d'allure anorganique.
+*24-03-11* Fièvre depuis 2j.Rash maculeux fin sur le tronc ce jour.EN en dehors de l'exanthème et d'1 enanthème.Virose probable.AT.
+*30-03-11* Otite ext D.Cipro plus.
+*01-04-11* Otalgie tj.Otite ext améliorée.Pas de bombement dy tympan G mais plutôt OSM.Pharyngite.Virose associée.
+*11-05-11* 18/105.5/ EN.
+*20-04-12* 19/112/ EN.
+*25-05-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-06-12* 19/113/ EN.
+*23-07-12* 19.5/113.5/ EN.
+*18-02-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*10-05-13* 20/117.5/ EN.
+*08-07-13* 22/118/ EN.
+*03-01-14* 23.5/120.5/ EN.
+*03-04-14* 23.5/121.5/ EN.
+*14-07-14* 24/122.5/ EN.
+*04-11-14* 25.5/124/ EN.
+*30-03-15* 27.5/128/
+*14-08-15* 29/129/ EN.
+*07-04-16* 33.5/132/ EN.
+*14-07-16* 34/133.5/ EN.
+*17-08-16* Angine.Amoxy.
+*14-10-16* 35.5/134/
+*16-12-16* 35/135/ Rhume.EN.
+*12-04-17* 35/137/ EN.Bourgeons mammaires.
+*03-11-17* 38.6/141/ EN.S1P1.
+*30-04-18* 40/143.EN.
+*04-06-18* 41.3/143.5/ EN.S2P1.
+*09-07-18* 41.3/144.5 EN.
+*20-09-18* 42.5/147/ EN.
+*27-12-18* 43.5/149.5/ EN.S2P2.
+*14-01-19* 44.3/149.5 EN.
+*18-03-19* 44.4/150 premieres menstruations 3 Mars 2019

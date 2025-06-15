@@ -1,0 +1,56 @@
+3270/50/34 IFM type OA.
+*08-05-02* 4400/53.5/37.5 EN.AM.
+*05-06-02* 5700/57.5/39 EN.AM.Fruit,fluor.
+*05-07-02* 6500/60.5/41 EN.AM.L.RHD.
+*05-08-02* 7050/64/41.5 EN.AM.LV.RHN.
+*09-10-02* 7900/68/43 EN.RV.Allaitement mixte.
+*08-11-02* 8150/69/44 EN.Allaitement mixte.
+*31-12-02* 9200/ Otite D.Amoxy-Clav.
+*20-01-03* 9300/71/45 EN.
+*29-01-03* Otite D+angine.Orelox(n'a pas aimé l'amoxy-Clav).
+*14-02-03* Fièvre depuis hier avec selles molles.EN.Tympans corrects.Traînées blanchatres sur les amygdales, d'allure virale.AT.
+*17-02-03* A fait 2j d'apyrexie.Reprise de la fièvre ce jour+coryza purulent.Amoxy.
+*28-02-03* Refait de la fièvre depuis 2j.EN en dehors de traînées blanches sur les amygdales.AT.
+*05-03-03* 9700/72.5/45.5 EN.
+*14-03-03* GEA fébrile.EN.RAD.AT.
+*07-04-03* 10.3/74/45.5 EN.Tympans nx.
+*16-06-03* 11/77.5/46.5 EN.
+*06-08-03* 11.4/78/47 EN.
+*30-03-04* 13.2/86/48.5 Synd grippal fébrile.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*23-04-04* Rhino-pharyngite purulente fébrile+trainées blanches sur les amygdales.Amoxy.
+*10-05-04* Fièvre depuis 2j.Ex:Pharyngite+angine.Amoxy.AC anti-VCA+CMV+Prélèvement de gorge.
+*17-05-04* NFP:Hb=12,6 - GB=11.900 (50/41) - plq=440.000 -VS=36. PNP:flore polymorphe.CMV et AC anti-VCA.
+*30-06-04* 13.5/88.5/49 Otite ext D.Sofradex.
+*30-07-04* Rhino-pharyngite purulente fébrile.Amoxy.
+*09-08-04* 13.5/89/49 EN.
+*18-08-04* Otite bilatérale+angine.Amoxy-Clav.
+*11-10-04* 14.3/90.5/ Rhino-pharyngite purulente fébrile.Amoxy.
+*10-03-05* 14.5/94.5/50.5 EN.
+*23-03-05* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*29-07-05* 15.9/95.5/50.5 EN.
+*30-01-06* Céphalées imp ce jour.Pas de fièvre.EN.Grippe probable.
+*10-04-06* Rash ressemblant au MEI.Pas de fièvre.Allergie ou virose.A surveiller.
+*03-05-06* VARICELLE modérée(au tél).
+*29-12-06* 20/ Otite D.Pas de fièvre.EN par ailleurs.Si algie imp ou fièvre,amoxy-clav.
+*07-05-07* 20/108/ EN.
+*11-06-07* 21/109.5/ EN.
+*11-07-07* 20/
+*14-12-07* Rhino-pharyngite purulente fébrile.Amoxy.
+*04-09-08* 22/116/ EN.
+*04-12-08* Fait un rash cutané maculaire généralisé depuis 1 sem environ.Pas de fièvre.Pas de modifications décelables dans la vie quotidienne.EN. Virose ou allergie?A suivre.
+*12-02-09* Angine.Amoxy.
+*16-02-09* MEI.
+*21-04-09* Angine.Amoxy.
+*05-10-09* Fièvre + céphalées + 1 vomissement ce jour.Bon EG.EN en dehors d'1 vague pharyngite.Virose probable.
+*07-10-10* 34.5/128/ EN.
+*01-12-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*30-05-13* 48/143/ EN.
+*01-07-13* /143/ EN.
+*01-08-13* EN.
+*03-09-13* 50/144/ EN.
+*29-04-15* 63/153/ EN.Puberté 0.
+*22-09-16* 81/163.5/ EN.P3.
+*27-10-17* 94.6/170.5/ EN.
+*22-11-17* EN.
+*04-01-18* EN.
+*25-02-19* 101.5/173 EN.

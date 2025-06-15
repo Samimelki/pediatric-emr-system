@@ -1,0 +1,70 @@
+2800/50/34
+*25-07-02* 4100/54.5/38.5 EN.
+*29-08-02* 5500/59/40.7 EN.Fruit,fluor.
+*30-09-02* 6700/62/42.5 EN.L.RHD.
+*30-10-02* 7650/67.5/43.5 EN.LV.
+*27-12-02* 9000/72/45.5 EN.RV.
+*31-12-02* Synd grippal fébrile.EN.Virose probable.AT.
+*27-01-03* 9500/74/46 EN.
+*24-03-03* 10.3/77/47.5 EN.
+*26-05-03* 11.2/81/48.5 EN.
+*17-06-03* Synd grippal fébrile.EN.Virose probable.AT.
+*26-06-03* 11.5/82/48.5 EN.
+*28-07-03* 12/83.5/49 EN.
+*27-08-03* 12.2/84/49 EN.
+*30-10-03* 12.9/86.5/49.5 EN.
+*28-11-03* 13.1/87/50 EN.
+*02-02-04* Fièvre isolée depuis 2j.EN en dehors d'1 pharyngite.Virose probable.ECBU fait hier montre 0 GB.
+*04-02-04* Fait 1 rash d'allure virale(au tél).
+*12-02-04* Fièvre+toux+coryza clair depuis hier.EN.Virose probable.AT.
+*06-04-04* 14.5/ A fait 2j de fièvre+coryza clair.Pas de fièvre ce jour mais toux et anorexie.EN.Virose probable.
+*03-06-04* 16.2/95/52 EN.
+*09-08-04* Fièvre depuis 6-7 jours.Bon EG.Pas d'autres signes accompagnateurs.EN.Virose possible,mais si persistance de la fièvre,bilan.
+*12-08-04* 16.5/ Bilan (-).La fièvre a disparu pendant 24h puis est réapparue ce jour.EN en dehors d'1 jetage purulent post. Amoxy-Clav.
+*13-08-04* La fièvre persiste élevée.Ex idem.Persévérer.
+*01-12-04* 17/100/52 EN.
+*30-12-04* Otite G avec jetage purulent post.Amoxy-Clav.
+*25-02-05* Petite angine + jetage post purulent.Amoxy.
+*29-03-05* Otite G.Amoxy-Clav.
+*27-04-05* 17.2/ Otite G.
+*30-05-05* 17.6/103.5/53 EN.
+*20-06-05* Fièvre depuis hier + selles molles.EN en dehors d'1 pharyngite.Virose probable.AT.
+*20-10-05* Fièvre+vomissements depuis hier.EN.Pas de raideur méningée.Excellent EG.Virose probable.AT.
+*27-01-06* Fièvre+vomissements depuis hier.EN en dehors d'1 pharyngite.Pas de raideur méningée.Virose probable.
+*21-02-06* Grippe.EN en dehors d'1 ADP cervicale ant.
+*28-02-06* 20/ Rhino-pharyngite purulente fébrile.Amoxy.
+*18-04-06* 20.5/111.5/ EN.
+*08-05-06* Fièvre de 2j puis rash viral.(MEI?).
+*26-01-07* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*03-04-07* Fièvre depuis 2j.EN en dehors de 2 ADP SAM (en bilatérale:oeuf de pigeon) et de 2 points blancs sur l'amygdale D.Virose probable.Si persistance de la fièvre,amoxy.
+*06-04-07* La fièvre persiste.Les ADP semblent avoir diminué.Les 2 points blancs sont tj là.Virose probable.Continuer AB.
+*08-11-07* Fièvre à éclipse depuis 3-4j.EN.Pas de fièvre depuis hier.Virose probable.
+*23-11-07* 27.5/122.5/ EN.
+*27-12-07* 28/123/ EN.
+*11-03-08* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*05-06-08* GEA subfébrile depuis hier avec rash plutôt morbilliforme sur tout le corps ce jour.EN en dehors d'1 pharyngite.RAD.EGU+ECBU pour pollakiurie.
+*19-06-08* 28/125.5/ EN.
+*30-12-08* 29/129.5/ EN.
+*08-09-09* 33/134/ EN.
+*28-09-09* Rhino-pharyngite purulente fébrile.Amoxy.
+*16-10-09* 33/134.5/ EN.
+*20-12-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*27-12-10* GEA fébrile intercurrente.
+*01-03-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*30-03-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*06-04-11* 38.5/ La fièvre a persisté jusqu'à hier.Rx thorax par PD:pneumonie segmentaire D.Il le met sous amoxy.EN.Persévérer.
+*22-04-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*26-04-11* Fièvre depuis 6j.Examiné déjà 2 fois.RAS.Rx thorax il y a 3j:RAS.EN ce joir en dehors de qques aphtes buccaux.Virose probable.Si persistance de la fièvre demian,bilan.
+*22-06-11* 38.5/143/ EN.
+*21-12-11* 44.5/146/ EN.
+*31-07-12* 47/149.5/ EN.
+*13-02-13* 48/153/ EN.Puberté 0.
+*10-09-13* 48/154.5/ EN.Puberté 0.
+*27-12-13* 52.5/156.5/ EN.Puberté 0.
+*06-10-14* 58/162/ EN.P1.
+*18-08-15* 69/172/ P4.
+*08-02-16* 73/175/ EN.
+*02-08-16* 74/179.5/ EN.
+*03-03-17* Synd grippal subfébrile.EN en dehors d'1 pharyngite.Virose probable.
+*27-06-17* 80/182/ EN.
+*09-02-18* 77.4/182/ EN.

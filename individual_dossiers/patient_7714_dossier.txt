@@ -1,0 +1,65 @@
+*
+*19-08-08* 8250/64.5/45 EN.Fruit.RHN.
+*25-08-08* 8300/ EN.
+*23-09-08* 8900/68.5/46 EN.L.
+*29-10-08* 9300/71/47 EN.RV.Fluor.
+*24-11-08* Otite D.Amoxy-Clav.
+*03-12-08* 10.3/72.5/47.5 EN.
+*30-12-08* Rhume.EN.
+*07-01-09* 10.3/74.5/48.5 EN.
+*05-02-09* 11.1/ GEA fébrile au départ.Pas de fièvre ce jour.EN en dehors d'1 pharyngite.RAD.
+*09-02-09* 10.7/76/49 EN.
+*20-03-09* 11.4/78/49.5 EN.
+*01-05-09* 11.8/79.5/50 EN.
+*01-06-09* 12.1/80/50.5 EN.
+*26-06-09* Fièvre ce jour.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*03-07-09* Disparition de la fièvre il y a 5j pour réapparaître hier soir.EN en dehors d'1 pharyngite.Virose?
+*06-07-09* La fièvre persiste.La mère signale 1 toux.EN en dehors d'1 pharyngite.Virose tj probable.CAT:Rx thorax + ECBU.La Rx thorax montre 1 épaississement bronchique avec suspicion de foyer rétro-cardiaque G.Mis sous amoxy-clav.
+*15-07-09* Bonne évolution sous amoxy-clav.Reprise de la fièvre ce jour.EN en dehors d'1 rash maculeux sur le tronc+pharyngite.
+*17-07-09* 12.4/83/50.5 EN.
+*10-08-09* GEA doublée d'1 coryza purulent.EN.RAD+ amoxy.
+*14-10-09* Otite D + bronchorrhée purulente.Amoxy-clav.
+*27-10-09* 13.2/86/51.5 EN.
+*16-11-09* 13.4/87/51.5 EN.
+*23-11-09* A fait 2j de fièvre.Ce jour pas de fièvre mais coryza purulent.EN.Si reprise de la fièvre,amoxy.
+*08-12-09* Otite D. Amoxy-clav.
+*22-01-10* 14.7/ Syndrome grippal febrile depuis 24 heures. Otite D. Amoxy-Clav.
+*04-02-10* Otite D.Ceftriaxone 1g / 5j. 
+*09-02-10* Otite D.Hospitalisé pour ceftriaxone IV.Yoyos probables.
+*17-02-10* 14.3/88/51.5 EN.Tympan D encore 1 peu remanié.
+*30-03-10* Conjonctivite+Rhinite.Cebemyxin.
+*19-04-10* 15.3/92.5/ EN.
+*11-05-10* Bronchospasme.Urgences HDF (Bonne réponse au salbu).
+*14-05-10* EN ce jour (son frère fait la même chose ce jour).
+*13-08-10* 15.8/95/
+*01-11-10* 16.7/98/ EN.
+*22-11-10* Fièvre oscillante depuis 2-3j.EN.Virose probables.Yoyos en place.
+*17-01-11* Tousse.EN.
+*21-01-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*31-01-11* GEA fébrile.EN.RAD.
+*16-03-11* Trauma crânien (chute de sa hauteur).Aucune manifestation anormale.EN en dehors d'1 bosse.Surveillance.
+*10-10-11* 18.2/105.5/ EN.
+*08-03-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*12-07-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*29-11-12* 20/112.5/ EN.
+*22-05-13* 22.5/115/54.5 EN.DTCaP + Hib (apporté par la mère).
+*30-01-14* 23/120/ EN.
+*27-02-14* EN.
+*07-03-14* EN.
+*27-03-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*22-04-14* 22.5/121/ EN.
+*03-07-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*01-10-14* /123.5/
+*14-01-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*04-02-15* 25/125.5/ EN.
+*31-03-15* 26/127/ EN.
+*24-12-15* 29/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*17-02-16* 30.5/131.5/ EN.
+*16-03-16* EN.
+*16-11-16* /135.5/
+*03-11-17* 33.3/139.5/
+*01-02-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*03-04-18* 34.4/141.5/ EN.
+*04-05-18* 34.2/142/ EN.
+*02-09-19* 36.8/148 EN.
+*02-01-20* 38/150 EN OGE augmentes de volume

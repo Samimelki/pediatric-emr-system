@@ -1,0 +1,47 @@
+2950/48/34
+*12-05-09* 4000/53.5/36 EN.AM.
+*10-06-09* 5050/56.5/38 EN.AM.
+*09-07-09* 5700/60/39 EN.Allaitement mixte.RHD.
+*10-08-09* 6000/61.5/40.5 EN.Allaitement mixte.Fruit.
+*12-08-09* RHN.
+*09-09-09* 6800/63.5/41.5 EN.Allaitement mixte.L.
+*12-10-09* 6950/66.5/42.5 EN.Allaitement mixte.RV.Fluor.
+*16-11-09* 7500/69/43 EN.
+*11-12-09* 8200/70/43.5 EN.
+*28-12-09* Syndrome grippal febrile depuis 24 heures. EN. Virose probable. AT.
+*31-12-09* disparition puis reprise de la fievre avec le syndrome grippal. Bon EG. EN. Radio thorax.
+*11-01-10* 8300/71/44.5 EN.
+*29-01-10* Fièvre isolée ce jours avec excellent EG.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*12-03-10* 8900/74/45.5 EN.
+*09-04-10* Fièvre depuis 3j Avec coryza clair.Bon EG.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*13-04-10* 9000/74.5/46 EN.
+*11-05-10* 9600/77/46.5 EN.
+*25-05-10* Fièvre pendant 2j puis rash rubéoliforme sur le corps.Pas de fièvre ce jour.EN.Virose.
+*07-06-10* 9600/78/46.5 EN.
+*05-07-10* 10/79.5/46.8 
+*06-08-10* 10.2/80/47 EN.
+*13-08-10* Fièvre et baisse de l'alimentation depuis ce matin.EN en dehors d'uen pharyngite.Virose probable.AT.
+*09-09-10* 10.3/81/47 EN.
+*29-10-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*23-11-10* 10.9/83.5/48 EN.
+*07-04-11* Fièvre depuis hier + coryza clair.EN en dehors d'1 pharyngite.Virose probable.AT.
+*10-05-11* 12.6/90.5/49.5 EN.
+*07-06-11* Fièvre.EN.
+*08-06-11* Toux.EN.
+*11-07-11* 13.2/92.5/49.5 EN.
+*10-01-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*29-03-12* 15.2/99.5/ EN.
+*19-02-13* Tousse.EN.Coryza purulent.Cipro.
+*07-10-13* 20.5/111/ A fait 24h de firvre il y a 2j.Rien actuellement.EN en dehors d'1 petite pharyngite.
+*08-07-14* 22.5/117.5/ EN.
+*01-10-14* 22.5/119/ EN.
+*07-11-14* 23/119.5/ EN.
+*06-12-14* 23.5/120/ EN.
+*08-10-15* 26/125.5/ EN.
+*11-11-15* 28/126/ EN.
+*09-12-15* 28/126.5/ EN.
+*04-03-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*04-11-16* 34.5/132/ EN.
+*05-10-17* 36.8/136.5/
+*10-09-18* 45.3/143/ EN.S1P2.
+*14-02-20* 55.5/155.5EN.

@@ -1,0 +1,67 @@
+2640/48/30 Mère présentant des AC anti-phospholipides durant la grossesse.ECG,NFP et SGPT nx.
+*07-07-09* 3500/52.5/35.5 EN.AM.
+*07-08-09* 4600/56.5/36.5 EN.AM.
+*09-09-09* 5600/59.5/38.5 EN.Allaitement mixte.RHD.
+*12-10-09* 6500/62.5/40 EN.Allaitement mixte.Fruit.RHN.
+*13-11-09* 7000/66/41 EN.L.
+*17-12-09* 7900/69.5/42 EN.
+*20-01-10* 8200/71.5/43 EN.
+*22-02-10* 8600/72.5/43.5 EN.
+*15-03-10* 9000/74/44 EN.
+*05-05-10* 9550/76.5/44.5 EN.
+*10-06-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*15-07-10* 10.4/80/45.5 EN.
+*05-08-10* 10750/81/46 EN.
+*27-08-10* 10.8/82/46 EN.
+*11-10-10* 10.8/84/46 EN.
+*18-11-10* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-11-10* Petite rhume.Coryza épais.Cebemyxine.
+*02-12-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*28-01-11* Rhino-pharyngite purulente fébrile.Amoxy-clav.
+*11-02-11* 11.8/89/46.5 EN.
+*14-02-11* Rhino-pharyngite purulente fébrile.Cefdinir.
+*11-03-11* Rhino-pharyngite purulente fébrile.Amoxy-clav.
+*30-03-11* Angine.Amoxy.
+*19-04-11* Tousse depuis 2j.Fièvre ce jour.EN en dehors d'1 pharyngite.Virose probable.AT.
+*20-04-11* Idem.Ex idem.
+*22-04-11* Fièvre tj avec selles molles.EN.RAD.
+*26-04-11* Est sous amoxy depuis 1 peu moins de 72h pour rhino-pharyngite (urgences - HDF).Présente tj des frissons + fièvre.EN en dehors d'1 petite pharyngite.Virose possible.Semblant de rash sur le tronc.A suivre.
+*28-04-11* La fièvre s'espace.EN.Petit jetage plutôt clair en post.Persévérer.
+*15-06-11* 12.6/90.5/47 EN.
+*15-07-11* 12.4/92/ EN.
+*13-02-12* 14.3/97.5/ EN.
+*22-05-12* 14.7/101/ EN.
+*26-10-12* EN.
+*29-10-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*20-11-12* 15.3/ Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*22-02-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*25-03-13* Fièvre oscillante depuis 4-5j.Coryza purulent.N'a plus de fièvre depuis 24h.EN.Est sous cipro nasal.Persévérer.
+*12-04-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*24-06-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*06-11-13* Douleurs abdominales cette après-midi.EN.
+*07-03-14* Otalgie.Petite pharyngite.
+*09-06-14* Otalgie.Petite pharyngite.
+*18-06-14* 20/ Rhino-pharyngite purulente fébrile.Amoxy.
+*11-07-14* 20/115/ EN.
+*08-08-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*25-08-14* 20/116/ EN.
+*25-09-14* EN.
+*27-10-14* 20/116.5/ EN.
+*20-02-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*11-05-15* Fièvre + otalgie D.EN edn dehors d'1 petite pharyngite.Le tympan D n'est pas visible.Cons ORL.
+*15-06-15* 21/ Fièvre depuis 48 heures.Angine pultacée.Amoxy (CM).
+*08-07-15* 20.5/121/ EN.
+*20-01-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*12-02-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*04-07-16* 23/127/ EN.
+*19-09-16* 24/128.5/ EN.
+*25-11-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*05-12-16* 25/129/ EN.
+*05-04-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-04-17* Angine.Clarithro.
+*21-07-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*24-07-17* 25/ Persistance de la fièvre. Rhinite purulente. Omnicef.
+*31-10-18* Grippe.ADP SAM.EN.
+*06-06-19* 37.2/149.5 EN.S2P2
+*18-12-19* 41/Angine.Amoxy-clav.
+*22-01-20* 41.4/154 EN.

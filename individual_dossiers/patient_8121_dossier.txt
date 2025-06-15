@@ -1,0 +1,54 @@
+3133/48/34
+*29-06-09* 4100/52.5/36.5 EN.Petit rhume.AM.
+*06-08-09* 5250/56.5/38.5 EN.AM.
+*14-09-09* 6300/59.5/40 EN.Allaitement mixte.RHD.
+*08-10-09* 6800/62/40.5 EN.Fruit.
+*09-11-09* 7450/65/42 EN.L.
+*13-05-10* 9800/74.5/45.5 EN.
+*10-06-10* Rhino-pharyngite purulente fébrile + tympans remaniés.Amoxy-Clav.
+*18-06-10* 10.4/76/46 EN.
+*15-07-10* 10.5/76/46 EN.
+*12-08-10* 10.9/77/46.5 EN.
+*13-09-10* 11/79/47 EN.
+*01-10-10* EN.
+*25-10-10* 10.7/81/47 EN.
+*08-11-10* 10.5/ GEA sans fièvre.EN.RAD.
+*06-01-11* 11/83/47.5 EN.
+*15-02-11* 11.6/83.5/47.5 EN.
+*28-02-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*11-05-11* Laryngite.EN.Humidifications.
+*20-05-11* Fièvre depuis hier.EN en dehors d'1 pharyngite vésiculeuse.Virose probable.AT.
+*19-10-11* 13.5/91/48.5 EN.
+*31-10-11* Dysurie.ECBU:700 GB/ml.Cefixime en attendant les cultures.
+*19-12-11* IU.Cysto:RVU Grade II B.Suspicion de bifidité PC G.Cotrimoxazole.UIV à faire.
+*11-01-12* UIV: bifidité pyélo-calicielle G confirmée.Suivi médical.Coordination avec chir péd (PD).
+*02-05-12* 14.7/94.5/48.5 EN.
+*31-05-12* 14.8/95/ EN.PD pense à 1 dysfonctionnement VS.Ditropan.
+*14-01-13* Cysto de contrôle:RVU minime sous très haute pression opacifiant l'uretère pelvien (SH le voit et l'écrit dans son rapport; moi je ne le vois pas).J'aurai tendance à arrêter les AS urinaires.Avis PD avant.
+*04-03-13* Tousse.EN.
+*03-07-13* 18.7/102/50 EN.
+*12-08-13* Trauma du cou il y a 3j.EN.Motricité et neuro corrects.
+*16-10-13* 20/103.5/ EN.
+*04-04-14* EN.
+*19-05-14* Pharyngite virale sans fièvre.EN.
+*03-10-14* Angine G monstrueuse.Amoxy.
+*13-10-14* 22/110/ EN.
+*13-11-14* EN.
+*15-12-14* 23/111.5/ EN.
+*06-02-15* Péri-onyxis en voie de guérison sous Bactroban.
+*17-09-15* 24/115.5/ EN.
+*28-09-15* EN.
+*18-01-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*21-03-16* A fait de la fièvre il y a 2j.Diagnostiquée avec 1 angine et mise sous amoxy-Clav.EN en dehors d'1 angine en voie de résolution.Persévérer.
+*01-07-16* 28.5/120.5/ EN.
+*29-07-16* 28/122/ EN.
+*03-10-16* Petit rhume.EN.
+*14-02-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*21-04-17* 33.5/123.5/ EN.Petit mal suivi par SS.
+*07-09-17* 32.4/127.5/ EN.
+*03-01-18* 33.5/127.5/
+*19-07-18* 32.5/130/ EN.
+*11-09-18* 31.5/131.5/ EN.
+*17-10-18* EN.
+*06-09-19* 37.1/134 EN. arret du convulex EEG normal.bilan de retard statural.
+*16-10-19* 37.8/135 EN.

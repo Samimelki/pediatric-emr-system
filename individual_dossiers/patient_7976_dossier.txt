@@ -1,0 +1,90 @@
+2900/49/33 Ictère néonatal intense:Maladie de Gilbert.
+*16-03-09* 3600/51/36 EN.Allaitement mixte.
+*21-04-09* 4700/54.5/38 EN.Allaitement mixte.
+*19-05-09* 5500/57/39.5 EN.RHD.
+*23-06-09* 6700/62/40.5 EN.Fruit.RHN.
+*21-07-09* 7300/65/41.5 EN.L.
+*04-08-09* A fait 24h de fièvre.EN.Pas de fièvre ce jour.
+*11-08-09* A pleuré la nuit passée.Pas de fièvre.EN.
+*14-08-09* A fait de la fièvre la nuit passée.EN.ECBU (RAS).
+*18-08-09* 7950/66.5/42.5 EN.RV.Fluor.
+*22-09-09* 8500/68.5/43.5 EN.
+*27-10-09* 9100/72/44.5 EN.
+*06-11-09* Rhume.EN.SPH.
+*20-11-09* Rhume.EN en dehors d'1 discrète pharyngite.SPH.
+*01-12-09* 9500/74/45 EN.
+*05-01-10* 10/75/45.5 EN.
+*02-02-10* 10/77/46 EN.
+*01-03-10* Fièvre. EN.
+*04-03-10* Rhinopharyngite purulente. Ospamox.
+*09-03-10* 10/77/46 EN.
+*06-04-10* 10.4/79/46.5 EN.
+*19-04-10* A fait 3j de fièvre.Hier selles 1 peu molles.EN.Pas de fièvre ce jour.Virose.
+*21-04-10* Rash discret ce jour (au tél).Virose probable.
+*03-05-10* 10.7/80/46.5 EN.
+*03-06-10* 11/82.5/47 EN.
+*09-06-10* Fébricule depuis hier.EN.
+*10-06-10* Fièvre élevée ce jour + 1 selle diarrhéique.EN en dehors d'1 petite pharyngite.Virose probable.RAD.AT.
+*01-07-10* 11.4/84/47.5 EN.
+*02-08-10* 11.5/84/47.5 Candidose bucale. Dologel Daktarin gel.
+*30-08-10* Fièvre + coryza purulent depuis 24 heures.Otite D.Amoxy-Clav.
+*13-09-10* 12.3/86/47.5 EN.
+*28-09-10* EN.
+*01-10-10* EN.
+*08-10-10* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*12-10-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*10-11-10* Otite bilatérale fébrile + jetage purulent post.Amoxy-clav.
+*22-11-10* Rhino-pharyngite purulente fébrile.Cefdinir.
+*01-12-10* A fait 1j de fièvre hier.EN.
+*06-12-10* Fievre 38.5. EN. AT. Surveillance.
+*08-12-10* Otite G.Amoxy-clav.
+*14-12-10* Otite persistante.S Rassi.Rocephine IM 5j.
+*11-03-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*14-03-11* 13/ Otite G.Amoxy-Clav.
+*25-05-11* 13.6/92.5/49 EN.
+*09-08-11* Otalgie G.Pas de fièvre.EN en dehors d'1 discrète pharyngite.
+*01-09-11* Fièvre depuis hier avec difficulté de marche ce matin.Articulations libres.EN.Virose probable.
+*08-09-11* 14.3/95/ EN.
+*22-09-11* EN.
+*25-11-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*29-11-11* Rhinite purulente, toux. Sofradex dans le nez. Zyrtec.
+*17-01-12* Synd grippal fébrile.EN en dehors d'1 angine.Amoxy.
+*02-02-12* 15.3/99/49.5 EN.
+*23-02-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*29-02-12* Otite bilatérale.Amoxy-Clav.
+*12-03-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*27-04-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.Otite ext bilatérale.Cipro plus.
+*25-09-12* 16.4/105/ EN.
+*09-11-12* Otite D.Amoxy-Clav.
+*07-12-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*06-08-13* Synd grippal subfébrile.EN en dehors d'1 pharyngite.Virose probable.
+*08-08-13* Refièvre + coryza purulent.EN.Amoxy.
+*04-10-13* 18/112/ EN.
+*18-11-13* 18/ Fièvre depuis 4 jours à 39 degres et otalgie droite.OMA droite.Amoxy-Clav.
+*02-12-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-12-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*19-02-14* GEA fébrile.EN.RAD+AT.
+*04-03-14* Fièvre + otalgie hier.Rx thorax faite au BMC la nuit montre 1 pneumonie D,lobe moyen.L'amoxy-clav est déjà débuté.
+*27-03-14* 18.5/114.5/ EN.
+*18-04-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*15-05-14* 18.5/115.5/ EN.
+*21-05-14* Fièvre éruptive.Coryza purulent.EN.Amoxy.
+*26-05-14* Rash fugace on & off depuis 1 sem.Rien ce soir.
+*11-08-14* Angine.Amoxy.
+*13-08-14* Fièvre tj.Ex idem.Probablement virose.
+*15-08-14* Baisse de la fièvre.Amygdales améliorées.
+*25-08-14* 19/118/ EN.
+*24-11-14* 20/119.5/ EN.
+*16-03-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*07-05-15* 20/120.5/ EN.
+*19-08-15* 22/123/ EN.
+*30-11-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*11-01-16* 22.5/ GEA fébrile.EN.RAD.
+*04-07-16* 24/129/ EN.
+*17-03-17* 25/ Otalgie et douleur de gorge depuis hier.EN.Virose respiratoire.
+*04-05-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-08-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*24-12-18* 32/ Otite D.Amoxy-Clav.
+*04-02-19* Congestion nasale sans fievre avec douleurs musculaires.Bilan et continuer Nasonex.
+*30-04-19* 32/144/ EN.
+*19-08-19* Fievre et otalgie.EN.Nuque souple.Virose probable.

@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Growth Statistics</h2>
+                <div class="text-muted">
+                    {% if statistics.last_updated %}
+                        Last updated: {{ statistics.last_updated.strftime('%Y-%m-%d %H:%M:%S') }}
+                    {% else %}
+                        Not calculated yet
+                    {% endif %}
+                    {% if statistics.calculating %}
+                        <span class="badge badge-info ml-2">Calculating...</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if not statistics.percentiles and not statistics.calculating %}
+                <div class="alert alert-info">
+                    <h5>Statistics Calculation</h5>
+                    <p>Growth curve statistics are being calculated in the background. This may take a few minutes depending on the amount of data in your EMR.</p>
+                    <p>The statistics will automatically update once calculation is complete. Please refresh this page in a few minutes.</p>
+                </div>
+            {% endif %}
+
+            {% if statistics.calculating %}
+                <div class="alert alert-warning">
+                    <h5><i class="fas fa-spinner fa-spin"></i> Calculating Statistics</h5>
+                    <p>Growth curve percentiles and outlier detection are currently being calculated. This process runs in the background and may take several minutes.</p>
+                </div>
+            {% endif %}
+
+            {% if statistics.outliers %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Measurement Outliers</h4>
+                        <small class="text-muted">Measurements that are more than 4 standard deviations from the mean for their age/sex group</small>
+                    </div>
+                    <div class="card-body">
+                        {% if statistics.outliers|length > 0 %}
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Patient MRN</th>
+                                            <th>Measurement Type</th>
+                                            <th>Sex</th>
+                                            <th>Age (months)</th>
+                                            <th>Value</th>
+                                            <th>Group Mean</th>
+                                            <th>Group SD</th>
+                                            <th>Std Deviations</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for outlier in statistics.outliers[:20] %}
+                                        <tr>
+                                            <td>
+                                                <a href="{{ url_for('patient.patient_detail', patient_id=outlier.patient_id) }}">
+                                                    {{ outlier.patient_mrn }}
+                                                </a>
+                                            </td>
+                                            <td>{{ outlier.measurement_type }}</td>
+                                            <td>{{ outlier.sex }}</td>
+                                            <td>{{ outlier.age_months }}</td>
+                                            <td><strong>{{ outlier.value }}</strong></td>
+                                            <td>{{ outlier.mean }}</td>
+                                            <td>{{ outlier.std_dev }}</td>
+                                            <td>
+                                                <span class="badge badge-{% if outlier.num_std_devs > 5 %}danger{% elif outlier.num_std_devs > 4.5 %}warning{% else %}info{% endif %}">
+                                                    {{ outlier.num_std_devs }}σ
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% if statistics.outliers|length > 20 %}
+                                    <p class="text-muted">Showing top 20 outliers out of {{ statistics.outliers|length }} total.</p>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No significant outliers found with current criteria (>4 standard deviations).</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if statistics.percentiles %}
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Local Growth Percentiles</h4>
+                        <small class="text-muted">Percentiles calculated from your EMR data (P3, P15, P50, P85, P97)</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h5>Weight for Age</h5>
+                                {% if statistics.percentiles.wfa %}
+                                    <p><strong>Boys:</strong> {{ statistics.percentiles.wfa.boys.Month|length }} age points</p>
+                                    <p><strong>Girls:</strong> {{ statistics.percentiles.wfa.girls.Month|length }} age points</p>
+                                {% else %}
+                                    <p class="text-muted">No weight data available</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Height for Age</h5>
+                                {% if statistics.percentiles.lhfa %}
+                                    <p><strong>Boys:</strong> {{ statistics.percentiles.lhfa.boys.Month|length }} age points</p>
+                                    <p><strong>Girls:</strong> {{ statistics.percentiles.lhfa.girls.Month|length }} age points</p>
+                                {% else %}
+                                    <p class="text-muted">No height data available</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Head Circumference for Age</h5>
+                                {% if statistics.percentiles.hcfa %}
+                                    <p><strong>Boys:</strong> {{ statistics.percentiles.hcfa.boys.Month|length }} age points</p>
+                                    <p><strong>Girls:</strong> {{ statistics.percentiles.hcfa.girls.Month|length }} age points</p>
+                                {% else %}
+                                    <p class="text-muted">No head circumference data available</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <p class="text-info">
+                                <i class="fas fa-info-circle"></i>
+                                These percentiles are calculated from all patient data in your EMR and are smoothed using a 3-month moving average. 
+                                Outliers beyond 5 standard deviations are filtered out before calculation.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="mt-4">
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+                <button onclick="location.reload()" class="btn btn-primary ml-2">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-refresh every 30 seconds if calculating
+{% if statistics.calculating %}
+setTimeout(function() {
+    location.reload();
+}, 30000);
+{% endif %}
+</script>
+{% endblock %} 

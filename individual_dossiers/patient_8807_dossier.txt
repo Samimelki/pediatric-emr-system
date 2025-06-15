@@ -1,0 +1,79 @@
+3350/49/34
+*29-07-11* 4400/52.5/37 EN.Allaitement mixte.
+*29-08-11* 5300/55/39 EN.Allaitement mixte.
+*29-09-11* 6100/59.5/40.5 EN.Allaitement mixte.RHD.
+*28-10-11* 6800/60.5/41 EN.Allaitement mixte.Fruit.RHN.
+*28-11-11* 7200/62/42 EN.Allaitement mixte.L.
+*28-12-11* 7700/65/43 EN.RV.Fluor.
+*10-01-12* Fièvre isolée hier.EN en dehors d'1 discrète pharyngite.Virose possible.ECBU de principe.
+*27-01-12* 8100/66.5/44 EN.
+*29-02-12* 8550/68/44.5 EN.
+*12-03-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*05-04-12* 9000/68.5/45 EN.
+*02-05-12* 9050/69.5/45.5 EN.
+*17-05-12* A fait 2j de fièvre puis rien.A fait 1 rash évanescent.Virose.Actuellement elle présente des boutons inflammatoires sur les zones découvertes qui ont tout l'air de piqûres d'insectes.
+*28-05-12* 9200/71/45.5 EN.
+*18-06-12* 9500/ Rhinopharyngite purulente fébrile.Amoxy-clav (PC).
+*20-06-12* Hier rash roséoliforme et disparition de la fièvre.EN en dehors d'1 petit rash vague au nv du tronc.Virose ss-jacente probable.Persévérer.
+*26-06-12* Reprise du rash hier,sans fièvre.EN.
+*29-06-12* 9100/72/45.5 EN.
+*30-07-12* 9500/72.5/46 EN.
+*21-08-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-08-12* La fièvre persiste quoique plus espacée.EN.Jetage post clair.
+*30-08-12* 9400/75/46.5 EN.
+*21-09-12* Fièvre depuis hier.Selles molles.EN en dehors d'1 pharyngite.Virose probable.AT.
+*05-10-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*25-10-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*31-10-12* 9500/76/46.5 EN.
+*12-11-12* EN.
+*10-01-13* 10.2/77.5/47.5 A fait 1 synd grippal fébrile sur les 4-5j précédents.Pas de fièvre ce jour.Va bien.EN en dehors d'1 petite pharyngite.
+*08-02-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*25-02-13* GEA fébrile.EN en dehors de 2 aphtes sur les piliers pharyngés.RAD,Medijel.
+*08-03-13* A fait 1 pic fébrile ce matin.Puis plus rien.EN.
+*12-04-13* 11.2/ Rhino-pharyngite purulente fébrile.Amoxy.
+*30-04-13* Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*19-06-13* Synd grippal subfébrile.EN en dehors d'1 pharyngite.Virose probable.
+*25-06-13* La fièvre a disparu le 21-06-13 pour reprendre hier.EN en dehors d'1 pharyngite.
+*27-06-13* Fièvre tj:jetage purulent post.Amoxy.
+*08-07-13* 11.3/83.5/48 EN.
+*07-08-13* 12.3/84/48.5 EN.
+*10-09-13* Toux + rhinite purulente.Pas de fièvre.Cipro.
+*23-09-13* Améliorée puis re-tousse depuis 48h.Rhinite allergique probable.Nasonex.
+*26-09-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*07-10-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*16-10-13* 12.2/85.5/49 EN.
+*26-02-14* 14.4/88.5/49.5 EN.
+*16-03-14* Rhino-pharyngite purulente fébrile.Amoxy. (vue à domicile).
+*18-03-14* Rash cutané discret,d'allure virale.
+*16-05-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*28-05-14* 14.3/90.5/49.5 EN.
+*18-07-14* Fébricule depuis hier.Petite pharyngite.Virose probable.
+*22-07-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*08-08-14* GEA.EN.RAD.
+*19-09-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*25-09-14* EN.
+*24-11-14* EN.
+*22-12-14* 15.2/95.5/ Rhino-pharyngite purulente fébrile.Amoxy.
+*01-05-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*26-06-15* /100/
+*09-07-15* Grippe sans fièvre.Tousse.EN.SPH.
+*11-08-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*14-10-15* 17.1/101/ EN.
+*13-01-16* 18/ Fièvre ce jour avec rhume et toux légère.Virose probable,à surveiller.
+*20-01-16* EN.
+*04-03-16* 18/105/ EN.
+*13-05-16* 18/105.5/ EN.
+*28-06-16* 19/106/ EN.
+*18-08-16* 19/106.5/ EN.
+*05-10-16* 19.5/108/ EN.
+*13-04-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*19-07-17* 21/110/ EN.
+*09-05-18* 22.1/116/ EN.
+*09-07-18* 22.7/116 EN.
+*28-11-18* 23.3/119/ EN.
+*21-12-18* Tousse.EN en dehors d'1 petite pharyngite.
+*25-03-19* Toux.PAs de fievre.Bon EG.EN.
+*20-09-19* 25.8/123 congestion nasale et signes de rhinite allergique.Nasonex.
+*25-10-19* bourgeon mammaire a G.Puberte precoce? Avis LM.
+*21-01-20* Syndrome grippal febrile depuis 48 heures.Flu test positif.Tamiflu.
+*26-02-20* 27.2/douleur abdominale avec notion de constipation.Laxatif.

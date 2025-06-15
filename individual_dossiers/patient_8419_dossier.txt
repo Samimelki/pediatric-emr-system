@@ -1,0 +1,55 @@
+3220/50/36
+*23-04-10* 5000/55.5/38 EN.Allaitement mixte.
+*19-05-10* 6200/60/39.5 EN.Allaitement mixte.
+*18-06-10* 7300/62.5/41 EN.Allaitement mixte.RHD.
+*22-07-10* 8200/66/42 EN.
+*24-09-10* 9800/71/44 EN.RV.Fluor.
+*22-10-10* 10.5/74/45.5 EN.
+*22-12-10* 11.2/76.5/46 EN.
+*16-02-11* 11.7/78.5/47 EN.
+*23-03-11* 11.8/79.5/47.5 EN.
+*08-04-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*25-05-11* Fièvre depuis hier.EN en dehors d'1 pharyngite.Virose probable.AT.
+*27-05-11* A fait le dernier pic fébrile à 4h du matin.EN.
+*01-06-11* 12.6/83.5/48 EN.
+*20-07-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*27-07-11* 13.3/84.5/48 EN.
+*25-08-11* 13.1/86/48 EN.
+*17-10-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*06-02-12* 14.5/ Angine.Amoxy.
+*08-02-12* La fièvre persiste + frissons.Angine idem!Amoxy-Clav.
+*04-04-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*19-04-12* Otite G.Amoxy-Clav.
+*27-07-12* Synd grippal subfébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*08-08-12* A fait 1 rash viral fin juillet 12.Reprise de la fièvre hier avec selles diarrhéiques.EN en dehors d'1 petite pharyngite.Virose probable.
+*15-08-12* 16/97/ EN.
+*18-09-12* Tousse depuis 3 sem environ,Pas de fièvre ni altération de l'état général.Horaire essentiellement nocturne.EN en dehors d'1 jetage post clair.Avamys.
+*04-10-12* Otite D avec perforation.Amoxy-Clav.
+*02-11-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*06-12-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*13-02-13* Otorrhée D.Pas de fièvre.Tympan non visible.Cipro.A fait des brûlures mictionnelles il y a 2 sem.ECBU:8.000 GB et 70 GR/ml. Culture: 20.000 col/ml de P.Mirabilis.A pris de la Cefixim pendant 10j.Echo rénale et urinaire N.ECBu de contrôle: 1 GB/ml - 3.500 col/ml polymorphe + proteus.
+*06-03-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*19-04-13* 20/102.5/50.5/ EN.
+*24-04-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*18-10-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*19-12-13* 23.5/108.5/ EN.
+*20-01-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*29-05-14* Sensation d'oreille G bouchée.EN.Avamys+carbocystéine.
+*13-06-14* Fièvre depuis 3-4j,on & off.Toux grasse invalidante.EN.Amoxy.
+*11-08-14* 27/114/ EN.
+*11-12-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Tympans non visibles.Le père signale 1 otorrhéee purulente que je ne vois pas.Avis ORL.
+*15-01-15* A fait à 2 reprises des hématuries macroscopiques:Echo N.C3-C4 Normales.Lithiase?? Avis néphro.
+*28-01-15* Cons Nephro (PAJ): Elle pense à des micro-lithiases associées à une colonisation par proteus.Propose boissons et mictions fréquentes.En attente pour voir si nécessaire de faire un bilan de maladie lithiasique.
+*17-04-15* 32.5/118/ EN.
+*08-07-15* 33/121.5/ EN.
+*09-03-16* 36/125/ EN.
+*18-03-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*19-09-16* Otite ext D.Cetraxal.
+*29-06-17* 42/132/ EN.
+*27-11-17* 44/ Fièvre et otalgie depuis hier.OMA G.Amoxy-clav.
+*26-07-18* 47.9/139/ EN.
+*20-08-18* Diarrhée fébrile.EN.
+*26-12-18* 53/141.5/ EN.
+*10-07-19* 55.6/144.5 EN.
+*10-02-20* 51.9/147.5 EN.
+*28-02-20* 51.4/ Fievre et cephalees.Angine erythematopultacee.Strep test negatif.

@@ -8,6 +8,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from typing import List, Dict, Tuple, Optional, Any
+import numpy as np
 import emr_config
 
 def convert_weight_to_kg(weight_raw):
@@ -51,18 +52,30 @@ def get_db_standalone(db_path=None):
         config = emr_config.EMRConfig()
         db_path = config.get_database_path()
     
-    if hasattr(g, '_database') and g._database is not None:
-        return g._database
-    
-    db = g._database = sqlite3.connect(db_path)
-    db.row_factory = sqlite3.Row
-    return db
+    # Check if we're in Flask context and can use g
+    try:
+        if hasattr(g, '_database') and g._database is not None:
+            return g._database
+        
+        db = g._database = sqlite3.connect(db_path)
+        db.row_factory = sqlite3.Row
+        return db
+    except RuntimeError:
+        # We're outside Flask context, create direct connection
+        db = sqlite3.connect(db_path)
+        db.row_factory = sqlite3.Row
+        return db
 
 def close_db_standalone(exception=None):
-    db = getattr(g, '_database', None)
-    if db is not None:
-        db.close()
-        g._database = None # Ensure it's removed from g
+    """Close database connection for standalone use"""
+    try:
+        db = getattr(g, '_database', None)
+        if db is not None:
+            db.close()
+            g._database = None
+    except RuntimeError:
+        # Outside Flask context, connection will be closed by caller
+        pass
 
 def calculate_average_vaccines_per_child(db_path=None):
     """Calculate average number of vaccines per child"""
@@ -257,11 +270,10 @@ def calculate_percentiles(db_path=None, target_percentiles=None, smoothing_windo
 
                 try:
                     visit_dt = datetime.fromisoformat(visit_date_iso.split('T')[0])
-                    age_delta = relativedelta(visit_dt, birth_dt)
-                    # Round age to nearest whole month for grouping
-                    age_in_total_months = age_delta.years * 12 + age_delta.months
-                    if age_delta.days > 15 and age_in_total_months < (max_age_months -1) : # round up if more than half a month, avoid exceeding max age
-                        age_in_total_months +=1
+                    
+                    # More deterministic age calculation - same as in outlier detection
+                    age_delta_days = (visit_dt - birth_dt).days
+                    age_in_total_months = int(age_delta_days / 30.44)  # Average days per month
                         
                     if 0 <= age_in_total_months <= max_age_months:
                         if weight_g is not None and weight_g > 0:
@@ -388,9 +400,18 @@ def find_measurement_outliers(db_path=None, std_dev_threshold=4.0, age_limit_mon
         db_path = config.get_database_path()
     
     conn = get_db_standalone(db_path=db_path)
-    
     cursor = conn.cursor()
     outliers_list = []
+    
+    # Track if we created the connection (outside Flask context)
+    should_close_conn = False
+    try:
+        from flask import g
+        # If we're in Flask context, don't close manually
+        should_close_conn = False
+    except RuntimeError:
+        # Outside Flask context, we should close the connection
+        should_close_conn = True
 
     # 1. Aggregate all measurements by type, sex, and age_month
     # Similar to calculate_percentiles, but we also need to store patient_id/mrn with each measurement
@@ -408,7 +429,8 @@ def find_measurement_outliers(db_path=None, std_dev_threshold=4.0, age_limit_mon
     }
 
     try:
-        cursor.execute("SELECT id, mrn, naissance_date, sexe FROM Patients WHERE naissance_date IS NOT NULL AND sexe IS NOT NULL")
+        # Add ORDER BY to ensure consistent processing order
+        cursor.execute("SELECT id, mrn, naissance_date, sexe FROM Patients WHERE naissance_date IS NOT NULL AND sexe IS NOT NULL ORDER BY id")
         patients = cursor.fetchall()
 
         if not patients: return []
@@ -433,17 +455,18 @@ def find_measurement_outliers(db_path=None, std_dev_threshold=4.0, age_limit_mon
                 birth_dt = datetime.fromisoformat(patient_birth_date_iso.split('T')[0])
             except ValueError: continue
 
-            cursor.execute("SELECT visit_date, weight_g, height_cm, head_circumference_cm FROM Visits WHERE patient_id = ? AND visit_date IS NOT NULL", (patient_id,))
+            # Add ORDER BY to ensure consistent visit processing order
+            cursor.execute("SELECT visit_date, weight_g, height_cm, head_circumference_cm FROM Visits WHERE patient_id = ? AND visit_date IS NOT NULL ORDER BY visit_date", (patient_id,))
             visits = cursor.fetchall()
 
             for visit_row in visits:
                 visit_date_iso = visit_row['visit_date']
                 try:
                     visit_dt = datetime.fromisoformat(visit_date_iso.split('T')[0])
-                    age_delta = relativedelta(visit_dt, birth_dt)
-                    age_in_total_months = age_delta.years * 12 + age_delta.months
-                    if age_delta.days > 15 and age_in_total_months < (age_limit_months -1) : # Round up, ensure not to exceed limit
-                        age_in_total_months +=1
+                    
+                    # More deterministic age calculation - same as in outlier detection
+                    age_delta_days = (visit_dt - birth_dt).days
+                    age_in_total_months = int(age_delta_days / 30.44)  # Average days per month
                     
                     if 0 <= age_in_total_months <= age_limit_months:
                         data_point = (patient_id, patient_mrn)
@@ -470,9 +493,13 @@ def find_measurement_outliers(db_path=None, std_dev_threshold=4.0, age_limit_mon
             'hcfa': 'Head Circ. (cm)'
         }
 
-        for sex in ['boys', 'girls']:
-            for m_type_key, m_type_label in measurement_type_map.items():
-                for age_month, measurements_with_ids in all_measurements_for_stats[sex][m_type_key].items():
+        # Process in consistent order for deterministic results
+        for sex in sorted(['boys', 'girls']):
+            for m_type_key in sorted(measurement_type_map.keys()):
+                m_type_label = measurement_type_map[m_type_key]
+                # Process age months in sorted order for consistency
+                for age_month in sorted(all_measurements_for_stats[sex][m_type_key].keys()):
+                    measurements_with_ids = all_measurements_for_stats[sex][m_type_key][age_month]
                     values_only = [m[0] for m in measurements_with_ids]
                     if len(values_only) < 2: # Need at least 2 data points to calculate std dev meaningfully
                         continue
@@ -483,10 +510,14 @@ def find_measurement_outliers(db_path=None, std_dev_threshold=4.0, age_limit_mon
                     if std_dev_val == 0: # Avoid division by zero if all values in group are identical
                         continue 
 
+                    # Sort measurements for consistent processing order
+                    measurements_with_ids.sort(key=lambda x: (x[1], x[0]))  # Sort by patient_id, then value
+                    
                     for value, p_id, p_mrn in measurements_with_ids:
                         if value is None: continue
                         num_std_devs = abs(value - mean_val) / std_dev_val
-                        if num_std_devs > std_dev_threshold:
+                        # Use a small epsilon to handle floating point precision issues
+                        if num_std_devs > (std_dev_threshold + 1e-10):
                             outliers_list.append({
                                 'patient_mrn': p_mrn,
                                 'patient_id': p_id,
@@ -500,7 +531,8 @@ def find_measurement_outliers(db_path=None, std_dev_threshold=4.0, age_limit_mon
                             })
         
         # Sort outliers for consistent display, e.g., by how extreme they are
-        outliers_list.sort(key=lambda x: x['num_std_devs'], reverse=True)
+        # Use multiple sort keys for deterministic ordering
+        outliers_list.sort(key=lambda x: (-x['num_std_devs'], x['patient_id'], x['measurement_type']))
         return outliers_list
 
     except sqlite3.Error as e:
@@ -512,7 +544,9 @@ def find_measurement_outliers(db_path=None, std_dev_threshold=4.0, age_limit_mon
         print(traceback.format_exc())
         return []
     finally:
-        if db_path:
+        if should_close_conn and conn:
+            conn.close()
+        else:
             close_db_standalone()
 
 if __name__ == '__main__':

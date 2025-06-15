@@ -1,0 +1,60 @@
+2126/45/31 PREMA 30 SA + 5j.Poids de sortie:2334g le 12-09-14.
+*19-09-14* 260046/32.5 EN.AM.
+*23-10-14* 4200/50.5/36 EN.
+*20-11-14* 5000/54.5/39.5 EN.RHD le mois prochain.
+*19-12-14* 5650/57/40.5 EN.RHD.
+*21-01-15* 6300/60.5/41 EN.Fruit.RHN.
+*24-02-15* 6950/63/42.5 EN.RV.Fluor.
+*23-03-15* 7300/64.5/43.5 EN.
+*30-03-15* EN.Ex ophtalmo N.
+*30-04-15* 7900/67.5/44.5 EN.
+*03-06-15* 8400/68/45.5 EN.
+*03-07-15* 8900/70.5/46 EN.
+*06-08-15* 9250/73/46.5 EN.
+*07-09-15* 9600/74/47 EN.
+*07-10-15* 9800/75/47 EN.
+*05-11-15* 10.2/76.5/47.5 EN.
+*10-12-15* 10.6/78/48 EN.
+*30-12-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*11-01-16* 10.7/80/48 EN.
+*03-02-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*08-02-16* EN.
+*11-02-16* 10.7/80.5/48 EN.
+*10-03-16* 11/82/48.5 EN.
+*24-03-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*29-03-16* Tousse.EN.
+*06-04-16* 11.2/82.5/48.5 EN.
+*04-05-16* 11.3/84/48.5 EN.
+*15-06-16* 11.5/86.5/48.5 EN.
+*10-08-16* 11.9/ GEA fébrile.EN.RAD.
+*15-08-16* Diarrhée et fièvre encore.EN.
+*16-09-16* 12/ Fièvre depuis 2j.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*04-11-16* 12.5/89.5/ Rhume.EN.
+*16-11-16* Tousse.EN.
+*21-11-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*01-12-16* EN.
+*22-12-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*27-12-16* Reprise de la fièvre.EN.Persévérer.
+*03-01-17* Subfébrile.EN.
+*17-01-17* 13.2/ Rhume.EN.
+*30-01-17* Rhino-pharyngite purulente fébrile.Conjonctivite purulenteAmoxy-Clav.
+*21-02-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*18-04-17* 13.7/93/ Angine.Clarithro.
+*28-06-17* 14.3/96/ Rhino-pharyngite purulente fébrile+conjonctivite purulente.Amoxy-Clav.
+*06-07-17* Allergie cutanée au nv du haut du torse probablement frottement ou chaleur.
+*21-08-17* 14.7/97/ Synd grippal fébrile.EN.Virose probable.AT.
+*23-08-17* Persistence de la fièvre avec toux mais espacement de la fièvre.EN.Virose probable.AT.
+*30-08-17* Rhino-pharyngite purulente fébrile.Tympan G mat.Amoxy-Clav.
+*11-10-17* 15.2/98.5/ Enrhumée sans fièvre.Otalgie G.EN.
+*31-10-17* Angine sans fièvre.EN par ailleurs.
+*20-11-17* 16/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*26-01-18* 16/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*29-01-18* Fièvre tj avec rash maculeux généralisé.EN.
+*14-02-18* Rhino-pharyngite purulente fébrile.Amoxy.
+*03-04-18* 16.6/102/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*05-04-18* Rhino-pharyngite purulente fébrile.Amoxy.
+*24-05-18* 17.2/103/ Otite G.Amoxy-Clav.
+*06-06-18* Otalgie D subfébrile.Le tympan D n'est pas pas bien visible.Cons ORL avant de donner Ceftriaxone.
+*05-10-18* 19.1/104.5 EN.
+*05-03-19* Syndrome grippal febrile avec gastroenterite.Bon EG.Nuque souple.EN.Virose probable.AT.
+*08-03-19* 20.2/108 EN.

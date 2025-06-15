@@ -167,7 +167,7 @@ def _import_vaccines_unified_direct(patient_id: int, patient_xml_data: dict, db_
     config_service = ImmunizationConfigService()
     brand_to_disease = config_service.get_brand_to_disease_mapping()
     
-    # Standard vaccine column mappings (XML to canonical disease)
+    # Standard vaccine column mappings (XML to canonical disease from comprehensive mapping)
     standard_vaccine_columns = {
         '/fichier/dtcp1': ('DTaP - IPV', 1),
         '/fichier/dtcp2': ('DTaP - IPV', 2), 
@@ -179,12 +179,12 @@ def _import_vaccines_unified_direct(patient_id: int, patient_xml_data: dict, db_
         '/fichier/hep_b1': ('Hepatitis B', 1),
         '/fichier/hep_b2': ('Hepatitis B', 2),
         '/fichier/hep_b3': ('Hepatitis B', 3),
-        '/fichier/hib1': ('Haemophilus influenzae type b (Hib)', 1),
-        '/fichier/hib2': ('Haemophilus influenzae type b (Hib)', 2),
-        '/fichier/hib3': ('Haemophilus influenzae type b (Hib)', 3),
-        '/fichier/hib_rappel': ('Haemophilus influenzae type b (Hib)', 4),
-        '/fichier/ror': ('Measles - Mumps - Rubella (MMR)', 1),
-        '/fichier/r': ('Measles', 1),
+        '/fichier/hib1': ('Hib (Haemophilus influenzae b)', 1),
+        '/fichier/hib2': ('Hib (Haemophilus influenzae b)', 2),
+        '/fichier/hib3': ('Hib (Haemophilus influenzae b)', 3),
+        '/fichier/hib_rappel': ('Hib (Haemophilus influenzae b)', 4),
+        '/fichier/ror': ('MMR (Measles, Mumps, Rubella)', 1),
+        '/fichier/r': ('Measles (single)', 1),
     }
     
     total_imported = 0
@@ -308,9 +308,10 @@ def populate_database_from_parsed_data(all_xml_patients, target_mode='pediatric'
 
             # Create/update document for this patient (failsafe feature)
             try:
-                word_manager.create_or_update_document(patient_id, document_format)
-                format_name = "Word document" if document_format == 'docx' else "Markdown document"
-                print(f"Created {format_name} for patient ID {patient_id} (MRN: {unified_patient_data.get('mrn', 'N/A')})")
+                if document_format != 'none':
+                    word_manager.create_or_update_document(patient_id, document_format)
+                    format_name = "Word document" if document_format == 'docx' else "Markdown document"
+                    print(f"Created {format_name} for patient ID {patient_id} (MRN: {unified_patient_data.get('mrn', 'N/A')})")
             except Exception as e:
                 print(f"Warning: Failed to create Word document for patient ID {patient_id}: {e}")
 

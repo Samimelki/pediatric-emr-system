@@ -1,0 +1,72 @@
+3300/51/34 A Rh Pos.
+*10-06-05* 3500/ Petit rhume.EN.
+*22-06-05* 4000/54/37 EN.
+*22-07-05* 4750/57.5/39 EN.
+*22-08-05* 5650/60.5/40 EN.Fruit.RHD.
+*22-09-05* 6100/64/41.5 EN.L.RHN.
+*23-11-05* 7400/68/44 EN.RV.Fluor.
+*27-12-05* Tousserait depuis 2 sem.EN.Petit rhume.SPH.
+*31-01-06* 8500/ Rhino-pharyngite purulente fébrile+conjonctivite purulente.Amoxy-Clav.
+*06-03-06* 8700/73/46 EN.
+*14-04-06* Grippe sub-fébrile.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*18-04-06* La fièvre a duré jusqu'à ce matin.EN en dehors d'1 pharyngite nette.Virose.
+*27-04-06* 9500/74/47.5 EN.
+*29-05-06* 9900/76/48 EN.
+*30-06-06* Rhume.
+*03-07-06* GEA fébrile.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*26-07-06* 10.1/78.5/48 EN.
+*22-09-06* 10.6/81/49 EN.
+*30-10-06* 10.8/82/49 EN.
+*22-11-06* 11.3/83/49.5 EN.
+*13-02-07* 11.7/85/ Grippe fébrile.EN.Virose probable.AT.
+*16-02-07* La fièvre persiste.Selles molles.EN en dehors d'1 pharyngite.Virose probable.AT+RAD.
+*24-05-07* 12.7/88/50.5 EN.
+*15-10-07* Grippe.EN.
+*31-10-07* 13.9/92/ EN.
+*16-05-08* Rhino-pharyngite purulente fébrile.Amoxy.
+*09-06-08* 15.5/97.5/ EN.
+*05-09-08* 16.1/99/ EN.
+*17-11-08* Fièvre depuis 3j avec petite toux.EN en dehors d'1 pharyngite et 1 gengivite.Virose.AT.
+*21-01-09* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*27-02-09* Eczéma de la cuisse.
+*06-04-09* GEA fébrile depuis 2-3j.EN en dehors d'1 angine.Amoxy.
+*11-06-09* 17.2/103.5/51 EN.
+*31-08-09* Subfébrile depuis 2-3j.Excellent EG.EN en dehors d'1 pharyngite et d'1 aphte buccal.
+*07-10-09* 17.8/105.5/ EN.
+*09-10-09* Fébricule ce jour + coryza clair.Excellent EG.EN.Virose probable.
+*26-10-09* Synd grippal fébrile.Excellent EG.EN en dehors d'1 pharyngite.Nuque souple.Virose probable.AT.
+*24-05-10* 20.5/111/ EN.
+*24-06-10* 20/111/ EN.
+*30-06-10* Fièvre isolée depuis 24 heures.Bon EG.EN en dehors d'une pharyngite.Nuque souple.Virose probable.AT.
+*02-07-10* Persistance de la fièvre.Nuque souple.Excellent EG.EN en dehors d'une pharyngite.Radio thorax de principe.
+*11-10-10* Prurigo.
+*12-11-10* A fait 1 rash maculeux hier,surtout au nv des zones recouvertes.Pas de fièvre.EN ce jour en dehors d'1 vague pharyngite.Virose ou allergie.
+*21-03-11* VARICELLE a minima.
+*27-04-11* 24/116/ EN.
+*03-09-11* 24/118.5/ EN.
+*19-09-11* EN.
+*22-11-11* Fièvre ce matin + douleurs abdominales intenses.Rien chez moi.EN.Virose probable.A suivre.
+*24-05-12* 27.5/123.5/ EN.
+*18-06-12* 27.5/ Eruption maculopapuleuse prurigineuse d'allure virale.Zyrtec.surveillance (PC).
+*29-06-12* 27.5/124.5/ EN.
+*27-09-12* 30/125.5/ EN.
+*05-11-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*01-03-13* Dysurie occasionnelle.Douleur testiculaire G ce jour.EN.ECBU.
+*06-03-13* ECBU stérile.
+*22-03-13* Sentirait des lancements au nv de la région du mammelon G de temps en temps depuis 1 certain temps.EN.
+*29-04-13* GEA.EN en dehors d'1 petite pâleur.Bon EG.RAD.
+*02-10-13* 35.5/ Douleur testiculaire G depuis 2-3j.Pas de notion de traumatisme.EN en dehors d'1 sensibilité de l'épidydime G.CAT:ECBU puis Cefixim.
+*04-07-14* 38/136.5 EN.
+*17-09-14* GEA fébrile.EN.RAD.
+*29-09-14* 35/138/ EN.
+*13-10-14* EN.
+*08-12-14* Douleur testiculaire vague,on & off depuis 10j,irradiant vers l'aine.EN.ECBU de principe.
+*15-12-14* ECBU:Stérile.
+*02-07-15* 39/142/ EN.
+*13-11-15* 44.5/144/ EN.
+*25-02-16* 45.5/ Rhino-pharyngite purulente fébrile.Amoxy.
+*19-07-16* 47.5/148.5/ EN.
+*09-09-16* 47/150/ EN.
+*04-11-16* 49.5/150.5/ EN.OGE commencent à augmenter de vol + duvet pubien.
+*02-06-17* 51.5/155.5/ EN.P2.
+*26-07-18* 55.1/166/ EN.P4.

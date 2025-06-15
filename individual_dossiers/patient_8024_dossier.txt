@@ -1,0 +1,50 @@
+3080/46/33
+*28-04-09* 3600/50/35.5 EN.Allaitement mixte.
+*07-05-09* A fait 5-6 selles molles en une après-midi.EN.
+*29-05-09* 4200/54/37.5 EN.Allaitement mixte.
+*01-07-09* 5000/56.5/38.5 EN.RHD.
+*30-07-09* 5700/59.5/39.5 EN.Fruit.
+*31-08-09* 6200/62/40.5 EN.L.
+*29-09-09* 6650/64.5/41 EN.RV.Fluor.
+*29-10-09* 7000/66.5/42 EN.
+*09-12-09* 7700/68/43 EN.
+*08-01-10* 7600/70/43.5 EN.
+*29-01-10* Petite fièvre + diarrhée depuis ce matin.EN en dehors d'1 petite pharyngite.RAD.
+*08-02-10* 8000/71/43.8/EN.
+*19-02-10* GEA fébrile.EN.RAD.
+*08-03-10* 8200/73/44 EN.
+*12-04-10* 8400/74/44.5 EN.
+*10-05-10* 8800/74.5/45 EN.
+*14-06-10* 9050/76/45.2 EN.
+*01-09-10* 9500/79/46 EN.
+*24-09-10* 9900/80/46.5 EN.
+*28-10-10* 9900/80.5/46.5 EN.
+*10-01-11* 10.4/84/48 EN.
+*24-02-11* 10.8/85/ Rhume.EN.SPH.
+*11-04-11* 11.1/85.5/47.5 EN.
+*11-05-11* 11.5/ EN.
+*27-06-11* 11.6/89.5/
+*22-08-11* Tousse.Pas de fièvre.EN en dehors d'1 jetage post clair.
+*26-09-11* VARICELLE a minima.
+*09-11-11* /92/
+*01-02-12* 13.5/ Otite G.Selles molles.EN par ailleurs.Amoxy-Clav.
+*01-05-12* 14.6/96.5/49 EN.
+*25-06-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*02-07-12* 14.3/97.5/ EN.
+*01-02-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-08-13* 18.4/106.5/ EN.
+*24-01-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-01-14* Fièvre tj avec coryza purulent actuellement.Amoxy.
+*03-04-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*12-05-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*13-08-14* 19.5/111/ EN.
+*22-09-14* 19.5/112.5/ EN.
+*04-02-15* 20/114.5/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*02-03-15* /115/
+*14-08-15* 22/117/ EN.
+*18-11-15* 23/119/ EN.
+*09-02-16* 26/120.5/ EN.
+*29-02-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*15-09-16* 25/124.5/ EN.
+*02-08-17* 28/125.5/ EN.
+*28-12-18* 33.2/137/ EN.

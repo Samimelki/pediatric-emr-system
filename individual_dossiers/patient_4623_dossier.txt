@@ -1,0 +1,84 @@
+3400/52/36
+*13-09-01* 4600/55.5/38.5 EN.AM.Mammelon surnuméraire D.
+*15-10-01* 5800/59/40.5 EN.AM+Fruit,fluor.
+*16-11-01* 6600/63.5/41 EN.Allaitement mixte.L.RHD.
+*17-12-01* 7200/66/42 EN.Allaitement mixte.LV.RHN.
+*15-02-02* 8150/69/43.5 EN.Allaitement mixte.RV.
+*15-03-02* 8500/70/44 EN.Allaitement mixte.
+*17-05-02* 9700/74.5/45.5 EN.
+*15-07-02* 10/77/46.5 EN.
+*13-08-02* 10/79/46.5 EN.
+*17-10-02* 10.6/ GEA fébrile(fièvre depuis hier).EN en dehors d'1 angine.Virose possible.RAD+Amoxy quand-même.
+*21-10-02* Persistance de la fièvre depuis le 16-10-02.Rx thorax N et ECBU(GB=5/ml)[urgences HDF].Bilan:NFP, VS,Widal,AC anti-VCA.Bilan (-).
+*28-10-02* 10.4/ La fièvre a disparu le 22-10-02 pour réapparaître le 26-10-02.Examiné hier à domicile:EN.Je pratique alors 1 echo cardiaque en pensant à 1 éventuel Kawasaki.Echo cardiaque N.Réexaminé ce jour:Otite G+ coryza post purulent.Amoxy-Clav.
+*18-11-02* 11/80/47.5 EN.
+*25-11-02* A fait 1 GEA fébrile il y a 2j.EN en dehors d'1 petite pharyngite.
+*27-12-02* 11.2/82/47.5 EN.
+*31-12-02* A fait 3j de fièvre avec 1 synd grippal.Pas de fièvre ce jour.EN.Virose probable.SPH.
+*31-01-03* Rhino-pharyngite purulente fébrile.Amoxy.
+*12-02-03* 11.5/83/48 EN.
+*25-02-03* Synd grippal fébrile.EN.Virose probable.AT.
+*14-03-03* 12/85/48.5 EN.
+*18-03-03* Fièvre depuis 3j.EN en dehors d'1 pharyngite intense.Virose probable.AT.
+*04-04-03* GEA fébrile.EN.RAD.
+*07-07-03* 12.4/89/ Fait des fébricules depuis 1 sem environ.EN.Virose possible.ECBU.
+*29-08-03* 12.9/91/48.5 EN.
+*29-09-03* Laryngite fébrile.EN.Virose.Humidifications.
+*27-11-03* Selles diarrhéiques et vomissements il y a 1 sem et reprise il y a 2j+hypothermie à 35.5-36.EN en dehors d'1 jetage post purulent.Cebemyxine.IG:Hallux valgus supra-ductus G.A surveiller.
+*12-01-04* Rhino-pharyngite purulente fébrile.Amoxy.
+*13-02-04* 13.8/94/49.5 EN.
+*03-03-04* Fièvre depuis 3j.Selles molles+qques vomissements.EN en dehors d'1 jetage purulent post.Klacid.
+*12-07-04* 14.1/99/51 EN.
+*03-08-04* Rhino-pharyngite purulente fébrile.Amoxy.
+*27-09-04* Fièvre depuis 2j.EN en dehors d'1 jetage purulent post.Amoxy.
+*07-10-04* Refièvre hier.EN.Virose probable.
+*27-10-04* 14.8/ Fièvre depuis hier avec rash maculo-papuleux.EN en dehors d'1 jetage purulent post.Cefzil.
+*22-02-05* 16/102/
+*22-04-05* 15.4/
+*14-06-05* 16.3/ Fièvre depuis hier.EN en dehors d'1 pharyngite.Virose probable.
+*05-07-05* 16/ Rhino-pharyngite purulente fébrile.Amoxy.
+*08-08-05* Rhino-pharyngite purulente fébrile.Cefzil.
+*21-02-06* 18.5/110/52
+*03-04-06* Rhino-pharyngite purulente fébrile.Amoxy.
+*11-04-06* A vomit 1 fois.EN.
+*16-06-06* Angine.Amoxy.
+*02-08-06* 18.5/112/52.5 EN.
+*15-09-06* 18.5/114/ EN.
+*12-02-07* 19.5/117/ Rhino-pharyngite purulente fébrile.Amoxy.
+*06-08-07* 19.5/119/ EN.
+*30-11-07* Mal aux testis.EN.
+*11-01-08* Aurait tj mal aux testicules depuis la fois passée!Il sent que ses testis vont éclater!!Pas de notion de fourmillements au périnée.Ex strictement normal.CAT:Echo abdomino- pelvienne.Avis chirurgical si nécessaire.
+*16-01-08* Echo N.
+*29-08-08* 23/124/ EN.
+*17-10-08* 21.5/124.5/ EN.
+*22-01-09* Rhino-pharyngite purulente fébrile.Amoxy.
+*07-04-09* Fièvre depuis hier + dysphagie.EN en dehors d'1 belle pharyngite.Virose probable.AT.
+*20-05-09* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*05-06-09* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*01-12-09* Syndrome grippal febrile depuis 2 jours. Bon EG. Rhinopharyngite purulente. Amoxy.
+*24-03-10* 27/131.5/ EN.
+*01-09-10* 28.5/133.5 EN.
+*24-12-10* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-12-10* La fièvre a baissé pour reprendre ce jour.EN en dehors d'1 jetage purulent post.Amoxy.
+*01-02-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*10-02-11* Fièvre depuis hier soir.Sensation de mal-être depuis plusieurs semaines.EN.Bilan.
+*02-03-11* Sérologie EBV (+).
+*15-06-11* Présente de nausées et des vomissements de façon irrégulière et ce depuis 2 sem.Pas de fièvre.Est sous Gravol depuis 3-4 ans pour mal de transport.Bon EG.EN en dehors d'1 jetage post clair.Rhino-sinusite possible.CAT:Fluticasone + Scan des sinus + cerveau.
+*01-08-11* 30/138/ EN.Scan cérébral N.Scan des sinus:Léger épaississement en cadre du sinus frontal D.Léger épaississement muqueux du plancher des sinus maxillaires.Comblement partiel de qques cellules éthmoïdales post G.
+*28-10-11* 31.5/139/ EN.
+*06-12-11* Rhinopharyngite purulente.Amoxy.Nasonex (BE).
+*06-08-12* 31.5/142.5/ EN.
+*03-09-12* 33.5/143/ EN.
+*07-09-13* Hospitalisé pour GEA sévère.
+*20-09-13* 35.5/146.5/ EN.
+*03-09-14* 38,5/ Fièvre, céphalée intense et courbatures. EN. Virose probable (CM).
+*18-09-14* GEA fébrile.EN.TB EG.RAD.
+*03-10-14* EN.P1.
+*04-11-14* 41/152.5/ Tristesse et pleurs inexpliqués depuis 1 sem.EN.Déprime passagère probable.Petit bilan de débrouillage sinon aide psycho.
+*20-03-15* 44.5/154/ EN.
+*01-09-16* 50.5/167/ EN.P4.
+*08-11-16* Céphalée subite,G,avec qques vomissements.Pas de fièvre.Bon EG.EN.Bien orienté.Pas de raideur méningée.Migraine?Si pas d'amélioration rapide,scan à la recherche d'1 improbable hémorragie méningée.
+*09-02-17* Deux jours de fièvre puis rash évanescent .EN.Virose probable.
+*15-09-17* 54.5/169.5/ EN.
+*27-12-19* 62.3/171.5 EN.
+*31-12-19* Syndrome grippal febrile depuis 4 jours.Fatigue et baisse de l'appetit.Flu test positif.Flumivir.

@@ -1,0 +1,53 @@
+3550/50/36
+*06-12-02* 4500/53/39 EN.AM.
+*09-01-03* 5600/56/40.5 EN.AM.Fruit.
+*07-02-03* 6300/59/41.5 EN.Allaitement mixte.L.RHD.
+*07-03-03* 7100/61/43 EN.LV.RHN.
+*09-05-03* 8250/66/45 EN.RV.Fluor.
+*06-06-03* 8500/67/46 EN.
+*30-07-03* GEA fébrile.EN en dehors d'1 petite pharyngite.RAD+AT.
+*04-08-03* 8850/70.5/46 EN.
+*26-08-03* Rhino-pharyngite purulente fébrile+conjonctivite purulente.Amoxy-Clav.
+*20-11-03* 10.3/74/48 EN.
+*08-12-03* 10.5/ OMA bilatérale.Orelox(B.Eid).
+*27-01-04* Synd grippal subfébrile.EN en dehors d'1 pharyngite.Virose probable.
+*29-01-04* La fièvre augmente.Ex:Otite bilatérale.Amoxy-Clav.
+*04-03-04* 11.6/77/49.5 EN.
+*01-04-04* Fièvre depuis 2j.A vomit 2 fois.EN en dehors d'1 pharyngite+qques traînées blanchâtres sur les amygdales.Virose possible.ECBU de principe.
+*05-04-04* 11.8/79/50 EN.ECBU stérile.
+*12-08-04* 12.6/84/51 EN.
+*13-10-04* 13.5/85.5/51.5 EN.
+*12-11-04* 13.3/86/52 EN.
+*18-11-04* Gengivo-stomatite fébrile.EN par ailleurs.Virose.Medijel.
+*07-12-04* Otite bilatérale.Amoxy-Clav.
+*12-07-05* Fièvre depuis 2j.EN en dehors d'1 belle pharyngite.Virose probable.AT.
+*12-09-05* Herpangine.Medijel.
+*04-11-05* Synd grippal fébrile depuis 3j.EN en dehors d'1 belle pharyngite.Virose probable.AT.
+*14-11-05* 16/94.5/53 EN.
+*17-11-05* Fièvre depuis 3j.Otite D+coryza purulent.
+*06-01-06* Otite bilatérale.Amoxy-Clav.
+*10-04-06* Otite bilatérale.Amoxy-Clav.
+*07-08-06* 17.3/100/53.5 EN.
+*09-08-06* IDR pos à 12 mm.Vérification au labo.
+*12-12-06* IDR (-) au labo.
+*22-12-06* Rhino-pharyngite purulente fébrile.Amoxy.
+*08-02-07* Synd grippal fébrile depuis 3j.EN en dehors d'1 vague pharyngite.Virose probable.Pas de fièvre ce jour.
+*20-12-07* 19/110/ EN.
+*21-01-08* 19/110.5/ EN.
+*12-08-08* 20/113.5/ EN.
+*28-11-08* 20/114.5/ EN.
+*09-04-09* 21/116/ EN.
+*31-08-10* 25/124 EN
+*02-09-10* IDR + à 1 cm.Faire radio thorax.
+*05-10-10* 25.5/124.5/ EN.IDR Nég au labo.
+*06-07-12* 30/136/ EN.
+*06-08-12* 31/136.5/ EN.
+*25-10-12* 31.5/138/ EN.
+*23-01-13* 32.5/139.5/ EN.S1P1.
+*10-01-14* 35.5/147.5/ EN.S2P3.
+*20-11-14* 40/153/ EN.S4P3.
+*13-02-15* 41.5/154/ EN.Premières menstruations le 20-01-15.
+*09-07-15* 44.5/155.5/ EN.
+*10-11-17* 50/159/ EN.
+*22-11-18* 51.7/159.5/ EN.
+*21-06-19* 49.8/159.5 EN.

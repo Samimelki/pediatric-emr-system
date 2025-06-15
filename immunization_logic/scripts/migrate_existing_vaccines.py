@@ -30,20 +30,20 @@ class VaccineMigrator:
         self.config_service = ImmunizationConfigService()
         self.comprehensive_mapping = self.config_service.get_comprehensive_mapping()
         
-        # Standard vaccine column mappings
+        # Standard vaccine column mappings (using comprehensive mapping canonical names)
         self.standard_columns = {
             'dtcp_date': 'DTaP - IPV',
             'hep_b_date': 'Hepatitis B',
             'polio_date': 'Polio',
-            'hib_date': 'Haemophilus influenzae type b (Hib)',
-            'pcv_date': 'Pneumococcal Conjugate Vaccine (PCV)',
+            'hib_date': 'Hib (Haemophilus influenzae b)',
+            'pcv_date': 'Pneumococcal PCV',
             'rotavirus_date': 'Rotavirus',
-            'mmr_date': 'Measles - Mumps - Rubella (MMR)',
-            'varicella_date': 'Varicella (Chickenpox)',
+            'mmr_date': 'MMR (Measles, Mumps, Rubella)',
+            'varicella_date': 'Varicella',
             'hep_a_date': 'Hepatitis A',
-            'meningococcal_date': 'Meningococcal',
-            'hpv_date': 'Human Papillomavirus (HPV)',
-            'tdap_date': 'Tetanus - Diphtheria - Pertussis (Tdap)',
+            'meningococcal_date': 'Meningococcal ACWY',
+            'hpv_date': 'HPV (Human Papillomavirus)',
+            'tdap_date': 'Tdap (Tetanus, Diphtheria, Pertussis)',
             'influenza_date': 'Influenza',
             'covid_date': 'COVID-19'
         }

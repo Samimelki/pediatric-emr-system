@@ -1,0 +1,51 @@
+4281/52.5/37.5
+*22-05-12* 5400/58/40.5 EN.
+*23-06-12* 6100/60.5/41.5 EN.
+*16-07-12* 6500/64/42 Petit rhume.EN.
+*14-08-12* 6900/65.5/42.5 EN.RHD.
+*11-09-12* 7350/66.5/44 EN.L.
+*05-10-12* 7800/68/44.5 EN.RV.Fluor.
+*02-11-12* Fièvre isolée ce jour.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*06-11-12* 8400/69/45 EN.
+*04-12-12* 8750/71.5/45.5 EN.
+*11-01-13* 9000/72/46 EN.
+*21-01-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-01-13* Fièvre encore.Selles diarrhéiques.EN en dehors d'1 petite pharyngite.Pas de déshydratation.RAD.
+*24-01-13* Fièvre encore.EN en dehors d'1 jetage post purulent épais.Amoxy-Clav.
+*12-02-13* 9250/72.5/46.5 EN.
+*12-03-13* 9300/73.5/46.5 EN.
+*25-03-13* Synd grippal.EN en dehors d'1 pharyngite.Virose probable.SPH.
+*09-04-13* 9450/74/47.5 EN.
+*19-04-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-05-13* 9800/76.5/47.5 EN.
+*04-06-13* 9700/77/47.5 EN.
+*26-06-13* Fièvre on & off depuis 1 sem.Selles molles.EN.OSM bilatérale.Virose probable.AT.
+*28-06-13* Fièvre tj.Ex tj N.Virose tj probable.
+*09-07-13* 10.1/78.5/47.5 EN.
+*13-08-13* 10.4/79.5/48 EN.
+*20-08-13* Rhino-pharyngite purulente fébrile+selles molles.RAD + Amoxy.
+*09-09-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*13-09-13* 10/ Fièvre depuis 4j.Baisse alimentaire sévère.Jetage purulent post + otite bilatérale débutante.Amoxy-Clav.
+*23-09-13* Fièvre + selles molles depuis hier.EN en dehors d'1 pharyngite.RAD.
+*25-09-13* 10.2/80.5/48.5 EN.
+*02-12-13* 11.1/82/48.5 EN.
+*23-12-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*06-01-14* Stomatite fébrile en voie de guérison.
+*24-03-14* Rhino-pharyngite purulente fébrile+conjonctivite purulente+selles molles.Amoxy-Clav.
+*07-04-14* 11.8/87/49.5 EN.
+*05-05-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*15-05-14* 12.2/87/49.5 EN.
+*26-05-14* Rhino-pharyngite purulente fébrile+conjonctivite purulente.Amoxy-Clav.
+*26-03-15* 13.5/ Rhino-pharyngite purulente fébrile.Amoxy.
+*09-04-15* 13.2/95.5/ EN.
+*19-08-15* 15/96.5/
+*28-09-15* NFP:RAS.
+*22-01-16* Douleurs abdominales.EN.
+*06-04-16* 15.3/100.5/ EN.
+*19-04-17* 18/108.5/ EN.
+*08-06-17* 17.5/109/ EN.
+*03-07-17* 18/109.5/ EN.
+*29-11-17* Douleur abdominale depuis hier.Pas de fievre ni diarrhee.EN.Constipation?regime alimentaire.
+*11-05-18* 19.2/115/ EN.
+*30-11-18* 19.7/118.5/ EN.
+*06-06-19* 20.5/120 EN.

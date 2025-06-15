@@ -1,0 +1,74 @@
+3740/51/36
+*23-01-03* 5400/53/39 EN.AM.
+*07-02-03* Grippe.EN.SPH.
+*24-02-03* 6700/57.5/41 EN.AM.Fruit.
+*11-03-03* Grippe+toux.EN.SPH.
+*24-03-03* 7700/60/42.5 EN.AM.RHD.
+*23-04-03* 8300/62/43.5 EN.RHN.
+*30-04-03* Rhino-pharyngite purulente fébrile.Amoxy.
+*29-05-03* Tousse 1 peu.EN.SPH.
+*03-06-03* Fièvre depuis hier.EN en dehors d'1 pharyngite.Virose probable.
+*23-06-03* 9400/67.5/44.5 EN.AM.RV.Fluor.
+*23-07-03* 9800/69.5/45.5 EN.AM.
+*04-09-03* Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*23-09-03* 10.5/71.5/46.5 EN.
+*24-11-03* 11.7/75/48 EN.
+*29-11-03* Fièvre depuis hier.EN en dehors d'1 coryza purulent.Amoxy-Clav.(La fièvre s'est arrêtée seule,l'AB n'est pas pris).
+*23-12-03* 12/76/48.5 EN.
+*29-12-03* A fait 1 laryngite fébrile il y a 2j.Va bien actuellement.EN.SPH.
+*06-02-04* Synd grippal fébrile.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*23-02-04* 12.4/77/49.5 EN.
+*24-03-04* Fièvre depuis hier.EN en dehors d'1 pharyngite.Virose probable.
+*23-04-04* 13.1/80/50 EN.
+*28-04-04* Fièvre depuis 2j.EN en dehors d'1 pharyngite.Virose probable.AT.
+*19-05-04* Fièvre oscillante depuis 2j+douleurs abdominales.EN.Virose possible.
+*09-08-04* Fièvre depuis hier+selles 1 peu molles depuis qques jours (et malodorantes).EN en dehors d'1 pharyngite.Virose probable.AT.
+*10-08-04* Fièvre tj + pleurs.Pas d'otite.EN en dehors d'1 pharyngite+qques points blancs sur les amygdales. Amoxy.
+*26-08-04* Fait 1 conjonctivite purulente D depuis 3-4j malgré Fucithalmic.Pas de fièvre.EN en dehors d'1 belle conjonctivite D.Oflox.
+*29-09-04* 14.7/86/51 
+*29-10-04* Tableau de GEA depuis 2j.EN en dehors d'1 jetage purulent post.RAD+Cebemyxin.
+*31-12-04* Rhino-pharyngite purulente fébrile.Amoxy.
+*27-04-05* 16.1/93/52 Fait 1 petit rash d'allure allergique.EN par ailleurs.
+*13-05-05* Fièvre depuis hier.EN en dehors d'1 belle pharyngite.Virose probable.AT.
+*11-07-05* Laryngite aiguë fébrile.EN.Humidifications+AT.
+*14-07-05* Rhino-pharyngite purulente fébrile.Cefzil.
+*01-08-05* Fièvre depuis hier.EN en dehors d'1 pharyngite modérée.Virose probable.AT.
+*12-08-05* Hospitalisé pour 1 gastrite érosive post aspirine.Omeprazole.(B.Eid).
+*23-09-05* 15.8/94/53 EN.
+*16-12-05* Fièvre depuis hier avec selles molles et qques vomissements.EN.Virose probable.RAD+AT.
+*22-12-05* La fièvre a disparu pendant 2j pour réapparaître hier avec 1 rash maculeux et papuleux rappelant le MEI.EN en dehors du rash et d'1 pharyngite.AT.
+*22-02-06* 17/98/53.5 EN.
+*28-02-06* Fièvre depuis la nuit passée avec nausées.EN en dehors d'1 pharyngite.Pas de raideur méningée.Virose probable.AT.
+*31-03-06* EN.
+*26-06-06* 17.1/101.5/ La mère le voit pâle et nonchalant.EN.NFP,glycémie.
+*16-10-06* 18.6/104/54 EN.
+*21-03-07* Fébricule depuis 2j.Ce jour fièvre isolée.EN en dehors d'1 pharyngite.Coryza purulent.Amoxy.
+*19-06-07* 20/108.5/ EN.
+*17-07-07* Otite ext D.Cipro.
+*27-09-07* 20.5/110/ EN.
+*01-11-07* 21.5/110.5/ EN.Testicules en place.
+*19-12-07* 21.5/111.5/ EN.
+*25-01-08* 21.5/112/ EN.
+*27-02-08* 22/112.5/ EN.
+*30-12-08* 24.5/118/ EN.
+*26-01-09* 25.5/119/ EN.
+*30-03-09* 25/ Rhino-pharyngite purulente fébrile.Amoxy.
+*11-05-09* 25/120/ EN.
+*23-09-09* 28.5/123/ EN.
+*01-02-10* 29/124.5/EN.
+*25-03-11* 34/131.5/ EN.
+*28-06-11* 37/134/
+*09-07-12* Fièvre élevée depuis hier.EN en dehors d'1 conjonctivite purulente.Pas d'ADP évidente.Est sous Tobrex depuis hier.Virose probable.Avis ophtalmo (EC).
+*11-07-12* Cons ophtalmo:Kérato-conjonctivite à adénovirus.Reçoit de l'ofloxacine.Selles molles.EN.Oeil D amélioré.Virose.
+*15-08-12* 40.5/140/ EN.
+*05-09-12* 40.5/140.5/ EN.
+*23-11-12* 44/141.5/ EN.
+*17-12-12* 45/142/ EN.
+*11-12-13* 51/147/ EN.Puberté 0.
+*10-10-14* 54/152.5/ EN.OGE un peu augmentés de vol.
+*01-06-15* 55/156.5/ EN.P1.
+*25-02-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*18-01-17* 72/171.5/ EN.P5.Imberbe.
+*26-10-18* 75.7/177.5/ EN.
+*28-12-18* 75.3/177.5/ EN.
+*18-01-19* 74.1/177.5 EN.

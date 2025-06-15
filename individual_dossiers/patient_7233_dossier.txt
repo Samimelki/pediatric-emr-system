@@ -1,0 +1,74 @@
+3050/49/35
+*07-09-07* 4100/51.5/38 EN.Allaitement mixte.
+*10-10-07* 5400/56.5/38.5 EN.Allaitement mixte.
+*09-11-07* 6300/59.5/40 EN.Allaitement mixte.RHD.
+*13-12-07* 6900/64/41.5 EN.Allaitement mixte.Fruit.RHN.
+*24-12-07* Otite G.Amoxy-Clav.
+*16-01-08* Aurait mal aux oreilles.EN.
+*18-01-08* GEA fébrile.EN.
+*11-02-08* 8400/68/43 EN.RV.Fluor.
+*10-03-08* 8850/69/43.5 EN.
+*14-05-08* 10/72.5/45 EN.
+*05-06-08* GEA fébrile.EN.RAD+AT.
+*07-07-08* 10.3/75.5/45 EN.
+*07-08-08* 10.6/76.5/46 EN.
+*13-10-08* 10.8/79/46.5 EN.
+*14-11-08* Rhino-pharyngite purulente fébrile+tympan G opaque.Amoxy-Clav.
+*19-12-08* 11.6/81.5/47 EN.
+*21-01-09* 11.8/82/47 EN.
+*04-02-09* Rhino-pharyngite purulente fébrile.Amoxy.
+*25-02-09* 11.5/83.5/47.5 EN.
+*24-03-09* Herpangine fébrile.AT+Medijel.
+*01-06-09* Deux jours de fièvre puis rash d'allure virale.EN par ailleurs.
+*22-06-09* Fait 1 laryngite fébrile depuis 2j.Vu aux urgences - HDF pour myringite bulleuse.Mis sous clarithro qu'il refuse.Persistance de la fièvre.Ex ce jour:belle pharyngite + tympan D rouge.Virose.AT.
+*11-08-09* 12.6/89/48 Synd grippal fébrile.Bon EG.EN en dehors d'1 pharyngite.Nuque souple.Virose probable.AT.
+*17-09-09* 13.2/89.5/ EN.
+*03-11-09* Fièvre + douleurs abdominales ce jour.EN.Virose probable.AT.
+*05-11-09* Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*13-11-09* 13.3/91.5/48 EN.
+*30-11-09* fievre depuis 3 jours. Otite droite. Amoxy-Clav.
+*24-12-09* Syndrome grippal febrile depuis 48 heures. Bon EG. EN en dehors d'une OSM bilaterale et pharyngite. Virose probable. AT.
+*30-12-09* 13.7/93.5/ EN.
+*10-02-10* 14/93.5 EN.
+*16-07-10* 15/97/ EN.
+*02-12-10* Otite G.Amoxy-Clav.
+*01-02-11* 15.8/ Otite G.Amoxy-Clav.
+*09-08-12* 19.2/111.5/ EN.
+*15-11-12* EN.
+*23-11-12* Angine.Amoxy.
+*27-02-13* 20.5/113.5/ EN.
+*19-03-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*21-03-13* Idem.
+*02-04-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*31-05-13* Angine.Amoxy.
+*13-06-14* 21/ Angine!!Amoxy-Clav.
+*15-07-14* 21/121/ EN.
+*10-04-15* 22.5/125/ EN.
+*17-04-15* Synd grippal fébrile+selles molles.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-04-15* EN.
+*27-05-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-06-15* EN.
+*29-06-15* Angine.Amoxy.
+*23-07-15* 24/127/ GEA fébrile.EN en dehors d'1 pharyngite.RAD.
+*30-12-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*19-01-16* Laryngite aiguë fébrile.EN.Humudifications.
+*09-02-16* EN.
+*30-06-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*15-11-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-06-17* 30/136/ EN.
+*07-07-17* Amygdalite purulente.Clarythromycine.
+*03-08-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*26-09-17* 31.2/138/ EN.
+*31-10-17* Otite D.Amoxy-Clav.
+*16-01-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*09-04-18* Fievre depuis 48 heures.Bon EG.Nuque souple.Virose probable.AT.
+*30-04-18* 31/ Fièvre depuis 48 heures.Nuque souple.Angine.Amoxy.
+*25-05-18* Angine.Amoxy-Clav.
+*13-08-18* Fièvre depuis 2j + céphalées + douleur à la nuque.EN en dehors d'1 angine d'allure virale.AT.
+*04-09-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*18-09-18* 33.5/144/ EN.
+*27-03-19* Fievre et douleur de gorge.Bon EG.Nuque souple.EN en dehors d'une pharyngite.Virose probable.AT.
+*23-07-19* 38.7/152 EN.P2
+*03-09-19* 39.8/154.5 P2.EN.
+*06-03-20* Angine.Strep test neg.Virose probable 
+*17-04-20* A fait 48 heures de fievre avec douleur de gorge.Pas de fievre depuis hier.Bon EG.EN.Virose probable.AT.

@@ -270,22 +270,12 @@ class VaccineScheduleEngine:
                     try:
                         age_months = self._parse_age_string(age_str)
                         interval_months = self._parse_age_string(interval_to_next) if interval_to_next else None
-                        
-                        # Use simple d1,d2,d3,d4... format for most vaccines
-                        # Only use booster format for vaccines that explicitly need it
-                        if vaccine_name in ["DTaP - IPV", "Hib (Haemophilus influenzae b)", "PPD (TB Skin Test)"]:
-                            # These vaccines have boosters after primary series
-                            dose_key = f"d{i+1}" if i < 3 else f"r{i-2}"
-                            label = f"Dose {i+1}" if i < 3 else f"Booster {i-2}"
-                        else:
-                            # Most vaccines use simple dose numbering
-                            dose_key = f"d{i+1}"
-                            label = f"Dose {i+1}"
+                        dose_key = f"d{i+1}" if i < 3 else f"r{i-2}"  # d1,d2,d3,r1,r2,r3,r4
                         
                         doses_dict[dose_key] = {
                             "age_months": age_months,
                             "age_display": self._format_age_display(age_months),
-                            "label": label,
+                            "label": f"Dose {i+1}" if i < 3 else f"Booster {i-2}",
                             "interval_to_next_months": interval_months
                         }
                     except (ValueError, KeyError) as e:
@@ -310,19 +300,12 @@ class VaccineScheduleEngine:
                     
                     try:
                         age_months = self._parse_age_string(age_str)
-                        
-                        # Use simple d1,d2,d3,d4... format for most vaccines
-                        if vaccine_name in ["DTaP - IPV", "Hib (Haemophilus influenzae b)", "PPD (TB Skin Test)"]:
-                            dose_key = f"d{i+1}" if i < 3 else f"r{i-2}"
-                            label = f"Dose {i+1}" if i < 3 else f"Booster {i-2}"
-                        else:
-                            dose_key = f"d{i+1}"
-                            label = f"Dose {i+1}"
+                        dose_key = f"d{i+1}" if i < 3 else f"r{i-2}"  # d1,d2,d3,r1,r2,r3,r4
                         
                         doses_dict[dose_key] = {
                             "age_months": age_months,
                             "age_display": self._format_age_display(age_months),
-                            "label": label,
+                            "label": f"Dose {i+1}" if i < 3 else f"Booster {i-2}",
                             "interval_to_next_months": None  # No interval info in legacy format
                         }
                     except (ValueError, KeyError) as e:
@@ -445,23 +428,16 @@ class VaccineScheduleEngine:
         # Prepare a detailed lookup dictionary for administered immunizations with consolidation
         administered_lookup = defaultdict(list)
         for record in administered_immunizations:
-            # Skip records with null/None/empty administered_date
-            administered_date = record['administered_date']
-            if not administered_date or administered_date == 'None' or administered_date.strip() == '':
-                if self.debug:
-                    print(f"DEBUG ENGINE: Skipping '{record['immunization']}' - null/empty date: {administered_date}")
-                continue
-                
             # Use shared utility to get canonical name
             canonical_name = get_canonical_vaccine_name(record['immunization'], debug=self.debug)
             # Store the full record, not just the date
             administered_lookup[canonical_name].append({
-                'administered_date': administered_date,
+                'administered_date': record['administered_date'],
                 'dose_number': record['dose_number'] if 'dose_number' in record.keys() else None,
                 'original_name': record['immunization']
             })
             if self.debug:
-                print(f"DEBUG ENGINE: '{record['immunization']}' -> '{canonical_name}' on {administered_date}")
+                print(f"DEBUG ENGINE: '{record['immunization']}' -> '{canonical_name}' on {record['administered_date']}")
         
         # Sort administered doses by date for each vaccine
         for vaccine in administered_lookup:
@@ -485,18 +461,6 @@ class VaccineScheduleEngine:
                 doses_dict = self._get_hpv_schedule(patient_dob_obj, current_date_obj)
             else:
                 doses_dict = vaccine_info["doses"]
-                
-            # Debug: Check if doses_dict is actually a dictionary
-            if self.debug:
-                print(f"DEBUG DOSES STRUCTURE: {vaccine_name} doses type: {type(doses_dict)}")
-                if isinstance(doses_dict, dict):
-                    print(f"  - Dose keys: {list(doses_dict.keys())}")
-                else:
-                    print(f"  - Doses content: {doses_dict}")
-                    # If it's a list, skip this vaccine for now to avoid crashes
-                    if isinstance(doses_dict, list):
-                        print(f"  - ERROR: doses_dict is a list, not dict. Skipping {vaccine_name}")
-                        continue
             
             # Track completed doses for interval-based calculation
             dose_keys_ordered = ['d1', 'd2', 'd3', 'd4', 'r1', 'r2', 'r3', 'r4']
@@ -507,24 +471,17 @@ class VaccineScheduleEngine:
             extra_doses = []
             
             if self.debug:
-                print(f"DEBUG DOSE ASSIGNMENT: {vaccine_name} has {len(administered_records)} administered doses")
-                print(f"  - Available schedule positions: {list(doses_dict.keys())}")
-                print(f"  - Standard order template: {dose_keys_ordered}")
-            
-            # Map administered doses to schedule positions in chronological order
-            # This prevents late doses from creating duplicates 
-            available_positions = sorted(doses_dict.keys(), key=lambda k: dose_keys_ordered.index(k) if k in dose_keys_ordered else 999)
+                print(f"DEBUG DOSE ASSIGNMENT: {vaccine_name} has {len(administered_records)} administered doses, {len(dose_keys_ordered)} standard positions")
             
             for i, record in enumerate(administered_records):
                 date = record['administered_date']
-                if i < len(available_positions):
-                    dose_key = available_positions[i]
-                    actual_dose_dates[dose_key] = date
+                if i < len(dose_keys_ordered):
+                    actual_dose_dates[dose_keys_ordered[i]] = date
                     if self.debug:
-                        print(f"DEBUG DOSE ASSIGNMENT: Dose {i+1} ({date}) -> {dose_key}")
+                        print(f"DEBUG DOSE ASSIGNMENT: Dose {i+1} ({date}) -> {dose_keys_ordered[i]}")
                 else:
                     # This is an extra dose beyond the configured schedule
-                    extra_dose_key = f"extra_{i - len(available_positions) + 1}"
+                    extra_dose_key = f"extra_{i - len(dose_keys_ordered) + 1}"
                     extra_doses.append((extra_dose_key, date))
                     if self.debug:
                         print(f"DEBUG DOSE ASSIGNMENT: Extra dose {i+1} ({date}) -> {extra_dose_key}")
@@ -532,23 +489,10 @@ class VaccineScheduleEngine:
             if self.debug and extra_doses:
                 print(f"DEBUG EXTRA DOSES: {vaccine_name} has {len(extra_doses)} extra doses: {extra_doses}")
             
-            # Strategy: Only show administered doses, plus scheduled doses that haven't been given yet
-            # This prevents duplicate entries for late doses and keeps timeline clean
-            
-            # First, process all administered doses (these always get shown)
-            administered_dose_keys = set(actual_dose_dates.keys())
-            
-            # Then, add scheduled doses that haven't been administered yet
-            scheduled_not_given = set(doses_dict.keys()) - administered_dose_keys
-            
-            all_dose_keys = administered_dose_keys | scheduled_not_given
+            # Process all administered doses instead of just configured schedule positions
+            # This ensures doses assigned to positions like r1, r2, d4+ are included
+            all_dose_keys = set(doses_dict.keys()) | set(actual_dose_dates.keys())
             sorted_dose_keys = sorted(all_dose_keys, key=lambda k: dose_keys_ordered.index(k) if k in dose_keys_ordered else 999)
-            
-            if self.debug:
-                print(f"DEBUG DOSE PROCESSING: {vaccine_name}")
-                print(f"  - Administered: {list(administered_dose_keys)}")
-                print(f"  - Scheduled but not given: {list(scheduled_not_given)}")
-                print(f"  - Processing order: {sorted_dose_keys}")
             
             for dose_key in sorted_dose_keys:
                 # Get dose info from schedule, or create minimal info for extra doses
@@ -569,35 +513,18 @@ class VaccineScheduleEngine:
                     )
                 elif completed_date:
                     # For administered doses not in schedule, use administered date as due date
-                    try:
-                        due_date_obj = datetime.strptime(completed_date, '%Y-%m-%d')
-                    except (ValueError, TypeError):
-                        # Skip doses with invalid dates
-                        if self.debug:
-                            print(f"DEBUG: Skipping dose {dose_key} with invalid date: {completed_date}")
-                        continue
+                    due_date_obj = datetime.strptime(completed_date, '%Y-%m-%d')
                 else:
                     # Skip doses that are neither in schedule nor administered
                     continue
                 due_date = due_date_obj.strftime('%Y-%m-%d')
                 
-                # Calculate actual age in months for this dose
-                # For completed doses, use the actual administered date; for others, use the due date
-                if completed_date:
-                    # Use actual administered date for completed doses
-                    try:
-                        administered_date_obj = datetime.strptime(completed_date, '%Y-%m-%d')
-                        calculated_age_months = ((administered_date_obj - patient_dob_obj).days / 30.44)
-                    except (ValueError, TypeError):
-                        # Fall back to due date if administered date is invalid
-                        if self.debug:
-                            print(f"DEBUG: Invalid administered date {completed_date}, using due date for age calculation")
-                        calculated_age_months = ((due_date_obj - patient_dob_obj).days / 30.44)
-                else:
-                    # Use calculated due date for non-completed doses
-                    calculated_age_months = ((due_date_obj - patient_dob_obj).days / 30.44)
-                
+                # Calculate actual age in months for this dose based on the calculated due date
+                # This ensures vaccines show at their correct calculated ages, not original scheduled ages
+                calculated_age_months = ((due_date_obj - patient_dob_obj).days / 30.44)  # More accurate than months calc
                 calculated_age_months = round(calculated_age_months)
+                
+                # Update age display if it differs significantly from original
                 calculated_age_display = self._format_age_display(calculated_age_months)
                 
                 # Calculate overdue date (due date + grace period)
@@ -719,12 +646,8 @@ class VaccineScheduleEngine:
         for i in range(current_dose_index):
             check_dose_key = dose_keys_ordered[i]
             if check_dose_key in actual_dose_dates:
-                dose_date = actual_dose_dates[check_dose_key]
-                # Skip None, empty, or invalid dates
-                if not dose_date or dose_date == 'None' or dose_date.strip() == '':
-                    continue
                 try:
-                    check_date = datetime.strptime(dose_date, '%Y-%m-%d')
+                    check_date = datetime.strptime(actual_dose_dates[check_dose_key], '%Y-%m-%d')
                     if earliest_completed_date is None or check_date < earliest_completed_date:
                         earliest_completed_date = check_date
                         earliest_completed_dose = check_dose_key

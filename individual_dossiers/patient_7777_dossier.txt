@@ -1,0 +1,48 @@
+3000/49/32
+*30-09-08* 3950/52.5/36 EN.AM.
+*28-10-08* 4800/56/37.5 EN.AM.
+*02-12-08* 5750/58.5/39 EN.AM.RHD.
+*06-01-09* 6300/61.5/40 EN.AM.Fruit.
+*10-02-09* 6900/64/41.3 EN.AM.L.
+*10-03-09* 7350/66/42.5 EN.AM.RV.Fluor.
+*07-04-09* 7500/67/42.5 EN.AM.
+*12-05-09* 7500/69.5/43 EN.AM.
+*16-06-09* 7900/70/43.5 EN.Allaitement mixte.
+*04-08-09* 8200/73/44 EN.
+*08-09-09* 8400/74/44.3 EN.
+*16-10-09* 8700/76/44.5 EN.
+*19-11-09* 9100/77/45 EN.
+*12-01-10* 9400/80/45 EN.
+*11-02-10* 9600/81/45.5 EN.
+*30-03-10* GEA.
+*27-04-10* 9800/83.5/46 EN.
+*30-04-10* Fébricule isolé ce jour.EN.Virose probable.AT.
+*13-09-10* 11/85/ EN.
+*12-10-10* 11.2/88/46.5 EN.
+*18-11-10* 11.3/90/ EN.
+*21-09-11* 12.7/97/47.5 EN.
+*08-11-11* 13.6/97.5/48 EN.
+*10-02-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*06-03-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*21-06-12* Otite ext D.Cipro plus.
+*06-07-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*13-12-12* 15.9/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*18-09-13* 17/111.5/ EN.
+*18-10-13* 17/111.5/ EN.
+*28-11-13* 17.5/112/ EN.
+*29-01-14* 18.5/112.5/ EN.
+*28-10-14* 20/118/ EN.
+*21-04-15* 21/121.5/ EN.
+*11-12-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*05-01-16* 23/125.5/ EN.
+*31-10-16* 27.5/128.5/ EN.
+*06-03-17* Synd grippal.EN en dehors d'1 pharyngite.Virose probable.
+*24-03-17* Douleur de hanche et adenopathie cervicale. FNP, CRP et echo hanches N.
+*27-03-17* Disparition de la fievre.ADP droite en diminution.Douleur de hanche a disparu.
+*31-05-17* A eu mal à l'avant-bras G 2 fois en 3 sem.EN.Bilan Rx et biologique faits antérieurement Nx.Avis psycho.
+*23-11-17* Rhino-pharyngite purulente fébrile.Amoxy.
+*02-03-18* 33.4/136.5/ EN.
+*01-08-18* 32.8/140/ EN.S1.
+*31-01-19* 35/Angine.Amoxy-clav.
+*29-10-19* 38.7/150.5 EN.
+*03-03-20* 40.5/152.5 Cephalees isolees depuis quelques semaines.Bon EG.EN y compris ex neuro.A surveiller.

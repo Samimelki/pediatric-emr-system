@@ -75,6 +75,49 @@
             </div>
         </div>
 
+        <!-- Birth Measurements -->
+        {% if is_feature_enabled('birth_measurements') %}
+            <div class="card mt-3">
+                <div class="card-header d-flex justify-content-between align-items-center" id="headingBirthMeasurements">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseBirthMeasurements" aria-expanded="false" aria-controls="collapseBirthMeasurements">
+                            Birth Measurements
+                        </button>
+                    </h5>
+                    <a href="{{ url_for('patient.edit_birth_measurements', patient_id=patient.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                </div>
+                <div id="collapseBirthMeasurements" class="collapse" aria-labelledby="headingBirthMeasurements">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><strong>Birth Weight:</strong> 
+                                    {% if patient.birth_weight_g %}
+                                        {% if patient.birth_weight_g > 500 %}
+                                            {{ "%.1f"|format(patient.birth_weight_g / 1000) }} kg ({{ patient.birth_weight_g }}g)
+                                        {% else %}
+                                            {{ patient.birth_weight_g }}g
+                                        {% endif %}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <p><strong>Birth Height:</strong> {{ patient.birth_height_cm if patient.birth_height_cm else 'N/A' }}{% if patient.birth_height_cm %} cm{% endif %}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p><strong>Head Circumference:</strong> {{ patient.birth_head_circumference_cm if patient.birth_head_circumference_cm else 'N/A' }}{% if patient.birth_head_circumference_cm %} cm{% endif %}</p>
+                            </div>
+                        </div>
+                        {% if patient.birth_notes %}
+                            <hr>
+                            <p><strong>Birth Notes:</strong> {{ patient.birth_notes }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
         <!-- Birth History -->
         {% if is_feature_enabled('birth_measurements') and grouped_custom_fields and 'Birth History' in grouped_custom_fields %}
             <div class="card mt-3">

@@ -585,3 +585,62 @@ def edit_patient_history(patient_id):
         flash(f'Error loading patient history: {e}', 'danger')
         return redirect(url_for('patient.list_patients'))
 
+
+@patient_bp.route('/<int:patient_id>/edit_birth_measurements', methods=['GET', 'POST'])
+def edit_birth_measurements(patient_id):
+    """Edit patient's birth measurements"""
+    db = get_db()
+    
+    if request.method == 'POST':
+        try:
+            # Get form data and convert to appropriate types
+            birth_weight_g = request.form.get('birth_weight_g')
+            birth_height_cm = request.form.get('birth_height_cm')
+            birth_head_circumference_cm = request.form.get('birth_head_circumference_cm')
+            birth_notes = request.form.get('birth_notes', '').strip()
+            
+            # Convert empty strings to None for database
+            birth_weight_g = float(birth_weight_g) if birth_weight_g and birth_weight_g.strip() else None
+            birth_height_cm = float(birth_height_cm) if birth_height_cm and birth_height_cm.strip() else None
+            birth_head_circumference_cm = float(birth_head_circumference_cm) if birth_head_circumference_cm and birth_head_circumference_cm.strip() else None
+            birth_notes = birth_notes if birth_notes else None
+            
+            # Update the patient record
+            db.execute("""
+                UPDATE Patients 
+                SET birth_weight_g = ?, birth_height_cm = ?, birth_head_circumference_cm = ?, birth_notes = ?
+                WHERE id = ?
+            """, (birth_weight_g, birth_height_cm, birth_head_circumference_cm, birth_notes, patient_id))
+            
+            db.commit()
+            
+            # Update Word document
+            word_manager = WordDocumentManager(db_path=emr_config.get_database_path(), documents_folder=emr_config.get_word_docs_folder())
+            word_manager.create_or_update_document(patient_id)
+            
+            flash('Birth measurements updated successfully!', 'success')
+            return redirect(url_for('patient.patient_detail', patient_id=patient_id))
+            
+        except ValueError as ve:
+            flash(f'Invalid number format in measurements: {ve}', 'danger')
+        except Exception as e:
+            db.rollback()
+            flash(f'Error updating birth measurements: {e}', 'danger')
+    
+    # GET request - display the form
+    try:
+        patient_cursor = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,))
+        patient = patient_cursor.fetchone()
+        
+        if not patient:
+            flash('Patient not found.', 'danger')
+            return redirect(url_for('patient.list_patients'))
+        
+        return render_template('edit_birth_measurements.html', 
+                             title='Edit Birth Measurements',
+                             patient=dict(patient))
+                             
+    except Exception as e:
+        flash(f'Error loading patient data: {e}', 'danger')
+        return redirect(url_for('patient.list_patients'))
+

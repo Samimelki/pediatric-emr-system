@@ -1,0 +1,65 @@
+2860/47/33.5
+*28-04-14* 4000/54.5/37.5 EN.AM.
+*26-05-14* 4700/57.5/38.5 EN.
+*02-07-14* 5950/61.5/39.5 EN.RHD.
+*30-07-14* 6650/64.5/40.5 EN.Fruit.RHN.
+*25-08-14* 7100/66/41.5 EN.L.
+*25-09-14* 7500/68/42.5 EN.RV.Fluor.
+*27-10-14* 8000/69/43.5 EN.
+*26-11-14* 8400/70.5/44 EN.
+*22-12-14* 8700/72.5/44.5 EN.
+*19-01-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*30-01-15* Fébricule isolé ce jour.EN.
+*26-02-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*12-03-15* 9500/75.5/45.5 EN.
+*30-03-15* EN.
+*30-04-15* 9700/76.5/46 EN.
+*08-05-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*20-05-15* Otite bilatérale.Amoxy-Clav.
+*27-05-15* Fièvre ce jour + éruption rappelant le synd PMB.AT.Medijel.
+*04-06-15* 9600/78.5/46 EN.
+*08-06-15* Piqûres de moustique.
+*29-06-15* Stomatite fébrile.EN par ailleurs.AT + Medijel.
+*06-07-15* 10.1/79.5/46 EN.
+*24-08-15* 10.4/80.5/46.5 EN.
+*15-10-15* 11.1/83/47 EN.
+*26-11-15* 11.4/84.5/47.5 EN.
+*18-12-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*21-12-15* Persistance de la fièvre avec espacement.EN.Virose tj probable.
+*28-12-15* Otorrhée purulente D.Amoxy-Clav.
+*04-01-16* Fièvre depuis 2j.Rash cutanée hier.EN en dehors d'1 stomatite aphteuse.Medijel.
+*25-01-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*11-03-16* 12.5/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*30-03-16* 12.5/ Fébricule depuis 3j.EN en dehors d'1 petite pharyngite.Virose probable.
+*01-04-16* Va bien.EN.
+*26-04-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-04-16* Amélioration pour otalgie sans fièvre.EN en dehors d'e discrète angine d'allure virale.
+*29-04-16* Otorrhée D.Cipro.
+*14-07-16* 12.5/91/ EN.
+*05-08-16* Otite D.Amoxy-Clav.
+*29-11-16* 13.7/ Rhino-pharyngite purulente fébrile+conjoctivite purulente.Amoxy-Clav.
+*30-01-17* Fièvre depuis 3j allant en s'estompant.EN en dehors de qques lésions aphtoïdes du palais.Virose probable.
+*24-02-17* Synd grippal fébrile.EN en dehors d'1 pharyngite+angine d'allure virale.AT.
+*27-02-17* 14/ Fièvre tj.Rhinorrhée purulente.EN.Amoxy.
+*27-03-17* Fievre depuis 72 hours.Angine.Amoxy-clav. 
+*21-04-17* Angine.Si persistance de la fièvre,Clarithro.
+*08-05-17* 13.9/97/49 EN.
+*12-06-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*14-06-17* Persistance de la fièvre avec apparition de diarrhée.Excellent EG.EN.Virose tj probable.
+*15-06-17* La fièvre a cassé ce jour.EN en dehors d'1 petite memnrane sur l'amygdale G.Virose tj probable.
+*24-08-17* Fievre et eruption cutanee.EC montre une angine avec aspect de pseudomembrane, leger rash au niveau du visage.Virose probable.AT.
+*11-10-17* Angine.Amoxy.
+*01-12-17* 15.3 Angine.Amoxy.
+*13-12-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*10-05-18* GEA fébrile.EN.RAD.
+*31-01-19* 16.4 Angine.Amoxy-clav.
+*04-02-19* Tjs angine.Continuer antibio.
+*18-03-19* 16.7/109 EN.
+*25-04-19* 16.7/109.5 EN.
+*24-05-19* 16.3/110 EN.
+*23-08-19* 17.3/111 EN.
+*20-11-19* 18.3/112 EN,.
+*02-12-19* Otalgie febrile.Otite sereuse.A surveiller.Virose probable.AT.
+*11-03-20* Fievre et douleur de gorge depuis hier avec cephalees.Nuque souple.Bon EG.Virose probable.AT.
+*13-03-20* Amelioration clinique.Tjs fievre mais espacee.Bon EG.EN.Virose
+*31-03-20* 18.1/116 EN.

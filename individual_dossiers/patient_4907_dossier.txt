@@ -1,0 +1,85 @@
+3000/51/34
+*03-06-02* 3400/51.5/35 EN.AM.
+*25-07-02* 5000/58.5/38.5 EN.Fruit,fluor.
+*29-08-02* 5600/61/40 EN.L.RHD.
+*30-09-02* 6150/64/40.5 EN.LV.RHN.
+*25-10-02* 6150/ Otite bilatérale.Amoxy-Clav.
+*18-11-02* 6600/ Re-Otite bilatérale.Amoxy-Clav.
+*22-11-02* Fièvre encore,moins qu'avant.Les tympans sont améliorés.A eu des selles molles.Bon EG.Virose intercurrente probable.AT.
+*29-11-02* 6600/67/42 EN.RV.
+*24-12-02* 7300/69/42.5 EN.Eczéma de la joue.
+*24-02-03* 8100/70.5/43.5 EN.
+*21-03-03* Otite G.Amoxy-Clav.
+*25-04-03* 8500/73.5/44 EN.
+*12-05-03* GEA fébrile.EN.RAD+AT.
+*26-05-03* 8800/75/44.5 EN.
+*28-05-03* VARICELLE.
+*14-07-03* 9000/76/45 EN.
+*28-07-03* Otite bilatérale.Amoxy-Clav.
+*21-08-03* Fièvre isolée ce jour.EN.Virose possible.Tympans bien améliorés mais pas encore renormalisés.Virose probable.AT.
+*30-09-03* 9800/79/45.5 EN.
+*26-11-03* 10.2/81.5/46 EN.
+*15-12-03* OMA bilatérale.Amoxy-Clav.Diarrhée+Fièvre(B.Eid).
+*16-12-03* Diarrhée plus imp.La fièvre est moins imp.Continuer+RAD.ORS.Seven Up(B.Eid).
+*26-12-03* Reprise de la fièvre 24h après arrêt de l'AB.EN.Virose possible.ECBU.
+*30-12-03* Re-Otite bilatérale!PNP+Ceftriaxone 5j.
+*02-01-04* Amélioration nette,mais les tympans sont encore gonflés.Continuer 2j.
+*30-04-04* 11.5/ Fièvre depuis 2j.EN en dehors d'1 tympan D qui commencerait à bomber.La fièvre a cessé cette après-midi.CAT:Si reprise de la fièvre,Zinnat.
+*04-06-04* 11.5/ Fièvre depuis la nuit passée.EN en dehors d'1 pharyngite.Virose probable.AT.
+*09-06-04* Disparition de la fièvre il y a 2j.Apparition de 2 ADP SAM bilatérale.EN par ailleurs.A surveiller.
+*18-08-04* Synd grippal fébrile.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*13-09-04* Otite G.Zinnat.
+*27-09-04* 12.1/90/48.5 EN.
+*25-11-04* 12.2/91/48.5 EN.
+*18-12-04* Otite.Amoxy-Clav(B.Eid).
+*10-02-05* GEA fébrile.EN en dehors d'1 jetage purulent post.RAD+Amoxy.
+*07-03-05* A fait 1 synd grippal subfébrile il y a qques jours.Depuis,elle présente  2 ADP cervicales ant,SAM,de la taille d'1 oeuf de pigeon.Pas de fièvre actuellement ou autre ADP dans les autres territoires.Virose probable.A surveiller.
+*18-04-05* Otite G.Amoxy-Clav.
+*16-05-05* OSM discrète,à surveiller.
+*22-06-05* 13.1/96/49 EN.
+*07-07-05* Grippe.EN.
+*08-07-05* Fièvre depuis hier.EN en dehors d'1 pharyngite.Virose probable.AT.
+*24-08-05* 13.5/
+*23-09-05* 13.8/98/49 EN.
+*27-02-06* Fièvre depuis 3j.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-02-06* Otorrhée purulente G.Amoxy-Clav.
+*19-04-06* 15.1/102.5/50 EN.
+*11-05-06* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*10-07-06* GEA fébrile.EN.RAD+AT.
+*27-10-06* 15.3/106/ EN.
+*10-11-06* Fièvre depuis hier.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-05-07* 16.5/110/ EN.
+*16-10-07* Fièvre+selles molles depuis hier.EN.RAD+AT.
+*14-11-07* 17.5/112/ EN.
+*26-12-07* 17.5/112.5/ EN.
+*02-05-08* 18/114/ EN.
+*22-05-08* Fièvre+1 vomissement hier.EN en dehors d'1 pharyngite.Virose.
+*09-07-08* Douleurs abdominales depuis 2j.Selles molles.EN.RAD.
+*11-08-08* 19/115/ EN.
+*09-10-08* EN.
+*12-03-09* Fièvre depuis hier.EN en dehors d'1 angine discrète et de grosses ADP SAM.Si persistance de la fièvre,amoxy.
+*01-10-09* EN.
+*25-11-09* Syndrome grippal depuis hier. Bon EG. EN en dehors d'une pharyngite. AT.
+*11-01-10* 23.5/ Syndrome grippal avec otalgie.Otite virale?Si fièvre,amoxy.
+*17-06-10* 24/127/ EN.
+*11-05-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*14-10-11* EN.
+*11-04-12* 30/135/ EN.
+*15-06-12* Douleur au mammelon gauche.Pas de rougeur,pas de chaleur,pas d'oedème.A surveiller (PC).
+*23-06-12* Bourgeon mammaire G.Hehe.
+*25-09-12* 31.5/138/ EN.
+*15-11-12* 32/138.5/ EN.
+*02-04-13* 31.5/141/ EN.
+*22-08-13* 37/142.5/ EN.S2P1.
+*15-10-13* EN.
+*17-01-14* 38.5/148/ EN.S3P3.
+*17-10-14* EN. Premières menstruations le 30-06-2014.
+*02-04-15* 45/154/ EN.
+*25-06-15* 44.5/154.5/ EN.
+*10-09-15* 48/154.5/ EN.
+*30-09-16* 55/156/ Aurait du mal à inspirer.Excellent EG.EN.
+*10-08-17* 53/156/ EN.
+*10-09-18* 53.4/156/ EN.
+*04-04-19* syndrome grippal febrile ce jour.Bon EG.EN en dehors d'une pharyngite.Virose probable.AT.
+*20-09-19* 57.5/156 EN.
+*09-03-20* 58/156 EN

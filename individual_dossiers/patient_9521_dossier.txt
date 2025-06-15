@@ -1,0 +1,56 @@
+2835/48/35 Ictère néonatal intense:ictère familial doublé d'1 ILM.Exploration négative.
+*05-08-13* 3900/51/37.5 EN.AM.
+*05-09-13* 5100/54/39.5 EN.Allaitement mixte.
+*04-10-13* 5600/56/41 EN.RHD.
+*28-10-13* 5950/59/42.5 EN.Fruit.RHN.
+*05-11-13* Rhume.EN.SPH.
+*28-11-13* 6500/62.5/43 EN.
+*27-12-13* 7000/64/43.5 EN.RV.Fluor.
+*27-01-14* 7500/65.5/44 EN.
+*05-02-14* Otite G suppurée.Amoxy-Clav.
+*19-02-14* Synd grippal fébrile.EN en dehors d'1 pharyngite et une respiration un peu saccadée.Bronchiolite minime probable.AT.
+*20-02-14* A fini par descendre aux urgences HDF pour accentuation de la bronchiolite.Excellent résultat avec inhalation de SHT.Fièvre élevée depuis hier soir.EN en dehors d'1 jetage purulent post.Pas de sibilants ou autre gêne respiratoire.Amoxy.
+*06-03-14* 8200/66.5/45.5 EN.
+*14-03-14* Rhino-pharyngite purulente fébrile+conjonctivite purulente.Amoxy-Clav.
+*04-04-14* 9000/67.5/46 EN.
+*08-05-14* 10/70.5/47 EN.
+*21-05-14* Tousse.EN.
+*09-06-14* 10.4/72/47 EN.
+*09-07-14* 10.8/73.5/47.5 EN.
+*08-08-14* 11.1/74.5/48 EN.
+*19-09-14* 11.5/77/48.5 EN.
+*23-09-14* Rhino-pharyngite purulente fébrile.Amoxy.Voix enrouée.Humidifications.
+*03-10-14* Rash maculeux éparse chez 1 fille bien portante.Allergie ou virose.
+*08-10-14* Amélioration puis reprise du rash après 1 pic fébrile hier.EN par ailleurs.Virose plutôt.
+*20-10-14* 11.5/77.5/48.5 EN.
+*17-11-14* 11.9/78/48.5 EN.
+*20-11-14* Rhino-pharyngite purulente fébrile + otorrhée purulente G.Amoxy-Clav.
+*01-12-14* Nuit blanche en se grattant l'oreille G.Pas de fièvre.EN.Cérumen.
+*19-12-14* 12.1/79/48.5 EN.
+*24-02-15* GEA fébrile.EN en dehors d'1 petite phryngite.Virose probable.RAD + AT.
+*10-03-15* 12.9/83/49.5 EN.
+*23-03-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*30-03-15* Reprise de la fièvre + jetage encore purulent.Amoxy-Clav.
+*09-04-15* 12.5/83.5/49.5 EN.
+*01-07-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*03-07-15* Fièvre tj.Jetage purulent post.Amoxy.
+*06-07-15* Baisse de la fièvre mais persistance.EN en dehors de qques stries blanches discrètes sur les amygdales,d'allure virale.Persévérer.
+*13-07-15* 13.3/86/49.5 EN.
+*06-11-15* 13.4/88.5/ Rhino-pharyngite purulente fébrile.Amoxy.
+*26-11-15* 13.7/89/ EN.
+*08-02-16* Rhume.EN.
+*12-02-16* Otite D.Amoxy-Clav.
+*07-03-16* 14/92/ EN.
+*13-07-16* 14.9/95.5/ EN.
+*02-12-16* 16.3/96/ EN.
+*29-12-16* Otorrhée purulente G + conjonctivite bilatérale.Amoxy-Clav.
+*16-01-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*03-03-17* Otite D après fièvre éruptive.Amoxy-Clav.
+*27-04-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*15-12-17* 19.4/ Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*22-03-18* 20.5/107/ EN.
+*12-07-18* 20.5/110/ EN.
+*17-08-18* 20.7/112/ EN.
+*04-02-19* 22.5/113 EN.
+*31-01-20* 26.2/122 EN.
+*10-04-20* 26/122.5 EN.

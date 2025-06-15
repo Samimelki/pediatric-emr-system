@@ -1,0 +1,48 @@
+3390/52/36 *
+*17-12-13* 3850/52.5/36.5 EN.Allaitement mixte.
+*26-12-13* Tousse.EN.
+*30-12-13* Idem.
+*28-01-14* 5400/57/39 EN.Allaitement mixte.
+*24-02-14* 6300/60.5/40.5 EN.Allaitement mixte.RHD.
+*24-03-14* 6800/63.5/42 EN.Fruit.RHN.
+*24-04-14* 7100/66/43 EN.L.
+*26-05-14* 7700/68.5/44 EN.RV.Fluor.
+*02-07-14* 8300/70.5/44.5 EN.
+*28-07-14* 8400/72.5/45 EN.
+*25-08-14* 8950/73.5/45.5 EN.
+*01-09-14* 9200/ Fièvre depuis 4 jours.OMA à gauche.Amoxy-clav (CM).
+*04-09-14* Examen normal mais OMA bilatérale;bon EG.Poursuivre les antibiotiques, sinon Bilan et changement de l'antibiotherapie (CM).
+*25-09-14* 9500/74.5/46 EN.
+*27-10-14* 10/76/46 EN.
+*26-11-14* 10.4/76.5/46.5 EN.
+*05-12-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*08-12-14* Otite bilatérale.Amoxy-Clav.
+*30-12-14* 11/77,5/47 EN.
+*29-01-15* 11.3/79/47 EN.
+*26-02-15* Otite D.Amoxy-Clav.
+*17-03-15* 11.7/81/47.5 EN.
+*15-04-15* 11.8/82.5/48 EN.
+*11-05-15* Fièvre depuis 2j + selles molles depuis hier.EN.RAD.AT.
+*14-05-15* 11.8/84.5/48 EN.
+*08-06-15* 12.2/85/48.5 EN.
+*06-07-15* 12.2/85.5/48.5 EN.
+*06-08-15* 12.3/87/48.5 EN.
+*09-09-15* 12.3/87.5/48.5 EN.
+*22-10-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-11-15* Synd grippal + otalgie,sans fièvre.Rhinorrhée purulente.EN.Cipro.
+*13-01-16* 13.7/90.5. Syndrome grippal.Apyrétique.Gorge érythémateuse.Maxilase (CM).
+*18-02-16* GEA fébrile.EN en dehors d'1 petite pharyngite.RAD + AT.
+*16-05-16* 13.7/93.5/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*19-05-16* EN.
+*08-08-16* Douleurs au zizi.EN.ECBU.
+*21-03-17* fievre depuis 3 jours.OMA G.Amoxy-clav.
+*24-03-17* Persistence de la fievre malgre antibiotiques.Bon EG.EN.Surveiller.
+*21-04-17* 16/100.5/49.5 EN.
+*12-09-17* 16.8/103/ EN.
+*05-10-17* Aurait boité hier.La mère fait 1 Rx des hanches et une echo.Le radiologue trouve 1 épanchement dans la hanche D (que je ne vois pas!).EN en dehors d'1 discrète sensibilité de la rotation int de la tête fémorale D.La mère signale une nette amélioration spontanée depuis hier grâce au repos.Persévérer.
+*01-02-18* Fièvre depuis hier + pleurs.Ex:Pétéchies du palais + otite D débutante.Amoxy-Clav.
+*27-12-18* 20.2/111.5/ EN.
+*25-02-19* Toux febrile depuis hier.OMA G.EN.Amoxy-clav.
+*24-04-19* 20.5/112/ EN.
+*22-08-19* 21.9/116 EN.
+*30-12-19* Syndrome grippal febrile depuis hier.EN.Nuque souple.Virose probable.AT.Douleur abdominale depuis 3 semaines.EN.Constipation?ASP.

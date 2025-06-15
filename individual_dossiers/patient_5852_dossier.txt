@@ -1,0 +1,84 @@
+3500/51.5/35.5
+*15-07-04* 4750/56/39 EN.Allaitement mixte.
+*18-08-04* 6400/60/41 EN.Fruit.
+*08-09-04* Rhume+toux imp.EN.SPH.
+*20-09-04* 7200/64/42.5 EN.L.RHD.
+*18-10-04* 7800/67/43 EN.LV.RHN.
+*02-11-04* Pleurs imp la nuit passée.Fièvre ce jour.EN.Virose probable.AT.
+*20-12-04* Fièvre.Rhinite à sécrétions claires.SPH(B.Eid).
+*22-12-04* 8500/ Otite bilatérale.Amoxy-Clav.
+*03-01-04* 8500/71.5/45.5 Tympans améliorés mais non encore normalisés.EN.RV.Fluor.
+*14-01-05* Otite G.Cefuroxim.
+*10-02-05* GEA fébrile.EN.RAD.
+*21-02-05* 9400/73/46.5 EN.
+*25-02-05* Otite G.Amoxy-Clav.
+*29-03-05* 9800/74.5/47 EN.A fait 1 otite(vu aux urgences HDF).Cefuroxim.Tympans nx ce jour.
+*08-04-05* Fièvre+coryza clair.EN.Virose ou réaction vaccinale.AT.
+*22-04-05* Fièvre de 2j.Pas de fièvre ce jour.EN en dehors d'1 otite D.Si reprise de la fièvre,amoxy-clav.
+*04-05-05* Fièvre depuis 2j.Selles 1 peu molles.EN.Pas d'otite bien que les tympans ne soient pas encore renormalisés. Virose possible.AT.
+*16-05-05* 9800/76.5/47.5 A fait 1j de fièvre il y a 4j.EN en dehors des restes d'1 Herpangine.Tympans pas encore renormalisés.A surveiller.
+*27-05-05* Otite bilatérale.PNP puis Orelox.
+*07-06-05* PNP:Moraxella catarrhalis sens au céphalo 2ème génération.
+*22-06-05* 10/79/47.5 EN.
+*07-07-05* Rhino-pharyngite purulente fébrile.Amoxy.
+*24-08-05* 11/81/49 EN.
+*23-09-05* 11.2/81.5/49 EN.
+*28-10-05* 11.6/82.5/49 EN.
+*09-01-06* Otite bilatérale.Amoxy-Clav.
+*20-01-06* Fièvre depuis hier de nouveau,avec diarrhée.EN en dehors d'1 rash sur le tronc.Virose probable.AT.
+*06-02-06* Synd grippal fébrile.EN en dehors d'1 pharyngite et des tympans 1 peu remaniés mais sans épanchement purulent.Virose probable.AT.
+*20-02-06* 12.1/88.5/49.5 EN.
+*02-03-06* Otite bilatérale.Amoxy-Clav.
+*04-05-06* GEA fébrile.EN en dehors d'1 pharyngite.Virose probable.AT+RAD.
+*08-05-06* La fièvre persiste.Coryza purulent.Amoxy.
+*14-06-06* Selles liquidiennes depuis 3-4j+fièvrev depuis hier.EN en dehors de tympans douteux et d'1 jetage purulent post.Cefpodoxim.
+*07-07-06* Fièvre depuis 3j.EN en dehors de tympans dépolis et d'1 pharyngite.Pas de fièvre ce jour.Virose possible.Si reprise de la fièvre, amoxy-clav.
+*18-07-06* 13.4/92/50.5 EN.
+*25-09-06* Angine.Amoxy.
+*27-10-06* 14.5/96/ EN.
+*19-02-07* 14.5/98.5/51.5 EN.
+*28-05-07* 15.6/101/52 EN.
+*12-06-07* Otite D.Amoxy-Clav.
+*30-07-07* Troisièmr jour de fièvre avec petite toux.EN en dehors d'1 pharyngite.Virose probable.AT.
+*16-10-07* Otite D.Amoxy-Clav.
+*14-11-07* 16.8/104.5/ EN.
+*11-03-08* Rhino-pharyngite purulente fébrile.Amoxy.
+*07-05-08* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*22-05-08* Otite D débutante.Amoxy-Clav.
+*24-06-08* Petite pharyngite.
+*11-08-08* 18/109.5/ EN.
+*09-10-08* EN.
+*06-11-08* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*10-03-09* 20/ Otite D.Amoxy-Clav.
+*01-07-09* Angine.Amoxy.
+*22-09-09* Rhino-pharyngite purulente fébrile.Amoxy.
+*01-10-09* EN.
+*03-05-10* 23/121/ EN.
+*17-06-10* 22/122.5/ EN.
+*16-09-10* 23.5/122.5 EN.
+*04-11-10* GEA fébrile.EN en dehors d'1 pharyngite.Virose.AT+RAD.
+*27-12-10* Fièvre depuis 2j.EN en dehors d'1 pharyngite discrète et 1 filet purulent post.Si persistance de la fièvre demain,amoxy. A été traité pour otite il y a 2 sem par amoxy-clav (BE).
+*25-03-11* 24.5/126/ EN.
+*11-05-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*06-06-11* 25/ Fièvre. EN.
+*08-06-11* Amygdalite.Ospamox. 
+*15-07-11* GEA fébrile.EN.RAD.
+*14-10-11* 25.5/129/ EN.
+*13-01-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*11-04-12* 29/132/ EN.
+*25-09-12* 28.5/134.5/ EN.
+*15-11-12* A mal à la face ext du pied D de temps en temps,après 1 effort.EN.Fatigue probable.A surveiller.
+*02-04-13* 29/136/ EN.
+*15-10-13* EN.Mis sous Staloral pour allergie ophtalmique,
+*02-06-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*25-08-14* 33/143.5/ EN.
+*17-10-14* EN.
+*02-04-15* 34/145.5/ EN.
+*25-06-15* 34/147/ EN.
+*10-09-15* 35.5/147.5/ EN.
+*04-01-16* 36.5/149/ EN.
+*30-09-16* 40/151.5/ EN.
+*22-03-17* Otalgie Dte avec cephalee et rhume.EN.Examen neuro normal.A surveiller.
+*10-08-17* 41.5/156/ EN.P1.
+*10-09-18* 48/167/ EN.P4.
+*20-09-19* 53.2/173.5 EN. Nasonex

@@ -1,0 +1,69 @@
+3100/47/34.5
+*20-11-07* 4050/51/37.2 EN.
+*26-12-07* 5100/53.5/39 EN.
+*04-01-08* Rhume.EN.SPH.
+*25-01-08* 5800/56.5/40.5 EN.RHD.
+*25-02-08* 6400/59.5/42 EN.Fruit.RHN.
+*28-03-08* 6850/62.5/42.8 EN.L.
+*02-05-08* 7550/65.5/44 EN.RV.Fluor.
+*07-05-08* Fièvre isolée depuis hier.EN en dehors d'1 conjonctivite G et d'1 vague pharyngite.Virose probable.AT.
+*06-06-08* 7900/66.5/44.5 EN.
+*09-07-08* 8150/69/45 EN.
+*11-08-08* 8300/71/45 EN.
+*08-09-08* GEA fébrile.EN en dehors d'1 pharyngite.RAD+AT.
+*11-09-08* 8550/72/46 EN.
+*26-09-08* 8900/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*09-10-08* 8750/72.5/46 EN.
+*06-11-08* 9300/73.5/46.5 EN.
+*11-11-08* Otite D.Amoxy-Clav.
+*03-12-08* 9400/75.5/47 EN.
+*09-01-09* 9200/76/47 EN.
+*25-02-09* 9600/78.5/47.5 EN.
+*26-03-09* 10.2/79/47.5 EN.
+*02-07-09* Fièvre isolée depuis hier.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*03-07-09* Fièvre + diarrhée ce jour.Ex idem.CAT:RAD+AT.
+*27-07-09* 10.4/ Otite bilatérale.Amoxy-Clav.
+*22-09-09* Diarrhée depuis 2j.Subfébrile chez moi.EN en dehors d'1 otite bilatérale.Amoxy-Clav.
+*01-10-09* EN.
+*05-10-09* Laryngite aiguë fébrile.EN en dehors de grosses amygdales propres.Humidifications+AT.
+*11-01-10* Syndrome grippal afébrile.Bon EG.EN en dehors de très grosses amygdales.Virose probable.A surveiller.
+*18-02-10* 12.4/89/ EN.Très grosses amygdales obstructives avec symptomatologie nocturne (apnées,sudation).Seront probablement enlevées (AH).
+*06-04-10* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.Amoxy.
+*26-04-10* 13/91/49.5 EN.
+*17-06-10* 13.2/93/49.5 EN.
+*16-09-10* 14/94/50.5 EN.
+*04-11-10* Otorrhée G purulente + otalgie.Pas de fièvre.EN en dehors d'1 yoyo G faisant sourdre des sécrétions purulentes.Rhinite purulente.Cipro + cebemyxin.
+*04-01-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*21-03-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.Le yoyo D est tombé.
+*25-03-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*16-05-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*18-05-11* 15.5/ Otite D.Amoxy-Clav.
+*14-10-11*16.3/104/ EN.
+*24-11-11* Souffle anorganique.
+*07-05-12* Fièvre + otalgie D depuis hier.EN en dehors d'1 pharyngite et d'1 tympan D 1 peu remanié mais sans collection derrière.Virose probable.AT.
+*25-09-12* 18/110/ EN.
+*15-11-12* 18.5/110.5/ EN.
+*13-03-13* Otite D.Amoxy-Clav.
+*02-04-13* 19.5/113/ EN.
+*02-05-13* Otorrhée purulente G depuis 4j,ne réagissant pas à la cipro gttes.Amoxy-Clav.
+*31-07-13* GEA fébrile.EN.RAD.
+*22-08-13* 20/115.5/ EN.
+*15-10-13* EN.
+*17-01-14* 21/119/ EN.
+*21-02-14* 22/119.5/ EN.
+*17-10-14* EN.
+*04-12-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*13-01-15* Douleurs aux MI depuis 2 sem,intolérables la nuit écoulée.Caren montre ses cuisses (tantôt D, tantôt G).Sa mère signale qu'elle avait très mal aux genoux.Ex strictement N.Un bilan de débrouillage fait revient correct.Crampes?? Je complète le bilan:NFP,ANA,AC anti-DNA, Ex ophtalmo, Rx des 2 MI.
+*15-01-15* NFP,iono,RA,Rx MI Nx.
+*02-04-15* 25.5/125.5/ EN.
+*25-06-15* 26.5/126/ EN.
+*10-09-15* 27.5/128/ EN.
+*25-02-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*30-09-16* 39/
+*10-08-17* 41/136/ EN.
+*12-02-18* Rhino-pharyngite purulente fébrile+otite D.Amoxy-clav.
+*04-04-18* 42.2/141/ EN.S1
+*27-03-19* 51/146. Petechies isolees sur le visage apparues après un épisode de vomissement.
+*04-04-19* Douleur de gorge et fievre depuis ce jour.EN en dehors d'une pharyngite.Nuque souple.Probable virose.
+*20-09-19* 53.5/148 EN S3P3
+*09-03-20* 56.1/150 EN.

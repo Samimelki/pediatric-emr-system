@@ -157,7 +157,8 @@ class WordDocumentImporter:
                 'medications': '', 'allergies': '',
                 'smoker': False, 'smoker_details': '',
                 'alcohol': False, 'alcohol_details': '',
-                'visits': []
+                'visits': [],
+                'vaccines': []
             }
 
             # 1. Name and potential DOB Parsing (from first line)
@@ -296,6 +297,24 @@ class WordDocumentImporter:
                         elif line_lower.startswith('tel:') or line_lower.startswith('phone:'):
                              patient_data['phone'] = (patient_data['phone'] + ' ' + line_content.split(':',1)[-1].strip()).strip()
                              is_patient_history_field = True
+                        
+                        # Parse vaccines - look for patterns like "Vaccine Name: dd/mm/yyyy" or "Vaccine Name - dd/mm/yyyy"
+                        vaccine_match = re.match(r'^(.+?)\s*[:\-]\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})\s*$', line_content.strip())
+                        if vaccine_match and not is_patient_history_field:
+                            vaccine_name = vaccine_match.group(1).strip()
+                            vaccine_date_str = vaccine_match.group(2).strip()
+                            
+                            # Skip if it looks like a visit date (starts with year)
+                            if not re.match(r'^\d{4}', vaccine_date_str):
+                                # Parse the vaccine date
+                                vaccine_date_iso = self._parse_date_string(vaccine_date_str, doc_path, f"Vaccine {vaccine_name}")
+                                if vaccine_date_iso:
+                                    patient_data['vaccines'].append({
+                                        'vaccine_name': vaccine_name,
+                                        'vaccine_date': vaccine_date_iso,
+                                        'raw_entry': line_content.strip()
+                                    })
+                                    is_patient_history_field = True  # Don't add to visit notes
 
                         if is_patient_history_field:
                             patient_history_lines.append(line_content)
@@ -474,6 +493,27 @@ class WordDocumentImporter:
         except Exception as e:
             print(f"Error adding visit for patient {patient_id}, date {parsed_visit_date}: {e}")
 
+    def add_vaccines(self, cursor: sqlite3.Cursor, patient_id: int, vaccines_data: List[Dict]):
+        """Add vaccine records to the database."""
+        if not vaccines_data:
+            return
+        
+        try:
+            for vaccine in vaccines_data:
+                # Insert into Immunizations table (unified table)
+                cursor.execute('''
+                    INSERT INTO Immunizations (patient_id, immunization, administered_date, notes)
+                    VALUES (?, ?, ?, ?)
+                ''', (
+                    patient_id, 
+                    vaccine.get('vaccine_name'), 
+                    vaccine.get('vaccine_date'),
+                    f"Imported from Word document: {vaccine.get('raw_entry', '')}"
+                ))
+            print(f"Added {len(vaccines_data)} vaccines for patient ID {patient_id}")
+        except Exception as e:
+            print(f"Error adding vaccines for patient ID {patient_id}: {str(e)}")
+
     def import_batch(self, doc_paths: List[str], document_format='md') -> List[Tuple[str, bool, str]]:
         results = []
         conn = self.connect_db()
@@ -491,15 +531,18 @@ class WordDocumentImporter:
                         if patient_id:
                             for visit_entry in patient_data.get('visits', []):
                                 self.add_visit(cursor, patient_id, visit_entry)
+                            # Add vaccines if any were parsed
+                            self.add_vaccines(cursor, patient_id, patient_data.get('vaccines', []))
                             conn.commit()  # Commit so WordDocumentManager can see the patient
                             
-                            # Create/update document (failsafe feature)
-                            try:
-                                doc_path = word_manager.create_or_update_document(patient_id, document_format)
-                                format_name = "Word document" if document_format == 'docx' else "Markdown document"
-                                print(f"Created {format_name} for patient ID {patient_id}: {os.path.basename(doc_path)}")
-                            except Exception as e:
-                                print(f"Warning: Failed to create Word document for patient ID {patient_id}: {e}")
+                            # Create/update document (failsafe feature) - skip if format is 'none'
+                            if document_format != 'none':
+                                try:
+                                    doc_path = word_manager.create_or_update_document(patient_id, document_format)
+                                    format_name = "Word document" if document_format == 'docx' else "Markdown document"
+                                    print(f"Created {format_name} for patient ID {patient_id}: {os.path.basename(doc_path)}")
+                                except Exception as e:
+                                    print(f"Warning: Failed to create Word document for patient ID {patient_id}: {e}")
                             
                             success = True
                             cursor.execute("SELECT mrn FROM Patients WHERE id = ?", (patient_id,))
@@ -528,33 +571,39 @@ class WordDocumentImporter:
         return results
 
     def import_document(self, doc_path: str, override_mrn: str = None) -> Tuple[bool, str]:
-        """Imports a single document. Note: For batch imports, use import_batch for better transaction handling."""
+        """Import a single Word document and create a patient record."""
         conn = self.connect_db()
         cursor = conn.cursor()
         try:
             patient_data = self.parse_patient_doc(doc_path)
             if not patient_data:
-                return False, "Failed to parse document structure"
-
-            # Determine the MRN to use for get_or_create_patient
-            # This MRN is used if a new patient is created, or for MRN-based lookup if Name/DOB fails.
-            mrn_for_lookup_or_creation = override_mrn
-            if not mrn_for_lookup_or_creation:
-                 mrn_for_lookup_or_creation = f"SINGLE_{datetime.now().strftime('%Y%m%d%H%M%S%f')}"
-                 # patient_data['mrn'] = mrn_for_lookup_or_creation # Not strictly needed to set it back here as get_or_create handles it
-
+                return False, "Failed to parse document structure."
+            
+            # Use override MRN if provided, otherwise generate one based on filename
+            if override_mrn:
+                mrn_for_lookup_or_creation = override_mrn
+            else:
+                # Generate MRN from filename (remove extension and use as base)
+                base_filename = os.path.splitext(os.path.basename(doc_path))[0]
+                mrn_for_lookup_or_creation = f"DOC_{base_filename}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+            
             patient_id = self.get_or_create_patient(cursor, patient_data, new_doc_mrn=mrn_for_lookup_or_creation)
             if not patient_id:
-                 # Fetch the MRN that was attempted for a clearer message if available
-                 failed_mrn_attempt = mrn_for_lookup_or_creation or patient_data.get('mrn', '[MRN not set]')
-                 return False, f"Could not get or create patient for document {os.path.basename(doc_path)} (attempted MRN: {failed_mrn_attempt})"
-
+                return False, "Failed to create or find patient record."
+            
+            # Add visits
             for visit_entry in patient_data.get('visits', []):
                 self.add_visit(cursor, patient_id, visit_entry)
             
-            conn.commit()
+            # Add vaccines if any were parsed
+            self.add_vaccines(cursor, patient_id, patient_data.get('vaccines', []))
             
-            # Create/update Word document (failsafe feature)
+            conn.commit()
+
+            
+            # Create/update Word document (failsafe feature) - skip if format is 'none'
+            # Note: This method doesn't take document_format parameter, so we'll always create markdown by default
+            # If you need to control this, you'd need to modify the method signature
             try:
                 word_manager = WordDocumentManager(self.db_path, emr_config.get_word_docs_folder())
                 doc_path = word_manager.create_or_update_document(patient_id)

@@ -41,39 +41,44 @@ class WordDocumentManager:
 
     def _get_patient_data(self, patient_id: int) -> dict:
         """Get patient data from database"""
-        db = get_db()
-        cursor = db.cursor()
-        cursor.execute("""
-            SELECT first_name, last_name, date_of_birth, sex, phone, address, email,
-                   insurance, primary_physician, pmh, psh, family_history, medications,
-                   allergies, smoker, smoker_details, alcohol, alcohol_details, raw_dossier_text
-            FROM patients WHERE id = ?
-        """, (patient_id,))
-        row = cursor.fetchone()
-        if not row:
-            raise ValueError(f"Patient with ID {patient_id} not found")
-        
-        return {
-            'first_name': row[0],
-            'last_name': row[1],
-            'date_of_birth': row[2],
-            'sex': row[3],
-            'phone': row[4],
-            'address': row[5],
-            'email': row[6],
-            'insurance': row[7],
-            'primary_physician': row[8],
-            'pmh': row[9],
-            'psh': row[10],
-            'family_history': row[11],
-            'medications': row[12],
-            'allergies': row[13],
-            'smoker': row[14],
-            'smoker_details': row[15],
-            'alcohol': row[16],
-            'alcohol_details': row[17],
-            'raw_dossier_text': row[18]
-        }
+        # Use direct connection to UnifiedEMR database
+        unified_db_path = os.path.expanduser("~/Documents/UnifiedEMR/unified_emr.db")
+        conn = sqlite3.connect(unified_db_path)
+        cursor = conn.cursor()
+        try:
+            cursor.execute("""
+                SELECT first_name, last_name, date_of_birth, sex, phone, address, email,
+                       insurance, primary_physician, pmh, psh, family_history, medications,
+                       allergies, smoker, smoker_details, alcohol, alcohol_details, raw_dossier_text
+                FROM patients WHERE id = ?
+            """, (patient_id,))
+            row = cursor.fetchone()
+            if not row:
+                raise ValueError(f"Patient with ID {patient_id} not found")
+            
+            return {
+                'first_name': row[0],
+                'last_name': row[1],
+                'date_of_birth': row[2],
+                'sex': row[3],
+                'phone': row[4],
+                'address': row[5],
+                'email': row[6],
+                'insurance': row[7],
+                'primary_physician': row[8],
+                'pmh': row[9],
+                'psh': row[10],
+                'family_history': row[11],
+                'medications': row[12],
+                'allergies': row[13],
+                'smoker': row[14],
+                'smoker_details': row[15],
+                'alcohol': row[16],
+                'alcohol_details': row[17],
+                'raw_dossier_text': row[18]
+            }
+        finally:
+            conn.close()
 
     def _format_filename(self, patient_data: dict, format_type='md') -> str:
         """Format filename according to convention"""
@@ -87,7 +92,9 @@ class WordDocumentManager:
 
     def _get_patient_visits(self, patient_id: int) -> list:
         """Retrieve all visits for a patient."""
-        conn = sqlite3.connect(self.db_path)
+        # Use direct connection to UnifiedEMR database
+        unified_db_path = os.path.expanduser("~/Documents/UnifiedEMR/unified_emr.db")
+        conn = sqlite3.connect(unified_db_path)
         cursor = conn.cursor()
         try:
             cursor.execute("""
@@ -98,6 +105,25 @@ class WordDocumentManager:
             visits = cursor.fetchall()
             columns = [description[0] for description in cursor.description]
             return [dict(zip(columns, visit)) for visit in visits]
+        finally:
+            conn.close()
+
+    def _get_patient_vaccines(self, patient_id: int) -> list:
+        """Retrieve all vaccines/immunizations for a patient."""
+        # Use direct connection to UnifiedEMR database
+        unified_db_path = os.path.expanduser("~/Documents/UnifiedEMR/unified_emr.db")
+        conn = sqlite3.connect(unified_db_path)
+        cursor = conn.cursor()
+        try:
+            cursor.execute("""
+                SELECT immunization, administered_date, notes, brand_name, dose_number
+                FROM Immunizations 
+                WHERE patient_id = ? 
+                ORDER BY administered_date ASC, immunization ASC
+            """, (patient_id,))
+            vaccines = cursor.fetchall()
+            columns = [description[0] for description in cursor.description]
+            return [dict(zip(columns, vaccine)) for vaccine in vaccines]
         finally:
             conn.close()
 
@@ -184,6 +210,31 @@ class WordDocumentManager:
                 doc.add_heading('Raw Dossier Text', 1)
                 doc.add_paragraph(patient_data['raw_dossier_text'])
             
+            # Add vaccines if any
+            vaccines = self._get_patient_vaccines(patient_id)
+            if vaccines:
+                doc.add_heading('Vaccination History', 1)
+                
+                # Group vaccines by name for better organization
+                vaccine_groups = {}
+                for vaccine in vaccines:
+                    vaccine_name = vaccine.get('immunization', 'Unknown Vaccine')
+                    if vaccine_name not in vaccine_groups:
+                        vaccine_groups[vaccine_name] = []
+                    vaccine_groups[vaccine_name].append(vaccine)
+                
+                for vaccine_name, vaccine_list in vaccine_groups.items():
+                    doc.add_heading(vaccine_name, 2)
+                    for vaccine in vaccine_list:
+                        vaccine_info = f"Date: {vaccine.get('administered_date', 'Unknown date')}"
+                        if vaccine.get('brand_name'):
+                            vaccine_info += f" | Brand: {vaccine['brand_name']}"
+                        if vaccine.get('dose_number'):
+                            vaccine_info += f" | Dose: {vaccine['dose_number']}"
+                        doc.add_paragraph(vaccine_info)
+                        if vaccine.get('notes'):
+                            doc.add_paragraph(f"Notes: {vaccine['notes']}")
+
             # Add visits if any
             visits = self._get_patient_visits(patient_id)
             if visits:
@@ -255,6 +306,34 @@ class WordDocumentManager:
             content.append(patient_data['raw_dossier_text'])
             content.append("```")
             content.append("")
+        
+        # Add vaccines if any
+        vaccines = self._get_patient_vaccines(patient_id)
+        if vaccines:
+            content.append("## Vaccination History")
+            content.append("")
+            
+            # Group vaccines by name for better organization
+            vaccine_groups = {}
+            for vaccine in vaccines:
+                vaccine_name = vaccine.get('immunization', 'Unknown Vaccine')
+                if vaccine_name not in vaccine_groups:
+                    vaccine_groups[vaccine_name] = []
+                vaccine_groups[vaccine_name].append(vaccine)
+            
+            for vaccine_name, vaccine_list in vaccine_groups.items():
+                content.append(f"### {vaccine_name}")
+                content.append("")
+                content.append("| Date | Brand | Dose | Notes |")
+                content.append("|------|-------|------|-------|")
+                
+                for vaccine in vaccine_list:
+                    date_str = vaccine.get('administered_date', 'Unknown')
+                    brand_str = vaccine.get('brand_name', '-')
+                    dose_str = vaccine.get('dose_number', '-')
+                    notes_str = vaccine.get('notes', '-')
+                    content.append(f"| {date_str} | {brand_str} | {dose_str} | {notes_str} |")
+                content.append("")
         
         # Add visits if any
         visits = self._get_patient_visits(patient_id)

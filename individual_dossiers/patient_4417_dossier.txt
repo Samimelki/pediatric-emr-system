@@ -1,0 +1,82 @@
+3430/52/37
+*27-02-01* 4650/55/40 EN.AM.
+*30-03-01* 5500/58.5/41.2 EN.AM+Fruit,fluor.
+*02-05-01* 6550/61.5/43 EN.AM+L.RHD.
+*30-05-01* 7200/65/44 EN.AM+LV.RHN.
+*30-07-01* 8400/69.5/46 EN.AM+RV.
+*30-08-01* 9000/73/46.5 EN.AM.
+*06-09-01* Toux+farfotement.EN.Petit rhume+dentition probablement.
+*31-10-01* 9700/76/47.5 EN.
+*03-01-02* 10.5/77.5/47.5 EN.
+*23-01-02* Synd grippal fébrile.EN.Virose probable.AT.
+*04-02-02* 10.6/78.5/48 EN.
+*03-04-02* 11.3/80/49.5 EN.
+*30-05-02* 12/84/50 EN.
+*01-07-02* 12/85.5/50.2 EN.
+*08-07-02* Fièvre isolée depuis hier.Selles 1 peu molles ce jour.EN.Virose probable.AT.
+*26-07-02* Stomatite aphteuse fébrile.EN par ailleurs.Medijel.
+*18-10-02* Synd grippal fébrile+selles molles.EN.Virose probable.AT.
+*30-01-03* 13.9/91.5/51.5 EN.
+*27-05-03* 14.5/93/ EN.
+*08-07-03* 14.5/94/ EN.
+*25-07-03* Tousse bcp,surtout la nuit.EN en dehors d'1 tympan G gonflé et terne.Otite débutante.Amoxy-Clav.
+*05-11-03* Otite bilatérale.Amoxy-Clav.
+*24-11-03* Synd grippal subébrile.EN.SPH.
+*19-12-03* Synd grippal.EN.
+*02-02-04* Rhino-pharyngite purulente fébrile.Amoxy.
+*26-02-04* 16.3/101/52 EN.
+*01-04-04* Otalgie bilatérale.EN en dehors d'1 otite séro-muqueuse impressionnante.Flixonase.A revoir dans 1 mois.
+*14-05-04* Fièvre puis rash puis refièvre.Ex:rash morbilliforme sur le tronc avec enanthème pharyngée+otite bilatérale.Zinnat.
+*23-02-05* 19.5/109/54 EN.
+*01-06-05* Synd grippal.EN.
+*15-08-05* Rhino-pharyngite purulente fébrile.Amoxy.
+*25-08-05* Laryngite sub-fébrile.EN.Humidifications.
+*26-10-05* ADP SAM bilatérales sensibles.EN par ailleurs.Virose possible.A surveiller.
+*27-10-05* Etat idem.EN.AT.
+*31-10-05* Otite bilatérale.Amoxy-Clav.
+*09-01-06* Rhume.EN.
+*10-02-06* Grippe.EN en dehors d'1 OSM bilatérale.A surveiller.
+*27-02-06* Synd grippal.Toux laryngée.EN en dehors de l'OSM bilatérale.
+*01-03-06* A mal au ventre depuis hier.EN.Fébricule.ECBU.
+*03-03-06* 21.5/115.5/ EN.
+*07-04-06* 22/116/ EN.
+*11-12-06* Otite bilatérale.Amoxy.
+*12-01-07* 24/122/ EN.
+*15-01-07* Otite D.Cefuroxim.
+*31-01-07* Otite G.Amoxy-Clav.
+*09-01-08* Angine.Amoxy.
+*06-03-08* 28/128/ EN.
+*07-05-08* 28.5/129.5/ EN.
+*08-10-08* 30/131.5/ EN.
+*01-06-09* 32.5/134/ EN.
+*12-06-09* Angine.Amoxy.
+*03-09-09* Angine.Amoxy.
+*29-06-10* GEA.EN.RAD
+*11-08-10* 37/140/
+*12-11-10* 37.5/142/ Toux laryngée.EN.
+*21-12-10* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*22-12-10* Jetage purulent post avec persistance de la fièvre.Amoxy.
+*19-01-11* 37/142/ EN.Bourgeons mammaires.
+*17-02-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*17-03-11* Fièvre isolée depuis hier.Excellent EG.Virose possible.ECBU.
+*24-03-11* Fièvre + frissons depuis hier avec coryza purulent.EN.Amoxy.
+*28-03-11* Va mieux.EN.
+*21-10-11* 41/146.5/ EN.
+*31-10-11* Otite D.Amoxy-Clav.
+*06-08-12* 44/152/ EN.S2.
+*14-09-12* 45/152.5/ EN.
+*21-11-12* 47.5/155/ EN.S2P1.
+*23-01-13* 46/157.5/ EN.S3P1.
+*20-05-13* 49.5/159.5/ EN.S4P2.
+*20-06-13* EN.Premières menstruations le 14-06-13.
+*22-08-14* 54/165/ EN.
+*27-10-14* 54/165/ EN.
+*21-12-15* Otite externe D.Cipro plus.
+*05-01-16* Rhino-sinusite clinique.Amoxy+Fluticasone.
+*13-04-16* Synd grippal.EN en dehors d'1 discrète pharyngite.Virose probable.
+*29-09-16* 56/167/ EN.
+*28-10-16* 59/167.5/ EN.
+*21-11-16* 60/168/ EN.
+*05-12-18* Rhino-pharyngite purulente fébrile.Amoxy.
+*28-02-19* 67.9/168 EN.
+*29-03-19* 68.3/168 EN.

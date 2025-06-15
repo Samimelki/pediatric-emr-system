@@ -1,0 +1,62 @@
+2800/48/34
+*18-12-07* 3800/50.5/35.5 EN.Allaitement mixte.
+*16-01-08* 4400/53.5/37.5 EN.
+*15-02-08* 5000/57/39 EN.RHD.
+*18-02-08* A fait 1 jour de fièvre isolée.EN.Virose possible.Si reprise de la fièvre:ECBU.
+*20-02-08* La fièvre a disparu hier pour réapparaître ce jour.EN.ECBU (RAS).
+*14-03-08* 5500/59/39.5 EN.Fruit.RHN.
+*15-04-08* 6000/62/40.5 EN.L.
+*14-05-08* 6200/64/41.5 EN.RV.Fluor.
+*16-06-08* 6200/65/42 EN.Pas de prise pondérale.A surveiller.
+*17-07-08* 6600/68/42.5 EN.
+*18-08-08* 7100/69/43 EN.
+*14-10-08* 7500/72/44 EN.
+*22-12-08* 8200/75/44.5 EN.
+*24-12-08* Fièvre isolée depuis hier.EN en dehors d'1 pharyngite.Virose probable.AT.
+*26-12-08* La fièvre oscille tj mais en plus espacé.Ex idem.AT.
+*31-12-08* La fièvre reprend ce jour avec coryza purulent et voix rauque.Amoxy-Clav.
+*23-01-09* 8300/76.5/45 EN.
+*18-03-09* 9100/79/45.5 EN.
+*22-04-09* 9100/79.5/46 EN.Desquamation labiale et péri-buccale qui traîne et ne réagit pas au ttt topique.Prise pondérale ralentie.Cons dermato (EM).
+*05-08-09* 10.5/84/46.5 EN.
+*02-11-09* 10.5(-1,32 ds)/85(+0,22 ds)/46.5 EN.Appétit très moyen.Quatre selles "normales" par jour.Avis gastro (BE) pour 1 éventuelle coeliakie.
+*11-08-10* 12.7/96/ EN.
+*28-10-10* 12.7/98/ EN.
+*23-12-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*18-01-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*25-02-11* Fièvre depuis hier.Selles molles.EN en dehors d'1 belle pharyngite.Virose probable.AT.
+*18-05-11* 14.4/100/ EN.
+*02-06-11* Rhino-pharyngite purulente fébrile.Selles diarrhéiques.Amoxy+RAD.
+*28-06-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*17-10-11* 14.6/103/ EN.
+*16-02-12* Vomissements ce jour + fièvre mais sans diarrhée.Douleurs abdominales.Bon EG.EN (abdomen souple) en dehors de qques ADP cervicales ant qui seraient là depuis 1 sem et que la mère qualifie d'avoir diminuer de vol.Diète.Surveillance.
+*01-03-12* A mal au cou des côtés et au nv du sourcil D?!Pas de fièvre.Les ADP cervicales persistent.EN par ailleurs en dehors d'1 pâleur modérée+jetage post purulent.CAT:Sofradex + NFP,VS,LP.
+*01-03-12* 20h:Deux heures après son passage chez moi,présente 1 fièvre à 39,6 + photophobie.EN.Pas de raideur souple.Pas de photophobie chez moi.Virose probable.
+*09-03-12* NFP:RAS.
+*19-03-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*30-04-12* A fait 2j de fièvre.Pas de fièvre ce jour.EN en dehors d'1 discrète pharyngite.Virose.
+*11-05-12* Fièvre depuis hier.EN en dehors d'1 pharyngite.Virose probable.AT.(La mère a fait 1 éruption généralisée hier).S'attendre à 1 rash.
+*25-10-12* 16.5/109/ EN.
+*12-12-12* A fait 1 Synd grippal fébrile.EN en dehors d'1 pharyngite + qques ADP SAM d'allure virale.Virose probable.
+*28-12-12* Amygdalite.Ospamox (BE).
+*17-01-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*13-03-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*18-03-13* Persistance de la fièvre+jetage post tj purulent.EN par ailleurs.Passer à à l'amoxy-clav.
+*22-04-13* 17.2/112.5/ EN.
+*22-05-13* 17.5/113.5/ EN.
+*24-06-13* EN.
+*02-07-13* A fait 1 synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.
+*17-01-14* 18/116.5/ EN.
+*24-01-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-02-14* 18/ EN.
+*23-02-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*26-02-15* Idem.
+*29-05-15* 21.5/125/ EN.
+*10-08-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*13-08-15* Idem.
+*18-04-17* 28/138/ EN.S1.
+*03-07-17* 30/139.5/ EN.
+*22-09-17* 31.3/143./ EN.S1P1.
+*03-01-18* EN.
+*22-07-19* 41.7/158.5 EN.Premieres menstruations 13 Sept 2018
+*28-02-20* 45.7/159.5 EN.

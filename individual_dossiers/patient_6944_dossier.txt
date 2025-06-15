@@ -1,0 +1,73 @@
+3670/50/37 GS: AB Rh Pos
+*04-01-07* 3850/ EN.A régurgité la nuit.
+*25-01-07* 5000/54/39.5 EN.Allaitement mixte.
+*23-02-07* 5800/56.5/41 Rhume.EN.SPH.
+*26-02-07* Rhume.EN.SPH.
+*19-03-07* 6500/60/42.5 Fébricule depuis la nuit passée.EN.Virose possible.Surveiller.Si persistance,bilan.
+*20-03-07* Hospitalisée pendant 48h.Bilan (-).
+*29-03-07* 6650/60/42.5 EN.
+*18-04-07* 7200/ Fièvre isolée ce matin.EN en dehors d'1 discrète pharyngite.Virose probable.AT.
+*30-04-07* 7400/ Fièvre + conjonctivite purulente + vomissement la nuit passée.EN.Amoxy-clav.
+*10-05-07* Fébricule.EN.
+*15-05-07* 7350/64.5/44 EN.Fruit.RHN.
+*29-05-07* 7500/65.5/44.5 EN.
+*08-06-07* Rhume subfébrile.EN.SPH.
+*27-06-07* 7900/66.5/45.5 EN.RV.Fluor.
+*25-07-07* 8300/68/46 EN.
+*23-08-07* 8900/70.5/47 EN.
+*04-09-07* GEA fébrile.EN.RAD+AT.
+*24-09-07* 9350/72/46.5 EN.
+*10-10-07* 9800/ Fièvre isolée depuis hier.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*24-10-07* 10/73.5/47 EN.
+*02-11-07* Synd grippal fébrile.EN.AT.
+*26-11-07* 10.5/74/47.5 EN.
+*03-12-07* Otorrhée G.Cetrxal + Omnicef (BE).
+*28-12-07* 11.1/75.5/48 EN.
+*24-01-08* 11.2/77.5/48.5 EN.
+*11-02-08* Pleure depuis 3j.EN.
+*03-03-08* 11.5/78.5/48.5 EN.
+*07-05-08* 12/80.5/49.5 EN.
+*12-05-08* Fièvre+diarrhée depuis 3j.EN en dehors d'1 belle pharyngite.Virose.
+*05-08-08* 12.6/85/ Fièvre depuis hier avec rash maculeux ce jour.EN en dehors d'1 belle pharyngite.Virose probable.AT.
+*27-08-08* Angine.Amoxy.
+*08-09-08* Fièvre depuis hier.EN en dehors d'1 belle aphtose pharyngée.Medijel.
+*18-09-08* 12.7/86/ EN.
+*25-09-08* A mal aux oreilles.EN en dehors d'1 petite pharyngite.
+*01-10-08* Vomit depuis ce matin,mais pas le lait.Pas de fièvre.EN.Domperidone.
+*20-10-08* 12.4/86.5/50 EN.
+*10-11-08* Rhino-pharyngite purulente fébrile.Cefdinir.
+*26-12-08* Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*25-03-09* Otalgie G + fébricule depuis hier.EN en dehors d'1 belle pharyngite.Virose probable.
+*24-02-10* 15.5/98 Syndrome grippal fébrile depuis 72 heures.Bon EG.Rhinopharyngite purulente.Amoxy.
+*13-04-10* Myringite bulleuse D.EN par ailleurs.Cipro plus.
+*26-04-10* Fièvre + vomissements depuis 2j.EN en dehors d'1 pharyngite.Nuque souple.Virose probable.AT.
+*14-09-10* 19/100/ EN.
+*03-11-10* 19/103.5/ EN.
+*22-12-10* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-01-11* Angine.Jetage post jaune.Amoxy.
+*26-01-11* 19/104/ EN.
+*29-03-11* Fièvre depuis 2-3j avec qques vomissements.EN en dehors d'1 pharyngite aphteuse.Medijel.
+*16-06-11* 18/107/ Rhino-pharyngite purulente fébrile.Amoxy.
+*02-08-11* IU traitée.Imagerie.
+*21-09-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*06-01-12* 20/110/ EN.
+*10-02-12* EN.
+*16-02-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*21-02-12* Persistance de la fièvre malgré prise d'amoxy pour angine apparue entretemps (au tél).Pas de fièvre ce jour.EN en dehors d'1 tache blanche sur l'amygdale G.Persévérer.
+*10-05-12* 23/112/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*12-09-12* Idem.Pas de fièvre chez moi.A suivre.
+*06-02-13* 23/115.5/ EN.
+*05-04-13* 23.5/116/ EN.
+*07-10-13* 26/118/ Rhino-pharyngite purulente fébrile.Amoxy.
+*24-03-14* 29/120/ EN.
+*26-09-14* 29.5/123.5/ EN.
+*15-10-14* GEA.Bon EG.EN.RAD.
+*05-10-15* Rhino-pharyngite purulente fébrile.Amoxy (déjà commencé par la mère).
+*03-12-15* Otite G.Amoxy-Clav.
+*15-12-15* Tousse depuis 3-4j.A vomit 2-3 fois.Fébrile ce jour.EN.Nuque souple.Virose probable.A suivre.
+*28-12-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*04-10-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-12-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*16-08-17* 46/137/ EN.
+*29-09-17* 45.3/138/ EN.Puberté 0.
+*08-10-18* 52/143/ EN.Bourgeons mammaires.

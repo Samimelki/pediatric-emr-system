@@ -1,0 +1,57 @@
+2710/48/32
+*21-09-10* 3800/53.5/35.5 EN.AM.
+*20-10-10* 4700/57/38 EN.AM.
+*23-11-10* 5500/60.5/39 EN.AM.RHD.
+*21-12-10* 6200/62/39.5 EN.AM.RHN.Fruit.
+*18-01-11* 6750/65/40 EN.AM.L.
+*02-02-11* Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*15-02-11* 7050/66.5/41 EN.AM.RV.Fluor.
+*15-03-11* 7750/68/41.8 EN.AM.
+*18-04-11* Fièvre + vomissements depuis hier.EN en dehors d'1 pharyngite.Virose probable.AT.
+*20-04-11* 8000/69.5/42.5 EN.Allaitement mixte.
+*17-05-11* 8100/ Otite G.Amoxy-Clav.
+*31-05-11* 8100/70.5/43 EN.
+*21-06-11* 8200/71.5/43 EN.
+*19-07-11* GEA fébrile.EN en dehors d'1 petite pharyngite.Virose probable.RAD + AT.
+*25-07-11* 8300/73.5/43.5 EN.
+*11-08-11* Fièvre isolée depuis 2j.EN en dehors d'1 pharyngite.Virose probable.AT.
+*12-08-11* Fièvre tj.Ex idem.Virose tj possible.ECBU par principe.
+*23-08-11* 8600/74/43.5 EN.
+*19-09-11* 8950/75/44 EN.
+*18-10-11* 9500/76/44 EN.
+*22-11-11* 9700/77/45 EN.
+*01-12-11* Eruption dentaire (BE).
+*21-12-11* 10.2/79.5/45.5 EN.
+*22-02-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*12-03-12* Vue aux urgences le 10-02-12:otite G.Mise sous amoxy-clav.La fièvre persiste + diarrhée et vomissements.EN.Tympan G amélioré.RAD + persévérer.
+*17-04-12* 11.1/83/46.5 EN.
+*01-06-12* N'est pas bien.EN en dehors d'1 discrète pharyngite et des dents qui poussent.
+*27-08-12* 12.8/88/47 EN.
+*20-11-12* 13.2/91/47.5 EN.
+*17-01-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*13-08-13* 14.7/97.5/48.5 EN.
+*19-11-13* 15,5/ Fievre depuis 48h et toux productive. Eupneique. Virose probable. EN a part une angine erythemateuse. Surveillance sinon Ospamox (CM).
+*24-01-14* Otite ext D.Cetraxal plus.
+*24-02-14* GEA fébrile.EN.RAD.
+*31-03-14* Tousse un peu.EN.
+*21-07-14* GEA.EN.RAD.
+*15-08-14* 18.5/ Rhino-pharyngite purulente fébrile.Amoxy.
+*16-12-14* 20.5/ Rhino-pharyngite purulente fébrile.Amoxy.
+*11-03-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*08-04-15* 22/112/
+*11-08-15* 22.5/113.5/ EN.
+*09-09-15* EN.
+*06-10-15* 23.5/116/ EN.
+*20-10-15* GEA fébrile.EN.RAD.
+*16-12-15* 24/116.5/ EN.Rhinite allergique.Nasonex.
+*21-12-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*02-08-16* 26.5/121/ EN.
+*19-12-16* Fièvre + vomissements verdâtres depuis hier.EN en dehors d'1 angine.Amoxy.
+*16-01-17* Epistaxis après synd grippal.EN.Rassurer la mère.
+*24-04-17* 28.5/124/ EN.
+*22-11-17* 28.2/128.5/ EN.
+*23-04-18* Erytheme du visage et du corps apres avoir joue au soleil.Creme hydratante.
+*16-12-19* 38.5/138 EN.
+*16-01-20* Fievre depuis ce jour.Nuque souple. Pharyngite.Virose probable.AT.
+*20-01-20* 39/Encore febrile.Flu test negatif.AT.
+*04-02-20* 38/ Fievre et otalgie depuis hier.Bon EG.Nuque souple.EN.Virose probable.AT.

@@ -1,0 +1,62 @@
+3650/51/35
+*23-12-11* 4800/57/38.5 EN.AM.
+*23-01-12* 5300/59.5/39.5 EN.
+*23-02-12* 6100/63.5/41.2 EN.RHD.
+*05-03-12* Rhume.EN en dehors d'1 OSM bilatérale.
+*09-03-12* Rhume.EN.
+*22-03-12* 6800/65.5/42.5 EN.Fruit.RHN.
+*20-04-12* 7500/68/43.5 EN.L.
+*18-05-12* 7950/70/44.8 EN.RV.Fluor.
+*23-06-12* 8600/71.5/45.5 EN.
+*23-07-12* 9000/73/46.5 EN.
+*22-08-12* 9650/74/47.5 EN.
+*24-08-12*Tousse et vomit depuis le matin.EN en dehors d'1 magnifique otite G.Pas de fièvre de notée.Amoxy-clav.
+*10-09-12* Fièvre isolée depuis hier.Selle molle.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*12-09-12* Etat idem.Ex idem.CAT:idem.
+*21-09-12* 9600/75/48 EN.
+*17-10-12* Synd grippal subfébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*26-10-12* 10.1/76.5/48.5 EN.
+*31-10-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*28-11-12* 10.1/77/48.5 EN.
+*19-12-12* 10.3/78/48.5 EN.
+*25-01-13* 10.7/79.5/49.5 EN.
+*21-02-13* Otite D.Amoxy-Clav.
+*13-03-13* 11/80.5/49.5 EN.
+*05-04-13* 11.3/82/49.5 EN.
+*10-05-13* 11.5/83.5/50 EN.
+*07-06-13* Rhino-pharyngite purulente fébrile+conjonctivite purulente.Amoxy-Clav.
+*08-07-13*Troisième cise de bradypnée expiratoire.Pas de fièvre.Réagie bien au salbu.On considère le diagnostic d'asthme.Le montelukast est indiqué.
+*05-08-13* 12/86/50.5 EN.
+*13-09-13* Rhume + toux.EN.SPH.
+*16-09-13* A fait 1 discrète crise il y a 2j ayant vite rétrocédé sous salbu.EN ce jour.Avis pneumo par principe.
+*15-10-13* 12.5/87.5/50.5 EN.
+*02-12-13* 12.5/89.5/50.5 EN.
+*03-01-14* 12.5/90/50.5 EN.
+*20-01-14* Otite D.Amoxy-Clav.
+*23-01-14* Se plaint toute la journée.EN.Otite améliorée.Pasde fièvre.
+*27-01-14* 12.6/ Reprise de la fièvre il y a 3j + selles diarrhéiques.EN.Tympan D presque guéri.RAD+AT.
+*03-04-14* 13/91/ Rash péri-buccal après prise de fraises.Soins péri-oral.
+*17-04-14* Stomatite fébrile.AT+Medijel.
+*14-07-14* 13.7/93/ EN.
+*04-11-14* 13.8/96.5/ Rhino-pharyngite purulente fébrile.Amoxy.
+*17-12-14* A fait 1 épisode fébrile avec douleurs abdominales qui s'est avéré être 1 pneumonie rétro-cardiaque.Mis sous amoxy-clav pour 2 sem (urgences - HDF).EN ce jour.
+*16-01-15* Synd grippal fébrile.EN en dehors d'1 pharyngite+pétéchies du palais..Virose probable.AT.
+*30-03-15* 14.9/99.5/ EN.
+*01-04-15* IDR: rougeur modérée + induration,le tout à 6 mm.Donc IDR négative.
+*14-08-15* 16.3/102/ EN.Fluticasone (Flixotide) arrêté depuis juin 2015.
+*26-02-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-04-16* 20/108/ EN.
+*07-09-16* 20.5/111/ EN.
+*03-10-16* A fait 1 crise de bradypnée expiratoire ce jour.Ceci a disparu sous salbu.
+*14-10-16* 20.5/111.5/ EN.
+*21-11-16* 21/113/ EN.
+*16-12-16* EN.
+*06-03-17* 21.5/114.5/ EN.
+*28-09-17* 22/118.5/ EN.
+*03-11-17* 21.8/118.5/ EN.
+*30-04-18* 22/121 EN.
+*09-07-18* 22.7/121 EN.
+*20-09-18* 23.1/123.5/ EN.
+*18-03-19* 22.1/125 EN.
+*01-08-19* Douleur abdominale sans fievre ni diarrhee.Notion de constipation.EN.
+*23-10-19* 26.6/130 EN.

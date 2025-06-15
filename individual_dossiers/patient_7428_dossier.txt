@@ -1,0 +1,72 @@
+3600/50
+*11-01-08* 4650/53/37.5 EN.Petit rhume.SPH.AM.
+*19-02-08* 6000/56.5/41 EN.AM.
+*18-03-08* 6900/60/42.5 EN.AM.RHD.
+*22-04-08* 7900/63.5/43.5 EN.AM.Fruit.
+*17-06-08* 9000/68.5/45.5 EN.AM.RV.Fluor.
+*21-07-08* 9200/70.5/46 EN.AM.
+*08-08-08* Fièvre depuis hier.EN en dehors d'1 pharyngite.Toute la famille y est passée.Virose probable.AT.
+*18-09-08* 10/74.5/47.5 EN.AM.
+*25-11-08* 10.6/77/48.5 EN.
+*05-01-09* 10.6/78.5/48.5 EN.
+*12-01-09* Fièvre + toux + vomissements.EN en dehors d'1 jetage purulent post.Amoxy.
+*09-02-09* Rhino-pharyngite purulente fébrile+conjonctivite purulente.Amoxy-Clav.
+*18-02-09* 10.2/79.5/48.5 EN.
+*27-02-09* Rhino-pharyngite purulente fébrile+conjonctivite purulente.Cefdinir.
+*26-03-09* 10.8/81.5/49 Petit rhume.EN.
+*15-04-09* GEA fébrile.EN.RAD.
+*28-04-09* 10.5/82.5/49 EN.
+*22-05-09* Fièvre isolée et subite cette après-midi.EN.Pas de raideur méningée.Virose probable.AT.
+*27-08-09* Synd grippal sans fièvre.Coryza purulent.Selles molles.EN en dehors d'1 pharyngite.RAD.Si fièvre,amoxy.
+*08-09-09* 11.7/87.5/50 EN.
+*09-11-09* Rhino-pharyngite purulente fébrile.Amoxy.
+*09-02-10* 13/92/ Bronchiolites répétées.Améliorées par salbu.Flixotide.
+*12-05-10* 13.9/94/ EN.Est sous montelukast (PHT) avec 1 effet mitigé.Essai de nexium.
+*21-05-10* A fait 1 wheezing modéré ce jour,rapidement réactif au salbu.EN en fin d'après-midi.Les parents signalent 1 amélioration avec le nexium.
+*13-08-10* 14/96/ Aurait fait une crise de bronchospasme hier traité par salbu.Ce jour va mieux.EN.Continuer salbu.
+*03-09-10* 14.2/97/ EN.
+*27-09-10* 14.5/98/ EN.
+*12-10-10* Aurait fait 1 crise de bronchospasme il y a 2j cédant sous salbu.EN ce jour.Si reprise,revoir PHT pour modification éventuelle du ttt.
+*29-10-10* 13.9/99/ EN.
+*17-11-10* 14.1/99.5/ A refait 1 crise d'asthme hier,jugulée aux urgences - HDF.EN ce jour en dehors de rares sibilants diffus.Revoir PHT pour le ttt qui semble moyennement efficace.
+*28-12-10* Tousse.EN.PHT a ajouté la fluticasone au montelukast pendant 2 mois puis évaluation.
+*30-12-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*02-02-11* 15/100/51.5 EN.IgE=371.Tests (+) aux dermatophagoïdes et aux acariens.
+*09-03-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*06-04-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*14-09-11* 16.3/102.5/ EN.
+*11-10-11* Fièvre depuis 2j + rash cutané sur le tronc.EN en dehors d'1 pharyngite + le rash.Virose probable.AT.
+*19-10-11* 15.5/ S'est amélioré puis la fièvre a repris le 15-10-11 avec frissons.Vu aux urgences:RAS.Revu le 16-10-11 aux urgences,où on trouve 1 otite D.Il reçoit 1 remplissage car ne mangerait pas bien.Mis sous amoxy-clav,il le refuse.On passe alors à la ceftriaxone.La fièvre s'espace mais persiste tj.Les parents le trouve en EG médiocre.EN!Le tympan D semble presque N.A hospitaliser pour bilan.On ne trouve rien au bilan.Virose probable.
+*08-11-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*05-01-12* 16/105.5/
+*06-02-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*05-04-12* 16.3/107.5/ Rhino-pharyngite purulente fébrile.Amoxy.
+*27-08-12* Otite ext G.Cipro plus.
+*25-09-12* 17.4/109/ EN.
+*09-11-12* 17.7/110/ EN.
+*07-12-12* 17.7/111/ EN.
+*14-12-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.A fait un wheezing d'après les parents,et reçoit du salbu à domicile.Auscultation strictement N à l'examen.
+*22-03-13* 18/111.5/ EN.
+*17-10-13* EN.
+*19-12-13* 20.5/117/ EN.
+*24-01-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*20-03-14* 20.5/118.5/ EN.
+*09-10-14* 20.5/121.5/ EN.
+*06-11-14* Céphalées + vertige hier,au retour de l'école.EN.Va nettement mieux ce jour.Labyrintite possible.
+*27-11-14* EN.
+*11-09-15* 27.5/127/ EN.
+*09-10-15* EN.
+*26-02-16* Synd grippal fébrile.EN en dehors d'1 pharyngite et de fins sibilants éparse.Virose probable.AT.Salbu.
+*16-03-16* A fait 1 crise d'asthme hier,s'améliorant sous salbu.EN ce jour.Reprendre le montelukast.
+*29-03-16* 30/131.5/ EN.
+*21-09-16* 31.5/134/ EN.
+*07-10-16* Douleurs testiculaires occasionnelles.EN.
+*18-10-16* A repris le Montelukast il y a 2 mois.Depuis,c'est la première crisette.EN.
+*28-11-16* 31.5/136.5/ EN.Ferait 1 crise par mois,même sous montelukast.Avis pneumo (EA).
+*04-01-18* 38.8/139.5/ EN.
+*05-03-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*12-11-18* Douleurs abdominales ce jour avec douleurs généralisées.EN.Pas de ventre chirurgical.A suivre.
+*23-11-18* 46.1/146.5/ EN.
+*13-02-19* 51.7/147.5 EN.P2
+*14-10-19* 56.4/153 EN.P2
+*27-02-20* GEA febrile.Bon EG.Nuque souple.EN.Virose.Regime alimentaire.

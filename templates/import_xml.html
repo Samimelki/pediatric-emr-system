@@ -94,7 +94,7 @@
                         {% endif %}
                     </label>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-check">
                                 <input type="radio" class="form-check-input" name="document_format" id="format_markdown" value="md" checked>
                                 <label class="form-check-label" for="format_markdown">
@@ -109,7 +109,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-check">
                                 <input type="radio" class="form-check-input" name="document_format" id="format_docx" value="docx">
                                 <label class="form-check-label" for="format_docx">
@@ -124,12 +124,27 @@
                                 </label>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" name="document_format" id="format_none" value="none">
+                                <label class="form-check-label" for="format_none">
+                                    <strong>🚫 No Files</strong>
+                                    <br><small class="text-info">
+                                        {% if emr_mode.value == 'pediatric' %}
+                                            ⚡ Le plus rapide • Aucun fichier créé
+                                        {% else %}
+                                            ⚡ Fastest • No files created
+                                        {% endif %}
+                                    </small>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <small class="form-text text-muted">
                         {% if emr_mode.value == 'pediatric' %}
-                            💡 Recommandé: Markdown pour les gros imports (plus rapide), Word pour de petits imports (plus joli).
+                            💡 Recommandé: Markdown pour les gros imports (plus rapide), Word pour de petits imports (plus joli), Aucun fichier pour l'import le plus rapide.
                         {% else %}
-                            💡 Recommended: Markdown for large imports (faster), Word for small imports (prettier).
+                            💡 Recommended: Markdown for large imports (faster), Word for small imports (prettier), No Files for fastest import.
                         {% endif %}
                     </small>
                 </div>

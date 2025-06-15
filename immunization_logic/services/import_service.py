@@ -52,14 +52,14 @@ class UnifiedImmunizationImporter:
             '/fichier/hep_b3': ('Hepatitis B', 3),
             
             # Haemophilus influenzae type b series
-            '/fichier/hib1': ('Haemophilus influenzae type b (Hib)', 1),
-            '/fichier/hib2': ('Haemophilus influenzae type b (Hib)', 2),
-            '/fichier/hib3': ('Haemophilus influenzae type b (Hib)', 3),
-            '/fichier/hib_rappel': ('Haemophilus influenzae type b (Hib)', 4),
+            '/fichier/hib1': ('Hib (Haemophilus influenzae b)', 1),
+            '/fichier/hib2': ('Hib (Haemophilus influenzae b)', 2),
+            '/fichier/hib3': ('Hib (Haemophilus influenzae b)', 3),
+            '/fichier/hib_rappel': ('Hib (Haemophilus influenzae b)', 4),
             
             # Single dose vaccines
-            '/fichier/ror': ('Measles - Mumps - Rubella (MMR)', 1),
-            '/fichier/r': ('Measles', 1),  # Measles alone
+            '/fichier/ror': ('MMR (Measles, Mumps, Rubella)', 1),
+            '/fichier/r': ('Measles (single)', 1),  # Measles alone
         }
         
         self.import_stats = {

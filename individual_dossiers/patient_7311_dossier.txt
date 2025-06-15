@@ -1,0 +1,73 @@
+2820/48/34
+*19-10-07* 3800/50/36.5 EN.AM.
+*23-11-07* 4900/55/38 EN.Allaitement mixte.
+*24-12-07* 5550/57.5/39 EN.Allaitement mixte.RHD.
+*24-01-08* 6000/59.5/40 EN.Allaitement mixte.Fruit.RHN.
+*22-02-08* 6200/62/40.5 EN.L.
+*18-03-08* 6900/64/41.5 EN.RV.Fluor.
+*25-03-09* Rhinite (BE).
+*18-04-08* 7400/65.5/42 EN.Poulet.
+*22-05-08* 7900/67/43 EN.
+*24-06-08* 8300/69/43 EN.
+*22-08-08* 8900/71.5/44 EN.
+*24-09-08* 9500/73/44.5 EN.
+*24-10-08* 9500/74/44.5 EN.
+*27-11-08* 10.2/75/45.5 EN.
+*30-12-08* 9800/76/45.5 EN.
+*30-01-09* 10.5/78/45.5 EN.
+*06-03-09* 10.6/79.5/46 EN.
+*07-04-09* 11/80/46.5 EN.
+*26-11-09* Syndrome grippal depuis 48 heures. Nuque souple. Bon EG. EN en dehors d'une pharyngite. AT.
+*02-12-09* 13.2/86/47 EN.
+*08-02-10* GEA.
+*16-04-10* 14.7/92/48 EN.
+*01-09-10* 15.2/96/49 EN.
+*18-10-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*24-12-10* Otite bilatérale.Cefdinir (mère allergique à l'amoxy-clav).
+*15-02-11* 16.2/100/ EN.Otite ext D.Cipro Plus.
+*17-03-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*21-03-11* Baisse puis reprise de la fièvre ce jour.EN en dehors otite G!Cefdinir.
+*21-11-11* 18.6/105/ Douleurs abdominales il y a 2j entraînant des pleurs.Pas de troubles digestifs ou de fièvre associés.Appétit conservé.Bon EG.EN.CAT:ECBU + Echo.
+*16-12-11* ECBU non encore faite.Echo N en dehors de la suspicion d'1 duplicité urinaire (pyélique) G.Pas de dilatation.A priori:surveillance.ECBU à faire.Avis chir (ZG).
+*20-01-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*25-01-12* Disparition puis reprise de la fièvre hier.Otite G.Amoxy-Clav.
+*19-03-12* 19/ Rhino-pharyngite purulente fébrile.Rash roséoliforme fin sur le tronc.Amoxy.
+*02-04-12* Rhino-pharyngite purulente fébrile de nouveau.Amoxy-Clav.
+*02-05-12* Rhino-pharyngite purulente fébrile.Cefuroxim.
+*04-05-12* N'a pas pris la Cefuroxim.Otalgie.EN en dehors d'1 otite G.Amoxy-Clav.
+*06-07-12* 19/111.5/ A passé les 3 premiers mois avec 1 coryza purulent.Prélèvement nasal:HI peu sensible avec S.Pneumonae très sensible!Depuis 1 sem:disparition de tous les symptomes. EN.
+*09-07-12* Fièvre depuis la veille.Synd grippal.EN en dehors d'1 pharyngite.Virose probable.AT.
+*13-07-12* La fièvre est partie pour revenir ce jour.Souffre de son ventre.EN.Ventre souple.ECBU.
+*16-07-12* ECBU: 350 GB/l - > 1.000.000 E.Coli BLSE.
+*26-09-12* 20/112/ EN.
+*25-10-12* 20/112.5/ EN.Discret astigmatisme (EC).
+*05-11-12* Otite G.Amoxy-Clav.
+*06-12-12* Otalgie G.EN en dehors d'1 otalgie G.Pas de fièvre.EN en dehors d'1 tympan G remanié mais sans collection derrière.Virose probable.
+*01-02-13* Brûlures mictionnelles.ECBU:260 GB/ml. Col: 5.000/ml.Gyndelta.
+*22-03-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*26-03-13* Encore 1 peu fatiguée.Nauséeuse et ne se "sent pas bien".Pas de fièvre.EN.Persévérer.
+*17-04-13* 20.5/115/ EN.
+*04-06-13* ECBU: 1.000.000 col/ml E.Coli.Cefixim puis imagerie.
+*27-06-13* GEA fébrile.EN.RAD.
+*12-07-13* 21/116.5/ EN.Cysto N.Stase sterchorale.Sirop de figues et de manne.
+*16-01-14* 24/119/ EN.
+*13-02-14* 24/119.5/ EN.
+*06-03-14* Rhino-pharyngite purulente fébrile.Amoxy.Ditopan pour DVS.
+*20-03-14* Encombrée.EN.SPH.
+*02-04-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*04-04-14* Fièvre tj.Coryza trouble.Amoxy.
+*22-07-14* 25/123.5/ Douleurs abdominales + nausées depuis hier.Pas de fièvre ni de diarrhée.EN.
+*29-09-14* Douleurs abdominales vagues + "vertige" depuis hier.Excellent EG.EN.Virose en préparation?A suivre.
+*07-10-14* Amélioration puis reprise des symptomes.
+*09-10-14* Bilan sanguin N.
+*26-11-14* 28/125.5/ EN.
+*17-04-15* Prurit.RAS.yoyos + adénoïdectomie (E. Eter, St joseph - 08-04-15).
+*05-10-15* 35/131/ Fond nauséeux depuis 2-3j.Appétit correct.Pas de trouble du transit.EN.Virose probable.
+*19-10-15* Présente on & off encore des douleurs abdominales avec fond nauséeux.Excellent EG.EN.Petit bilan.
+*18-05-16* 37/135/ EN.Puberté 0.
+*13-10-16* Synd grippal.EN en dehors d'1 pharyngite.Virose probable.S1.
+*07-11-16* 40/137.5/ EN.S1P1
+*19-01-17* Tousse et a le vertige depuis 3j.Pas de fièvre.Sinusite allergique possible.Avamys.
+*13-11-17* 45.8/143.5/  EN.S2P1.
+*19-03-18* 50/146.5/ EN.S3P1.
+*25-10-18* 53.9/151.5/ Nausées depuis 2-3j surtout le matin,sans diarrhée ni vomissement.EN en dehors d'1 myringite bulleuse G.S4P2.

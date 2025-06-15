@@ -1,0 +1,60 @@
+3518/53/35
+*05-06-08* 4000/55.5/37.8 EN.
+*03-07-08* 5350/59.5/40 EN.
+*04-08-08* 6350/62.5/41.5 EN.RHD.
+*04-09-08* 6950/65.5/43 EN.Fruit.RHN.
+*06-10-08* 7900/68.5/44 EN.L.
+*06-11-08* 8300/70.5/45 EN.RV.Fluor.
+*04-12-08* 8600/71.5/46 EN.
+*08-01-09* 9500/74/47 EN.
+*12-02-09* 9600/74.5/47 EN.
+*16-02-09* Otite D.Amoxy-Clav.
+*30-04-09* 9800/77.5/48 EN.
+*18-05-09* Fièvre + selles molles + rash morbilliforme ce jour.EN en dehors d'1 belle pharyngite granuleuse.Virose probable.AT.
+*04-06-09* 9900/78/48 EN.
+*02-07-09* Rhino-pharyngite purulente fébrile.La fièvre a disparu ce jour.Si reprise,amoxy.
+*09-07-09* Rhino-pharyngite purulente fébrile.Amoxy.
+*21-07-09* 10.2/79.5/48.5 EN.
+*03-09-09* 11/80/49 EN.
+*09-09-09* Rhino-pharyngite purulente fébrile.Amoxy.
+*08-10-09* 11.4/82.5/49.5 EN.
+*26-11-09* 11.7/83/50 EN.
+*01-12-09* Fièvre isolée depuis hier avec baisse de l'alimentation.Bon EG.Otite gauche.Amoxy-Clav.
+*14-04-10* 13/89.5/ Otite D.Amoxy-Clav.
+*13-05-10* Fièvre isolée depuis hier.EN en dehors d'1 pharyngite.Virose probable.AT.
+*19-05-10* 13/90/50.5 EN.
+*08-07-10* 13.4/92 EN à part un ganglion cervical postérieur gauche et 2 petits ganglions inguinaux.Bilan.
+*14-07-10* Hb 12.9; GB 10.900(L 67%); IgM EBV 1.3; IgG EBV 70.
+*07-10-10* 13.7/94/51 EN.
+*24-01-11* 14.3/97.5/ Rhino-pharyngite purulente fébrile.Amoxy.
+*03-03-11* 14.8/98/51 EN.
+*07-04-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*14-04-11* 14.7/100/51.5 EN.
+*03-05-11* Fièvre depuis hier.EN en dehors d'1 angine d'allure virale.AT.
+*10-10-11* 16.5/103.5/ EN.
+*12-12-11* GEA.ORS (BE).
+*13-02-12* 17.1/107/ Rhino-pharyngite purulente fébrile+conjonctivite purulente.Amoxy-Clav.
+*02-04-12* 17.7/108/ Fièvre depuis 2j.Selles molles.Ex:Synd PMB.
+*10-01-13* 19/112.5/ Synd grippal fébrile.EN en dehors d'1 pharyngite + ADP SAM.Virose probable.AT.
+*05-06-13* 20/115/ EN.
+*17-10-13* 20.5/117/ EN.
+*28-11-13* /118/ EN.
+*18-02-14* /121.5/ GEA fébrile.Bon EG.EN.Grosses amygdales propres.RAD+AT.
+*20-03-14* 22.5/121.5/ EN.
+*22-05-14* 23.5/122/ EN.
+*21-08-14* 24.5/123/ GEA.EN.RAD.
+*10-09-14* 24/123/ Odynophagie,pas de fièvre.EN à part une gorge érythemateuse.Virose (CM).
+*17-11-14* Fièvre hier puis rash papulo-maculeux évanescent.Rien à l'examen.Virose.
+*30-12-14* Otalgie Droite. Pas d'OMA. EN. Otisedol.
+*06-03-15* Fievre depuis 24 heures. cephalee et douleur abdominale. EN, ganglions cervicaux bilateraux.
+*07-05-15* 27.5/127/ EN.
+*08-06-15* Synd grippal fébrile avec céphalées.EN en dehors d'1 pharyngite.Nuque souple.Virose probable.AT.
+*22-10-15* 31.5/130/ EN.
+*19-11-15* 30/131.5/ EN.
+*15-02-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*27-05-16* 32/133.5/ EN.
+*22-09-16* 34.5/136/ EN.
+*13-02-17* 36.5/138/ EN.
+*22-09-17* 42.2/140/
+*05-10-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*03-01-19* 47.8/149/ EN.

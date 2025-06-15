@@ -1,0 +1,58 @@
+3070/49/33.5
+*19-01-07* 6000/60/39.5 EN.RHD.
+*24-01-07* Rhume.EN.SPH.
+*19-02-07* 6800/63.5/41 EN.Fruit.RHN.
+*19-03-07* 7400/65/41.8 EN.
+*03-04-07* Synd grippal fébrile depuis 2j.Pas de fièvre ce jour.EN.Virose possible.Si reprise de la fièvre,ECBU.
+*04-04-07* Reprise de la fièvre ce jour.Ex tj normal.ECBU.
+*05-04-07* ECBU:GB=6.000/ml.Suspicion de PNA.Hospitalisation.
+*16-04-07* PNA confirmée.Bonne évolution sous ttt IV.Echo N.Cysto:RVU grade I à D.Sort sous cefaclor.
+*26-04-07* 7700/67.5/42.5 EN.RV.Fluor.
+*07-05-07* ECBU stérile.
+*28-05-07* 8200/69.5/43.5 EN.
+*28-06-07* 8500/70.5/44 EN.
+*30-07-07* 8700/72/44 EN.
+*10-09-07* Fièvre ce jour.EN en dehors d'1 aphte lingual.Virose probable.AT.
+*13-09-07* 9100/73.5/ EN.
+*27-11-07* 9400/76/44 EN.
+*04-12-07* Anorexie??Oligurie??EN.ECBU (BE).
+*02-01-08* 9700/76.5/44 EN.
+*19-02-08* 10/79/44.5 EN.
+*18-03-08* 10/80/44.5 EN.
+*25-04-08* Cysto de contrôle:RVU passif grade I G.
+*29-04-08* 10.2/81.5/45 EN.
+*01-05-08* Petit rash évanescent.EN.Virose.
+*27-05-08* 10.3/82/45.5 EN.
+*19-08-08* Fébricule pendant 1j puis rash cutané maculeux polymorphe au nv des membres.EN par ailleurs.Virose.
+*19-09-08* A vomi plusieurs fois ce jour.Pas de fièvre ni de diarrhée.EN.Domperidone.
+*29-09-08* Eruption maculeuse labile et fugace.Virose probable.
+*18-11-08* 11/86.5/45.5 EN.
+*09-04-09* Cysto de contrôle N.
+*22-05-09* 12/90/46.5 EN.
+*26-06-09* Fièvre isolée ce jour.EN en dehors d'1 petite pharyngite.Pas de raideur méningée.Virose probable.AT.
+*15-09-09* 12.1/92/46.5 EN.
+*16-09-09* A vomi 2 fois ce jour dans 1 contexte subfébrile.EN.Virose probable.
+*27-11-09* Syndrome grippal febrile depuis 2 jours. Bon EG. Otite G. Amoxy-Clav.
+*05-07-10* 14/99/ Fièvre + syndrome grippal depuis 48 heures.Bon EG.EN en dehors d'une pharyngite.Virose probable.AT.
+*07-07-10* Persistance de la fièvre avec syndrome grippal.Rhinopharyngite purulente aigue.Cefdinir (allergie à l'Amoxy-Clav??)
+*27-12-10* A fait 1 stomatite fébrile.Pas de fièvre ce jour.EN.
+*30-06-11* 16.1/106.5/ EN.Plaie du front,suturée.
+*16-09-11* 16.1/107.5/ EN.
+*17-11-11* 16.9/108/ EN.
+*18-01-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*16-05-12* Fièvre ce jour.EN.Virose probable.
+*21-05-12* La fièvre persiste mais très espacée.EN.
+*25-06-12* 18.1/113.5/48.5 EN.
+*12-10-12* 18.5/114.5/ EN.
+*01-03-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*18-06-13* 20.5/118/ EN.
+*18-10-13* 20.5/120/ EN.
+*13-10-14* Angine.Amoxy.
+*10-11-14* 25/124/ EN.
+*20-11-15* 30/131/ EN.
+*09-02-16* 33/132/ EN.Bougeons mammaires discrets.
+*20-09-16* 31/136/ EN.S1.
+*23-10-17* 36.9/143.5/ EN.S3P1.
+*04-07-18* 40/149 EN.Premieres menstruations 14/6/2018
+*14-02-19* 46/152 EN.
+*22-03-19* Syndrome grippal febrile depuis hier.Bon EG.Nuque souple.EN en dehors d'une pharyngite.Virose probable.AT.

@@ -99,8 +99,11 @@ def import_xml():
                     document_format=document_format
                 )
                 
-                format_name = "Word documents" if document_format == 'docx' else "Markdown documents"
-                flash(f'XML import completed: {patients_added} patients, {visits_added} visits, {vaccines_added} vaccines imported. {format_name} created in Documents/UnifiedEMR/word_documents/', 'success')
+                if document_format == 'none':
+                    flash(f'XML import completed: {patients_added} patients, {visits_added} visits, {vaccines_added} vaccines imported. No files created.', 'success')
+                else:
+                    format_name = "Word documents" if document_format == 'docx' else "Markdown documents"
+                    flash(f'XML import completed: {patients_added} patients, {visits_added} visits, {vaccines_added} vaccines imported. {format_name} created in Documents/UnifiedEMR/word_documents/', 'success')
             
             except Exception as e:
                 flash(f"Error during XML import: {str(e)}", 'danger')
@@ -185,9 +188,13 @@ def import_documents():
                      'info' if success else 'danger')
             
             if total_success > 0:
-                format_name = "Word documents" if document_format == 'docx' else "Markdown documents"
-                flash(f'Document import completed: {total_success} succeeded, {total_fail} failed. {format_name} created in Documents/UnifiedEMR/word_documents/', 
-                     'success' if total_fail == 0 else 'warning')
+                if document_format == 'none':
+                    flash(f'Document import completed: {total_success} succeeded, {total_fail} failed. No files created.', 
+                         'success' if total_fail == 0 else 'warning')
+                else:
+                    format_name = "Word documents" if document_format == 'docx' else "Markdown documents"
+                    flash(f'Document import completed: {total_success} succeeded, {total_fail} failed. {format_name} created in Documents/UnifiedEMR/word_documents/', 
+                         'success' if total_fail == 0 else 'warning')
             else:
                 flash(f'Document import completed: {total_success} succeeded, {total_fail} failed.', 
                      'success' if total_fail == 0 else 'warning')

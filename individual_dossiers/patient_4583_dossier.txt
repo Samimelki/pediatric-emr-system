@@ -1,0 +1,63 @@
+3670/51/35
+*06-08-01* 4800/55/38.5 EN.
+*05-09-01* 5600/57.5/40 EN.Fruit,fluor.
+*03-10-01* 6300/61/41.5 EN.L.RHD.
+*07-11-01* 7200/64.5/42.5 EN.LV.RHN.
+*03-01-02* 8100/68.5/44 EN.RV.
+*10-01-02* Fièvre depuis hier+selles molles.EN.GEA probable.RAD+AT.
+*06-02-02* 8400/70.5/45 EN.
+*15-04-02* 9100/73.5/46 EN.
+*03-06-02* 9600/76/46.5 EN.
+*18-06-02* A fait 1 chute du lit sur le sol(40 cm) il y a 1 sem.Depuis,la mère note que la fillette fait 1 révulsion des yeux très brèves,sans perte de connaissance ni résolution du tonus.EN.Coïncidence probable.EEG de précaution.
+*28-06-02* 9900/76.5/46.5 EN.EEG fait pour regard surélevé de temps en temps:N.
+*12-09-02* 10.5/80.5/47 EN.
+*11-10-02* A fait 1j de fièvre il y a 1 sem.Reprise de la fièvre hier.Selles diarrhéiques ce jour.EN en dehors d'1 petite pharyngite.Virose probable. RAD+AT.
+*14-11-02* 10.7/81/47.5 EN en dehors d'1 petite conjonctivite purulente.A fait 2j de fièvre il y a 4j.Fucithalmic.
+*26-12-02* Rhino-pharyngite purulente fébrile.Amoxy.
+*06-01-03* A fait 2j de fièvre avec inappétance max.Pas de fièvre ce jour.EN en dehors d'1 discrète herpangine. Medijel.
+*21-01-03* Angine.Amoxy.
+*10-02-03* Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*07-03-03* Synd grippal sans fièvre.EN en dehors de 2 aphtes sur le pilier d du plais et d'1 rash d'allure allergique (prurigo) au niveau des MI.Virose.
+*16-04-03* 12.1/ Rhino-pharyngite purulente fébrile.Tympan G suspect.Amoxy-Clav.
+*19-05-03* Fièvre ce jour+selles 1 peu molles.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*05-08-03* 12.5/87/48 EN.
+*17-11-03* Fièvre il y a 2j.EN en dehors d'1 Rhino-pharyngite purulente fébrile.Amoxy.
+*15-03-04* Fièvre depuis 3j.EN en dehors d'1 angine+jetage purulent post.Amoxy.
+*27-04-04* Rhino-pharyngite purulente fébrile.Amoxy.
+*04-06-04* 13.8/94.5/49.5 EN.Allergie cutanée au nv des bras.Ebastel.
+*14-01-05* Rhino-pharyngite purulente fébrile.Amoxy.
+*09-11-05* Synd grippal fébrile.EN.Virose probable.AT.
+*19-01-06* Douleurs aux MI survenant d'1 façon irrégulière depuis 1 an environ.EN.NFP,VS.
+*31-01-06* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*02-02-06* Fièvre tj.Ex idem.AT.
+*05-04-06* Fièvre isolée depuis hier.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-04-06* 17/ La fièvre a perduré jusqu'à ce matin.Pas de fièvre ce jour.EN en dehors d'1 angine!Si reprise de la fièvre,amoxy.
+*09-08-06* 17.1/106/ EN.
+*11-09-06* 17.2/107/ EN.
+*29-12-06* Cons IG:douleurs de croissance aux MI.
+*15-01-07* Rhino-pharyngite purulente fébrile.Amoxy.
+*19-01-07* Fièvre de nouveau ce jour.EN.Persévérer.
+*22-01-07* La fièvre persiste encore.EN.Rx thorax.
+*08-03-07* ECBU:2.000 GB/ml.E.Coli 1.000.000 col/ml.Suprax puis imagerie.
+*23-04-07* Echo rénale N.Cysto:RVU grade IIa à G.
+*04-05-07* Fièvre depuis 3j.Angine.Amoxy.
+*29-11-07* 19/113.5/ EN.
+*10-03-08* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*04-07-08* Fièvre depuis hier+douleurs abdominales.EN.Bon EG.Virose possible.ECBU de principe.
+*20-11-08* 20/120.5/ EN.
+*11-09-09* 21.5/123.5/ EN.
+*29-10-10* 25/128.5/ EN.
+*31-12-10* Rhino-pharyngite purulente fébrile.
+*22-08-11* Conjonctivite purulente.Fucithalmic.
+*10-10-11* 26.5/133.5/ EN.
+*11-11-11* 27/134/ EN.Puberté:S1.
+*11-01-12* 28.5/134.5/ EN.
+*17-02-12* EN.
+*10-08-12* 28.5/137.5/ EN.S2.
+*04-04-13* 30/141.5/ EN.S2.
+*25-03-15* 39.5/157.5/ EN.Premières menstruations le 24-07-2014.
+*25-09-15* 42.5/159.5/ EN.
+*23-10-15* EN.
+*02-03-17* 45.5/161/ EN.
+*14-11-18* 47.4/161/ EN.
+*12-12-18* EN.

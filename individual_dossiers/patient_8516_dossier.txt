@@ -1,0 +1,61 @@
+3340/50/35 Hospitalisé à H3 de vie pour DRN.Evolution simple. *
+*30-09-10* 4350/55/36.5 EN.Allaitement mixte.
+*01-11-10* 5950/58/39 EN.Allaitement mixte.
+*05-11-10* Petit rhume.EN.
+*01-12-10* 6900/62/40 EN.RHD.
+*27-12-10* Otite D.Amoxy-Clav.
+*07-01-11* 8000/65.5/41.5 EN.RHN.Fruit.
+*26-01-11* Fébricule ce jour.EN en dehors d'1 petite pharyngite.
+*02-02-11* 8500/67/42.5 EN.L.
+*02-03-11* 9000/68.5/43.5 EN.RV.Fluor.
+*07-03-11* Fièvre depuis 2j avec discrète toux.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*11-03-11* La fièvre a disparu,mais tousse encore.EN.SPH.
+*30-03-11* 9200/70.5/44 EN.
+*02-05-11* 9500/72.5/45 EN.
+*09-05-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*17-05-11* Refièvre depuis hier.EN en dehors d'1 pharyngite vésiculeuse.Virose intercurrente.Persévérer.Medijel.
+*03-06-11* 9800/73.5/45.5 EN.
+*19-07-11* Tousserait depuis 1 mois nuit et jour,sans position préférentielle.Pas de fièvre.Bon EG.EN.Cetirizine.
+*01-08-11* 10.6/78/46.5 EN.
+*07-09-11* 11.1/78.5/46.5 EN.
+*15-09-11* Fièvre,selles molles,coryza purulent depuis hier.Ce jour,baisse de la fièvre avec rash sur le tronc.EN.Virose.RAD + Cebemyxine.Si reprise de la fièvre,amoxy.
+*05-10-11* 11.3/79.5/47 EN.
+*02-11-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*10-11-11* Fièvre à nouveau depuis hier.EN.Pas de rash cutané.Virose intercurrente probable.Persévérer.
+*17-11-11* 11.4/80.5/47.5 EN.
+*19-12-11* 11.6/82/48 EN.
+*24-01-12* Otite G.OSM D.Amoxy-Clav.
+*16-02-12* Otite D!!Ceftriaxone.
+*14-03-12* 12.7/86/48.5 Fièvre depuis hier.Angine.OSM bilatérale.A suivre de près.Amoxy-Clav.
+*28-03-12* Fébricule isolé ce jour.EN.OSM améliorée.
+*05-04-12* Fièvre depuis hier.EN en dehors d'1 angine.Si persistance de la fièvre demain,amoxy.
+*18-04-12* 12.3/86.5/49 EN.
+*14-05-12* Fièvre depuis 2j.Ex:Tympans distendus opaques avec angine.Amoxy-Clav.
+*12-07-12* 12.7/89/49.5 EN.
+*16-07-12* Otite G.Amoxy-Clav.
+*21-09-12* 12.7/90/49.5 EN.
+*24-10-12* 13.8/91/ EN.
+*11-01-13* 13.8/93/ Otite D.Amoxy-Clav.
+*25-02-13* GEA fébrile.EN.RAD.
+*25-09-13* 15.1/99/ EN.
+*21-10-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*18-12-13* Otalgie.EN en dehors d'1 OSM à D.
+*21-02-14* Grippe.EN.
+*07-08-14* 17/106.5/ Tousse.EN.
+*23-10-14* 19/107.5/ Tousse.EN.
+*01-04-15* 18/111/ EN.
+*04-05-15* A fait 2j de fièvre.Rien ce jour.EN.
+*06-01-16* 20/117/ EN.
+*16-02-16* Otite D.Amoxy-Clav.
+*06-05-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*11-07-16* 21/121/ EN.
+*09-09-16* EN.
+*16-11-16* 23.5/122.5/ EN.
+*23-12-16* Rhino-pharyngite purulente fébrile.
+*13-03-17* 24/124/ EN.
+*19-04-17* EN.
+*11-07-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*27-02-19* Vomissements et douleur abdominale depuis 72 heures.Pas de fievre.Bon EG.Pas de signe d'appendicite.EN.GEA probable.
+*22-03-19* 30.5/Douleur de gorge febrile.EN en dehors d'une pharyngite.Virose probable.Mere prefer faire strep test.
+*19-07-19* 32/139 EN.
+*11-09-19* otite sereuse bilaterale.Otrivin.

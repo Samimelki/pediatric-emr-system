@@ -1,0 +1,45 @@
+4360/54.5/38.5
+*13-05-05* 4950/55.5/38.5 EN.Hydrocèle bilatérale.AM.Régurgitations.Symptômes de tachy-aérophagie.Conseils.
+*24-06-05* 6500/61/42 EN.AM.
+*25-07-05* 6950/64/43 EN.AM.RHD.
+*29-08-05* 7500/66/44.5 EN.Allaitement mixte.RHN.
+*04-11-05* 9050/71/46.5 EN.Hydrocèle diminuée de vol.RV.Fluor.
+*15-12-05* 9200/72.5/47.5 EN.
+*02-02-06* 10/75.5/48.5 EN.
+*09-05-06* 10.4/78.5/50 EN.
+*14-06-06* 11.1/81/50 EN.
+*20-06-06* Fièvre depuis hier.Toux imp et 1 vomissement ce matin.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-06-06* Farfote 1 peu.Selles diarrhéiques.EN.RAD.
+*02-08-06* 10.8/82.5/50.5 EN.
+*06-09-06* 11.6/84.5/50.5 EN.
+*16-10-06* 11.6/88/51 EN.
+*13-11-06* Otite D.Amoxy-clav.
+*27-11-06* Synd grippal fébrile.EN.Virose probable.AT.
+*19-12-06* Rhino-pharyngite purulente fébrile.Amoxy.
+*20-03-07* Rhino-pharyngite purulente fébrile.Amoxy.
+*16-05-07* Rhino-pharyngite purulente fébrile.Amoxy.
+*25-06-07* 13.8/93.5/ Fièvre isolée depuis hier.EN en dehors d'1 pharyngite.Virose probable.AT.
+*26-12-07* Rhino-pharyngite purulente fébrile.Amoxy.
+*11-02-08* Fièvre depuis hier avec 1 vomissement.EN en dehors d'1 tympan D 1 peu opalescent mais sans collection derrière.Vuirose probable.AT.
+*21-08-08* 16.8/102.5/ EN.
+*07-11-08* A fait 3 épisodes fébriles en 40j,s'accompagnant "d'aphtes".EN ce jour en d'aphtes sur la langue,probablement auto-entretenus.
+*08-01-09* Fièvre ce matin avec adynamie importante et douleurs partout (surtout au nv de la tête et de l'abdomen).N'arrive pas à uriner,bien qu'il soit en train de boire.Pas de troubles digestifs.Ex:Pas de raideur méningée.Grosses amygdales propres.Pharyngite.Abdomen:RAS.Grippe possible. Faire Rx Thorax + ECBU.
+*10-11-09* 18/110.5/ EN.
+*11-01-10* 18/ Fièvre depuis 36 heures.Rhinopharyngite purulente.Amoxy.
+*11-06-10* 19.5/115/ EN.
+*24-11-10* A eu 1 enflement du cou à G hier.Ce jour cet "enflement" a bien diminué.EN en dehors de grosses amygdales propres,d'1 jetage purulent post + 2 ADP SAM bilatérales.Excellent EG. Virose probable.Cebemyxin.
+*27-06-11* GEA fébrile.EN en dehors de très grosses amygdales propres + pharyngite.
+*10-11-11* Otite bilatérale.Est sous Amoxy-Clav depuis ce matin (urgences-HDF).
+*21-08-12* 24/127.5/ EN.
+*08-02-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*08-11-13* Synd grippal fébrile+laryngite.EN en dehors d'1 pharyngite.Virose probable.AT.
+*01-04-14* Gonalgie D hier soir fugace.Apparition brusque d'1 fièvre élevée au petit matin.A malun peu partout,mais n'a plus mal au genou D.EN en dehors d'1 petite pharyngite + 1 petit doute sur 1 raideur méningée,rapidement écarté après plusieurs tentatives de flexion de la nuque.Virose probable.
+*06-10-14* 30.5/138.5/ EN.
+*06-05-16* 38.5/145.5/ EN.Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*31-08-16* 39.5/147/ EN.Puberté 0.
+*05-09-17* 43.6/151/ EN.Puberté 0.
+*05-10-17* 46.1/151/ EN.
+*31-05-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-08-18* 48.9/155.5/ EN.OGE commencent à se développer.
+*02-09-19* 58.4/159 EN.OGE augmentes de volume.
+*25-09-19* Angine.Amoxy-clav.

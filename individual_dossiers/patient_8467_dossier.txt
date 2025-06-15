@@ -1,0 +1,62 @@
+3260/51/35
+*02-07-10* 4100/54.5/37 Allaitement mixte.EN.
+*08-07-10* Pustulose aseptique + érythème au niveau du tronc et des bras.Atoderm.
+*02-08-10* 5500/60/39 EN.
+*02-09-10* 6150/62.5/40 EN.RHD.
+*04-10-10* 7300/65.5/42 EN.RHN.Fruit.Angiome plan du dos de la main G.
+*03-11-10* 8800/69.5/43.5 EN.L.
+*02-12-10* 9400/72/44.5 EN.RV.Fluor.
+*03-01-11* 10.3/74.5/45.5 EN.
+*28-01-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*02-02-11* 10.9/76.5/46 EN.
+*02-03-11* 11.5/77.5/46.5 EN.
+*10-03-11* Fièvre depuis 3j + selles diarrhéiques.EN en dehors d'1 pharyngite.Virose probable.RAD + AT.
+*04-04-11* 11.6/78/47 EN.
+*04-05-11* 12.2/79/47.5 EN.
+*02-06-11* 12.7/82/47.5 EN.
+*04-07-11* 13/83/48 EN.Angiome qui blanchit.
+*01-08-11* 13.7/85.5/48.5 EN.
+*12-08-11* Fièvre + selles molles.EN en dehors d'1 petite pharyngite.Virose probable.RAD + AT.
+*01-09-11* 13.4/86/49 EN.
+*03-10-11* 14.2/87.5/49 EN.A fait de la fièvre avec 100.000 col/ml puis 30.000 col avec 2 GB/ml.Echo N.
+*02-11-11* 14.3/89/49.5 EN.
+*03-02-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*02-04-12* 15.2/ Otite D.Amoxy-Clav.
+*04-05-12* 15.7/94/50.5 EN.
+*22-06-12* 16/96.5/ EN.
+*02-11-12* 16/98/ EN.
+*13-11-12* Angine+jetage post purulent.Amoxy.
+*06-12-12* Otite D.Amoxy-Clav.
+*08-02-13* Fièvre isolée depuis 3j.EN en dehors d'1 petite angine d'allure virale.Si persistance demain,amoxy.
+*20-05-13* Cellulite cutanée superficielle de la partie ant de la cuisse D après piqûre de moustique.Cefadroxyl.
+*07-06-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*17-07-13* 17.5/104.5/ EN.
+*08-11-13* Gengivo-stomatite fébrile.EN par ailleurs.Medijel.
+*14-02-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*26-02-14* Fissure anale.
+*14-04-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*05-05-14* Fièvre éruptive avec recrudescence de la fièvre ce jour.Otite D débutante + angine d'allure virale.Amoxy-Clav.
+*10-07-14* 20/112/ EN.
+*09-02-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*19-02-15* A fait 3j de fièvre sous AB.Rien ce matin.EN.Excellent EG.Virose intercurrente probable.
+*05-03-15* 20/ Fièvre depuis 24 heures et toux.EN mais rhinorrhée postérieure sévère.Surveillance 24h sinon amoxy-clav. (CM).(Pas de prise d'AB).
+*18-03-15* Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*28-05-15* Otite D après fièvre éruptive.Amoxy-Clav.
+*01-07-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*10-07-15* 20/118/ EN.
+*10-08-15* EN.
+*02-09-15* 23/121/ EN.
+*18-12-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*18-02-16* Otite moyenne bilaterale. Amoxy-Clav.
+*20-05-16* Fièvre oscillante depuis 4-5j + toux.Depuis ce matin,douleur à la base thoracique G.EN en dehors d'1 pharyngite et d'1 diminution du MV à la base G.CAT:Rx Thorax.
+*22-06-16* 23/126/ EN.
+*28-07-16* 24.5/126.5/ EN.
+*27-01-17* Rhino-pharyngite purulente fébrile.Clarithro.
+*08-03-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*09-08-17* 28/133.5/ EN.
+*13-09-17* 28.6/134/ EN.
+*21-12-17* Fatigué ce jour.EN.
+*13-04-18* 30/ Fièvre et douleur de gorge.EN.Virose probable.AT.Molluscum contagiosum partie anterieure du cou G.
+*28-05-18* Otite G.Amoxy-Clav.
+*02-01-19* Tousserait depuis 3-4 sem.EN.
+*26-08-19* 32.3/144 EN.

@@ -1,0 +1,64 @@
+3250/50/36
+*26-04-04* 4900/52.5/38.5 EN.Discret ictère.HO.AM.ILF probablement.
+*26-05-04* 6000/55/40.5 EN.AM.HO.A fait 1 oedème lors de l'introduction du LV.
+*15-07-04* 7200/61.5/42 EN.Allaitement mixte avec Nutarmigen.RHD.HO nettement diminuée de vol.
+*16-08-04* 7500/63.5/43.5 EN.RHN.AM exclusif.
+*25-08-04* 7950/ A fait 1 jour de fièvre puis rash non spécifique.EN en dehors d'1 petite pharyngite.Virose probable.
+*22-09-04* 8300/65.5/44.5 EN.AM.Fruit.Fluor.
+*27-10-04* 8400/67.5/44.5 EN.AM.L.
+*06-12-04* 8900/ Otite bilatérale.Amoxy-Clav.
+*11-01-05* 9200/70.5/46 EN.AM.
+*15-02-05* Otite bilatérale.Cefuroxim.A fait aussi 1 autre otite il y a 25j(vue à l'HDF et traitée par Orelox).Cons ORL(AH).
+*08-03-05* 9500/72/47.5 EN.
+*30-03-05* 9700/73/47.5 EN.On fera l'épreuve de réintroduction des PLV le 06-04-05.
+*08-04-05* Synd grippal fébrile.EN.Virose probable.Echec de l'épreuve de réintroduction des PLV.
+*25-04-05* A fait 1j de fièvre il y a 2j.EN.Virose probable.
+*08-06-05* 9800/76.5/48.5 EN.AM.
+*18-07-05* Otite D.Amoxy-Clav.
+*30-08-05* 10/78.5/49 EN.AM.
+*05-10-05* 10.6/79.5/50 EN.AM.
+*22-11-05* 11.1/82/49.5 EN.AM.
+*13-03-06* 12/86.5/50.5 EN.AM.
+*17-03-06* Otite G.Amoxy-Clav.
+*22-08-06* 13/90/51 EN.
+*27-11-06* Grippe.EN.
+*15-02-07* Fièvre+céphalées depuis hier.EN en dehors d'1 vague pharyngite.Virose probable.AT.
+*06-03-07* Rhino-pharyngite purulente fébrile.Amoxy.
+*18-04-07* 14/96/51 EN.
+*02-05-07* 14.3/96.5/51 EN.
+*12-06-07* Otite ext D.Oflo.
+*22-10-07* Otite ext G.Sofradex.
+*29-11-07* Otite ext D.Oflo+dexa.
+*10-12-07* OMA Bilatérale.Amoxy-Clav (BE). 
+*07-01-08* Fièvre isolée depuis 2j.Son frère 1 GEA fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*06-03-08* VARICELLE discrète.Tousse 1 peu.EN.
+*17-04-08* Tousse depuis hier.Fièvre hier.EN en dehors d'1 petite pharyngite.
+*02-07-08* Otalgie.EN en dehors d'1 petite pharyngite.
+*22-09-08* Bronchite sifflante subfébrile.Terrain allergique familiale.Salbu.
+*24-09-08* Guérie.
+*26-09-08* Otite ext D.Cipro+dexa.
+*29-09-08* Fièvre depuis 3j.EN.La petite signale des brûlures mictionnelles.ECBU.
+*20-11-08* 17/ Tousserait depuis 10j environ,essentiellement le jour.EN.Toux allergique.
+*15-12-08* Otite ext G.Otisedol (BE).
+*19-01-09* EN.
+*06-02-09* Synd grippal subfébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*18-03-09* 18/109/ EN.
+*04-05-09* EN.
+*15-09-09* EN.
+*11-11-09* Synd grippal subfébrile.Bon EG.EN en dehors d'1 pharyngite.Nuque souple.Virose probable.AT.
+*21-04-10* 23/115/ EN.
+*09-05-11* 24.5/121/ EN.
+*06-09-11* 25.5/124.5/
+*09-01-12* 29/126/ EN.
+*06-02-12* 29.5/126.5/ EN.
+*03-05-13* 32/133/ EN.
+*04-11-13* Rhino-pharyngite purulente.Amoxy.
+*17-02-14* 35/138.5/ EN.Puberté 0.
+*28-05-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*02-02-15* 36.5/142/ EN.S1P1.
+*18-03-15* EN.S1P1.
+*18-05-15* 36.5/143.5/ EN.S1P1.
+*16-05-16* 42.5/151.5/ EN.S3P3.
+*22-09-16* 46.5/154.5/ EN.S3P3.
+*29-08-17* 49/156.5/ EN.Premières menstruations en nov 2016.
+*04-03-19* 47.9/158.5 EN.

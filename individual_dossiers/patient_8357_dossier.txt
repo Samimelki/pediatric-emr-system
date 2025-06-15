@@ -1,0 +1,63 @@
+3120/51/35
+*24-11-09* 4700/55/37.5 EN. 
+*14-12-09* 5800/59/39.EN.
+*21-12-09* 6300/60/40.EN.
+*01-01*10* Hospitalisé pour bronchiolite (HDF).
+*13-01-10* 7000/ Rhinite.
+*21-01-10* 7200/62/41 EN.
+*26-01-10* Rhume.EN.SPH.
+*23-02-10* 8000/67/42 EN.
+*05-03-10* Rhinite.Cebemyxin.
+*30-03-10* 8500/69/ Rhinite purulente.Cebemyxin.
+*07-04-10* Rhinite subfébrile.EN.
+*09-04-10* Fièvre depuis hier.EN.Virose probable.AT.Rx thorax:pneumopathie débutante.Amoxy-Clav.
+*20-04-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*04-05-10* 8800/72/44 EN.RV.Fluor.
+*01-06-10* 9350/74/44.5 EN.
+*20-07-10* 9700/76/46 EN.
+*30-07-10* Piqûres d'insectes.Pellit gel.
+*20-09-10* 10.5/79/46.5 EN.
+*21-10-10* 10.3/80/47 EN.
+*08-11-10* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*10-11-10* 10.8/80.5/47.5 EN.
+*29-11-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*28-12-10* 11.3/82.5/47.5 EN.
+*01-02-11* Otite D.Amoxy-Clav.
+*22-02-11* 11.8/85.5/48.5 EN.
+*22-03-11* 12/86.5/48.5 EN.
+*03-05-11* 12.7/87/48.5 EN.
+*13-09-11* 13.4/91/49.5 EN.
+*28-09-11* Tousse bcp.EN.
+*28-10-11* 14/91.5/49.5 EN.
+*23-11-11* 14.3/93/49.5 EN.
+*03-05-12* 16.5/97/50 EN.
+*24-08-12* GEA fébrile.EN en dehors d'1 pharyngite.
+*19-09-12* 17.4/100/50.5 EN.Je le trouve pâle.Le père signale 1 activité normale.Bilan par prudence:NFP,VS,LP,Fer.
+*21-09-12* NFP: Hb=11,9 - VGM=82 - plq=335.000.LP:RAS.VS=7.Fer=15,1 (N).Ttt martial.
+*08-10-12* EN.
+*14-11-12* Otite D.Amoxy-Clav.
+*25-02-13* 19/ Otite D.Amoxy-Clav.
+*10-10-13* EN.
+*13-02-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*18-04-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*26-08-14* 22/114.5/ EN.
+*23-09-14* EN.
+*10-10-14* 23/116/ EN.
+*10-11-14* EN.
+*09-03-15* Fièvre depuis ce matin avec odynophagie sévère.Angine purulente.Amoxy (CM).
+*20-03-15* 23/118/ EN.
+*26-10-15* 24.5/122/ EN.
+*24-12-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-12-15* Baisse puis reprise de la fièvre.EN.Rhinite purulente.Amoxy.
+*04-03-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*09-03-16* Idem.
+*10-03-16* Otalgie D.EN.
+*14-07-16* 27/126.5/ EN.
+*28-10-16* 27.5/128/ EN.
+*01-02-17* Douleur de gorge et syndrome grippal depuis 2 jours. Erytheme de gorge reste de l'examen normal. AT.
+*09-02-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*01-06-18* 30.9/137/ EN.La mère me signale 1 ADP inguinale D infra-centimétrique (8 mm environ) qui serait là depuis plus d'1 an.Les autres territoires gglaires sont libres.A surveiller simplement.
+*06-06-18* NFP,VS,LDH N. bilan normal.
+*06-07-18* 31.4/137.5 EN à part des taches café-au-lait fosse iliaque D.EN.
+*12-09-18* 31/139.5/ EN.TCAL mpeut-être augmentées de nombre.La mère signale des vomissements.le plus souvent nocturnes,survenant tous les qques mois,mais actuellement qui se rapprochent.Il faut éliminer une atteinte neuro dans le cadre d'1 maladie de VRH:IRM + cons ophtalmo (ID).Une cons gastro est utile avant (BE).
+*25-10-19* 36.2/142.5 EN.

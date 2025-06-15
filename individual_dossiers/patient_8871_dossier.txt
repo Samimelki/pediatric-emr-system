@@ -1,0 +1,72 @@
+2950/50/32
+*21-09-11* 3800/53/36.5 EN.Allaitement mixte.
+*24-10-11* 5400/56/39 EN.
+*07-11-11* Petit rhume.SPH.
+*24-11-11* 6700/58.5/40.5 EN.RHD.
+*21-12-11* 7500/62.5/41.5 EN.Fruit.RHN.
+*23-01-12* 8300/67/42.5 EN.L.
+*23-02-12* 8950/68.5/43.5 EN.RV.Fluor.
+*02-03-12* Rhume subfébrile.EN en dehors d'1 petite pharyngite.Virose probable.
+*22-03-12* 9250/70.5/44 EN.
+*10-04-12* Fièvre depuis 2j.Coryza clair depuis hier.EN en dehors d'1 vague pharyngite.Virose probable.AT.ECBU de principe (RAS).
+*23-04-12* 9100/72.5/44.5 EN.
+*04-05-12* Rhume.EN.SPH.
+*23-05-12* 9500/73/44.8 EN.
+*25-06-12* 10/74/45.5 EN.
+*23-07-12* 10.4/76.5/45.5 EN.
+*23-08-12* 10.6/77/46 EN.
+*24-09-12* 11.1/77.5/46.5 EN.
+*11-10-12* 11.3/78.5/47 EN.
+*16-10-12* Petit rhume.Pas de fièvre.EN en dehors d'1 pharyngite.SPH.
+*24-10-12* EN.
+*10-12-12* 11.7/81/47 EN.
+*25-01-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*18-04-13* 12.5/ Toux depuis 4j.Coryza purulent ce jour + otalgie G.Ex:pharyngite + tympan G remanié.Amoxy-Clav.
+*20-05-13* Conjonctivite purulente bilatérale.Fucithalmic.
+*22-05-13* 12.8/ Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*31-05-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*03-06-13* Fièvre de nouveau après accalmie de 24h.Ex:jetage post.ECBU de principe.
+*19-06-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*09-07-13* Rhino-pharyngite purulente fébrile+selles molles.RAD + amoxy.
+*13-08-13* Tousserait depuis 1 mois,jour et nuit.Pas de fièvre.Va bien sinon.EN.Rhinite allergique possible.Nasonex.
+*26-08-13* 13.3/88.5/48 EN.
+*26-09-13* 13.1/90/ EN.
+*25-10-13* 13.4/90.5/48.5 EN.
+*05-11-13* Rhume.EN.SPH.
+*02-12-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*03-03-14* 14.5/94.5/ Rhino-pharyngite purulente fébrile.Amoxy.
+*17-04-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*08-05-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*26-05-14* Ronfle la nuit.EN.Dishydrose plantaire (fungus).Pevaryl.
+*09-07-14* 15.5/97/50 EN.
+*16-07-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*29-07-14* Fait 1 Rhino-pharyngite purulente fébrile depuis 2j.Elle est sous amoxy depuis 48h.EN.Persévérer.
+*30-07-14* Idem.Ex: le jetage purulent a disparu.CAT idem.
+*17-11-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*19-01-15* 17/102/50 EN.
+*10-03-15* Rhino-pharyngite purulente fébrile.Anoxy.
+*13-03-15* Fièvre encore.Bon EG.EN.Le jetage purulent a disparu.Virose intercurrente probable.Persévérer.
+*25-03-15* GEA.EN.RAD.
+*07-09-15* 17.9/105/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-10-15* 18.1/106.5/ Otalgie.Pas de fièvre.EN en dehors d'1 petite pharyngite.Virose.
+*25-01-16* Rhume.EN.
+*18-04-16* 20.5/110/ EN.
+*13-07-16* 20.5/111.5/ EN.
+*23-08-16* EN.
+*27-09-16* 20.5/113/ EN.
+*02-12-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*16-12-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-01-17* 21/115/ Tousse.EN.
+*06-02-17* Rhino-pharyngite purulente fébrile.+Tympan D remanié.Amoxy-Clav.
+*31-05-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*01-06-17* Idem.
+*29-08-17* 22/115.5/ EN.
+*11-12-17* Synd grippal fébrile.EN.Virose probable.AT.
+*13-12-17* 22.9/ Rhino-pharyngite purulente fébrile.Cefdinir.
+*11-01-18* Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*07-03-18* Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*11-07-18* 25.4/122.5/ EN.
+*31-08-18* Histoire rappelant 1 malaise vagal.EN.Avis cardio.
+*09-11-18* Synd grippal.EN.
+*21-12-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-08-19* 29.3/129 EN.

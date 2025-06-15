@@ -1,0 +1,50 @@
+3080/49/35
+*19-06-09* 415052/37 EN.Discret ictère finissant.AM.ILM.
+*20-07-09* 4900/55.5/38.5 EN.AM.
+*20-08-09* 5750/58.5/39.5 EN.AM.RHD.
+*24-09-09* 6500/61/41.5 EN.AM.Fruit.RHN.
+*19-11-09* 7200/64.5/42.5 EN.AM.RV.Fluor.
+*16-12-09* 7450/65.5/43 EN.
+*18-02-10* 7800/68.5/44 EN.
+*19-04-10* 8100/71.5/44.5 EN.AM.
+*31-05-10* 8300/73/45 EN.AM.
+*08-06-10* GEA fébrile.EN.RAD.Brûlure 2ème degré supercifiel au nv de la main G.Soins locaux.
+*19-07-10* 8600/75.5/45.5 EN.
+*29-09-10* 8800/76.5/45.5 EN.
+*04-11-10* 9050/77.5/46 EN.Bilan pour coeliaquie (cassure de la courbe.Père atteint).
+*05-11-10* Fièvre depuis hier + selles molles.EN en dehors d'1 petite pharyngite.RAD + AT.
+*25-04-12* 12/89/ Dysurie + douleurs au flanc G lors des mictions.ECBU:1.800 GB - 100 GR/ml.Cefixime + imagerie (N).
+*02-05-12* Fièvre + frissons hier,sous Cefixim.Bon EG ce jour.EN.Virose intercurrente probable.AT.
+*05-07-12* 11.7/91/ Stomatite fébrile.EN par ailleurs.Medijel.
+*07-08-12* 11.9/91.5/ EN.
+*07-11-12* 12.6/92/ EN.
+*19-03-13* 13(-0,7 ds)/93(-1,6 ds)/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.Ferait des énurésies même diurnes depuis qques temps.IRM médullaire.Biopsie jéjunale à considérer.
+*09-08-13* 13.7(-0,6 ds)/95.5(-1,6 ds)/49.5 EN.
+*14-08-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*11-09-13* 13.7/97/ EN.
+*11-10-13* EN.
+*09-12-13* /98.5/ Rhino-pharyngite purulente fébrile.Amoxy.
+*10-01-14* 14.8/99/
+*14-02-14* 15.2/99.5(-1,36 ds)/ EN.
+*23-04-14* 15.3/100.5(-1,32 ds)/ EN.
+*20-06-14* 15.3/100.5/ Aurait senti des fourmillements ce jour lors de l'endormissement.EN.
+*23-07-14* 15.6/101.5/
+*21-08-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*29-08-14* 15.6/101.5/
+*13-11-14* 16.9/103(-1,5 ds)/
+*25-02-15* 17.5/105(-1,4 ds)/
+*25-03-15* 17.5/105.5/ EN.
+*14-08-15* 17.1/107.5/ EN.
+*11-09-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*25-01-16* Douleur lors de l'alimentations.EN.
+*10-02-16* 19.5/111/ EN.
+*23-06-16* 20/113.5/ EN.
+*09-12-16* 21/115.5/ 
+*15-02-17* 21/116.5/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*09-02-18* 22.8/121.5(-1.32 ds)/ EN.Puberté 0.Avis endocrino (LM).
+*17-01-19* 25.9/127 EN.
+*10-06-19* 26.1/129 brulures urinaires.ECBU.
+*13-12-19* 29/132 EN.bourgeons mammaires.
+*13-01-20* 29.3/132 EN.
+*27-01-20* Toux et courbatures.Pas de fievre.EN.Virose. Bilan staturo ponderal normal. AO=AC.
+*17-04-20* 29.9/136.5 EN.

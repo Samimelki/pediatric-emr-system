@@ -1,0 +1,57 @@
+2826/49/34
+*05-08-14* 3900/53.5/35.5 EN.Allaitement mixte.
+*17-09-14* 5050/58.5/38.5 EN.
+*16-10-14* 5600/61.5/39.5 EN.RHD.
+*12-11-14* 6050/63/40 EN.Fruit.RHN.
+*10-12-14* 6700/66.5/40.5 EN.L.
+*08-01-15* 7100/68/41.5 EN.RV.Fluor.
+*06-02-15* 7300/70/42 EN.
+*26-02-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*12-03-15* 7600/71/42.5 EN.
+*02-04-15* Rhino-pharyngite purulente fébrile.Tympans dépolis.Amoxy-Clav.
+*14-04-15* 8200/73/42.5 EN.
+*08-05-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*11-05-15* 8100/ La fièvre a nettement diminuée et s'est espacée.Dernier fébricule il y 3-4h environ.EN.
+*13-05-15* 8100/73.5/42.5 EN.
+*05-06-15* GEA fébrile.EN.RAD.
+*08-06-15* 8500/74/43 EN.
+*23-06-15* 8300/ Selles diarrhéiques depuis 1 sem.Va mieux.EN.
+*06-07-15* 8750/76/43 EN.
+*03-08-15* 9100/77.5/43.5 EN.
+*03-09-15* 9300/78/43.5 EN.
+*07-10-15* 9700/80/43.5 EN.
+*06-11-15* 9600/81/43.5 EN.
+*10-12-15* 10.3/82/44 EN.
+*16-12-15* Rhino-pharyngite purulente fébrile + otite D.Amoxy-Clav.
+*08-01-16* 9800/82.5/44.5 EN.
+*18-01-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*08-02-16* 9900/83.5/44.5 EN.
+*09-03-16* 10.4/85/45 EN.
+*01-04-16* 10.4/85.5/45 EN.
+*13-05-16* 11/86/ EN.
+*07-06-16* 11/86/ Fièvre depuis 24h.EN.Surveillance (CM).
+*20-07-16* 11/87.5/45.5 EN.
+*30-09-16* 11.4/89/ GEA.Bon EG.EN.Pas de signe de déshydratation.RAD.
+*23-12-16* 11.6/91.5/45.5 EN.
+*08-02-17* 13/92.5/
+*10-02-17* Fièvre isolée depuis hier.EN.Virose probable.AT.
+*17-02-17* Otite bilatérale.Amoxy-Clav.
+*10-03-17* Synd grippal fébrile.EN en dehors d'1 pharyngite+OSM bilatérale sans épanchement purulent.Virose probable.AT.
+*12-04-17* 13.4/ Rhino-pharyngite purulente fébrile.Amoxy.
+*25-07-17* 14.4/ Fièvre isolée depuis 48h.EN.Virose probable.AT.
+*29-11-17* 15.toux et syndrome grippal depuis hier. Bon EG. Otite bilaterale. Amoxy-clav.
+*26-02-18* 14.5/101.5/ Traité pour otite en Janvier par Rocephine. Fièvre depuis hier avec otalgie D avec syndrome grippal. Angine et tympan D remanié.Amoxy-clav.
+*29-03-18* Fièvre et rhume depuis hier.Bon EG.Nuque souple.Virose probable.AT.
+*05-04-18* 15/101.5/ EN.La fièvre du 29-03-18 a persisté et s'est avérée être une otite,traitée par Amoxy-Clav (Urgences - HDF).Avis ORL (SM).
+*06-06-18* 15.1/102/  Otite D.Amoxy-Clav.
+*18-06-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*05-10-18* 15.5/103 EN.
+*07-12-18* Otite D.Pas de fièvre.EN par ailleurs.Si fièvre,Amoxy-Clav.
+*14-12-18* N'a pas eu de fièvre.Pas d'AB.Le tympan D va mieux.
+*13-02-19* Syndrome grippal avec fébricules.Bon EG.EN.Nuque souple.Virose probable.AT.
+*06-06-19* 16.8/OMA D.Amoxy-clav.
+*29-08-19* 16.8/109 EN 
+*11-10-19* 18/ OMA D.Amoxy-clav.
+*16-10-19* 17.7/109 EN.
+*07-01-20* Syndrome grippal febrile depuis 36 heuresBon EG.Nuque souple.EN a part pharyngite.Virose probable.AT.
+*09-01-20* 18/111 OMA D.Amoxy-clav

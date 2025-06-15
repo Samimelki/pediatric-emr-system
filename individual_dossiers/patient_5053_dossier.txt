@@ -1,0 +1,53 @@
+3450/50/35
+*13-09-02* 5450/59/38 EN.Discret ictère.AM.
+*17-10-02* 7100/62.5/40.5 EN.AM.Fruit.
+*18-11-02* 8100/66/41.5 EN.AM.L.RHD.
+*18-12-02* 8800/69/42.5 EN.Allaitement mixte.LV.RHN.
+*17-02-03* 9400/72.5/45 EN.RV.Fluor.
+*17-03-03* 10.1/74.5/45.5 EN.
+*15-05-03* 11/78/46.5 EN.
+*17-07-03* 11.3/81/47.5 EN.
+*22-07-03* Fait 1 rash sur le visage et le tronc+diarrhée ce jour.EN en dehors d'1 pharyngite.Virose probable.RAD.
+*18-08-03* 11.7/82/48 EN.
+*17-10-03* 12/84.5/48.5 EN.
+*20-12-03* 13.3/88/49.5 EN.
+*10-03-04* 13.8/90/49.5 EN.
+*27-04-04* Douleur au-dessus du zizi.EN.ECBU:GB=1/ml.
+*04-06-04* Fièvre depuis hier.EN en dehors d'1 pharyngite.Virose probable.AT.
+*13-08-04* 14.5/95.5/50.5 EN.
+*01-10-04* Synd grippal.Avait de la fièvre il y a qques jours.EN.
+*10-01-05* Otite G+jetage purulent post.Amoxy-Clav.
+*07-03-05* Rhino-pharyngite purulente fébrile.Amoxy.
+*17-03-05* 15.3/101/51.5 EN.
+*13-07-05* Fièvre depuis 3j avec 24 h sans fièvre.Rash scarlatiniforme depuis 2j.EN en dehors d'1 pharyngite intense.Virose probable.AT.
+*22-07-05* 15.7/105/52 EN.
+*07-10-05* Fièvre+otalgie depuis la nuit dernière.EN en dehors d'1 jetage purulent post.
+*20-10-05* 17.2/106.5/ EN.
+*27-01-06* Tousse 1 peu et a mal au ventre.Pas de fièvre.EN.
+*06-03-06* Rhino-pharyngite purulente fébrile.Amoxy.
+*02-05-06* Rash puis fièvre.EN en dehors d'1 rash papuleux minuscule au nv du tronc,surtout au nv de la ceinture+1 énanthème.Virose probable.AT.
+*29-06-06* Douleurs abdominales vagues depuis 1 sem environ.Selles molles.EN.
+*28-07-06* Douleurs abdominales de temps en temps.Se retient svt pour uriner.EN.ECBU.
+*06-10-06* 19.5/115.5/ EN.
+*13-07-07* 20.5/121/ EN.
+*16-08-07* 21.5/121.5/ EN.
+*11-10-07* 22/122/ EN.
+*07-08-08* 24/128/ EN.
+*27-10-08* 24.5/129.5/ EN.
+*12-02-09* GEA subfébrile.EN.RAD.
+*24-02-09* Histoire d'1 rhino-sinusite clinique:fièvre on & off tous les 2j et ce depuis 2 sem,accompagnée d'1 coryza jaune.EN en dehors d'1 jetage purulent post épais.Amoxy+Fluticasone.
+*16-07-09* 26/134/ EN.
+*10-11-09* Synd grippal fébrile depuis 2j.EN en dehors d'1 pharyngite.Virose probable.AT.
+*16-08-10* 33/141/ EN.
+*07-07-11* 40.5/147/ EN.
+*31-07-12* 47/153/ EN.P1.
+*04-09-12* 49/155/ EN.P1.
+*02-07-13* 51.5/158.5/ EN.P3.
+*03-09-13* 55/159.5/ EN.
+*31-10-13* EN.P3.
+*17-03-14* 60/162/ EN.
+*20-08-14* 61/165/ EN.P4.
+*04-08-17* 84/183.5/ EN.
+*13-09-17* 85.2/184.5/ EN.
+*29-09-17* 84.3/184.5/ EN.
+*02-10-19* 86.6/185.5 EN.

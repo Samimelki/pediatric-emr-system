@@ -1,0 +1,67 @@
+3200/50/34
+*26-11-03* 4500/53/38.3 EN.AM.
+*23-12-03* 5500/55/40 EN.AM.
+*21-01-04* 6000/58.5/41 EN.AM.RHD.
+*19-02-04* 6750/61/42.5 EN.Fruit.RHN.
+*27-02-04* Fièvre ce jour.EN en dehors d'1 pharyngite+coryza ant purulent.Amoxy-Clav.
+*28-04-04* 7900/66/44.5 EN.RV.Fluor.
+*17-05-04* Fièvre depuis hier.EN en dehors d'1 pharyngite.Virose probable.AT.ECBU.
+*27-05-04* 7950/67.5/45.5 EN.
+*30-07-04* 8700/71/46.5 EN.
+*20-09-04* 9600/74/47 EN.
+*19-10-04* 9800/74.5/47.5 EN.
+*19-11-04* 10/75/47.5 EN.
+*22-12-04* 10.5/76/48 EN.
+*22-02-05* 11.2/78.5/49 EN.
+*16-03-05* Otite D débutante.EN.
+*05-04-05* 11.6/80/49 EN.Tympans corrects.
+*15-04-05* A fait 1 jour de fièvre.EN en dehors d'1 petite pharyngite.Virose probable.
+*25-05-05* Fièvre depuis hier.EN en dehors d'1 pharyngite.Virose probable.AT.
+*18-07-05* Rhino-pharyngite purulente fébrile.Cefzil.
+*22-08-05* Fièvre depuis hier avec coryza clair.EN en dehors d'1 pharyngite.Virose probable.AT.
+*21-10-05* 12.4/87/50 EN.Tousse bcp.EN.
+*28-11-05* 13/88/50 EN.
+*03-01-06* GEA fébrile.EN en dehors d'1 pharyngite.Virose probable.RAD+AT.
+*09-01-06* 13/89/50 EN.
+*19-01-06* Otite bilatérale.(A fait 4 otites en 2005).Cefpodoxim.
+*30-01-06* Fièvre ce jour.EN en dehors d'1 angine d'allure virale.AT.
+*02-02-06* Fièvre tj.EN en dehors d'1 jetage purulent post.Amoxy.
+*10-02-06* Oedème palpébral d'abord G sup puis D sup.Pas de fièvre.EN en dehors d'1 petit oedème palpébral inf G,d'aspect non inflammatoire.Pas d'otite.Pas d'atteinte conjonctivale.Trauma passé inaperçu ou allergie?Cellulite improbable.EGU et cons ophtalmo et/ou ORL.
+*25-05-06* 13.3/91/51.5 EN.
+*25-10-06* 14.2/95/51.5 EN.
+*17-11-06* 14.7/96/51.5 EN.
+*17-01-07* A fait 2j de fièvre.Pas de fièvre ce jour.EN.Virose possible.
+*19-01-07* Rhino-pharyngite purulente fébrile.Amoxy.
+*05-02-07* 15.1/97/51.5 EN.
+*13-03-07* Rhino-pharyngite purulente fébrile.Amoxy.
+*07-08-07* 16/100.5/51.5 EN.Impétigo eczématizé,Fucicort.
+*02-10-07* 16.5/101.5/51.5 EN.
+*30-09-08* 18/109/ EN.
+*07-11-08* Rhino-pharyngite purulente fébrile.Amoxy.
+*05-12-08* 19/109.5/ EN.
+*05-01-09* 19.5/110.5/ EN.
+*24-03-09* Fièvre isolée depuis hier.EN en dehors d'1 pharyngite.Virose probable.
+*27-03-09* La fièvre persiste.Otite bilatérale débutante.Amoxy-Clav.
+*27-07-09* 21.5/114/ EN.
+*02-10-09* 22/115/ EN.
+*04-11-09* 21.5/115.5/ EN.
+*04-12-09* Syndrome grippal subfébrile.Bon EG.Nuque souple.EN.Virose probable.
+*29-01-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*27-05-10* 24/119/ EN.
+*30-09-10* 26/122/ EN.
+*28-02-11* 27/123/ EN.
+*25-08-11* 29/126/ EN.
+*22-09-11* EN.
+*06-04-12* GEA fébrile.Bon EG.EN en dehors d'1 petite pharyngite.AT + RAD.
+*10-07-12* 32/131/ EN.
+*26-09-12* 34.5/132/ EN.
+*01-03-13* 35/133.5/ EN.
+*14-10-13* 38.5/136.5/ EN.Puberté 0.
+*06-10-14* 43/142/ EN.OGE légèrement augmentés de vol.
+*09-02-15* 46/143.5/ EN.
+*11-09-15* 53/147.5/ EN.
+*09-02-16* 57/151.5/ EN.P2.
+*13-09-16* 61/157/ EN.P2.
+*09-02-18* 70/166.5/ EN.P4.
+*21-08-18* 73.3/167/ EN.
+*20-11-18* 76/167.5/ EN.

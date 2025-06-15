@@ -1,0 +1,72 @@
+2650/49/33
+*15-01-13* 3850/52/36.5 EN.Allaitement mixte.
+*05-02-13* 4500/54.5/37.5 EN.
+*05-03-13* 5300/57.5/38.5 EN.RHD.
+*02-04-13* 5900/60.5/39 EN.Fruit.
+*09-04-13* RHN.
+*10-04-13* Rhume subfébrile.Petite pharyngite.SPH.
+*07-05-13* 6550/63/40.5 EN.L.
+*04-06-13* 7050/66/41 EN.Vue hier aux urgences - HDF pour fièvre et irritabilité.EN.ECBU:400 GB/ml.Cefixime en attendant la culture.Améliorée depuis hier.ECBU stérile.
+*10-06-13* 7100/ EN.RV.Fluor.
+*20-06-13* Fébricule isolé ce jour.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*09-07-13* 7650/68/42 EN.
+*13-08-13* 7750/70/42.5 EN.
+*10-09-13* 8500/71.5/43 EN.
+*25-09-13* Fièvre isolée depuis ce matin.EN en dehors d'1 petite pharyngite.Excellent EG.Virose probable.AT.
+*27-09-13* Fièvre tj avec discret coryza clair.EN.Discrète pharyngite.ECBU de principe.
+*08-10-13* 8500/72/43.5 EN.
+*21-10-13* Synd grippal fébrile.EN en dehors d'1 pharyngite+points blancs sur les amygdales.Virose probable.AT.
+*23-10-13* La fièvre a disparu mais a pleuré toute l'après-midi hier.EN en dehors de 2 aphtes des piliers.Medijel.
+*05-11-13* 8900/73/44 EN.
+*25-11-13* Otite bilatérale.Amoxy-Clav.
+*10-12-13* 9200/75.5/44.5 EN.
+*19-12-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-01-14* 9600/76/44.5 EN.
+*31-01-14* Rhino-pharyngite purulente fébrile+enduit blanchatre sur les amygdales.Amoxy.
+*13-02-14* 10/77.5/45 EN.
+*21-02-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*14-03-14* 10/78.5/45.5 EN.
+*18-03-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*15-04-14* 10.4/79.5/46 EN.
+*22-04-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*28-04-14* Reprise de la fièvre hier.Erution papuleuse + aphtes des piliers.Virose intercurrente.Persévérer + Medijel.
+*11-06-14* Fièvre isolée depuis hier.EN en dehors d'1 angine!!Virose probable.Si persistance de la fièvre jusqu'à demain,amoxy.
+*04-08-14* Fiévre depuis hier:angine!Si persistance de la fièvre,amoxy!
+*19-08-14* 11.3/84.5/46.5 EN.
+*30-10-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*01-12-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*16-12-14* 11.8/88.5/46.5 EN.
+*18-03-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*24-03-15* 12.2/91/47 EN.
+*03-06-15* Angine.Amoxy.
+*05-08-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-11-15* Otite bilatérale.Amoxy-Clav.
+*08-12-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*10-12-15* 13.3/96.5/47.5 EN.
+*12-01-16* 13.3/97/47.5 EN.
+*05-02-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*08-02-16* Otite D.Amoxy-Clav.Avis ORL pour infections à répétition (SR).
+*25-02-16* Fièvre 1j puis rhinite purulente.EN.Ciloxan.
+*22-03-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*21-04-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*22-04-16* Idem.
+*25-04-16* Idem.
+*21-10-16* 15/ Angine.Amoxy.
+*16-01-17* Rhino-pharyngite purulente fébrile+tympan D remanié.Amoxy-Clav.
+*06-03-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*22-03-17* Fièvre depuis 4 jours. Angine.Amoxy.
+*22-06-17* Fièvre depuis hier.EN en dehors d'1 angine d'allure virale.AT.
+*21-11-17* 16/ Rhino-pharyngite purulente fébrile.Amoxy.
+*18-01-18* 15.7/108/ EN.
+*23-01-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*25-01-18* Otite bilatérale.Amoxy-Clav.
+*19-03-18* 15.8/109/ EN.
+*01-05-18* 16.3/ OMA G.Amoxy-clav.
+*07-08-18* 16.5/111.5/ EN.
+*23-10-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*04-01-19* 17.8/113.5/ EN.
+*20-03-19* 18.2/syndrome grippal febrile depuis qqes jours.2 episodes de vomissements.Angine Amoxy
+*11-10-19* 19.2/ OMA G et angine.Amoxy-clav.
+*10-01-20* Fievre et douleur de gorge depuis 48 heures.Bon EG.Nuque souple.Pharyngite.Strep test positif.Amoxy
+*26-02-20* 20/Syndrome grippal febrile depuis hier.Bon EG.Nuque souple.Pgharyngite.Virose probable.AT.
+*28-02-20* toujours febrile.Bon EG.Nuque souple.Pharyn gite.Virose probable.AT.

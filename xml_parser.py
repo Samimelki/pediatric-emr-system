@@ -28,26 +28,246 @@ def parse_date_to_iso(date_str, input_format='%d-%m-%y'):
         return None # Or return original string, or log error
     return None
 
+def preclean_measurement_string(measurement_str):
+    """
+    Pre-clean measurement strings to fix common formatting issues before parsing.
+    
+    Rules:
+    1. Weight should be 2-5 digits (20-14000g range) - extended for older babies
+    2. Height should be 2-3 digits (20-200cm range) 
+    3. Head circumference should be 2-3 digits (20-100cm range)
+    4. Handle decimals properly
+    5. Handle missing slashes between height and HC
+    """
+    
+    if not measurement_str or '/' not in measurement_str:
+        return measurement_str
+    
+    # Split by slashes
+    parts = measurement_str.split('/')
+    
+    if len(parts) < 2:
+        return measurement_str
+    
+    # Clean each part
+    cleaned_parts = []
+    
+    for i, part in enumerate(parts):
+        if part.strip():
+            cleaned_parts.append(part.strip())
+    
+    if len(cleaned_parts) < 2:
+        return measurement_str
+    
+    # Pattern 0: Check for missing slash between height and HC (like "10.1/6946" -> "10.1/69/46")
+    if len(cleaned_parts) == 2:  # Only weight/heightHC format
+        try:
+            weight_val = float(cleaned_parts[0])
+            height_hc_str = cleaned_parts[1]
+            
+            # If second part is 3-4 digits, might be concatenated height+HC
+            if len(height_hc_str) >= 3 and height_hc_str.replace('.', '').isdigit():
+                # Try different split positions for height/HC
+                for height_digits in [2, 3]:  # Try 2 digits for height first, then 3
+                    if height_digits < len(height_hc_str):
+                        potential_height = height_hc_str[:height_digits]
+                        potential_hc = height_hc_str[height_digits:]
+                        
+                        try:
+                            height_val = float(potential_height)
+                            hc_val = float(potential_hc)
+                            
+                            # Check if this makes sense
+                            if (20 <= height_val <= 200 and    # Reasonable height range
+                                20 <= hc_val <= 100):          # Reasonable HC range
+                                
+                                result = f"{cleaned_parts[0]}/{potential_height}/{potential_hc}"
+                                return result
+                                
+                        except ValueError:
+                            continue
+        except ValueError:
+            pass
+    
+    # Focus on the first part (weight) - this is where most concatenation happens
+    first_part = cleaned_parts[0]
+    
+    # Pattern 1: First part is too long and contains concatenated weight+height
+    # BUT: Skip if we already have valid measurements in the original format
+    if len(first_part) >= 5:
+        
+        # Check if the original format is already valid before trying to split
+        if len(cleaned_parts) >= 2:
+            try:
+                original_weight = float(cleaned_parts[0])
+                original_height = float(cleaned_parts[1])
+                
+                # If original measurements are already reasonable, don't split
+                if (1000 <= original_weight <= 14000 and 20 <= original_height <= 200):
+                    # Skip Pattern 1 - original format is already good
+                    pass
+                else:
+                    # Original format has issues, proceed with Pattern 1 splitting
+                    # Handle decimal numbers
+                    if '.' in first_part:
+                        integer_part, decimal_part = first_part.split('.', 1)
+                        
+                        # If integer part is 5+ digits, likely concatenated
+                        if len(integer_part) >= 5:
+                            # Try different split positions for weight
+                            for weight_digits in [4, 5, 3]:  # Try 4 digits first, then 5, then 3
+                                if weight_digits < len(integer_part):
+                                    potential_weight = integer_part[:weight_digits]
+                                    potential_height = integer_part[weight_digits:] + '.' + decimal_part
+                                    
+                                    try:
+                                        weight_val = int(potential_weight)
+                                        height_val = float(potential_height)
+                                        
+                                        # Check if this makes sense - EXTENDED WEIGHT RANGE
+                                        if (20 <= weight_val <= 14000 and  # Extended weight range for older babies
+                                            20 <= height_val <= 200):       # Reasonable height range
+                                            
+                                            # Reconstruct the measurement string
+                                            new_parts = [potential_weight, potential_height]
+                                            if len(cleaned_parts) > 1:
+                                                new_parts.extend(cleaned_parts[1:])
+                                            
+                                            result = '/'.join(new_parts)
+                                            return result
+                                            
+                                    except ValueError:
+                                        continue
+                    
+                    # Handle non-decimal numbers
+                    else:
+                        if first_part.isdigit() and len(first_part) >= 5:
+                            # Try different split positions
+                            for weight_digits in [4, 5, 3]:  # Try 4 digits first, then 5, then 3
+                                if weight_digits < len(first_part):
+                                    potential_weight = first_part[:weight_digits]
+                                    potential_height = first_part[weight_digits:]
+                                    
+                                    try:
+                                        weight_val = int(potential_weight)
+                                        height_val = int(potential_height)
+                                        
+                                        # Check if this makes sense - EXTENDED WEIGHT RANGE
+                                        if (20 <= weight_val <= 14000 and  # Extended weight range for older babies
+                                            20 <= height_val <= 200):       # Reasonable height range
+                                            
+                                            # Reconstruct the measurement string
+                                            new_parts = [potential_weight, potential_height]
+                                            if len(cleaned_parts) > 1:
+                                                new_parts.extend(cleaned_parts[1:])
+                                            
+                                            result = '/'.join(new_parts)
+                                            return result
+                                            
+                                    except ValueError:
+                                        continue
+            except ValueError:
+                # If we can't parse the original values, proceed with Pattern 1 anyway
+                pass
+    
+    # Pattern 2: Check if weight is too small and height is too large (like "34/5678/44")
+    # BUT: Skip this pattern if we already have a valid weight/height combination
+    if len(cleaned_parts) >= 2:
+        try:
+            first_val = float(cleaned_parts[0])
+            second_val = float(cleaned_parts[1])
+            
+            # Skip Pattern 2 if we already have reasonable values
+            if (1000 <= first_val <= 14000 and 20 <= second_val <= 200):
+                # This is already a valid weight/height combination, don't modify
+                pass
+            elif first_val < 100 and second_val > 1000:
+                # Only process cases where weight is too small AND height is too large
+                # Merge first two parts
+                merged = cleaned_parts[0] + str(int(second_val))
+                
+                # Try to split the merged number
+                if len(merged) >= 4:
+                    for weight_digits in [4, 3, 5]:
+                        if weight_digits < len(merged):
+                            potential_weight = merged[:weight_digits]
+                            potential_height = merged[weight_digits:]
+                            
+                            try:
+                                weight_val = int(potential_weight)
+                                height_val = int(potential_height)
+                                
+                                # EXTENDED WEIGHT RANGE
+                                if (100 <= weight_val <= 14000 and  # Extended weight range
+                                    20 <= height_val <= 200):        # Reasonable height range
+                                    
+                                    new_parts = [potential_weight, potential_height]
+                                    if len(cleaned_parts) > 2:
+                                        new_parts.extend(cleaned_parts[2:])
+                                    
+                                    result = '/'.join(new_parts)
+                                    return result
+                                    
+                            except ValueError:
+                                continue
+        except ValueError:
+            pass
+    
+    # Pattern 3: Check for missing decimal in height (like "5300/595/39" -> "5300/59.5/39")
+    if len(cleaned_parts) >= 2:
+        try:
+            height_val = float(cleaned_parts[1])
+            if height_val > 200 and len(cleaned_parts[1]) == 3:  # Like "595"
+                # Try adding decimal point
+                height_str = cleaned_parts[1]
+                potential_height = height_str[:2] + '.' + height_str[2:]
+                potential_height_val = float(potential_height)
+                
+                if 20 <= potential_height_val <= 200:
+                    new_parts = [cleaned_parts[0], potential_height]
+                    if len(cleaned_parts) > 2:
+                        new_parts.extend(cleaned_parts[2:])
+                    
+                    result = '/'.join(new_parts)
+                    return result
+        except ValueError:
+            pass
+    
+    # No cleaning needed
+    return measurement_str
+
 def _parse_measurement_string(measurement_str):
-    """Parse measurement string like '3880/51/37' into weight_g, height_cm, hc_cm."""
+    """Parse measurement string like '3880/51/37' into weight_g, height_cm, hc_cm.
+    Now includes pre-cleaning to fix common formatting issues.
+    """
     if not measurement_str:
         return None, None, None
     
-    parts = measurement_str.split('/')
+    # PRE-CLEAN the measurement string first
+    cleaned_measurement_str = preclean_measurement_string(measurement_str)
+    
+    # Split by '/' to get parts
+    parts = cleaned_measurement_str.split('/')
+    
     weight_g = None
     height_cm = None
     hc_cm = None
     
     try:
         if len(parts) >= 1 and parts[0].strip():
-            weight_g = int(float(parts[0].strip()))
+            weight_value = float(parts[0].strip())
+            # Improved weight conversion logic
+            if weight_value < 50:  # Values < 50 are likely in kg (like 10.1 kg)
+                weight_g = int(weight_value * 1000)
+            else:
+                weight_g = int(weight_value)  # Already in grams (like 11450g)
         if len(parts) >= 2 and parts[1].strip():
             height_cm = float(parts[1].strip())
         if len(parts) >= 3 and parts[2].strip():
             hc_cm = float(parts[2].strip())
     except (ValueError, IndexError):
         pass
-    
+
     return weight_g, height_cm, hc_cm
 
 def parse_memo_text(memo_text):
@@ -193,7 +413,7 @@ def _process_row(row_element, headers, ns):
             if header_name == memo_header_key:
                 patient_data['parsed_dossier_content'] = parse_memo_text(data_value)
             elif header_name == autres_vac_header_key:
-                patient_data['parsed_additional_vaccines'] = parse_autres_vac_text(data_value)
+                patient_data['parsed_autres_vaccins'] = parse_autres_vac_text(data_value)
         
         logical_col_idx += 1
     return patient_data

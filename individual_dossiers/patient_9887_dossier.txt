@@ -1,0 +1,44 @@
+2715/48/36
+*02-10-14* 3650/51/38 EN.AM.
+*28-10-14* 5150/55/40.5 EN.Allaitement mixte.
+*24-11-14* 6050/58/42 EN.Allaitement mixte.RHD.
+*22-12-14* 6900/61/43.5 EN.Allaitement mixte.Fruit.
+*08-01-15* RHN.
+*22-01-15* 7600/63.5/44.5 EN.L.
+*06-02-15* Synd grippal subfébrile.EN en dehors d'1 pharyngite.Virose probable.SPH.
+*23-02-15* 8200/66/45.5 EN.RV.Fluor.
+*25-03-15* 8900/68/46 EN.
+*22-04-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*24-04-15* Fièvre encore,moins intense.Ex:Stomatite.Medijel.
+*27-04-15* 9100/70.5/46.5 EN.
+*28-05-15* 9800/72.5/47.5 EN.
+*26-06-15* 10.1/75/47.5 EN.
+*03-08-15* 10.5/76/48.5 EN.
+*31-08-15* 11/77/48.5 EN.
+*28-09-15* 11.2/78/48.5 EN.
+*28-10-15* 11.4/79.5/48.5 EN.
+*27-11-15* 11.9/80.5/49.5 EN.
+*18-12-15* Otite D + conjonctivite purulente.Amoxy-Clav.
+*28-12-15* 11.7/81/49.5 EN.
+*28-01-16* 11.7/81.5/50 EN.
+*15-02-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*17-02-16* Fièvre tj.Selles diarrhéiques.EN.RAD.
+*25-02-16* Otite D débutante + rhinorrhée purulente.Amoxy-Clav.
+*11-03-16* 12.7/82.5/50 EN.
+*07-04-16* 12.9/83.5/50.5 EN.
+*12-05-16* 13/84/50.5 EN.
+*16-06-16* 13.1/84.5/50.5 EN.
+*22-12-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*17-02-17* Rhino-pharyngite + conjonctivite purulentes fébriles.Amoxy-Clav.
+*28-08-17* Fièvre depuis 24h.Synd grippal fébrile.EN à part une gorge erythemateuse.Virose probable.AT.
+*20-09-17* 15/ Rhino-pharyngite purulente fébrile.Amoxy.
+*13-11-17* Rhino-pharyngite purulente fébrile.Amoxy.
+*31-01-18* A fait un synd grippal fébrile.Ce jour,pas de fièvre.EN en dehors d'1 pharyngite.Virose probable.
+*23-03-18* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*06-06-18* 17.2/101/ EN.
+*14-02-19* Syndrome grippal fébrile depuis 48 heures.Tres bon EG.Nuque souple.EN.Virose probable.AT.
+*27-05-19* Toux.EN.
+*05-06-19* Syndrome grippal febrile.EN.Nuque souple.pharyngite.Virose probable.AT.
+*12-09-19* 18.1/110 EN.
+*10-10-19* 19.1/110 EN.
+*20-02-20* Syndrome grippal febrile depuis 48 heures.Bon EG.Nuque souple.Cerumen dans l'oreille dte mais il y a plus dans la gauche.continuer cerulyse.

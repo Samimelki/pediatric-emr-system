@@ -1,0 +1,86 @@
+3200/50/35
+*08-04-10* 3200/ EN.Ictère finissant.
+*30-04-10* 4400/53.5/37.5 EN.Allaitement mixte.
+*28-05-10* 5400/57.5/39 EN.
+*01-07-10* 6500/62/40 EN.
+*19-07-10* Température à 38 depuis hier avec crises de pleurs.EN.ECBU de principe.
+*23-07-10* OMAG. Augmentin ES.
+*13-08-10* 6750/65/42 EN en dehors d'un aphte amygdalien et une température à 37.8 au cabinet.Si fièvre, avertir.
+*16-08-10* 6750 Il garde une température entre 37.3 et 37.8.EN.
+*25-08-10* 7000/ Fièvre isolée depuis cet après-midi.Bon EG.EN en dehors d'une pharyngite.Virose probable.Si persistance de la fièvre, avertir pour faire un bilan sanguin et urinaire.
+*26-08-10* Fièvre persistante.Bilan urgences HDF.
+*09-09-10* Chute il y a deux heures,hauteur de 1m,point d'impact non connu.EN.Surveillance stricte.
+*10-09-10* 7400/67/44 EN.
+*04-10-10* 7550/68.5/44.5 EN.RV.Fluor.
+*15-10-10* Rhino-pharyngite purulente fébrile.Amoxy.
+*04-11-10* 8050/ Fièvre depuis hier.Coryza clair depuis 3j.EN en dehors d'1 discrète pharyngite.Virose probable.AT.
+*10-11-10* 8100/69.5/44.5 EN.
+*24-11-10* Rhino-pharyngite purulente fébrile!Amoxy.
+*20-12-10* 8550/71.5/45 EN.
+*13-01-11* 9050/72.5/45.2 EN.
+*21-01-11* Vomissements + selles molles.Fébricule.EN.RAD.
+*21-02-11*Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*23-02-11* Fièvre tj.EN.Virose probable.AT.
+*01-03-11* La fièvre a disparu le 24 pour reprendre hier.EN.AT.
+*03-03-11* Fièvre tj.EN en dehors d'1 jetage purulent post.Amoxy.
+*18-03-11* Eczéma.Elocom.
+*30-03-11* 9600/75.5/46 EN.
+*14-04-11* Fièvre depuis ce matin + coryza clair.EN en dehors d'1 pharyngite.Virose probable.AT.
+*15-04-11* Angine!Amoxy.
+*02-05-11* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*06-05-11* VARICELLE.
+*26-05-11* 10/ Rhino-pharyngite purulente fébrile.Amoxy.
+*20-06-11* 10.2/78.5/47 EN.
+*28-07-11* 10.5/79.5/47.5 EN.
+*26-08-11* Fébricule + toux depuis 2j.EN en dehors d'1 pharyngite.Virose probable.
+*31-08-11* 10.8/81.5/48 EN.
+*21-09-11* 11/82/48 EN.
+*03-10-11* Pleurs inconsolables la nuit écoulée.Vu aux urgences:RAS.ECBU non réalisable.Fièvre ce jour.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*05-10-11* Fièvre tj mais meilleur EG.EN.Virose tj probable.
+*07-10-11* Ne s'appuie pas bien ce jour sur le MID.Fébricule tj.EN en dehors d'1 limitation des mvts de la hanche D.ROT présents et symétriques.Ibuprofen.
+*17-10-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*23-11-11* 11/84/48 EN.
+*06-01-12* Fièvre isolée depuis hier.EN en dehors d'1 discrète pharyngite.Virose probable.AT.
+*09-01-12* Rhino-pharyngite purulente fébrile.Amoxy.
+*22-02-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*02-04-12* 12/87/49 EN.
+*09-05-12* Fébricule isolé depuis hier.EN en dehors d'1 petite pharyngite.Virose possible.AT.
+*11-05-12* Idem.ADP cervicales en sus.AT.
+*14-05-12* La fièvre a bien baissé les 12 et 13-05-12 pour reprendre ce jour.EN en dehors d'1 pharyngite.Bilan à faire vu que c'est le sixième jour de fièvre.
+*16-05-12* EBV IgM (+).MNI.
+*04-07-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*06-08-12* Tousse.EN.
+*28-09-12* 13.1/91/50 EN.
+*08-11-12* 13.3/91.5/50 EN.
+*20-11-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*19-12-12* GEA fébrile.EN en dehors de qques stries blanches sur les amygdales d'allure virale.RAD+AT.Pollakiurie.EGU + ECBU.
+*03-01-13* ECBU,EGU:RAS.
+*28-01-13* GEA fébrile.EN en dehors d'1 pharyngite.Virose probable.RAD.
+*30-01-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*03-04-13* 14.6/95.5/ EN.
+*12-07-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*24-10-13* EN.
+*29-11-13* Rhino-pharyngite purulente fébrile.Amoxy.
+*19-12-13* GEA subfébrile.EN en dehors d'1 petite pharyngite.RAD.
+*13-01-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*30-01-14* Synd grippal fébrile+selles molles.EN en dehors d'1 pharyngite.Virose probable.AT+RAD.
+*31-01-14* Fièvre tj.Ex:jetage post purulent.Amoxy.
+*14-04-14* 17/ Angine.Amoxy.
+*13-02-15* GEA fébrile + jetage purulent post.RAD + Amoxy.
+*08-05-15* 19.5/110.5/ EN.
+*03-06-15* Synd grippal fébrile+selles molles.EN en dehors d'1 pharyngite.Virose probable.AT.
+*05-06-15* Fébricule encore.EN.ECBU.
+*08-01-16* Gêne à déféquer.EN.Faktu + microclismi.
+*21-01-16* Angine d'allure virale.EN par ailleurs.
+*04-03-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-03-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*13-04-16* 22.5/116/ EN.
+*06-05-16* 22.5/116.5/ EN.
+*30-06-17* 25/122/ EN.
+*19-07-17* Otalgie G. EN.
+*16-04-18* 27/ Fièvre depuis hier.Rhinopharyngite purulente aigue.Amoxy-clav.
+*09-11-18* 28.7/128.5/ EN.
+*08-03-19* 28/Rhinopharyngite purulente aigue.Amoxy-clav.
+*03-01-20* Syndrome grippal febrile depuis 48 heures.Bon EG.Nuque souple.Virose probable.AT.
+*06-01-20* Tjs febrile mais fievre espacee.Bon EG.Nuqeu souple.Surveiller.
+*14-02-20* Se sent fatigue avec febricules qui debutent.Bon EG.Nuque souple.Pharyngite.Virose probable.AT.

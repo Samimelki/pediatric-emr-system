@@ -1,0 +1,63 @@
+3521/49.5/34
+*11-10-01* 4200/53.5/36.5 Rhume avec temp à 37.3.EN.SPH+surveillance.
+*19-11-01* 5500/57/38.5 EN.Fruit,fluor.
+*10-12-01* ECBU fait le 05-12-01 pour baisse de l'appétit,isolemment:GB=25 - 70.000 col d'E.Coli.A vérifier ultérieurement.
+*19-12-01* 6300/60.5/40 EN.L.RHD.
+*02-01-02* Petit rhume.EN.SPH.
+*04-01-02* Fièvre+toux ce jour.Ex:bronchiolite.Pas de cyanose.Inhalation aux urgences HDF.
+*21-01-02* 6700/62.5/41 EN.LV.RHN.L'ECBU a été recontrôlé:100.000 col/ml d'E.Coli.Ttt AB puis imagerie:N.
+*01-03-02* Synd grippal fébrile.EN.Virose.
+*20-03-02* 7500/66/42.5 EN.RV.
+*08-04-02* Otite bilatérale.Amoxy-Clav.
+*22-04-02* 8250/68.5/43 EN.
+*19-06-02* Otite G.Amoxy-Clav.
+*04-07-02* 9100/73/44 EN.
+*31-07-02* Fièvre depuis hier.EN.Virose probable.AT.Si persistance,ECBU.
+*29-08-02* 9400/74.5/44.5 EN.
+*23-09-02* 9400/75/45 EN.
+*26-11-02* 9900/78/46.5 EN.
+*02-01-03* Otite bilatérale+jetage purulent post+conjonctivite purulente.Amoxy-Clav.Présence d'ADP inguinales bilatérales depuis plus de 20j(ils ont peut être diminué de vol).Si persistance, NFP+VS.
+*22-01-03* Synd grippal sub-fébrile.EN.Virose probable.SPH.Les ADP inguinales ont encore diminué de vol.
+*31-01-03* 10.2/79.5/45.5 EN.
+*17-04-03* 11/81.5/46 EN.
+*26-05-03* Grippe.EN.
+*22-10-03* Toux gênante,sans fièvre.Ex:Sibilants diffus.Bronchiolite possible(vu l'épidémie).Hydratation.
+*10-11-03* Synd grippal fébrile.EN.Virose probable.AT.
+*09-01-04* Fièvre depuis 2j.EN en dehors d'1 blockpnée et des crépitants à D.Rx Thorax (N).
+*09-02-04* 12.7/90/ Rougeur au coin int de l'oeil G,sur les 2 paupières.Pas d'oedème.Pas de fièvre.EN.Pas d'otite ou de stigmate d'ethmoïdite.A surveiller.
+*20-05-04* 13/92.5/
+*08-07-04* 13/93/ Otite D.Amoxy-Clav.
+*18-08-04* 13.4/94.5/48 EN.
+*29-12-04* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*02-02-05* 14.5/ Synd grippal fébrile.EN en dehors d'1 petite pharyngite.Virose probable.AT.
+*16-05-05* 14.7/ Tousserait depuis 1 mois environ.La mère entend 1 wheezing de temps en temps.A fait des expectorations purulentes ce jour.Ex:Fébricule. EN par ailleurs.Amoxy.Si pas d'amélioration de la toux,1 allergie serait probable.Le Montelukast serait envisageable.
+*03-06-05* 14.2/ Synd grippal fébrile.La toux s'est 1 peu améliorée mais a repris.On va essayer le Montelukast avant le bilan.
+*22-08-05* 14.3/102/ S'est nettement améliorée sous Montelukast mais a rechuté 2 sem après arrêt.Reprise du Montélukast et Bilan:NFP,Fer sérique,IgE,Rx thorax.
+*29-01-06* Pneumonie G(Lingula).Amoxy-Clav po.Bonne évolution.
+*01-03-06* OSM bilatérale.Etait grippaée il y a 10j.A surveiller.
+*20-06-06* Ablation VA+yoyos(AH).
+*01-09-06* 16/106/ EN.
+*03-10-06* 16.5/109/ EN.
+*08-11-06* Rhino-pharyngite purulente fébrile.Clarithro.
+*09-07-07* Furonculose répétitive.Cefadroxil.
+*31-07-07* 19/ Otite ext G.Cipro.
+*19-12-07* 19/117/ EN.
+*24-04-08* EN.
+*09-09-08* 21.5/120/ EN.
+*09-10-08* 21/121/ EN.
+*29-09-09* EN.
+*01-02-10* 22/Fièvre, otalgie et mal de gorge depuis hier matin.Bon EG.Rhinopharyngite purulente et otite G.Amoxy-Clav.
+*09-03-10* 23/127.5 EN. 
+*21-05-10* 24/129.5/ EN.
+*05-10-10* 25/132/ Douleurs abdominales depuis presque 1 an.Ces douleurs sont surtout nocturnes,mais diurnes aussi.Siège surtout para-ombilical,parfois épigastrique.EN.Pas de brûlures mictionnelles. CAT:Echo,NFP,VS,SGPT,amylasémie,ECBU.
+*21-02-11* Fièvre + frissons + toux + douleurs abdominales depuis 2j.EN.Rx Thorax:début de condensation basale D.Amoxy.
+*25-02-11* La fièvre persiste.Bon EG.EN.Passer à Amoxy-Clav + Clarithro.
+*11-08-11* 26/136/ EN.Puberté 0.
+*27-09-12* 29.5/141.5/ EN.
+*01-11-12* 29.5/142.5/ EN.
+*02-07-13* Otalgie D.EN en dehors d'1 OSM.
+*12-06-14* Toux trainante + expectorations purulentes.Pas de fièvre.EN.Rhino-sinusite probable.Amoxy-Clav + Avamys.
+*20-04-15* 48/ Rhino-sinusite.Amoxy-Clav + Avamys.Premières menstruations en  novembre 2014.
+*29-05-15* Douleur abdominale supra-ombilicale depuis 34j.Pas de trouble digestif associé ni de fièvre.Appétit conservé.EN.Gastrite?Omeprazole.
+*09-03-17* 48/161.5/ EN.
+*02-01-19* 48.5/161.5/ EN.

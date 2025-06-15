@@ -1,0 +1,63 @@
+3750/53/36
+*19-12-03* 4200/53/38 EN.Allaitement mixte.
+*30-01-04* 5900/58.5/41 EN.Allaitement mixte.Fruit.
+*05-03-04* 6750/62/42 EN.Allaitement mixte.L.RHD.
+*22-03-04* EF.
+*07-04-04* 7700/64.5/43.5 EN.Allaitement mixte.LV.RHN.
+*12-05-04* Grippe.EN.SPH.
+*26-05-04* 8800/68.5/45 EN.RV.Fluor.
+*25-06-04* 9300/70/46 EN.
+*27-08-04* 10.2/73/47.5 EN.
+*01-11-04* 10.7/74.5/48 EN.
+*01-12-04* 11/76.5/48.5 EN.
+*04-12-04* Rhino-pharyngite purulente fébrile.Amoxy.
+*19-01-05* Rhino-pharyngite purulente fébrile.Tympans douteux.Cefzil.
+*28-01-05* Otite D.Amoxy-Clav.
+*10-02-05* 11.3/80/48.5 EN.
+*21-03-05* Rash roséoliforme épars sur le tronc,sans fièvre le précédant.Allergie ou virose.
+*07-04-05* 12.1/82/49.5 EN.
+*03-05-05* Rhino-pharyngite purulente fébrile+tympan D crémeux.Amoxy-Clav.
+*01-06-05* 12.3/83/49.5 EN.
+*06-07-05* 12.6/84.5/50 EN.
+*07-11-05* 13.5/89/51 EN.
+*16-01-06* 14/90/ Grippe.EN.
+*11-05-06* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*16-05-06* Il reste 1 petit fébricule.EN.Virose probable.
+*07-07-06* Fièvre subite depuis qques minutes.EN en dehors d'1 pharyngite.Virose probable.AT.
+*13-07-06* 14.3/94.5/52 EN.
+*20-11-06* 15.7/99/52.5 EN.
+*28-12-06* GEA fébrile.EN en dehors d'1 pharyngite.RAD+AT.
+*22-01-07* Douleurs abdominales récurrentes depuis 1 certain temps.EN.CAT:ASP+Echo abdo+ECBU.
+*29-01-07* ECBU: Stérile.
+*22-02-07* Echo abdomino-pelvienne N.ASP:Stase stercorale.D'abord lactulose,sinon lavement.
+*04-06-07* 17.1/102.5/ Stomatite aphteuse fébrile.EN par ailleurs.Medijel+AT.
+*30-08-07* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*12-09-07* Tousse.EN.
+*25-10-07* Rhume.EN.
+*19-02-08* Synd grippal fébrile depuis 2j.EN en dehors d'1 pharyngite.Virose probable.AT.
+*22-02-08* Va mieux.Temp < 37.8.EN.
+*29-09-08* 20.5/110.5/ EN.
+*03-11-08* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*13-11-08* A vomi 2 fois dans la nuit passée.EN en dehors d'1 petite pharyngite.
+*05-12-08* A vomi 2 fois en 2j.EN en dehors d'1 petite pharyngite.
+*26-12-08* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*08-01-09* 20.5/112/ EN.
+*12-02-09* EN.
+*27-03-09* Rhino-pharyngite purulente fébrile.Amoxy.
+*13-10-09* EN.
+*23-11-09* Synd grippal fébrile.Bon EG.EN en dehors d'1 pharyngite.Nuque souple.Virose probable.AT.
+*28-12-09* 21/118 EN.
+*10-09-10* 22.5/121/ EN.
+*18-11-10* 22.5/122.5/ EN.
+*02-05-11* 24/124.5/ EN.
+*20-02-12* 27/128/ EN.
+*21-09-12* 27.5/132/ EN.
+*21-10-13* 32/141.5/ EN.S1P1.
+*17-10-14* 41/150.5/ EN.Premières menstruations en juillet 2014.
+*05-12-14* 43/153/ EN.
+*14-09-15* 52/156.5/ EN.
+*19-10-15* EN.
+*05-01-16* 51/157/ EN.SS anorganique.
+*21-10-16* 55.5/159/ EN.
+*12-10-18* 56/161/ EN.
+*14-12-18* 55.4/161/ EN.

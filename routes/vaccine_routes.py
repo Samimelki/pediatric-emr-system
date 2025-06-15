@@ -604,6 +604,15 @@ def save_immunization_record(patient_id):
             
             if db.execute("SELECT changes()").fetchone()[0] > 0:
                 db.commit()
+                
+                # Update Word document after successful deletion
+                try:
+                    word_manager = WordDocumentManager(db_path=emr_config.get_database_path(), documents_folder=emr_config.get_word_docs_folder())
+                    word_manager.create_or_update_document(patient_id)
+                except Exception as word_error:
+                    # Don't fail the whole operation if Word document update fails
+                    current_app.logger.warning(f"Failed to update Word document for patient {patient_id}: {word_error}")
+                
                 return jsonify({'success': True, 'action': 'deleted'})
             else:
                 # No record found to delete
@@ -639,6 +648,15 @@ def save_immunization_record(patient_id):
                 action = 'created'
             
             db.commit()
+            
+            # Update Word document after successful database update
+            try:
+                word_manager = WordDocumentManager(db_path=emr_config.get_database_path(), documents_folder=emr_config.get_word_docs_folder())
+                word_manager.create_or_update_document(patient_id)
+            except Exception as word_error:
+                # Don't fail the whole operation if Word document update fails
+                current_app.logger.warning(f"Failed to update Word document for patient {patient_id}: {word_error}")
+            
             return jsonify({'success': True, 'action': action})
             
     except Exception as e:

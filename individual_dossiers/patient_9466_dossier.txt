@@ -1,0 +1,60 @@
+2716/48/34
+*05-06-13* 3550/52/36 EN.AM.
+*09-07-13* 4900/57/38.5 EN.AM.
+*09-08-13* 5850/61.5/40 EN.AM.RHD.
+*10-09-13* 6800/65/41.5 EN.Fruit.RHN.
+*08-10-13* 7200/68/42.5 EN.L.
+*05-11-13* 7800/69/43.5 EN.RV.Fluor.
+*03-12-13* 8000/70.5/44 EN.
+*30-12-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*07-01-14* 8300/72/44.5 EN.
+*04-02-14* 8600/73.5/45.5 EN.
+*04-03-14* 9000/74.5/45.5 EN.
+*08-04-14* 9000/77/46.5 EN.
+*06-05-14* 9000/78/46.5 EN.
+*10-06-14* 9600/79.5/47 EN.
+*08-07-14* 9700/81.5/47 EN.
+*12-08-14* 10/82/47.5 EN.
+*22-09-14* 10.5/84/47.5 EN.
+*07-10-14* EN.
+*21-10-14* 10.5/85.5/47.5 EN.
+*27-01-15* 11.5/90/48.5 EN.
+*02-04-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*26-05-15* 11.6/92/49 EN.
+*30-06-15* 11.9/93.5/49 EN.
+*06-10-15* EN.
+*09-11-15* Fièvre depuis hier avec rash roséoliforme presque concommitant.EN par ailleurs.Virose probable.
+*02-12-15* 12.8/ Otite D débutante.Amoxy-Clav.
+*28-01-16* A fait 1 crise convulsive généralisée le 24-01-16 sans fièvre.Récupération totale.EN.Bilan biochimique et IRM N.EEG:ondes lentes.A recontrôler dans 1 mois.
+*16-02-16* Rash maculeux généralisé sans notion de fièvre ant chez une fille en pleine santé.Pas de prurit.EN.Virose ou allergie.
+*10-05-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*11-05-16* Fièvre + éruption.EN.Virose.
+*26-05-16* 14.5/100/ EN.
+*23-06-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*24-06-16* Fièvre tj.Ex:rhinite purulente post.Amoxy.
+*27-06-16* Baisse de la fièvre + apparition d'1 rash cutané d'allure virale.
+*05-08-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*13-09-16* 14.7/103/ EN.
+*29-09-16* EN.
+*24-10-16* Otalgie + rhinite.EN.SPH.
+*22-11-16* 15/ EEG N.
+*19-01-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*03-05-17* 16/107.5/50.5 EN.
+*18-07-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*20-07-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*25-09-17* 17.3/111.5/ EN.
+*29-11-17* Fièvre et toux depuis 48 heures.EN.Virose.AT.
+*20-12-17* Angine.Amoxy.
+*22-12-17* La fièvre s'espace mais persiste.Bon EG.EN en dehors de l'angine.Virose possible.Persévérer.
+*04-05-18* 18/115.5/ EN.A arrêté la Depakine depuis 1 mois.
+*04-06-18* 17.6/116/ EN.
+*21-09-18* 18.7/118/ EN.
+*26-10-18* 18.9/118.5/ EN.
+*31-12-18* Rhino-pharyngite purulente fébrile.Amoxy-Clav.
+*09-01-19* pas de pneumonie sur radio thorax (rapport final), EBV IGM + Disparition de la fievre hier.A pris total de 10 jours d'antibio.Stop augmentin.
+*04-04-19* fievre avec bon EG.EN en dehors d'une pharyngite.Virose probable.AT.
+*05-06-19* 20/122 EN.
+*07-11-19* 23/127 EN.
+*15-01-20* 24.4/127 EN.
+*29-01-20* Syndrome grippal febrile depuis 48 heures.Bon EG.Nuque souple.Pharyngite.Virose probable.AT.
+*31-01-20* Toujours febrile.Bon EG.Nuque souple.Flu test negatif.

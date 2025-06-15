@@ -1,0 +1,70 @@
+3430/51/35
+*23-04-01* 4650/55.5/38 EN.Allaitement mixte.
+*17-05-01* 5400/58/39 EN.Allaitement mixte.Fruit,fluor.
+*18-06-01* 5900/62.5/40.5 EN.L.RHD.
+*20-07-01* 6500/63.5/41.5 EN.LV.RHN.
+*19-09-01* 7400/70/43.5 EN.RV.
+*18-10-01* 7700/71.5/44 EN.
+*21-12-01* 9000/74/46 EN.
+*18-02-02* 9600/78/46.5 EN.
+*27-02-02* Otite bilatérale.Amoxy-Clav.
+*11-03-02* La fièvre a bien disparu.Puis est apparu il y a 3j 1 rash cutané.Karl a bien été jusqu'à ce jour où il fait 1 pic à 39.5.Ex:tympans nettement améliorés.Angine d'allure virale.Si non reprise de la fièvre,ne rien faire.Si reprise, Duricef.
+*14-03-02* La fièvre persiste malgré la prise de Duricef.Ce jour:Otite G+amygdales blanches.Amoxy-Clav.
+*27-03-02* Re-otite bilatérale.CAT:PNP+Amoxy(100 mg/Kg/j)+Cons ORL(AH).
+*27-04-02* 10.6/ Otite G.Tympan D très moyen.Pas de conjonctivite.Le PNP n'a pas pu être fait.La réponse à l'amoxy(27-03-02)était très bonne.Vu les circonstances:PNP,Amoxy(150mg/K/j)+cons ORL.
+*02-05-02* PNP:P.Maltophilia+Strepto groupe C.
+*10-05-02* Otite ext D.Sofradex.
+*27-06-02* 10.6/83/47.5 EN.Tympans encore très remaniés.Surveillé par AH.
+*29-07-02* 11.3/85/47.5 EN.
+*02-10-02* 12.3/85.5/48.5 EN.
+*20-10-02* A fait 3j de fièvre il y a 4j.Afébrile depuis hier.Son frère fait actuellement 1 fièvre avec frissons.EN. Virose probable.
+*15-11-02* Rhino-pharyngite purulente fébrile.Amoxy.
+*11-12-02* 12/ Otite bilatérale surtout gauche.Amoxy-clav.(S.Sabbagh).
+*26-12-02* Re-Otite bilatérale.Orelox.Re-Cons AH.
+*13-01-03* Fièvre depuis 2j.EN.Tympans en voie de guérison.Pas de bombement ni de pus derrière.Virose possible. AT.
+*24-02-03* 12.8/ Otite bilatérale.Orelox.
+*17-03-03* Fièvre depuis hier.EN en dehors d'1 pharyngite.Virose probable.AT.
+*09-04-03* Otite G+Angine.Orelox.
+*06-06-03* Rhino-pharyngite purulente fébrile+selles molles.EN par ailleurs.RAD+Amoxy.A fait la VARICELLE il y a 1 mois environ.
+*19-06-03* Hospitalisé il y a 2 sem pour melaena et vomissements noirâtres:Ulcère gastrique(antre).HP(+).Ttt anti HP.
+*19-01-04* 14/ Fièvre depuis 4j.Traité depuis 60 heures avec de l'Orelox(AH) pour 1 otite G.La fièvre persiste élevée malgré le ttt.EN en dehors d'1 otite G(mais le tympan semble affaissé)et 1 jetage purulent post.Résistance au ttt? CAT:Rx Thorax.Si persistance de la fièvre,Amoxy à 100 mg/K/j.Sinon Ceftriaxone.Rx Thorax:Infiltrats bilatéraux d'allure virale(ou atypique?).
+*12-03-04* 14.3/100/50 EN.
+*30-06-04* Fièvre depuis 2j.EN en dehors d'1 aphte sur l'amgdale D.Virose probable.Medijel.AT.
+*07-07-04* /104/ Rash de chaleur au nv du dos.
+*16-08-04* 15.8/105/
+*28-09-04* Tousserait depuis 3-4 sem avec coryza purulent continuel.La fièvre est peu présente.EN en dehors d'1 jetage post et ant purulent. Rhino-sinusite probable.Orelox+Flixonase.
+*07-01-05* Rash.
+*20-04-05* Fièvre isolée depuis 3j,le soir essentiellement.EN.Virose?ECBU.
+*17-06-05* 16.7/109/ Fièvre depuis 2j avec selles 1 peu glaireuses.EN.Virose probable.Karl est tj sous IPP?La mère souhaite 1 second avis.Cons BE.
+*21-09-05* OSM G.
+*10-07-06* Pustule de la cuisse en voie de collection.A eu 1 autre collection incisée il y a environ 2 sem au nv de l'avant-bras G(PD).N'a jamais eu de choses pareilles.Cefadroxil.
+*01-11-06* 20/119/ EN.
+*06-12-06* Otite ext D.Sofradex.
+*29-12-06* Otite D.Amoxy.
+*11-01-07* 19/119.5/ EN.
+*04-06-07* 20.5/122.5/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*18-07-07* 20/123/ EN.Jetage post purulent net.Toux.
+*04-02-08* Synd grippal.Céphalées.EN en dehors d'1 OSM G.A suivre.
+*15-04-08* Synd grippal fébrile.EN en dehors d'1 pharyngite et d'1 conjonctivite.Virose probable.AT.
+*18-04-08* La fièvre persiste.Coryza purulent.Amoxy.
+*26-05-08* Otite D.Amoxy.
+*28-10-08* 23/ Angine.Amoxy.
+*19-12-08* Rhino-pharyngite purulente fébrile.Amoxy.
+*04-02-09* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*20-07-09* 24.5/132.5/ EN.
+*25-11-09* 26/ Synd grippal. EN.
+*22-07-11* 30/143.5/ EN.
+*15-09-11* 29/144.5/ EN.Gland non décallotable.A mon avis,patienter.Cons ZG par principe.
+*30-08-12* 35/150.5/ EN.
+*15-03-13* Otite ext D.Cipro plus.
+*19-03-13* Otite moyenne bilatérale!Amoxy-Clav.
+*03-03-14* 47/166/ EN.Bourgeon mammaire D.P4.
+*02-10-14* 50/173.5/ Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*27-03-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*21-07-16* 60/179/ EN.
+*08-12-16* EN.
+*10-04-17* 60.5/179/ EN.
+*12-05-17* IDR 7 mm.
+*21-06-17* EN.
+*21-03-19* Syndrome grippal febrile depuis 24 heures.Fatigue.Nuque souple.EN en dehors d'une pharyngite.Virose probable.AT.
+*09-08-19* 60.8/180 EN.

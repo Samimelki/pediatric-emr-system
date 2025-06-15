@@ -1,0 +1,58 @@
+3450/52/35
+*15-03-11* 4100/53/37 EN.Allaitement mixte.
+*18-04-11* 5050/57/39.5 EN.Allaitement mixte.
+*18-05-11* 5650/60/40 EN.RHD.
+*17-06-11* 6200/62.5/41 EN.Fruit.RHN.
+*18-07-11* 6800/65/42 EN.L.
+*18-08-11* 7150/67/42.5 EN.RV.Fluor.Teint pâle.Fer.
+*20-09-11* 7300/69/43 EN.
+*17-10-11* 7600/69.5/43.5 EN.
+*17-11-11* 7850/70/44 EN.
+*19-12-11* Rhino-pharyngite purulente fébrile.Amoxy.
+*18-01-12* 8400/73.5/45 EN.
+*16-02-12* 8600/75/45.5 EN.
+*14-03-12* 8600/76/46 EN.
+*18-04-12* 9000/76.5/46 EN.
+*30-04-12* Fièvre isolée depuis 2j.EN en dehors d'1 pharyngite.Virose probable.AT.
+*17-05-12* 9100/78.5/46.5 EN.
+*22-05-12* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*25-06-12* 9300/80/46.5 EN.
+*12-12-12* Fièvre depuis hier + baisse de l'appétit.EN en dehors d'1 belle pharyngite + aphtes du palais.Stomatite virale probable.Medijel.AT.
+*26-12-12* 10.5/ OMA bilatérale.Amoxy-clav (BE).
+*09-01-13* EF.
+*17-01-13* EF nettement amélioré.
+*22-04-13* 11.1/89/48.5 EN.
+*22-05-13* 11.5/89.5/
+*03-06-13* Synd grippal subfébrile.EN en dehors d'1 pharyngite.Virose probable.
+*24-06-13* 11.2/91.5/ EN.
+*02-07-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*26-08-13* Plaie de la main D en voie de cicatrisation.
+*17-01-14* 12.8/96/ EN.
+*03-02-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*28-02-14* 13/96.5/ EN.
+*08-08-14* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*06-11-14* 14.3/ Rhino-pharyngite purulente fébrile.
+*17-11-14* OSM D.Flixonase.
+*21-11-14* Otite D!Amoxy-Clav.
+*23-12-14* 15/ Fièvre depuis 5 jours.Angine purulente.Conjonctivite à D.Amoxy-clav et Tobrex (CM).
+*05-02-15* Otalgie sans fièvre.Ex:Pharyngite.
+*23-02-15* Rhino-pharyngite purulente fébrile.Amoxy.
+*22-04-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*11-05-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*14-05-15* Oscillations espacées de la fièvre.EN.
+*12-06-15* Fievre depuis 24h. Diarrhée ce jour.EN à part une gorge erythemateuse.Virose.
+*28-09-15* Angine.Amoxy.
+*28-01-16* Otalgie G.EN en dehors d'1 pharyngite.
+*08-04-16* 18.5/ Rhino-pharyngite purulente fébrile.Amoxy.
+*22-04-16* 18.5/113.5/ EN.
+*14-10-16* Rhino-pharyngite purulente fébrile.Amoxy.
+*25-01-17* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*26-01-17* Idem.Ex:membranes blanchâtres sur les amygdales.Si persistance de la fièvre jusqu'à demain,clarithro.
+*18-04-17* 20/118.5/ EN.
+*03-07-17* 20/121/EN.
+*22-09-17* 19.2/123.5/ EN.
+*29-11-17* 20.9/ Fièvre et otalgie depuis hier.Nuque souple.OMA D.Amoxy-clav (RM).
+*03-01-18* 20.7/125/ EN.
+*31-10-18* GEA invasive.Bon EG.EN.RAD.
+*22-07-19* 24.8/133.5 EN.
+*28-02-20* 25.3/137 EN.

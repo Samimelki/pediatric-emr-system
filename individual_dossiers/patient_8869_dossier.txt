@@ -1,0 +1,54 @@
+3050/49/34 *
+*19-09-11* 4250/55/36.5 EN.AM.Très discret ictère.ILM.ECBU.
+*29-09-11* ECBU stérile.
+*19-10-11* 5450/58/38.5 EN.Allaitement mixte.Disparition de l'ictère.
+*18-11-11* 6250/61/39.5 EN.Allaitement mixte.RHD.
+*19-12-11* 6600/63.5/41 EN.Allaitement mixte.Fruit.RHN.
+*18-01-12* 7150/67/41.5 EN.Allaitement mixte.
+*15-02-12* 7700/69/42.5 EN.Allaitement mixte.RV.Fluor.
+*14-03-12* 8200/71/43 EN.Allaitement mixte.
+*19-03-12* Otite D + conjonctivite purulente.Amoxy-Clav.
+*18-04-12* 8300/72.5/43.5 EN.
+*16-05-12* 8700/73/44 EN.
+*23-05-12* Fièvre depuis 4-5j,d'abord oscillante,assez soutenue depuis hier.Cris surajoutés depuis hier.EN en dehors d'1 petite pharyngite.Virose?ECBU de principe.
+*24-05-12* Fièvre tj.ECBU:10.000 col/ml polymorphe.EN.Bilan demain si persistance de la fièvre.
+*08-06-12* Bilan :Hb 8.5- VGM 77. VS 113. IgM CMV neg/ IgG 287 UI (seuil 1) Reste RAS. N'a plus de fièvre.Fer (BE).
+*29-06-12* 9250/75.5/45 EN.
+*26-07-12* 9250/76.5/45.5 EN.
+*03-09-12* 9600/77/45.5 EN.
+*03-10-12* 10.1/78.5/46 EN.
+*01-11-12* 10.2/79/46 EN.
+*05-12-12* 10.3/80.5/46 EN.
+*21-12-12* Fièvre.EN.
+*17-01-13* 10.5/82/47 EN.
+*14-02-13* GEA.La fièvre a disparu.EN.RAD.
+*20-03-13* Fièvre isolée hier.EN.
+*22-03-13* La fièvre a continué à osciller:Otite D.Mais pas de fièvre ce jour.Si reprise de la fièvre,amoxy-clav.
+*02-04-13* 10.7/83.5/47 EN.
+*09-05-13* 11/84.5/47 EN.
+*28-05-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*30-05-13* Fièvre tj.Otite G.Amoxy-Clav.
+*05-07-13* Synd grippal fébrile.Toux laryngée.EN en dehors d'1 pharyngite.Virose probable.AT+humidifications.
+*23-09-13* 11.4/87.5/47.5 EN.
+*27-09-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*05-12-13* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.Impression de brûlures mictionnelles.ECBU.
+*03-02-14* Qques boutons pris pour 1 varicelle.Je ne pense pas.
+*19-02-14* 12.3/ Rhino-pharyngite purulente fébrile+conjonctivite purulente.Amoxy-Clav.
+*20-02-14* Aspect d'hémorragie conjonctivale sus-irienne D.Cons ophtalmo.
+*12-03-14* Rhino-pharyngite purulente fébrile.Amoxy.
+*08-05-14* 12.9/90.5/48.5 EN.
+*09-06-14* Angine.Amoxy-Clav.
+*02-02-15* Petit rhume.Pharyngite.
+*09-02-15* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*04-03-16* Synd grippal fébrile.EN en dehors d'1 pharyngite.Virose probable.AT.
+*09-03-16* 16/ Baisse de la fièvre le 5 puis reprise de la fièvre ce jour.EN en dehors d'1 myringite bulleuse G.Clarithro.
+*08-09-16* 18.5/110.5/ EN.
+*20-10-16* EN.
+*27-02-17* 19/113.5/ EN.
+*25-09-17* 18.4/116.5/ EN.
+*14-05-18* 20.6/120/ Douleurs abdominales occasionnelles depuis 2 mois.Pas de troubles digestif.Pas de fièvre.Pas de dysurie.EN en dehors d'1 sensibilité diffuse à la palpation de l'abdomen.CAT:Echo abdominale (N).
+*31-08-18* 21/122.5/ EN.
+*29-10-18* 22/124/ EN.
+*11-02-19* Douleur de gorge sans fievre actuellement.EN.Virose probable.
+*07-08-19* Syndrome grippal afebrile.EN.
+*10-02-20* Herpes sur levres.Zovirax.

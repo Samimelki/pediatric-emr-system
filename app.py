@@ -3,6 +3,7 @@ import sys
 import json
 import datetime
 import threading
+import time
 import base64
 import shutil
 import io
@@ -22,6 +23,9 @@ from routes.pdf_export_routes import pdf_export_bp
 from routes.admin_routes import admin_bp
 from routes.settings_routes import settings_bp
 from routes.emr_settings_routes import emr_settings_bp
+
+# Statistics engine for pediatric growth curves
+from statistics_engine.statistics_calculator import calculate_percentiles, find_measurement_outliers
 
 # --- Start of Logging Setup ---
 # Ensure the log directory exists
@@ -148,6 +152,120 @@ def format_date_standard(date_str):
 
 app.jinja_env.filters['format_date_standard'] = format_date_standard
 
+# Global variables for statistics cache
+statistics_cache = {
+    'percentiles': None,
+    'outliers': None,
+    'last_updated': None,
+    'calculating': False
+}
+statistics_lock = threading.Lock()
+
+# Store cache in app instance for blueprint access
+app.statistics_cache = statistics_cache
+app.statistics_lock = statistics_lock
+
+def calculate_statistics_background():
+    """Background thread function to calculate growth curve statistics"""
+    global statistics_cache
+    
+    # Calculate immediately on startup, then every 30 minutes
+    first_run = True
+    
+    while True:
+        try:
+            # Check if we should calculate statistics
+            should_calculate = False
+            with statistics_lock:
+                if not statistics_cache['calculating']:
+                    statistics_cache['calculating'] = True
+                    should_calculate = True
+                    logging.info("Starting background statistics calculation...")
+            
+            if should_calculate:
+                try:
+                    logging.info("Checking database for patient data...")
+                    
+                    # Quick check if we have any patients with birth dates and visits
+                    import sqlite3
+                    db_path = emr_config.get_database_path()
+                    conn = sqlite3.connect(db_path)
+                    conn.row_factory = sqlite3.Row
+                    cursor = conn.cursor()
+                    
+                    cursor.execute("SELECT COUNT(*) as count FROM Patients WHERE naissance_date IS NOT NULL AND sexe IS NOT NULL")
+                    patient_count = cursor.fetchone()['count']
+                    
+                    cursor.execute("SELECT COUNT(*) as count FROM Visits WHERE weight_g IS NOT NULL OR height_cm IS NOT NULL OR head_circumference_cm IS NOT NULL")
+                    visit_count = cursor.fetchone()['count']
+                    
+                    conn.close()
+                    
+                    logging.info(f"Found {patient_count} patients with birth dates and {visit_count} visits with measurements")
+                    
+                    if patient_count == 0 or visit_count == 0:
+                        logging.info("No data available for statistics calculation, skipping...")
+                        with statistics_lock:
+                            statistics_cache['calculating'] = False
+                    else:
+                        logging.info("Calculating percentiles...")
+                        # Calculate percentiles with smoothing
+                        percentiles = calculate_percentiles(
+                            db_path=db_path,
+                            target_percentiles=[3, 15, 50, 85, 97],
+                            smoothing_window=3,
+                            max_age_months=228,
+                            outlier_filter_sd_threshold=5.0,
+                            min_points_for_outlier_filtering=10
+                        )
+                        
+                        logging.info("Finding outliers...")
+                        # Find outliers
+                        outliers = find_measurement_outliers(
+                            db_path=db_path,
+                            std_dev_threshold=4.0,
+                            age_limit_months=60
+                        )
+                        
+                        # Update cache
+                        with statistics_lock:
+                            statistics_cache['percentiles'] = percentiles
+                            statistics_cache['outliers'] = outliers
+                            statistics_cache['last_updated'] = datetime.datetime.now()
+                            statistics_cache['calculating'] = False
+                            
+                        logging.info(f"Statistics calculation completed. Found {len(outliers) if outliers else 0} outliers.")
+                    
+                except Exception as e:
+                    logging.error(f"Error calculating statistics: {e}")
+                    import traceback
+                    logging.error(traceback.format_exc())
+                    with statistics_lock:
+                        statistics_cache['calculating'] = False
+            
+            # Wait 30 minutes before next calculation (or 10 seconds for first run)
+            if first_run:
+                time.sleep(10)  # Short delay for first run
+                first_run = False
+            else:
+                time.sleep(1800)  # 30 minutes for subsequent runs
+            
+        except Exception as e:
+            logging.error(f"Error in statistics background thread: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            time.sleep(300)  # Wait 5 minutes on error
+
+def get_cached_statistics():
+    """Get cached statistics data"""
+    with statistics_lock:
+        return {
+            'percentiles': statistics_cache['percentiles'],
+            'outliers': statistics_cache['outliers'],
+            'last_updated': statistics_cache['last_updated'],
+            'calculating': statistics_cache['calculating']
+        }
+
 @app.context_processor
 def inject_now():
     return {'current_year': datetime.datetime.now().year}
@@ -198,6 +316,10 @@ app.register_blueprint(visit_bp)
 from routes.demographics_routes import demographics_bp
 app.register_blueprint(demographics_bp)
 
+# Statistics functionality
+from routes.statistics_routes import statistics_bp
+app.register_blueprint(statistics_bp)
+
 logging.info("Blueprints registered.")
 
 @app.route('/')
@@ -209,6 +331,68 @@ def index():
                          title='Home', 
                          emr_features=features,
                          emr_config=emr_config)
+
+@app.route('/api/statistics')
+def api_statistics():
+    """API endpoint to get cached statistics data"""
+    stats = get_cached_statistics()
+    # Convert datetime to string for JSON serialization
+    if stats['last_updated']:
+        stats['last_updated'] = stats['last_updated'].isoformat()
+    
+    return jsonify(stats)
+
+@app.route('/api/statistics/trigger', methods=['POST'])
+def trigger_statistics_calculation():
+    """Manual trigger for statistics calculation (for testing)"""
+    global statistics_cache
+    
+    with statistics_lock:
+        if statistics_cache['calculating']:
+            return jsonify({'error': 'Calculation already in progress'}), 400
+        
+        statistics_cache['calculating'] = True
+    
+    try:
+        logging.info("Manual statistics calculation triggered")
+        
+        # Calculate percentiles with smoothing
+        percentiles = calculate_percentiles(
+            db_path=emr_config.get_database_path(),
+            target_percentiles=[3, 15, 50, 85, 97],
+            smoothing_window=3,
+            max_age_months=228,
+            outlier_filter_sd_threshold=5.0,
+            min_points_for_outlier_filtering=10
+        )
+        
+        # Find outliers
+        outliers = find_measurement_outliers(
+            db_path=emr_config.get_database_path(),
+            std_dev_threshold=4.0,
+            age_limit_months=60
+        )
+        
+        # Update cache
+        with statistics_lock:
+            statistics_cache['percentiles'] = percentiles
+            statistics_cache['outliers'] = outliers
+            statistics_cache['last_updated'] = datetime.datetime.now()
+            statistics_cache['calculating'] = False
+            
+        logging.info(f"Manual statistics calculation completed. Found {len(outliers)} outliers.")
+        
+        return jsonify({
+            'success': True,
+            'outliers_found': len(outliers),
+            'percentiles_calculated': bool(percentiles)
+        })
+        
+    except Exception as e:
+        logging.error(f"Error in manual statistics calculation: {e}")
+        with statistics_lock:
+            statistics_cache['calculating'] = False
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/update_vaccine_date', methods=['POST'])
 def update_vaccine_date():
@@ -400,6 +584,15 @@ if __name__ == '__main__':
         flask_thread.daemon = True
         flask_thread.start()
         logging.info("Flask thread started.")
+        
+        # Start statistics calculation thread for pediatric profiles
+        try:
+            statistics_thread = threading.Thread(target=calculate_statistics_background)
+            statistics_thread.daemon = True
+            statistics_thread.start()
+            logging.info("Statistics calculation thread started successfully.")
+        except Exception as e:
+            logging.error(f"Failed to start statistics thread: {e}")
         api_instance = Api()
         with app.app_context():
             logging.info("Initializing DB schema...")
