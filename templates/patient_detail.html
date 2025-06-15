@@ -131,12 +131,13 @@
         <!-- Vaccine Timeline -->
         {% if is_feature_enabled('vaccines') %}
         <div class="card mt-3">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Vaccines</h5>
+            <div class="card-body text-center py-4">
                 {% if patient.naissance_date %}
-                <a href="{{ url_for('vaccine.vaccine_schedule_timeline', patient_id=patient.id) }}" class="btn btn-primary">
+                <a href="{{ url_for('vaccine.vaccine_schedule_timeline', patient_id=patient.id) }}" class="btn btn-primary btn-lg">
                     <i class="fas fa-syringe"></i> View Vaccines
                 </a>
+                {% else %}
+                <p class="text-muted mb-0">Birth date required to view vaccine schedule</p>
                 {% endif %}
             </div>
         </div>
