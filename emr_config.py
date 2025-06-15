@@ -228,8 +228,8 @@ DEFAULT_CONFIG = {
             'specialty': 'Your Specialty',
             'hospital_name': 'Hospital/Clinic Name',
             'faculty_name': 'Faculty/University Name',
-            'contact_line1': 'Contact Line 1',
-            'contact_line2': 'Contact Line 2'
+            'contact_line1': '',
+            'contact_line2': ''
         },
         'footer_note_fr': 'Note de bas de page',
         'footer_note_en': 'Footer note',

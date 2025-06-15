@@ -33,16 +33,16 @@ def manage_pdf_settings():
             "specialty": "Votre Spécialité",
             "hospital_name": "Nom de l'Hôpital/Clinique",
             "faculty_name": "Nom de la Faculté/Université",
-            "contact_line1": "Ligne de contact 1",
-            "contact_line2": "Ligne de contact 2"
+            "contact_line1": "",
+            "contact_line2": ""
         },
         "physician_details_en": {
             "name": "Dr. Your Name",
             "specialty": "Your Specialty",
             "hospital_name": "Hospital/Clinic Name",
             "faculty_name": "Faculty/University Name",
-            "contact_line1": "Contact Line 1",
-            "contact_line2": "Contact Line 2"
+            "contact_line1": "",
+            "contact_line2": ""
         },
         "footer_note_fr": "Note de bas de page",
         "footer_note_en": "Footer note",

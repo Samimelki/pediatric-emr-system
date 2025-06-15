@@ -31,30 +31,6 @@ TABLE_COLUMN_LABELS_EN = {
     "r1": "Booster 1", "r2": "Booster 2", "r3": "Booster 3", "r4": "Booster 4"
 }
 
-# Default PDF configuration
-DEFAULT_PDF_CONFIG = {
-    'physician_details_en': {
-        'name': 'Dr. John Doe',
-        'specialty': 'Family Physician',
-        'hospital_name': 'Medical Center',
-        'faculty_name': 'Medical University',
-        'contact_line1': 'Contact Line 1',
-        'contact_line2': 'Contact Line 2'
-    },
-    'physician_details_fr': {
-        'name': 'Dr. Jean Dupont',
-        'specialty': 'Médecin de Famille',
-        'hospital_name': 'Centre Médical',
-        'faculty_name': 'Université de Médecine',
-        'contact_line1': 'Ligne de contact 1',
-        'contact_line2': 'Ligne de contact 2'
-    },
-    'footer_note_en': 'This is a computer-generated document. No signature is required.',
-    'footer_note_fr': 'Ce document est généré par ordinateur. Aucune signature n\'est requise.',
-    'signature_image_filename': None,
-    'logo_image_filename': None
-}
-
 # --- END OF CENTRALIZED VACCINE CONSTANTS ---
 
 def migrate_old_pdf_config():
@@ -442,7 +418,7 @@ def export_vaccination_record_fr(patient_id):
     pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = f'attachment; filename=vaccination_record_{patient["id"]}_fr.pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=vaccination_record_{patient["prenom"]}_{patient["nom"]}_{patient["id"]}_fr.pdf'
     return response
 
 @pdf_export_bp.route('/vaccination_record_en/<int:patient_id>')
@@ -482,7 +458,7 @@ def export_vaccination_record_en(patient_id):
     pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = f'attachment; filename=vaccination_record_{patient["id"]}_en.pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=vaccination_record_{patient["prenom"]}_{patient["nom"]}_{patient["id"]}_en.pdf'
     return response
 
 @pdf_export_bp.route('/total_history_fr/<int:patient_id>')
@@ -520,7 +496,7 @@ def export_total_history_fr(patient_id):
     pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = f'attachment; filename=total_history_{patient["id"]}_fr.pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=total_history_{patient["prenom"]}_{patient["nom"]}_{patient["id"]}_fr.pdf'
     return response
 
 @pdf_export_bp.route('/total_history_en/<int:patient_id>')
@@ -558,7 +534,7 @@ def export_total_history_en(patient_id):
     pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = f'attachment; filename=total_history_{patient["id"]}_en.pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=total_history_{patient["prenom"]}_{patient["nom"]}_{patient["id"]}_en.pdf'
     return response
 
 @pdf_export_bp.route('/complete_report/<int:patient_id>')
@@ -637,5 +613,5 @@ def export_complete_report(patient_id):
     pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = f'attachment; filename=complete_report_{patient["id"]}.pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=complete_report_{patient["prenom"]}_{patient["nom"]}_{patient["id"]}_en.pdf'
     return response
