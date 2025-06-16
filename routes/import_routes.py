@@ -1,6 +1,8 @@
 import os
 import json
-from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
+import zipfile
+import tempfile
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, jsonify, send_file
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from emr_config import emr_config
@@ -11,6 +13,7 @@ from populate_db import populate_database_from_parsed_data
 
 # Import Word document processing functionality  
 from word_importer import WordDocumentImporter
+from csv_importer import CSVImporter
 
 import_bp = Blueprint('import', __name__, url_prefix='/import')
 
@@ -275,4 +278,127 @@ def migrate_legacy():
         import traceback
         traceback.print_exc()
     
-    return redirect(url_for('import.import_legacy_databases')) 
+    return redirect(url_for('import.import_legacy_databases'))
+
+@import_bp.route('/import_csv', methods=['GET', 'POST'])
+def import_csv():
+    """Handle CSV file imports"""
+    if request.method == 'GET':
+        return render_template('import_csv.html')
+    
+    if request.method == 'POST':
+        try:
+            # Check if files were uploaded
+            if 'csv_files' not in request.files:
+                flash('No files selected', 'error')
+                return redirect(request.url)
+            
+            files = request.files.getlist('csv_files')
+            if not files or all(f.filename == '' for f in files):
+                flash('No files selected', 'error')
+                return redirect(request.url)
+            
+            # Get import options
+            update_existing = request.form.get('update_existing') == 'on'
+            
+            # Create temporary directory for uploaded files
+            with tempfile.TemporaryDirectory() as temp_dir:
+                uploaded_files = {}
+                
+                # Save uploaded files
+                for file in files:
+                    if file and file.filename:
+                        filename = secure_filename(file.filename)
+                        if filename.endswith('.csv'):
+                            file_path = os.path.join(temp_dir, filename)
+                            file.save(file_path)
+                            uploaded_files[filename] = file_path
+                
+                if not uploaded_files:
+                    flash('No valid CSV files uploaded', 'error')
+                    return redirect(request.url)
+                
+                # Initialize CSV importer
+                db_path = emr_config.get_database_path()
+                importer = CSVImporter(db_path)
+                
+                # Import files
+                results = {}
+                total_imported = 0
+                total_updated = 0
+                total_errors = 0
+                
+                # Check if this is a bundle import (directory with multiple files)
+                if len(uploaded_files) > 1:
+                    # Bundle import
+                    results = importer.import_csv_bundle(temp_dir, update_existing)
+                    
+                    for file_type, stats in results.items():
+                        if 'error' not in stats:
+                            total_imported += stats.get('imported', 0)
+                            total_updated += stats.get('updated', 0)
+                            total_errors += stats.get('errors', 0)
+                else:
+                    # Single file import
+                    filename, file_path = list(uploaded_files.items())[0]
+                    
+                    try:
+                        if 'patients' in filename.lower():
+                            stats = importer.import_patients_csv(file_path, update_existing)
+                            results['patients'] = stats
+                        elif 'visits' in filename.lower():
+                            stats = importer.import_visits_csv(file_path, update_existing)
+                            results['visits'] = stats
+                        elif 'immunizations' in filename.lower():
+                            stats = importer.import_immunizations_csv(file_path, update_existing)
+                            results['immunizations'] = stats
+                        else:
+                            # Try to auto-detect based on content
+                            flash(f'Could not determine file type for {filename}. Please ensure filename contains "patients", "visits", or "immunizations".', 'error')
+                            return redirect(request.url)
+                        
+                        total_imported = stats.get('imported', 0)
+                        total_updated = stats.get('updated', 0)
+                        total_errors = stats.get('errors', 0)
+                        
+                    except Exception as e:
+                        flash(f'Error importing {filename}: {str(e)}', 'error')
+                        return redirect(request.url)
+                
+                # Generate success message
+                success_parts = []
+                if total_imported > 0:
+                    success_parts.append(f'{total_imported} records imported')
+                if total_updated > 0:
+                    success_parts.append(f'{total_updated} records updated')
+                
+                if success_parts:
+                    flash(f'CSV import completed: {", ".join(success_parts)}', 'success')
+                
+                if total_errors > 0:
+                    flash(f'{total_errors} errors occurred during import', 'warning')
+                
+                # Show detailed results
+                for file_type, stats in results.items():
+                    if 'error' in stats:
+                        flash(f'{file_type.title()}: {stats["error"]}', 'error')
+                    else:
+                        details = []
+                        if stats.get('imported', 0) > 0:
+                            details.append(f"{stats['imported']} imported")
+                        if stats.get('updated', 0) > 0:
+                            details.append(f"{stats['updated']} updated")
+                        if stats.get('skipped', 0) > 0:
+                            details.append(f"{stats['skipped']} skipped")
+                        if stats.get('errors', 0) > 0:
+                            details.append(f"{stats['errors']} errors")
+                        
+                        if details:
+                            flash(f'{file_type.title()}: {", ".join(details)}', 'info')
+                
+                return redirect(url_for('import.import_csv'))
+                
+        except Exception as e:
+            current_app.logger.error(f"CSV import error: {e}")
+            flash(f'Import failed: {str(e)}', 'error')
+            return redirect(request.url) 

@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}Import CSV Data{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h2><i class="fas fa-file-csv"></i> Import CSV Data</h2>
+            <p class="text-muted">Import patient data from CSV files exported from this system or other EMR systems.</p>
+            
+            <!-- Instructions Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> Import Instructions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><strong>Supported File Types:</strong></h6>
+                            <ul>
+                                <li><code>patients.csv</code> - Patient demographic data</li>
+                                <li><code>visits.csv</code> - Visit records and measurements</li>
+                                <li><code>immunizations.csv</code> - Vaccination records</li>
+                            </ul>
+                            
+                            <h6><strong>Import Options:</strong></h6>
+                            <ul>
+                                <li><strong>Single File:</strong> Upload one CSV file at a time</li>
+                                <li><strong>Bundle Import:</strong> Upload multiple CSV files together</li>
+                                <li><strong>Update Mode:</strong> Choose whether to update existing records or skip duplicates</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><strong>File Format Requirements:</strong></h6>
+                            <ul>
+                                <li>UTF-8 encoding with BOM (for French characters: é, è, à, ù, etc.)</li>
+                                <li>CSV format with comma separators</li>
+                                <li>First row must contain column headers</li>
+                                <li>Date format: YYYY-MM-DD or DD/MM/YYYY</li>
+                            </ul>
+                            
+                            <div class="alert alert-info">
+                                <i class="fas fa-lightbulb"></i> <strong>Tip:</strong> 
+                                Files exported from this system are already in the correct format and can be re-imported directly.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Import Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-upload"></i> Upload CSV Files</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" id="csvImportForm">
+                        
+                        <!-- File Selection -->
+                        <div class="form-group mb-4">
+                            <label for="csv_files" class="form-label">
+                                <strong>Select CSV Files:</strong>
+                            </label>
+                            <input type="file" 
+                                   class="form-control" 
+                                   id="csv_files" 
+                                   name="csv_files" 
+                                   accept=".csv"
+                                   multiple
+                                   required>
+                            <div class="form-text">
+                                You can select multiple CSV files for bundle import. Supported files: patients.csv, visits.csv, immunizations.csv
+                            </div>
+                        </div>
+                        
+                        <!-- Import Options -->
+                        <div class="form-group mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6>Import Options</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-check">
+                                        <input class="form-check-input" 
+                                               type="checkbox" 
+                                               id="update_existing" 
+                                               name="update_existing">
+                                        <label class="form-check-label" for="update_existing">
+                                            <strong>Update Existing Records</strong>
+                                        </label>
+                                        <div class="form-text">
+                                            If checked, existing records will be updated with new data. 
+                                            If unchecked, duplicate records will be skipped.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Warning Notice -->
+                        <div class="alert alert-warning">
+                            <h6><i class="fas fa-exclamation-triangle"></i> Important Notice:</h6>
+                            <ul class="mb-0">
+                                <li>This operation will import data into your current database</li>
+                                <li>Make sure to backup your database before importing large datasets</li>
+                                <li>Import order: Patients → Visits → Immunizations (for referential integrity)</li>
+                                <li>French accented characters (é, è, à, ù, î, ï) are fully supported</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Confirmation -->
+                        <div class="form-group mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       id="confirm_import" 
+                                       name="confirm_import" 
+                                       required>
+                                <label class="form-check-label" for="confirm_import">
+                                    <strong>I understand that this will import data into the current database</strong>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" 
+                                    class="btn btn-primary btn-lg" 
+                                    id="importButton">
+                                <i class="fas fa-file-import"></i> Import CSV Data
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Progress Indicator (hidden by default) -->
+            <div class="card mt-4" id="progressCard" style="display: none;">
+                <div class="card-body">
+                    <h6><i class="fas fa-spinner fa-spin"></i> Importing CSV Data...</h6>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                             role="progressbar" 
+                             style="width: 100%">
+                        </div>
+                    </div>
+                    <p class="text-muted mt-2">Please wait while your CSV files are being processed...</p>
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="mt-4">
+                <a href="{{ url_for('import.import_home') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Import Options
+                </a>
+                <a href="{{ url_for('admin.export_csv_data_route') }}" class="btn btn-outline-info">
+                    <i class="fas fa-download"></i> Export CSV Data
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('csvImportForm');
+    const importButton = document.getElementById('importButton');
+    const progressCard = document.getElementById('progressCard');
+    const fileInput = document.getElementById('csv_files');
+    
+    // Show file information when files are selected
+    fileInput.addEventListener('change', function() {
+        const files = this.files;
+        if (files.length > 0) {
+            let fileInfo = `Selected ${files.length} file(s): `;
+            const fileNames = Array.from(files).map(f => f.name).join(', ');
+            fileInfo += fileNames;
+            
+            // Create or update file info display
+            let fileInfoDiv = document.getElementById('fileInfo');
+            if (!fileInfoDiv) {
+                fileInfoDiv = document.createElement('div');
+                fileInfoDiv.id = 'fileInfo';
+                fileInfoDiv.className = 'alert alert-info mt-2';
+                this.parentNode.appendChild(fileInfoDiv);
+            }
+            fileInfoDiv.innerHTML = `<i class="fas fa-file-csv"></i> ${fileInfo}`;
+        }
+    });
+    
+    // Handle form submission
+    form.addEventListener('submit', function(e) {
+        const confirmCheckbox = document.getElementById('confirm_import');
+        
+        if (!confirmCheckbox.checked) {
+            e.preventDefault();
+            alert('Please confirm that you understand the import process.');
+            return false;
+        }
+        
+        // Show progress indicator
+        importButton.disabled = true;
+        importButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importing...';
+        progressCard.style.display = 'block';
+        
+        // Scroll to progress card
+        progressCard.scrollIntoView({ behavior: 'smooth' });
+    });
+});
+</script>
+{% endblock %} 
