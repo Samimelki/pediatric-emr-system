@@ -206,10 +206,7 @@ def calculate_percentiles(db_path=None, target_percentiles=None, smoothing_windo
     percentile_keys = [f"P{p}" for p in target_percentiles]
 
     if db_path is None:
-        try:
-            conn = get_db_standalone()
-        except RuntimeError:
-            conn = get_db_standalone(db_path='emr_database.db')
+        conn = get_db_standalone()
     else:
         conn = get_db_standalone(db_path=db_path)
 
