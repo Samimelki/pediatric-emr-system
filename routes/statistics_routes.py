@@ -385,7 +385,7 @@ def update_raw_dossier_text(db, patient_id, measurement_type, old_value, new_val
 
 @statistics_bp.route('/statistics/download_csv')
 def download_csv():
-    """Download statistics as CSV"""
+    """Download statistics as CSV with UTF-8 BOM for proper French character display"""
     stats = get_statistics_data()
     
     if not stats['success'] or not stats['percentiles']:
@@ -413,16 +413,19 @@ def download_csv():
                                     row.append('')
                             writer.writerow(row)
     
-    output.seek(0)
+    # Add UTF-8 BOM for proper French character display in Excel
+    csv_content = '\ufeff' + output.getvalue()
+    output.close()
+    
     return Response(
-        output.getvalue(),
+        csv_content,
         mimetype='text/csv',
         headers={'Content-Disposition': 'attachment; filename=growth_statistics.csv'}
     )
 
 @statistics_bp.route('/statistics/get_percentiles_csv_data/<measurement_type>/<sex>')
 def get_percentiles_csv_data(measurement_type, sex):
-    """Generate CSV data for percentiles"""
+    """Generate CSV data for percentiles with UTF-8 BOM for proper French character display"""
     if measurement_type not in ['wfa', 'lhfa', 'hcfa'] or sex not in ['boys', 'girls']:
         return jsonify({"error": "Invalid parameters"}), 400
 
@@ -456,7 +459,8 @@ def get_percentiles_csv_data(measurement_type, sex):
             row.append(data_to_process.get(p_key, [])[i] if i < len(data_to_process.get(p_key, [])) else 'N/A')
         writer.writerow(row)
     
-    csv_string = output.getvalue()
+    # Add UTF-8 BOM for proper French character display in Excel
+    csv_string = '\ufeff' + output.getvalue()
     output.close()
     
     filename = f"local_percentiles_{measurement_type}_{sex}.csv"

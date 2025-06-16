@@ -3,13 +3,16 @@ import io
 
 def generate_patient_csvs(patients_data, active_custom_fields_metadata):
     """
-    Generates multiple CSV strings from patient data.
+    Generates multiple CSV strings from patient data with proper UTF-8 BOM for French characters.
     - patients_data: List of patient dictionaries.
     - active_custom_fields_metadata: List of dictionaries for active custom fields 
                                      (from database.get_active_custom_demographic_fields).
     Returns: A dictionary {filename: csv_string}.
     """
     csv_files = {}
+    
+    # UTF-8 BOM (Byte Order Mark) to ensure Excel properly displays French accented characters
+    UTF8_BOM = '\ufeff'
 
     # --- Generate patients.csv ---
     patients_output = io.StringIO()
@@ -50,7 +53,7 @@ def generate_patient_csvs(patients_data, active_custom_fields_metadata):
             
         patients_csv_writer.writerow(row)
     
-    csv_files['patients.csv'] = patients_output.getvalue()
+    csv_files['patients.csv'] = UTF8_BOM + patients_output.getvalue()
     patients_output.close()
 
     # --- Generate visits.csv ---
@@ -77,7 +80,7 @@ def generate_patient_csvs(patients_data, active_custom_fields_metadata):
             ]
             visits_csv_writer.writerow(row)
     
-    csv_files['visits.csv'] = visits_output.getvalue()
+    csv_files['visits.csv'] = UTF8_BOM + visits_output.getvalue()
     visits_output.close()
 
     # --- Generate immunizations.csv ---
@@ -105,7 +108,7 @@ def generate_patient_csvs(patients_data, active_custom_fields_metadata):
             ]
             immunizations_csv_writer.writerow(row)
 
-    csv_files['immunizations.csv'] = immunizations_output.getvalue()
+    csv_files['immunizations.csv'] = UTF8_BOM + immunizations_output.getvalue()
     immunizations_output.close()
 
     return csv_files
