@@ -38,7 +38,7 @@ a = Analysis(
         ('templates', 'templates'), 
         ('static', 'static'), 
         ('data/who_standards', 'data/who_standards'), 
-        ('AppIcon.icns', '.'),
+        ('EMRAppIcon.icns', '.'),
         # GDK-Pixbuf loaders
         ('/opt/homebrew/lib/gdk-pixbuf-2.0/2.10.0/loaders', 'gdk-pixbuf-2.0/2.10.0/loaders'),
         # Fontconfig configuration files
@@ -154,7 +154,7 @@ coll = COLLECT(
 app = BUNDLE(
     coll,
     name='EMR.app',
-    icon='AppIcon.icns',
+    icon='EMRAppIcon.icns',
     bundle_identifier='com.emr.wordocs', # Updated with a proper bundle ID
     info_plist={
         'CFBundleName': 'Word Docs EMR',
@@ -162,7 +162,7 @@ app = BUNDLE(
         'CFBundleVersion': '1.0.0',
         'CFBundleShortVersionString': '1.0.0',
         'CFBundleExecutable': 'EMR',
-        'CFBundleIconFile': 'AppIcon.icns',
+        'CFBundleIconFile': 'EMRAppIcon.icns',
         'NSHighResolutionCapable': True,
         'NSSupportsAutomaticGraphicsSwitching': True,
         'LSMinimumSystemVersion': '10.15.0',
