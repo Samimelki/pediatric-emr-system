@@ -461,7 +461,9 @@ def update_vaccine_date():
 
 def run_flask_app():
     logging.info("Flask app thread started.")
-    app.run(debug=True, port=9999, host='127.0.0.1', use_reloader=False)
+    # Disable debug mode in production to prevent any recursive issues
+    debug_mode = not getattr(sys, 'frozen', False)  # Only debug in development
+    app.run(debug=debug_mode, port=9999, host='127.0.0.1', use_reloader=False)
 
 class Api:
     def __init__(self):
@@ -578,6 +580,21 @@ def inject_vaccine_mappings():
     }
 
 if __name__ == '__main__':
+    # Critical fix for PyInstaller: prevent multiprocessing issues
+    import multiprocessing
+    multiprocessing.freeze_support()
+    
+    # Prevent multiple instances by checking if port is already in use
+    import socket
+    def is_port_in_use(port):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            return s.connect_ex(('127.0.0.1', port)) == 0
+    
+    if is_port_in_use(9999):
+        logging.error("Port 9999 is already in use - another instance may be running. Exiting.")
+        print("ERROR: Another instance of EMR may already be running. Please close it first.")
+        sys.exit(1)
+    
     logging.info("Entering __main__ block.")
     try:
         flask_thread = threading.Thread(target=run_flask_app)
@@ -609,7 +626,8 @@ if __name__ == '__main__':
         api_instance.set_window(window)
         api_instance.set_app(app)
         logging.info("Starting webview event loop...")
-        webview.start(debug=True)
+        # Disable webview debug mode to prevent recursive launching
+        webview.start(debug=False)
     except Exception as e:
         logging.critical("An error occurred in the __main__ block:", exc_info=True)
     finally:
