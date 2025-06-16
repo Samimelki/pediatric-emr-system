@@ -71,19 +71,19 @@
                                                     <div class="measurement-item">
                                                         <strong>W:</strong> 
                                                         <span class="measurement-value {% if outlier.measurement_type == 'Weight (kg)' %}text-danger font-weight-bold{% endif %}">
-                                                            {{ outlier.parsed_measurements.weight_kg or 'N/A' }}{% if outlier.parsed_measurements.weight_kg %}kg{% endif %}
+                                                            {{ outlier.parsed_measurements.weight_kg or 'None' }}{% if outlier.parsed_measurements.weight_kg %}kg{% endif %}
                                                         </span>
                                                     </div>
                                                     <div class="measurement-item">
                                                         <strong>H:</strong> 
                                                         <span class="measurement-value {% if outlier.measurement_type == 'Height (cm)' %}text-danger font-weight-bold{% endif %}">
-                                                            {{ outlier.parsed_measurements.height_cm or 'N/A' }}{% if outlier.parsed_measurements.height_cm %}cm{% endif %}
+                                                            {{ outlier.parsed_measurements.height_cm or 'None' }}{% if outlier.parsed_measurements.height_cm %}cm{% endif %}
                                                         </span>
                                                     </div>
                                                     <div class="measurement-item">
                                                         <strong>HC:</strong> 
                                                         <span class="measurement-value {% if outlier.measurement_type == 'Head Circ. (cm)' %}text-danger font-weight-bold{% endif %}">
-                                                            {{ outlier.parsed_measurements.head_circumference_cm or 'N/A' }}{% if outlier.parsed_measurements.head_circumference_cm %}cm{% endif %}
+                                                            {{ outlier.parsed_measurements.head_circumference_cm or 'None' }}{% if outlier.parsed_measurements.head_circumference_cm %}cm{% endif %}
                                                         </span>
                                                     </div>
                                                     <div class="measurement-item">
@@ -99,7 +99,7 @@
                                                                value="{{ outlier.parsed_measurements.weight_kg or '' }}" 
                                                                step="0.01"
                                                                id="edit-weight-{{ loop.index }}"
-                                                               placeholder="N/A">
+                                                               placeholder="None">
                                                     </div>
                                                     <div class="form-group mb-1">
                                                         <label class="small">H (cm):</label>
@@ -108,7 +108,7 @@
                                                                value="{{ outlier.parsed_measurements.height_cm or '' }}" 
                                                                step="0.1"
                                                                id="edit-height-{{ loop.index }}"
-                                                               placeholder="N/A">
+                                                               placeholder="None">
                                                     </div>
                                                     <div class="form-group mb-1">
                                                         <label class="small">HC (cm):</label>
@@ -117,7 +117,7 @@
                                                                value="{{ outlier.parsed_measurements.head_circumference_cm or '' }}" 
                                                                step="0.1"
                                                                id="edit-hc-{{ loop.index }}"
-                                                               placeholder="N/A">
+                                                               placeholder="None">
                                                     </div>
                                                 </div>
                                             {% else %}

@@ -298,8 +298,29 @@ def import_csv():
                 flash('No files selected', 'error')
                 return redirect(request.url)
             
+            # Check confirmation
+            confirm_import = request.form.get('confirm_import')
+            if not confirm_import:
+                flash('You must confirm that you understand the data will be imported.', 'danger')
+                return redirect(request.url)
+            
             # Get import options
             update_existing = request.form.get('update_existing') == 'on'
+            full_replace = request.form.get('full_replace') == 'on'
+            document_format = request.form.get('document_format', 'md')
+            
+            # Handle full replace if requested
+            if full_replace:
+                db_path = current_app.config['DATABASE']
+                if os.path.exists(db_path):
+                    os.remove(db_path)
+                    flash('Existing database removed for fresh import.', 'info')
+                
+                # Reinitialize database schema
+                from database import init_db_schema
+                with current_app.app_context():
+                    init_db_schema()
+                flash('Database schema reinitialized.', 'info')
             
             # Create temporary directory for uploaded files
             with tempfile.TemporaryDirectory() as temp_dir:
@@ -365,6 +386,45 @@ def import_csv():
                         flash(f'Error importing {filename}: {str(e)}', 'error')
                         return redirect(request.url)
                 
+                # Generate documents if requested and import was successful
+                if document_format != 'none' and (total_imported > 0 or total_updated > 0):
+                    try:
+                        from word_document_manager import WordDocumentManager
+                        
+                        # Get database and documents paths
+                        db_path = emr_config.get_database_path()
+                        documents_folder = os.path.expanduser("~/Documents/UnifiedEMR/word_documents")
+                        
+                        # Initialize document manager with required arguments
+                        doc_manager = WordDocumentManager(db_path, documents_folder)
+                        
+                        # Get all patients to generate documents for
+                        import sqlite3
+                        conn = sqlite3.connect(db_path)
+                        cursor = conn.cursor()
+                        cursor.execute("SELECT id FROM patients")
+                        patient_ids = [row[0] for row in cursor.fetchall()]
+                        conn.close()
+                        
+                        # Generate documents for all patients
+                        docs_generated = 0
+                        for patient_id in patient_ids:
+                            try:
+                                if document_format == 'docx':
+                                    doc_manager._create_docx_document(patient_id)
+                                else:  # markdown
+                                    doc_manager._create_markdown_document(patient_id)
+                                docs_generated += 1
+                            except Exception as e:
+                                current_app.logger.warning(f"Failed to generate document for patient {patient_id}: {e}")
+                        
+                        if docs_generated > 0:
+                            format_name = "Word documents" if document_format == 'docx' else "Markdown documents"
+                            flash(f'{docs_generated} {format_name} generated in Documents/UnifiedEMR/word_documents/', 'info')
+                    
+                    except Exception as e:
+                        flash(f'Document generation failed: {str(e)}', 'warning')
+                
                 # Generate success message
                 success_parts = []
                 if total_imported > 0:
@@ -377,6 +437,15 @@ def import_csv():
                 
                 if total_errors > 0:
                     flash(f'{total_errors} errors occurred during import', 'warning')
+                    
+                    # Show sample of detailed errors
+                    detailed_errors = importer.get_detailed_errors(limit=5)
+                    if detailed_errors:
+                        flash('Sample errors:', 'info')
+                        for error in detailed_errors:
+                            flash(f'• {error}', 'warning')
+                        if len(importer.detailed_errors) > 5:
+                            flash(f'... and {len(importer.detailed_errors) - 5} more errors', 'info')
                 
                 # Show detailed results
                 for file_type, stats in results.items():

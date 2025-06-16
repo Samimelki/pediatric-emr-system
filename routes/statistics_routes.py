@@ -113,20 +113,16 @@ def statistics_outliers(page=None):
         enhanced_outlier['raw_dossier_text'] = patient_data['raw_dossier_text'] if patient_data else None
         
         # Extract relevant visit text and all measurements for this outlier
-        if enhanced_outlier['raw_dossier_text']:
-            visit_info = extract_visit_with_all_measurements(
-                enhanced_outlier['raw_dossier_text'], 
-                outlier['value'], 
-                outlier['measurement_type'],
-                outlier['patient_id']
-            )
-            enhanced_outlier['relevant_visit_text'] = visit_info['visit_text']
-            enhanced_outlier['parsed_measurements'] = visit_info['measurements']
-            enhanced_outlier['visit_date'] = visit_info['visit_date']
-        else:
-            enhanced_outlier['relevant_visit_text'] = None
-            enhanced_outlier['parsed_measurements'] = None
-            enhanced_outlier['visit_date'] = None
+        # Always try to extract measurements, regardless of raw_dossier_text
+        visit_info = extract_visit_with_all_measurements(
+            enhanced_outlier['raw_dossier_text'], 
+            outlier['value'], 
+            outlier['measurement_type'],
+            outlier['patient_id']
+        )
+        enhanced_outlier['relevant_visit_text'] = visit_info['visit_text']
+        enhanced_outlier['parsed_measurements'] = visit_info['measurements']
+        enhanced_outlier['visit_date'] = visit_info['visit_date']
             
         enhanced_outliers.append(enhanced_outlier)
     
@@ -151,9 +147,6 @@ def statistics_outliers(page=None):
 
 def extract_visit_with_all_measurements(raw_dossier_text, target_value, measurement_type, patient_id):
     """Extract the visit text that contains the outlier and show all measurements from that visit"""
-    if not raw_dossier_text:
-        return {'visit_text': None, 'measurements': None, 'visit_date': None}
-    
     import re
     from database import get_db
     
@@ -170,83 +163,102 @@ def extract_visit_with_all_measurements(raw_dossier_text, target_value, measurem
     
     # Find the visit that contains our target outlier value
     target_visit = None
+    
+    # First pass: Look for exact matches with increased tolerance
     for stored_visit in stored_visits:
         if measurement_type == 'Weight (kg)' and stored_visit['weight_g']:
             weight_kg = stored_visit['weight_g'] / 1000
-            if abs(weight_kg - target_value) < 0.01:
+            # For weights, also check if the raw grams value matches the target kg value
+            # This handles cases where 87g is stored but outlier shows as 87kg
+            if (abs(weight_kg - target_value) < 0.1 or 
+                abs(stored_visit['weight_g'] - target_value) < 1):  # 87g matches 87kg outlier
                 target_visit = stored_visit
                 break
         elif measurement_type == 'Height (cm)' and stored_visit['height_cm']:
-            if abs(stored_visit['height_cm'] - target_value) < 0.01:
+            if abs(stored_visit['height_cm'] - target_value) < 0.5:
                 target_visit = stored_visit
                 break
         elif measurement_type == 'Head Circ. (cm)' and stored_visit['head_circumference_cm']:
-            if abs(stored_visit['head_circumference_cm'] - target_value) < 0.01:
+            if abs(stored_visit['head_circumference_cm'] - target_value) < 0.5:
                 target_visit = stored_visit
                 break
     
+    # Second pass: If no exact match, look for the problematic value in any field
+    # This handles data entry errors where height was entered as weight, etc.
     if not target_visit:
-        return {'visit_text': None, 'measurements': None, 'visit_date': None}
-    
-    # Extract the corresponding raw text from dossier
-    visit_date = target_visit['visit_date']
-    visit_date_obj = None
-    try:
-        from datetime import datetime
-        visit_date_obj = datetime.fromisoformat(visit_date.split('T')[0])
-        visit_date_short = visit_date_obj.strftime('%d-%m-%y')
-    except:
-        visit_date_short = None
-    
-    # Find the raw text for this visit
-    relevant_visit_text = None
-    if visit_date_short:
-        # Look for this specific date in the raw dossier text
-        visit_pattern = rf'\*{re.escape(visit_date_short)}\*\s*([^\*]+?)(?=\*\d{{2}}-\d{{2}}-\d{{2}}\*|$)'
-        match = re.search(visit_pattern, raw_dossier_text, re.DOTALL)
-        if match:
-            relevant_visit_text = f"*{visit_date_short}* {match.group(1).strip()}"
-    
-    # If we couldn't find by date, try to find by measurement pattern
-    if not relevant_visit_text and raw_dossier_text:
-        visit_pattern = r'\*(\d{2}-\d{2}-\d{2})\*\s*([^\*]+?)(?=\*\d{2}-\d{2}-\d{2}\*|$)'
-        visits = re.findall(visit_pattern, raw_dossier_text, re.DOTALL)
-        
-        for date, visit_text in visits:
-            visit_text = visit_text.strip()
-            # Look for measurement patterns that might match our stored values
-            measurement_pattern = r'(\d+(?:\.\d+)?(?:/\d+(?:\.\d+)?)*(?:/\d+(?:\.\d+)?)*)'
-            measurements = re.findall(measurement_pattern, visit_text)
+        for stored_visit in stored_visits:
+            # Check if the target value appears in any measurement field
+            weight_kg = stored_visit['weight_g'] / 1000 if stored_visit['weight_g'] else 0
+            height_cm = stored_visit['height_cm'] if stored_visit['height_cm'] else 0
+            hc_cm = stored_visit['head_circumference_cm'] if stored_visit['head_circumference_cm'] else 0
             
-            for measurement in measurements:
-                parts = measurement.split('/')
-                # Check if any part matches our target value or stored values
-                for part in parts:
-                    try:
-                        part_value = float(part)
-                        # Check against weight (in grams), height, or HC
-                        if (target_visit['weight_g'] and abs(part_value - target_visit['weight_g']) < 1) or \
-                           (target_visit['height_cm'] and abs(part_value - target_visit['height_cm']) < 0.1) or \
-                           (target_visit['head_circumference_cm'] and abs(part_value - target_visit['head_circumference_cm']) < 0.1):
-                            relevant_visit_text = f"*{date}* {visit_text}"
-                            break
-                    except ValueError:
-                        continue
-                if relevant_visit_text:
-                    break
-            if relevant_visit_text:
+            # Check if target value matches any measurement (allowing for unit confusion)
+            if (abs(weight_kg - target_value) < 0.1 or  # Normal weight match
+                abs(stored_visit['weight_g'] - target_value) < 1 or  # Grams vs kg confusion
+                abs(height_cm - target_value) < 0.5 or  # Height match
+                abs(hc_cm - target_value) < 0.5):  # HC match
+                target_visit = stored_visit
                 break
     
-    # Prepare the measurements data
+    # Third pass: If still no match, look for visits with unusual values that could be data entry errors
+    if not target_visit and measurement_type == 'Weight (kg)':
+        for stored_visit in stored_visits:
+            if stored_visit['weight_g']:
+                weight_kg = stored_visit['weight_g'] / 1000
+                # Look for weights that are clearly wrong (too high for pediatric patients)
+                if weight_kg > 50:  # Clearly wrong for most pediatric patients
+                    target_visit = stored_visit
+                    break
+                # Or very small weights that might be data entry errors
+                elif weight_kg < 0.5:  # Less than 500g, likely data entry error
+                    target_visit = stored_visit
+                    break
+    
+    if not target_visit:
+        # If still no match found, return structure indicating the issue
+        return {
+            'visit_text': f'Could not locate visit with {measurement_type} = {target_value}',
+            'measurements': {
+                'weight_kg': None,
+                'height_cm': None,
+                'head_circumference_cm': None,
+                'raw_measurement_string': f'Target value {target_value} not found in any visit'
+            },
+            'visit_date': None
+        }
+    
+    # Use the raw_visit_entry directly from the target visit
+    visit_date = target_visit['visit_date']
+    relevant_visit_text = target_visit['raw_visit_entry'] if target_visit['raw_visit_entry'] else None
+    
+    # If no raw_visit_entry, try to extract from raw_dossier_text as fallback
+    if not relevant_visit_text and raw_dossier_text:
+        visit_date_obj = None
+        try:
+            from datetime import datetime
+            visit_date_obj = datetime.fromisoformat(visit_date.split('T')[0])
+            visit_date_short = visit_date_obj.strftime('%d-%m-%y')
+        except:
+            visit_date_short = None
+        
+        # Find the raw text for this visit
+        if visit_date_short:
+            # Look for this specific date in the raw dossier text
+            visit_pattern = rf'\*{re.escape(visit_date_short)}\*\s*([^\*]+?)(?=\*\d{{2}}-\d{{2}}-\d{{2}}\*|$)'
+            match = re.search(visit_pattern, raw_dossier_text, re.DOTALL)
+            if match:
+                relevant_visit_text = f"*{visit_date_short}* {match.group(1).strip()}"
+    
+    # Prepare the measurements data - always include all fields, use None for missing values
     stored_measurements = {
         'weight_kg': target_visit['weight_g'] / 1000 if target_visit['weight_g'] else None,
-        'height_cm': target_visit['height_cm'],
-        'head_circumference_cm': target_visit['head_circumference_cm'],
-        'raw_measurement_string': target_visit['raw_visit_entry'] if target_visit['raw_visit_entry'] else 'N/A'
+        'height_cm': target_visit['height_cm'] if target_visit['height_cm'] else None,
+        'head_circumference_cm': target_visit['head_circumference_cm'] if target_visit['head_circumference_cm'] else None,
+        'raw_measurement_string': target_visit['raw_visit_entry'] if target_visit['raw_visit_entry'] else 'No raw text available'
     }
     
     return {
-        'visit_text': relevant_visit_text or 'Raw text not found',
+        'visit_text': relevant_visit_text if relevant_visit_text else f'Visit on {visit_date.split("T")[0] if visit_date else "unknown date"}',
         'measurements': stored_measurements,
         'visit_date': visit_date.split('T')[0] if visit_date else None
     }

@@ -75,6 +75,26 @@ def edit_demographics(patient_id):
                 elif form_value is not None:
                     updates[field_name] = form_value.strip() if isinstance(form_value, str) else form_value
 
+        # Handle dual name fields - update both French and English versions
+        if 'nom' in updates:
+            updates['last_name'] = updates['nom']
+        if 'prenom' in updates:
+            updates['first_name'] = updates['prenom']
+        
+        # Handle dual date fields
+        if 'naissance_date' in updates:
+            updates['date_of_birth'] = updates['naissance_date']
+        
+        # Handle dual sex fields
+        if 'sexe' in updates:
+            updates['sex'] = updates['sexe']
+            
+        # Handle dual contact fields
+        if 'telephone' in updates:
+            updates['phone'] = updates['telephone']
+        if 'domicile' in updates:
+            updates['address'] = updates['domicile']
+
         # Validate required fields
         if not updates.get('nom') or not updates.get('prenom'):
             flash('Last Name and First Name are required.', 'danger')
@@ -85,10 +105,11 @@ def edit_demographics(patient_id):
                                    current_values=updates, 
                                    title="Edit Demographics")
         
-        # Build SQL update statement
+        # Build SQL update statement - include both French and English fields
+        all_updatable_fields = list(EDITABLE_DEMOGRAPHIC_FIELDS.keys()) + ['first_name', 'last_name', 'date_of_birth', 'sex', 'phone', 'address']
         set_clauses = []
         for key, value in updates.items():
-            if key in EDITABLE_DEMOGRAPHIC_FIELDS or any(field['field_name'] == key for field in custom_fields_metadata):
+            if key in all_updatable_fields or any(field['field_name'] == key for field in custom_fields_metadata):
                 set_clauses.append(f"{key} = :{key}")
                 sql_params_dict[key] = value
             else:
@@ -121,8 +142,23 @@ def edit_demographics(patient_id):
 
     # GET request - display the form
     patient_data = dict(patient)
+    
+    # Ensure French fields are populated from English fields if missing
+    if not patient_data.get('prenom') and patient_data.get('first_name'):
+        patient_data['prenom'] = patient_data['first_name']
+    if not patient_data.get('nom') and patient_data.get('last_name'):
+        patient_data['nom'] = patient_data['last_name']
+    if not patient_data.get('naissance_date') and patient_data.get('date_of_birth'):
+        patient_data['naissance_date'] = patient_data['date_of_birth']
+    if not patient_data.get('sexe') and patient_data.get('sex'):
+        patient_data['sexe'] = patient_data['sex']
+    if not patient_data.get('telephone') and patient_data.get('phone'):
+        patient_data['telephone'] = patient_data['phone']
+    if not patient_data.get('domicile') and patient_data.get('address'):
+        patient_data['domicile'] = patient_data['address']
+    
     return render_template('edit_patient_demographics.html',
-                           title=f"Edit Demographics for {patient['first_name']} {patient['last_name']}",
+                           title=f"Edit Demographics for {patient_data.get('prenom') or patient_data.get('first_name') or 'Unknown'} {patient_data.get('nom') or patient_data.get('last_name') or 'Unknown'}",
                            patient=patient_data,
                            patient_id=patient_id,
                            editable_fields=EDITABLE_DEMOGRAPHIC_FIELDS,

@@ -81,7 +81,8 @@
                                     <h6>Import Options</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div class="form-check">
+                                    <!-- Update Existing Records -->
+                                    <div class="form-check mb-3">
                                         <input class="form-check-input" 
                                                type="checkbox" 
                                                id="update_existing" 
@@ -92,6 +93,47 @@
                                         <div class="form-text">
                                             If checked, existing records will be updated with new data. 
                                             If unchecked, duplicate records will be skipped.
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Full Database Replace -->
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" 
+                                               type="checkbox" 
+                                               id="full_replace" 
+                                               name="full_replace">
+                                        <label class="form-check-label" for="full_replace">
+                                            <strong>Full Database Replace</strong>
+                                        </label>
+                                        <div class="form-text text-danger">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <strong>Warning:</strong> This will completely replace your current database with the imported data.
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Document Format -->
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong>Document Generation:</strong></label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="document_format" id="format_md" value="md" checked>
+                                            <label class="form-check-label" for="format_md">
+                                                Generate Markdown documents (.md files)
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="document_format" id="format_docx" value="docx">
+                                            <label class="form-check-label" for="format_docx">
+                                                Generate Word documents (.docx files)
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="document_format" id="format_none" value="none">
+                                            <label class="form-check-label" for="format_none">
+                                                No documents (faster import)
+                                            </label>
+                                        </div>
+                                        <div class="form-text">
+                                            Choose whether to generate patient documents after import. Documents are saved to Documents/UnifiedEMR/word_documents/
                                         </div>
                                     </div>
                                 </div>

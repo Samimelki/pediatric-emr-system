@@ -89,6 +89,21 @@ def calculate_average_vaccines_per_child(db_path=None):
     cursor = conn.cursor()
 
     try:
+        # Check if we have data in the Immunizations table (CSV import) or Patients table (XML import)
+        cursor.execute("SELECT COUNT(*) FROM Immunizations")
+        immunizations_count = cursor.fetchone()[0]
+        
+        if immunizations_count > 0:
+            # Use Immunizations table data (CSV import)
+            cursor.execute("SELECT COUNT(DISTINCT patient_id) FROM Immunizations")
+            patients_with_vaccines = cursor.fetchone()[0]
+            
+            if patients_with_vaccines > 0:
+                return immunizations_count / patients_with_vaccines
+            else:
+                return 0
+        
+        # Fallback to original logic for XML-based data
         # Get all patient IDs
         cursor.execute("SELECT id FROM Patients")
         patients = cursor.fetchall()
