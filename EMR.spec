@@ -37,18 +37,78 @@ a = Analysis(
     datas=[
         ('templates', 'templates'), 
         ('static', 'static'), 
-        ('pdf_config.json', '.'), 
         ('data/who_standards', 'data/who_standards'), 
         ('AppIcon.icns', '.'),
         # GDK-Pixbuf loaders
         ('/opt/homebrew/lib/gdk-pixbuf-2.0/2.10.0/loaders', 'gdk-pixbuf-2.0/2.10.0/loaders'),
         # Fontconfig configuration files
-        ('/opt/homebrew/etc/fonts', 'etc/fonts')
+        ('/opt/homebrew/etc/fonts', 'etc/fonts'),
     ],
-    hiddenimports=['webview', 'objc', 'Cocoa', 'WebKit', 'Quartz', 'weasyprint', 'jinja2.ext', 'routes', 'statistics_engine', 'database', 'database_operations', 'word_document_manager', 'word_importer', 'csv_exporter', 'xml_exporter', 'xml_parser', 'config_manager', 'utils', 'who_data_utils', 'weasyprint.fonts'],
-    hookspath=[],
+    hiddenimports=[
+        # Core webview and macOS frameworks
+        'webview', 'objc', 'Cocoa', 'WebKit', 'Quartz',
+        
+        # PDF generation and styling
+        'weasyprint', 'weasyprint.fonts', 'jinja2.ext',
+        
+        # Core application modules
+        'database', 'database_operations', 'unified_database',
+        'emr_config', 'config_manager',
+        'word_document_manager', 'word_importer', 
+        'csv_exporter', 'csv_importer', 'xml_exporter', 'xml_parser',
+        'migration_utility', 'who_data_loader', 'who_data_utils',
+        'populate_db', 'init_schema',
+        
+        # Route modules
+        'routes', 'routes.patient_routes', 'routes.pdf_export_routes', 
+        'routes.admin_routes', 'routes.settings_routes', 'routes.emr_settings_routes',
+        'routes.demographics_routes', 'routes.statistics_routes', 'routes.import_routes',
+        'routes.vaccine_routes', 'routes.visit_routes',
+        
+        # Utils modules
+        'utils', 'utils.vaccine_schedule_engine', 'utils.vaccine_name_utils',
+        'utils.vaccine_mapping', 'utils.form_validators', 'utils.patient_utils',
+        
+        # Statistics engine
+        'statistics_engine', 'statistics_engine.statistics_calculator',
+        'statistics_engine.pdf_to_csv_who_hfa',
+        
+        # Immunization logic
+        'immunization_logic',
+        
+        # Data processing libraries
+        'pandas', 'numpy', 'openpyxl', 'python-docx',
+        
+        # Web server
+        'waitress',
+        
+        # Flask extensions and utilities
+        'flask', 'flask.ext', 'werkzeug', 'werkzeug.serving', 'werkzeug.utils',
+        'itsdangerous', 'markupsafe', 'click', 'blinker',
+        
+        # Date and time utilities
+        'dateutil', 'dateutil.parser', 'dateutil.tz', 'pytz',
+        
+        # Image processing
+        'PIL', 'PIL.Image', 'PIL.ImageTk', 'pillow',
+        
+        # WeasyPrint dependencies
+        'cssselect2', 'tinycss2', 'pyphen', 'pydyf', 'tinyhtml5',
+        'fonttools', 'fonttools.ttLib', 'fonttools.subset',
+        
+        # Compression
+        'zopfli', 'brotli',
+        
+        # XML processing
+        'et_xmlfile',
+        
+        # PyObjC frameworks (for macOS integration)
+        'Foundation', 'AppKit', 'CoreFoundation', 'CoreServices',
+        'SecurityFoundation', 'SystemConfiguration',
+    ],
+    hookspath=['hooks'],
     hooksconfig={},
-    runtime_hooks=[],
+    runtime_hooks=['runtime_hook.py'],
     excludes=[],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
@@ -95,5 +155,17 @@ app = BUNDLE(
     coll,
     name='EMR.app',
     icon='AppIcon.icns',
-    bundle_identifier=None # Add your bundle ID here if you have one, e.g., 'com.yourdomain.emr'
+    bundle_identifier='com.emr.wordocs', # Updated with a proper bundle ID
+    info_plist={
+        'CFBundleName': 'Word Docs EMR',
+        'CFBundleDisplayName': 'Word Docs EMR',
+        'CFBundleVersion': '1.0.0',
+        'CFBundleShortVersionString': '1.0.0',
+        'CFBundleExecutable': 'EMR',
+        'CFBundleIconFile': 'AppIcon.icns',
+        'NSHighResolutionCapable': True,
+        'NSSupportsAutomaticGraphicsSwitching': True,
+        'LSMinimumSystemVersion': '10.15.0',
+        'NSRequiresAquaSystemAppearance': False,
+    }
 )
