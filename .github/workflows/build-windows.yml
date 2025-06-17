@@ -1,0 +1,233 @@
+name: Build Windows Executable
+
+on:
+  push:
+    branches:
+      - emr-merger-project
+      - main
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install system dependencies
+      run: |
+        # Install Microsoft Visual C++ Redistributable (often needed for compiled packages)
+        choco install vcredist-all -y
+        # Install GTK3 runtime for WeasyPrint (PDF generation)
+        choco install gtk-runtime -y
+
+    - name: Create requirements-windows.txt
+      run: |
+        # Create a Windows-specific requirements file excluding macOS-specific packages
+        python -c "
+        with open('requirements.txt', 'r') as f:
+            lines = f.readlines()
+        
+        # Filter out macOS-specific packages
+        filtered_lines = []
+        for line in lines:
+            line = line.strip()
+            if line and not line.startswith('#'):
+                # Skip pyobjc packages (macOS-specific)
+                if not line.startswith('pyobjc'):
+                    filtered_lines.append(line)
+        
+        with open('requirements-windows.txt', 'w') as f:
+            f.write('\n'.join(filtered_lines))
+        "
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-windows.txt
+        pip install pyinstaller
+
+    - name: Create Windows PyInstaller spec
+      run: |
+        python -c "
+        spec_content = '''# -*- mode: python ; coding: utf-8 -*-
+        import os
+
+        a = Analysis(
+            ['app.py'],
+            pathex=[],
+            binaries=[],
+            datas=[
+                ('templates', 'templates'), 
+                ('static', 'static'), 
+                ('data/who_standards', 'data/who_standards'),
+                ('immunization_logic', 'immunization_logic'),
+                ('utils', 'utils'),
+                ('routes', 'routes'),
+                ('statistics_engine', 'statistics_engine'),
+            ],
+            hiddenimports=[
+                # Core application modules
+                'database', 'database_operations', 'unified_database',
+                'emr_config', 'config_manager',
+                'word_document_manager', 'word_importer', 
+                'csv_exporter', 'csv_importer', 'xml_exporter', 'xml_parser',
+                'migration_utility', 'who_data_loader',
+                'populate_db', 'init_schema',
+                
+                # Route modules
+                'routes', 'routes.patient_routes', 'routes.pdf_export_routes', 
+                'routes.admin_routes', 'routes.settings_routes', 'routes.emr_settings_routes',
+                'routes.demographics_routes', 'routes.statistics_routes', 'routes.import_routes',
+                'routes.vaccine_routes', 'routes.visit_routes',
+                
+                # Utils modules
+                'utils', 'utils.vaccine_schedule_engine', 'utils.vaccine_name_utils',
+                'utils.vaccine_mapping', 'utils.form_validators', 'utils.patient_utils',
+                'utils.vaccine_grouping',
+                
+                # Statistics engine
+                'statistics_engine', 'statistics_engine.statistics_calculator',
+                
+                # Immunization logic
+                'immunization_logic', 'immunization_logic.services',
+                'immunization_logic.services.immunization_service',
+                'immunization_logic.services.config_service',
+                'immunization_logic.services.database_manager',
+                
+                # PDF generation and styling
+                'weasyprint', 'weasyprint.fonts', 'jinja2.ext',
+                
+                # Data processing libraries
+                'pandas', 'numpy', 'openpyxl', 'python-docx',
+                
+                # Web server
+                'waitress',
+                
+                # Flask extensions and utilities
+                'flask', 'werkzeug', 'werkzeug.serving', 'werkzeug.utils',
+                'itsdangerous', 'markupsafe', 'click', 'blinker',
+                
+                # Date and time utilities
+                'dateutil', 'dateutil.parser', 'dateutil.tz', 'pytz',
+                
+                # Image processing
+                'PIL', 'PIL.Image', 'pillow',
+                
+                # WeasyPrint dependencies
+                'cssselect2', 'tinycss2', 'pyphen', 'pydyf', 'tinyhtml5',
+                'fonttools', 'fonttools.ttLib',
+                
+                # Compression
+                'zopfli', 'brotli',
+                
+                # XML processing
+                'et_xmlfile',
+            ],
+            hookspath=[],
+            hooksconfig={},
+            runtime_hooks=[],
+            excludes=[],
+            win_no_prefer_redirects=False,
+            win_private_assemblies=False,
+            cipher=None,
+            noarchive=False,
+        )
+
+        pyz = PYZ(a.pure, a.zipped_data, cipher=None)
+
+        exe = EXE(
+            pyz,
+            a.scripts,
+            a.binaries,
+            a.zipfiles,
+            a.datas,
+            [],
+            name='PediatricEMR',
+            debug=False,
+            bootloader_ignore_signals=False,
+            strip=False,
+            upx=True,
+            upx_exclude=[],
+            runtime_tmpdir=None,
+            console=False,  # Set to True for debugging
+            disable_windowed_traceback=False,
+            argv_emulation=False,
+            target_arch=None,
+            codesign_identity=None,
+            codesign_entitlements_file=None,
+            icon='icon.png'  # Use the PNG icon for Windows
+        )
+        '''
+        
+        with open('EMR-windows.spec', 'w') as f:
+            f.write(spec_content)
+        "
+
+    - name: Build executable with PyInstaller
+      run: |
+        pyinstaller EMR-windows.spec --clean --noconfirm
+
+    - name: Create portable package
+      run: |
+        # Create a portable package with necessary files
+        mkdir PediatricEMR-Portable
+        
+        # Copy the executable
+        copy dist\PediatricEMR.exe PediatricEMR-Portable\
+        
+        # Create a simple batch file to run the app
+        echo @echo off > PediatricEMR-Portable\run.bat
+        echo echo Starting Pediatric EMR System... >> PediatricEMR-Portable\run.bat
+        echo start PediatricEMR.exe >> PediatricEMR-Portable\run.bat
+        
+        # Create a README
+        echo # Pediatric EMR System - Windows Portable > PediatricEMR-Portable\README.md
+        echo. >> PediatricEMR-Portable\README.md
+        echo ## Installation >> PediatricEMR-Portable\README.md
+        echo 1. Extract this folder to your desired location >> PediatricEMR-Portable\README.md
+        echo 2. Double-click 'run.bat' or 'PediatricEMR.exe' to start the application >> PediatricEMR-Portable\README.md
+        echo 3. The application will start a web server and open in your default browser >> PediatricEMR-Portable\README.md
+        echo. >> PediatricEMR-Portable\README.md
+        echo ## Features >> PediatricEMR-Portable\README.md
+        echo - Patient management and demographics >> PediatricEMR-Portable\README.md
+        echo - Vaccine tracking and immunization schedules >> PediatricEMR-Portable\README.md
+        echo - Growth charts and WHO standards >> PediatricEMR-Portable\README.md
+        echo - PDF export and reporting >> PediatricEMR-Portable\README.md
+        echo - CSV import/export functionality >> PediatricEMR-Portable\README.md
+        
+        # Create ZIP archive
+        powershell Compress-Archive -Path PediatricEMR-Portable -DestinationPath PediatricEMR-Windows-Portable.zip
+
+    - name: Upload Windows executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: PediatricEMR-Windows-Executable
+        path: dist/PediatricEMR.exe
+        retention-days: 30
+
+    - name: Upload Windows portable package
+      uses: actions/upload-artifact@v4
+      with:
+        name: PediatricEMR-Windows-Portable
+        path: PediatricEMR-Windows-Portable.zip
+        retention-days: 30
+
+    - name: Upload to release (if release)
+      if: github.event_name == 'release'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: PediatricEMR-Windows-Portable.zip
+        asset_name: PediatricEMR-Windows-Portable-${{ github.event.release.tag_name }}.zip
+        asset_content_type: application/zip 
