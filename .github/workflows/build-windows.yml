@@ -184,28 +184,40 @@ jobs:
         # Copy the executable
         copy dist\PediatricEMR.exe PediatricEMR-Portable\
         
-        # Create a simple batch file to run the app
-        echo @echo off > PediatricEMR-Portable\run.bat
-        echo echo Starting Pediatric EMR System... >> PediatricEMR-Portable\run.bat
-        echo start PediatricEMR.exe >> PediatricEMR-Portable\run.bat
+        # Create a simple batch file to run the app using PowerShell
+        powershell -Command "
+        '@echo off
+        echo Starting Pediatric EMR System...
+        start PediatricEMR.exe' | Out-File -FilePath 'PediatricEMR-Portable\run.bat' -Encoding ASCII
+        "
         
-        # Create a README
-        echo # Pediatric EMR System - Windows Portable > PediatricEMR-Portable\README.md
-        echo. >> PediatricEMR-Portable\README.md
-        echo ## Installation >> PediatricEMR-Portable\README.md
-        echo 1. Extract this folder to your desired location >> PediatricEMR-Portable\README.md
-        echo 2. Double-click 'run.bat' or 'PediatricEMR.exe' to start the application >> PediatricEMR-Portable\README.md
-        echo 3. The application will start a web server and open in your default browser >> PediatricEMR-Portable\README.md
-        echo. >> PediatricEMR-Portable\README.md
-        echo ## Features >> PediatricEMR-Portable\README.md
-        echo - Patient management and demographics >> PediatricEMR-Portable\README.md
-        echo - Vaccine tracking and immunization schedules >> PediatricEMR-Portable\README.md
-        echo - Growth charts and WHO standards >> PediatricEMR-Portable\README.md
-        echo - PDF export and reporting >> PediatricEMR-Portable\README.md
-        echo - CSV import/export functionality >> PediatricEMR-Portable\README.md
+        # Create a README using PowerShell
+        powershell -Command "
+        '# Pediatric EMR System - Windows Portable
+
+        ## Installation
+        1. Extract this folder to your desired location
+        2. Double-click ''run.bat'' or ''PediatricEMR.exe'' to start the application
+        3. The application will start a web server and open in your default browser
+
+        ## Features
+        - Patient management and demographics
+        - Vaccine tracking and immunization schedules
+        - Growth charts and WHO standards
+        - PDF export and reporting
+        - CSV import/export functionality
+
+        ## System Requirements
+        - Windows 10 or later
+        - No additional installation required (portable)
+
+        ## Support
+        For issues or questions, please visit: https://github.com/Samimelki/pediatric-emr-system
+        ' | Out-File -FilePath 'PediatricEMR-Portable\README.md' -Encoding UTF8
+        "
         
         # Create ZIP archive
-        powershell Compress-Archive -Path PediatricEMR-Portable -DestinationPath PediatricEMR-Windows-Portable.zip
+        powershell -Command "Compress-Archive -Path 'PediatricEMR-Portable' -DestinationPath 'PediatricEMR-Windows-Portable.zip'"
 
     - name: Upload Windows executable
       uses: actions/upload-artifact@v4
