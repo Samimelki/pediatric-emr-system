@@ -85,16 +85,102 @@ jobs:
                 # Core application modules that actually exist
                 'database_operations',
                 'init_schema',
+                'database',
+                'emr_config',
+                'xml_exporter',
+                'csv_exporter',
+                'utils',
+                'utils.format_datetime',
+                'utils.pdf_generator',
+                'utils.pdf_fallback',
+                'utils.vaccine_grouping',
+                'utils.vaccine_schedule_engine',
+                'utils.vaccine_name_utils',
+                'utils.vaccine_mapping',
+                'utils.form_validators',
+                'utils.patient_utils',
+                
+                # All route blueprints
+                'routes',
+                'routes.patient_routes',
+                'routes.pdf_export_routes', 
+                'routes.admin_routes',
+                'routes.settings_routes',
+                'routes.emr_settings_routes',
+                'routes.demographics_routes',
+                'routes.vaccine_routes',
+                'routes.statistics_routes',
+                'routes.import_routes',
+                'routes.visit_routes',
+                
+                # Immunization logic modules
+                'immunization_logic',
+                'immunization_logic.services',
                 'immunization_logic.services.immunization_service',
+                'immunization_logic.services.config_service',
+                'immunization_logic.services.database_manager',
+                'immunization_logic.services.vaccine_name_utils',
+                'immunization_logic.services.vaccine_timeline_engine',
+                
+                # Statistics engine
+                'statistics_engine',
+                'statistics_engine.statistics_calculator',
                 
                 # Essential Flask and web modules
-                'flask', 'werkzeug',
+                'flask',
+                'flask.app',
+                'flask.blueprints',
+                'flask.templating',
+                'flask.json',
+                'flask.helpers',
+                'flask.wrappers',
+                'flask.globals',
+                'flask.ctx',
+                'werkzeug',
+                'werkzeug.serving',
+                'werkzeug.urls',
+                'werkzeug.utils',
+                'werkzeug.wrappers',
+                'werkzeug.exceptions',
+                'werkzeug.routing',
+                'jinja2',
+                'jinja2.loaders',
+                'jinja2.runtime',
+                'jinja2.environment',
+                'jinja2.filters',
+                
+                # Database modules
+                'sqlite3',
                 
                 # PDF fallback libraries (Windows compatible)
-                'xhtml2pdf', 'reportlab',
+                'xhtml2pdf',
+                'xhtml2pdf.default',
+                'reportlab',
+                'reportlab.pdfgen',
+                'reportlab.pdfgen.canvas',
+                'reportlab.lib',
+                'reportlab.lib.pagesizes',
                 
                 # Image processing for Windows
-                'PIL', 'PIL.Image',
+                'PIL',
+                'PIL.Image',
+                'PIL.ImageDraw',
+                'PIL.ImageFont',
+                
+                # Other standard library modules that might be missed
+                'json',
+                'datetime',
+                'threading',
+                'base64',
+                'shutil',
+                'io',
+                'zipfile',
+                'logging',
+                'os',
+                'sys',
+                
+                # Web view component
+                'webview',
             ],
             hookspath=[],
             hooksconfig={},
@@ -122,7 +208,7 @@ jobs:
             upx=True,
             upx_exclude=[],
             runtime_tmpdir=None,
-            console=False,  # Set to True for debugging
+            console=True,  # Enable console for debugging Flask import issues
             disable_windowed_traceback=False,
             argv_emulation=False,
             target_arch=None,
