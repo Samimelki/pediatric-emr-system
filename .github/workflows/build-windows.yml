@@ -49,6 +49,8 @@ jobs:
         # Add alternative PDF library
         filtered_lines.append('reportlab==4.0.4')
         filtered_lines.append('xhtml2pdf==0.2.11')
+        # Add Pillow for icon conversion
+        filtered_lines.append('Pillow==10.0.0')
         
         with open('requirements-windows.txt', 'w') as f:
             f.write('\n'.join(filtered_lines))
@@ -80,62 +82,19 @@ jobs:
                 ('statistics_engine', 'statistics_engine'),
             ],
             hiddenimports=[
-                # Core application modules
-                'database', 'database_operations', 'unified_database',
-                'emr_config', 'config_manager',
-                'word_document_manager', 'word_importer', 
-                'csv_exporter', 'csv_importer', 'xml_exporter', 'xml_parser',
-                'migration_utility', 'who_data_loader',
-                'populate_db', 'init_schema',
-                
-                # Route modules
-                'routes', 'routes.patient_routes', 'routes.pdf_export_routes', 
-                'routes.admin_routes', 'routes.settings_routes', 'routes.emr_settings_routes',
-                'routes.demographics_routes', 'routes.statistics_routes', 'routes.import_routes',
-                'routes.vaccine_routes', 'routes.visit_routes',
-                
-                # Utils modules
-                'utils', 'utils.vaccine_schedule_engine', 'utils.vaccine_name_utils',
-                'utils.vaccine_mapping', 'utils.form_validators', 'utils.patient_utils',
-                'utils.vaccine_grouping',
-                
-                # Statistics engine
-                'statistics_engine', 'statistics_engine.statistics_calculator',
-                
-                # Immunization logic
-                'immunization_logic', 'immunization_logic.services',
+                # Core application modules that actually exist
+                'database_operations',
+                'init_schema',
                 'immunization_logic.services.immunization_service',
-                'immunization_logic.services.config_service',
-                'immunization_logic.services.database_manager',
                 
-                # PDF generation and styling
-                'weasyprint', 'weasyprint.fonts', 'jinja2.ext',
+                # Essential Flask and web modules
+                'flask', 'werkzeug',
                 
-                # Data processing libraries
-                'pandas', 'numpy', 'openpyxl', 'python-docx',
+                # PDF fallback libraries (Windows compatible)
+                'xhtml2pdf', 'reportlab',
                 
-                # Web server
-                'waitress',
-                
-                # Flask extensions and utilities
-                'flask', 'werkzeug', 'werkzeug.serving', 'werkzeug.utils',
-                'itsdangerous', 'markupsafe', 'click', 'blinker',
-                
-                # Date and time utilities
-                'dateutil', 'dateutil.parser', 'dateutil.tz', 'pytz',
-                
-                # Image processing
-                'PIL', 'PIL.Image', 'pillow',
-                
-                # WeasyPrint dependencies
-                'cssselect2', 'tinycss2', 'pyphen', 'pydyf', 'tinyhtml5',
-                'fonttools', 'fonttools.ttLib',
-                
-                # Compression
-                'zopfli', 'brotli',
-                
-                # XML processing
-                'et_xmlfile',
+                # Image processing for Windows
+                'PIL', 'PIL.Image',
             ],
             hookspath=[],
             hooksconfig={},
@@ -169,7 +128,7 @@ jobs:
             target_arch=None,
             codesign_identity=None,
             codesign_entitlements_file=None,
-            icon='icon.png'  # Use the PNG icon for Windows
+            icon=None  # No icon for Windows build to avoid PIL dependency issues
         )
         '''
         
