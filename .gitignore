@@ -41,18 +41,21 @@ logs/
 .AppleDouble
 .LSOverride
 
-# Electron app build artifacts
-electron-app/node_modules/
-electron-app/dist/
-electron-app/src/renderer/node_modules/
+# Build and distribution artifacts
+dist/
 build/
 *.pkg
 *.dmg
 *.exe
 *.msi
+*.app/
+
+# Electron app build artifacts
+electron-app/node_modules/
+electron-app/dist/
+electron-app/src/renderer/node_modules/
 
 # Large binary files
-*.app/
 *.framework/
 
 # IDE
