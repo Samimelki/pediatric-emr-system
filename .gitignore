@@ -1,7 +1,86 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Electron app build artifacts
+electron-app/node_modules/
+electron-app/dist/
+electron-app/src/renderer/node_modules/
+build/
+*.pkg
+*.dmg
+*.exe
+*.msi
+
+# Large binary files
+*.app/
+*.framework/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Media files (potentially large)
+*.mp4
+*.avi
+*.mov
+*.wmv
+
+# Backup files
+*.bak
+*.backup
+
+# Configuration files with sensitive data
+config/local_*
+.env
+.env.local
+
 # Ignore patient records folder
 patient_records/
-Patient records/
- 
-# Ignore build and dist folders
-build/
-dist/ 
+Patient records/ 
