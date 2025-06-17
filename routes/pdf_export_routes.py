@@ -147,7 +147,6 @@ def _prepare_vaccine_table_data_unified(patient_id, language='en', apply_groupin
         language: Language for display (en/fr)
         apply_grouping: Whether to apply vaccine combination grouping (for timeline consistency)
     """
-    print(f"DEBUG PDF: Starting vaccine preparation for patient {patient_id}, grouping={apply_grouping}")
     db = get_db()
     
     # Get ALL immunizations for this patient from the Immunizations table (single source of truth)
@@ -156,13 +155,6 @@ def _prepare_vaccine_table_data_unified(patient_id, language='en', apply_groupin
         (patient_id,)
     )
     immunizations = immunizations_cursor.fetchall()
-    print(f"DEBUG PDF: Found {len(immunizations)} immunizations in Immunizations table")
-    
-    if immunizations:
-        for i, imm in enumerate(immunizations[:5]):  # Show first 5
-            print(f"  {i+1}. {imm['immunization']} on {imm['administered_date']}")
-        if len(immunizations) > 5:
-            print(f"  ... and {len(immunizations) - 5} more")
     
     # Get vaccine configuration to determine categories
     vaccine_config = get_vaccine_schedule_config()
@@ -223,8 +215,6 @@ def _prepare_vaccine_table_data_unified(patient_id, language='en', apply_groupin
         else:
             other_vaccines.append(vaccine_entry)
     
-    print(f"DEBUG PDF: Categorized vaccines - Mandatory: {len(mandatory_vaccines)}, Recommended: {len(recommended_vaccines)}, Other: {len(other_vaccines)}")
-    
     return {
         'mandatory_vaccines': mandatory_vaccines,
         'recommended_vaccines': recommended_vaccines,
@@ -235,14 +225,11 @@ def _determine_vaccine_category(vaccine_name, vaccine_config):
     """
     Determine if a vaccine is mandatory, recommended, or other based on config
     """
-    print(f"DEBUG PDF: Categorizing vaccine '{vaccine_name}'")
-    
     # Check if vaccine exists directly in config (top-level keys)
     if vaccine_name in vaccine_config:
         vaccine_info = vaccine_config[vaccine_name]
         if isinstance(vaccine_info, dict) and 'category' in vaccine_info:
             category = vaccine_info['category']
-            print(f"DEBUG PDF: Direct match '{vaccine_name}' -> {category}")
             if category == 'mandatory':
                 return 'mandatory'
             elif category == 'recommended':
@@ -255,13 +242,11 @@ def _determine_vaccine_category(vaccine_name, vaccine_config):
         name_mappings = vaccine_config['name_mappings']
         for original_name, canonical_name in name_mappings.items():
             if vaccine_name.lower() == original_name.lower():
-                print(f"DEBUG PDF: Name mapping match '{vaccine_name}' -> '{canonical_name}'")
                 # Look up the canonical name in the config
                 if canonical_name in vaccine_config:
                     vaccine_info = vaccine_config[canonical_name]
                     if isinstance(vaccine_info, dict) and 'category' in vaccine_info:
                         category = vaccine_info['category']
-                        print(f"DEBUG PDF: Mapped vaccine '{canonical_name}' -> {category}")
                         if category == 'mandatory':
                             return 'mandatory'
                         elif category == 'recommended':
@@ -270,7 +255,6 @@ def _determine_vaccine_category(vaccine_name, vaccine_config):
                             return 'other'
     
     # Default to 'other' if not found in config
-    print(f"DEBUG PDF: Vaccine '{vaccine_name}' not found in config, defaulting to 'other'")
     return 'other'
 
 # Vaccine display mappings for PDF templates
