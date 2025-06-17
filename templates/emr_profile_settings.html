@@ -212,6 +212,23 @@
                         </select>
                     </div>
                 </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h6>Vaccine Timeline Display</h6>
+                        <p class="text-muted">Group combination vaccines (like DTaP-IPV-Hib) together on timeline display</p>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="groupVaccineCombinations" 
+                                   {% if current_profile.settings.get('group_vaccine_combinations', true) %}checked{% endif %}>
+                            <label class="form-check-label" for="groupVaccineCombinations">
+                                Group vaccine combinations (e.g., show "Pentaxim" instead of separate DTaP, IPV, Hib entries)
+                            </label>
+                        </div>
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            This simplifies the timeline display while keeping individual vaccines separate in PDF exports
+                        </small>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -349,6 +366,7 @@
             const features = getFeatureConfiguration();
             const dateFormat = document.getElementById('dateFormat').value;
             const language = document.getElementById('language').value;
+            const groupVaccineCombinations = document.getElementById('groupVaccineCombinations').checked;
             
             fetch('{{ url_for("emr_settings.update_profile") }}', {
                 method: 'POST',
@@ -361,6 +379,7 @@
                     settings: {
                         date_format: dateFormat,
                         language: language,
+                        group_vaccine_combinations: groupVaccineCombinations,
                         weight_unit_preference: '{{ current_profile.settings.get("weight_unit_preference", "auto") }}',
                         show_percentiles: {{ current_profile.settings.get("show_percentiles", true)|tojson }},
                         require_visit_notes: {{ current_profile.settings.get("require_visit_notes", true)|tojson }}

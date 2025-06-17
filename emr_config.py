@@ -129,7 +129,8 @@ DEFAULT_PROFILES = {
             'language': 'fr',
             'show_percentiles': True,
             'require_visit_notes': True,
-            'date_format': 'dd/mm/yyyy'
+            'date_format': 'dd/mm/yyyy',
+            'group_vaccine_combinations': True
         }
     },
     'adult_profile': {
@@ -156,7 +157,8 @@ DEFAULT_PROFILES = {
             'language': 'en',
             'show_percentiles': False,
             'require_visit_notes': True,
-            'date_format': 'mm/dd/yyyy'
+            'date_format': 'mm/dd/yyyy',
+            'group_vaccine_combinations': False
         }
     },
     'family_practice_profile': {
@@ -183,7 +185,8 @@ DEFAULT_PROFILES = {
             'language': 'en',
             'show_percentiles': True,
             'require_visit_notes': True,
-            'date_format': 'dd/mm/yyyy'
+            'date_format': 'dd/mm/yyyy',
+            'group_vaccine_combinations': True
         }
     }
 }
@@ -471,6 +474,21 @@ class EMRConfig:
             self.save_config()
             return True
         return False
+    
+    def is_vaccine_grouping_enabled(self) -> bool:
+        """Check if vaccine combination grouping is enabled in the current profile"""
+        profile = self.get_active_profile()
+        return profile.get('settings', {}).get('group_vaccine_combinations', True)
+    
+    def set_vaccine_grouping(self, enabled: bool):
+        """Enable or disable vaccine combination grouping"""
+        profile_name = self.get_active_profile_name()
+        profile = self.get_active_profile()
+        if 'settings' not in profile:
+            profile['settings'] = {}
+        profile['settings']['group_vaccine_combinations'] = enabled
+        self.update_profile(profile_name, profile)
+        return True
 
     def load_vaccine_config(self):
         """Load vaccine schedule configuration with user/fallback logic."""

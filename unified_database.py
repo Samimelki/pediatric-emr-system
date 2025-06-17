@@ -532,59 +532,41 @@ def _apply_bidirectional_mapping(patient_data: Dict[str, Any]):
     if patient_data.get('domicile') and not patient_data.get('address'):
         patient_data['address'] = patient_data['domicile']
 
-def _insert_patient_unified(patient_data: Dict[str, Any]) -> int:
-    """Insert new patient with unified data."""
-    db = get_db()
+def standardize_patient_fields(patient_data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Standardize patient field mapping to ensure all systems use English as primary
+    and French as secondary fields, with proper bidirectional compatibility.
     
-    # Get all column names from Patients table
-    cursor = db.execute("PRAGMA table_info(Patients);")
-    columns = [col[1] for col in cursor.fetchall() if col[1] != 'id']
+    This function should be used by ALL import systems to ensure consistency.
+    """
+    # Create a copy to avoid modifying original data
+    standardized = dict(patient_data)
     
-    # Prepare insert data only for existing columns
-    insert_data = {}
-    for column in columns:
-        if column in patient_data:
-            insert_data[column] = patient_data[column]
+    # CRITICAL: Ensure correct field mapping from French to English
+    # prenom = first name, nom = last name (this was the bug!)
+    if standardized.get('prenom') and not standardized.get('first_name'):
+        standardized['first_name'] = standardized['prenom']
+    if standardized.get('nom') and not standardized.get('last_name'):
+        standardized['last_name'] = standardized['nom']
     
-    if not insert_data.get('created_date'):
-        insert_data['created_date'] = datetime.now().isoformat()
+    # Handle date fields
+    if standardized.get('naissance_date') and not standardized.get('date_of_birth'):
+        standardized['date_of_birth'] = standardized['naissance_date']
     
-    # Build INSERT query
-    placeholders = ', '.join(['?' for _ in insert_data])
-    column_names = ', '.join(insert_data.keys())
+    # Handle contact fields
+    if standardized.get('telephone') and not standardized.get('phone'):
+        standardized['phone'] = standardized['telephone']
+    if standardized.get('domicile') and not standardized.get('address'):
+        standardized['address'] = standardized['domicile']
     
-    query = f"INSERT INTO Patients ({column_names}) VALUES ({placeholders})"
+    # Handle gender field
+    if standardized.get('sexe') and not standardized.get('sex'):
+        standardized['sex'] = standardized['sexe']
     
-    cursor = db.execute(query, list(insert_data.values()))
-    patient_id = cursor.lastrowid
-    db.commit()
+    # Now apply bidirectional mapping to ensure both sets of fields are populated
+    _apply_bidirectional_mapping(standardized)
     
-    return patient_id
-
-def _update_patient_unified(patient_data: Dict[str, Any]) -> int:
-    """Update existing patient with unified data."""
-    db = get_db()
-    patient_id = patient_data['id']
-    
-    # Get all column names from Patients table
-    cursor = db.execute("PRAGMA table_info(Patients);")
-    columns = [col[1] for col in cursor.fetchall() if col[1] not in ('id', 'created_date')]
-    
-    # Prepare update data only for existing columns
-    update_data = {}
-    for column in columns:
-        if column in patient_data:
-            update_data[column] = patient_data[column]
-    
-    if update_data:
-        # Build UPDATE query
-        set_clause = ', '.join([f"{col} = ?" for col in update_data.keys()])
-        query = f"UPDATE Patients SET {set_clause} WHERE id = ?"
-        
-        db.execute(query, list(update_data.values()) + [patient_id])
-        db.commit()
-    
-    return patient_id
+    return standardized
 
 def get_custom_demographic_fields(db_conn=None, mode: Optional[str] = None):
     """Get custom demographic fields filtered by EMR mode."""
@@ -704,4 +686,58 @@ def get_all_patient_data_for_export():
     """Get all patient data for export (maintains compatibility)."""
     db = get_db()
     cursor = db.execute("SELECT * FROM Patients ORDER BY id")
-    return cursor.fetchall() 
+    return cursor.fetchall()
+
+def _insert_patient_unified(patient_data: Dict[str, Any]) -> int:
+    """Insert new patient with unified data."""
+    db = get_db()
+    
+    # Get all column names from Patients table
+    cursor = db.execute("PRAGMA table_info(Patients);")
+    columns = [col[1] for col in cursor.fetchall() if col[1] != 'id']
+    
+    # Prepare insert data only for existing columns
+    insert_data = {}
+    for column in columns:
+        if column in patient_data:
+            insert_data[column] = patient_data[column]
+    
+    if not insert_data.get('created_date'):
+        insert_data['created_date'] = datetime.now().isoformat()
+    
+    # Build INSERT query
+    placeholders = ', '.join(['?' for _ in insert_data])
+    column_names = ', '.join(insert_data.keys())
+    
+    query = f"INSERT INTO Patients ({column_names}) VALUES ({placeholders})"
+    
+    cursor = db.execute(query, list(insert_data.values()))
+    patient_id = cursor.lastrowid
+    db.commit()
+    
+    return patient_id
+
+def _update_patient_unified(patient_data: Dict[str, Any]) -> int:
+    """Update existing patient with unified data."""
+    db = get_db()
+    patient_id = patient_data['id']
+    
+    # Get all column names from Patients table
+    cursor = db.execute("PRAGMA table_info(Patients);")
+    columns = [col[1] for col in cursor.fetchall() if col[1] not in ('id', 'created_date')]
+    
+    # Prepare update data only for existing columns
+    update_data = {}
+    for column in columns:
+        if column in patient_data:
+            update_data[column] = patient_data[column]
+    
+    if update_data:
+        # Build UPDATE query
+        set_clause = ', '.join([f"{col} = ?" for col in update_data.keys()])
+        query = f"UPDATE Patients SET {set_clause} WHERE id = ?"
+        
+        db.execute(query, list(update_data.values()) + [patient_id])
+        db.commit()
+    
+    return patient_id 

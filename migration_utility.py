@@ -1,410 +1,190 @@
 #!/usr/bin/env python3
 """
-Data Migration Utility for Unified EMR System
-This utility helps migrate existing data from separate adult and pediatric EMR databases
-to the new unified schema.
+Migration Utility for EMR Database Field Standardization
+
+This script fixes the French/English field confusion in the database by:
+1. Ensuring all patients have both French and English fields populated
+2. Correcting any swapped name fields (first_name/last_name vs prenom/nom)
+3. Standardizing all field mappings
+
+Usage: python migration_utility.py
 """
 
-import os
-import sys
 import sqlite3
-import json
-import shutil
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+import os
+from typing import Dict, Any
+from unified_database import standardize_patient_fields
 
-try:
-    from emr_config import emr_config
-except ImportError:
-    print("Error: emr_config module not found. Make sure you're running from the EMR directory.")
-    sys.exit(1)
 
-class EMRDataMigrator:
-    """Handles migration of data from legacy EMR systems to unified system."""
+def migrate_patient_field_standardization(db_path: str) -> Dict[str, int]:
+    """
+    Migrate database to fix French/English field confusion.
     
-    def __init__(self, unified_db_path: str):
-        self.unified_db_path = unified_db_path
-        self.migration_log = []
-        self.backup_paths = []
-        
-    def log_message(self, message: str):
-        """Log a message with timestamp."""
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        log_entry = f"[{timestamp}] {message}"
-        self.migration_log.append(log_entry)
-        print(log_entry)
+    Returns:
+        Dictionary with migration statistics
+    """
+    stats = {
+        'patients_processed': 0,
+        'patients_updated': 0,
+        'errors': 0
+    }
     
-    def create_backup(self, source_path: str) -> str:
-        """Create a backup of the source database."""
-        if not os.path.exists(source_path):
-            raise FileNotFoundError(f"Source database not found: {source_path}")
-        
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        backup_name = f"backup_{os.path.basename(source_path)}_{timestamp}"
-        backup_path = os.path.join(os.path.dirname(source_path), backup_name)
-        
-        shutil.copy2(source_path, backup_path)
-        self.backup_paths.append(backup_path)
-        self.log_message(f"Created backup: {backup_path}")
-        
-        return backup_path
+    if not os.path.exists(db_path):
+        raise FileNotFoundError(f"Database not found: {db_path}")
     
-    def verify_database_structure(self, db_path: str) -> Dict[str, List[str]]:
-        """Verify and return the structure of a database."""
-        try:
             conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row  # Enable row access by column name
             cursor = conn.cursor()
-            
-            # Get all table names
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-            tables = [row[0] for row in cursor.fetchall()]
-            
-            structure = {}
-            for table in tables:
-                cursor.execute(f"PRAGMA table_info({table});")
-                columns = [col[1] for col in cursor.fetchall()]
-                structure[table] = columns
-            
-            conn.close()
-            return structure
-        except Exception as e:
-            self.log_message(f"Error verifying database structure: {e}")
-            return {}
     
-    def count_patients(self, db_path: str) -> int:
-        """Count patients in a database."""
-        try:
-            conn = sqlite3.connect(db_path)
-            cursor = conn.cursor()
-            cursor.execute("SELECT COUNT(*) FROM Patients;")
-            count = cursor.fetchone()[0]
-            conn.close()
-            return count
-        except Exception:
-            return 0
-    
-    def perform_migration(self, 
-                         adult_db_path: Optional[str] = None,
-                         pediatric_db_path: Optional[str] = None,
-                         create_backups: bool = True) -> Dict[str, Any]:
-        """Perform the complete migration process."""
+    try:
+        # Get all patients
+        cursor.execute("SELECT * FROM Patients")
+        patients = cursor.fetchall()
         
-        migration_results = {
-            'start_time': datetime.now().isoformat(),
-            'adult_migration': {'attempted': False, 'success': False, 'stats': {}},
-            'pediatric_migration': {'attempted': False, 'success': False, 'stats': {}},
-            'total_patients_migrated': 0,
-            'total_visits_migrated': 0,
-            'errors': [],
-            'backups_created': []
-        }
-        
-        self.log_message("Starting EMR data migration process...")
-        
-        # Initialize unified database schema
-        try:
-            # Ensure directories exist
-            os.makedirs(os.path.dirname(self.unified_db_path), exist_ok=True)
+        for patient in patients:
+            stats['patients_processed'] += 1
             
-            self.log_message("Unified database schema initialized successfully")
-            
-        except Exception as e:
-            error_msg = f"Failed to initialize unified database: {e}"
-            self.log_message(error_msg)
-            migration_results['errors'].append(error_msg)
-            return migration_results
-        
-        # Migrate from adult EMR database
-        if adult_db_path and os.path.exists(adult_db_path):
             try:
-                self.log_message(f"Starting migration from adult EMR: {adult_db_path}")
-                migration_results['adult_migration']['attempted'] = True
+                # Convert to dict for processing
+                patient_dict = dict(patient)
                 
-                if create_backups:
-                    backup_path = self.create_backup(adult_db_path)
-                    migration_results['backups_created'].append(backup_path)
+                # Apply standardization - but standardize_patient_fields expects a dict with .get() method
+                # So we need to handle the Row object properly
+                standardized = standardize_patient_fields(patient_dict)
                 
-                stats = self._migrate_adult_data(adult_db_path)
-                migration_results['adult_migration']['stats'] = stats
-                migration_results['adult_migration']['success'] = stats['errors'] == 0
-                migration_results['total_patients_migrated'] += stats['patients_migrated']
-                migration_results['total_visits_migrated'] += stats['visits_migrated']
+                # Check if any fields need updating
+                needs_update = False
+                update_fields = {}
                 
-                self.log_message(f"Adult EMR migration completed: {stats}")
+                # Key fields to check and update
+                fields_to_check = [
+                    'first_name', 'last_name', 'prenom', 'nom',
+                    'date_of_birth', 'naissance_date',
+                    'sex', 'sexe',
+                    'phone', 'telephone',
+                    'address', 'domicile'
+                ]
+                
+                for field in fields_to_check:
+                    # Compare standardized value with original value from database
+                    original_value = patient[field] if field in patient.keys() else None
+                    standardized_value = standardized.get(field)
+                    
+                    if standardized_value != original_value:
+                        needs_update = True
+                        update_fields[field] = standardized_value
+                
+                if needs_update:
+                    # Build update query
+                    set_clauses = []
+                    values = []
+                    
+                    for field, value in update_fields.items():
+                        set_clauses.append(f"{field} = ?")
+                        values.append(value)
+                    
+                    if set_clauses:
+                        update_query = f"UPDATE Patients SET {', '.join(set_clauses)} WHERE id = ?"
+                        values.append(patient['id'])
+                        
+                        cursor.execute(update_query, values)
+                        stats['patients_updated'] += 1
+                        
+                        print(f"Updated patient {patient['id']} ({patient.get('mrn', 'No MRN')}): {list(update_fields.keys())}")
                 
             except Exception as e:
-                error_msg = f"Error migrating adult EMR data: {e}"
-                self.log_message(error_msg)
-                migration_results['errors'].append(error_msg)
+                stats['errors'] += 1
+                print(f"Error processing patient {patient['id']}: {e}")
+                continue
         
-        # Migrate from pediatric EMR database
-        if pediatric_db_path and os.path.exists(pediatric_db_path):
-            try:
-                self.log_message(f"Starting migration from pediatric EMR: {pediatric_db_path}")
-                migration_results['pediatric_migration']['attempted'] = True
-                
-                if create_backups:
-                    backup_path = self.create_backup(pediatric_db_path)
-                    migration_results['backups_created'].append(backup_path)
-                
-                stats = self._migrate_pediatric_data(pediatric_db_path)
-                migration_results['pediatric_migration']['stats'] = stats
-                migration_results['pediatric_migration']['success'] = stats['errors'] == 0
-                migration_results['total_patients_migrated'] += stats['patients_migrated']
-                migration_results['total_visits_migrated'] += stats['visits_migrated']
-                
-                self.log_message(f"Pediatric EMR migration completed: {stats}")
-                
-            except Exception as e:
-                error_msg = f"Error migrating pediatric EMR data: {e}"
-                self.log_message(error_msg)
-                migration_results['errors'].append(error_msg)
+        conn.commit()
+        print(f"\nMigration completed:")
+        print(f"- Patients processed: {stats['patients_processed']}")
+        print(f"- Patients updated: {stats['patients_updated']}")
+        print(f"- Errors: {stats['errors']}")
         
-        migration_results['end_time'] = datetime.now().isoformat()
-        migration_results['success'] = len(migration_results['errors']) == 0
-        
-        # Save migration log
-        self.save_migration_log(migration_results)
-        
-        self.log_message("Migration process completed!")
-        return migration_results
+    except Exception as e:
+        conn.rollback()
+        raise Exception(f"Migration failed: {e}")
+    finally:
+        conn.close()
     
-    def _migrate_adult_data(self, source_db_path: str) -> Dict[str, int]:
-        """Migrate data from adult EMR system."""
-        stats = {'patients_migrated': 0, 'visits_migrated': 0, 'errors': 0}
-        
-        try:
-            # Connect to source database
-            source_conn = sqlite3.connect(source_db_path)
-            source_conn.row_factory = sqlite3.Row
-            
-            # Connect to destination database
-            dest_conn = sqlite3.connect(self.unified_db_path)
-            
-            # Migrate patients
-            cursor = source_conn.execute("SELECT * FROM Patients")
-            for patient in cursor.fetchall():
-                try:
-                    # Convert to dictionary and add metadata
-                    patient_dict = dict(patient)
-                    patient_dict['emr_mode'] = 'adult'
-                    patient_dict['created_date'] = datetime.now().isoformat()
-                    patient_dict['modified_date'] = datetime.now().isoformat()
-                    
-                    # Remove ID to get new one
-                    old_id = patient_dict.pop('id', None)
-                    
-                    # Build insert query
-                    columns = list(patient_dict.keys())
-                    placeholders = ', '.join(['?' for _ in columns])
-                    column_names = ', '.join(columns)
-                    
-                    query = f"INSERT INTO Patients ({column_names}) VALUES ({placeholders})"
-                    cursor = dest_conn.execute(query, list(patient_dict.values()))
-                    
-                    stats['patients_migrated'] += 1
-                    
-                except Exception as e:
-                    self.log_message(f"Error migrating adult patient {patient.get('id', 'unknown')}: {e}")
-                    stats['errors'] += 1
-            
-            dest_conn.commit()
-            source_conn.close()
-            dest_conn.close()
-            
-        except Exception as e:
-            self.log_message(f"Error in adult data migration: {e}")
-            stats['errors'] += 1
-        
-        return stats
-    
-    def _migrate_pediatric_data(self, source_db_path: str) -> Dict[str, int]:
-        """Migrate data from pediatric EMR system."""
-        stats = {'patients_migrated': 0, 'visits_migrated': 0, 'errors': 0}
-        
-        try:
-            # Connect to source database
-            source_conn = sqlite3.connect(source_db_path)
-            source_conn.row_factory = sqlite3.Row
-            
-            # Connect to destination database
-            dest_conn = sqlite3.connect(self.unified_db_path)
-            
-            # Migrate patients
-            cursor = source_conn.execute("SELECT * FROM Patients")
-            for patient in cursor.fetchall():
-                try:
-                    # Convert to dictionary and add metadata
-                    patient_dict = dict(patient)
-                    patient_dict['emr_mode'] = 'pediatric'
-                    patient_dict['created_date'] = datetime.now().isoformat()
-                    patient_dict['modified_date'] = datetime.now().isoformat()
-                    
-                    # Remove ID to get new one
-                    old_id = patient_dict.pop('id', None)
-                    
-                    # Build insert query
-                    columns = list(patient_dict.keys())
-                    placeholders = ', '.join(['?' for _ in columns])
-                    column_names = ', '.join(columns)
-                    
-                    query = f"INSERT INTO Patients ({column_names}) VALUES ({placeholders})"
-                    cursor = dest_conn.execute(query, list(patient_dict.values()))
-                    
-                    stats['patients_migrated'] += 1
-                    
-                except Exception as e:
-                    self.log_message(f"Error migrating pediatric patient {patient.get('id', 'unknown')}: {e}")
-                    stats['errors'] += 1
-            
-            dest_conn.commit()
-            source_conn.close()
-            dest_conn.close()
-            
-        except Exception as e:
-            self.log_message(f"Error in pediatric data migration: {e}")
-            stats['errors'] += 1
-        
-        return stats
-    
-    def save_migration_log(self, results: Dict[str, Any]):
-        """Save migration log to file."""
-        log_dir = os.path.dirname(self.unified_db_path)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        log_file = os.path.join(log_dir, f"migration_log_{timestamp}.json")
-        
-        log_data = {
-            'migration_results': results,
-            'migration_log': self.migration_log,
-            'backup_paths': self.backup_paths
-        }
-        
-        try:
-            with open(log_file, 'w', encoding='utf-8') as f:
-                json.dump(log_data, f, indent=2, ensure_ascii=False)
-            self.log_message(f"Migration log saved to: {log_file}")
-        except Exception as e:
-            self.log_message(f"Error saving migration log: {e}")
+    return stats
 
-def detect_emr_databases() -> Tuple[Optional[str], Optional[str]]:
-    """Detect existing EMR databases in the system."""
-    
-    # Current workspace (adult EMR)
-    current_workspace = os.getcwd()
-    adult_db_path = None
-    
-    # Check for current EMR database
-    potential_adult_paths = [
-        os.path.join(current_workspace, 'emr_database.db'),
-        os.path.join(current_workspace, 'unified_emr.db'),
-        os.path.join(os.path.expanduser('~'), 'Documents', 'WordDocsEMR', 'emr_database.db')
-    ]
-    
-    for path in potential_adult_paths:
-        if os.path.exists(path):
-            adult_db_path = path
-            break
-    
-    # Check for pediatric EMR database
-    pediatric_db_path = None
-    foxpro_path = os.path.join(os.path.dirname(current_workspace), 'foxpro2025')
-    
-    potential_pediatric_paths = [
-        os.path.join(foxpro_path, 'emr_database.db'),
-        os.path.join(foxpro_path, 'database.db'),
-        os.path.join(os.path.expanduser('~'), 'Documents', 'FoxPro2025', 'emr_database.db')
-    ]
-    
-    for path in potential_pediatric_paths:
-        if os.path.exists(path):
-            pediatric_db_path = path
-            break
-    
-    return adult_db_path, pediatric_db_path
 
-def main():
-    """Main migration script."""
-    print("=" * 60)
-    print("EMR Data Migration Utility")
-    print("=" * 60)
+def verify_field_consistency(db_path: str) -> Dict[str, int]:
+    """
+    Verify that all patients have consistent French/English field mapping.
     
-    # Detect existing databases
-    adult_db, pediatric_db = detect_emr_databases()
+    Returns:
+        Dictionary with verification statistics
+    """
+    stats = {
+        'total_patients': 0,
+        'missing_english_names': 0,
+        'missing_french_names': 0,
+        'missing_birth_dates': 0,
+        'missing_contact_info': 0,
+        'inconsistent_fields': 0
+    }
     
-    print(f"Adult EMR Database: {adult_db or 'Not found'}")
-    print(f"Pediatric EMR Database: {pediatric_db or 'Not found'}")
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
     
-    if not adult_db and not pediatric_db:
-        print("\nNo EMR databases found. Nothing to migrate.")
-        return
+    try:
+        cursor.execute("SELECT * FROM Patients")
+        patients = cursor.fetchall()
+        
+        for patient in patients:
+            stats['total_patients'] += 1
+            patient_dict = dict(patient)
+            
+            # Check for missing English names
+            if not patient_dict.get('first_name') or not patient_dict.get('last_name'):
+                stats['missing_english_names'] += 1
+                print(f"Patient {patient['id']} missing English names: first_name='{patient_dict.get('first_name')}', last_name='{patient_dict.get('last_name')}'")
+            
+            # Check for missing French names
+            if not patient_dict.get('prenom') or not patient_dict.get('nom'):
+                stats['missing_french_names'] += 1
+                print(f"Patient {patient['id']} missing French names: prenom='{patient_dict.get('prenom')}', nom='{patient_dict.get('nom')}'")
+            
+            # Check for missing birth dates
+            if not patient_dict.get('date_of_birth') and not patient_dict.get('naissance_date'):
+                stats['missing_birth_dates'] += 1
+            
+            # Check for inconsistent field mapping
+            if (patient_dict.get('first_name') and patient_dict.get('prenom') and 
+                patient_dict['first_name'] != patient_dict['prenom']):
+                stats['inconsistent_fields'] += 1
+                print(f"Patient {patient['id']} has inconsistent names: first_name='{patient_dict['first_name']}' vs prenom='{patient_dict['prenom']}'")
     
-    # Set up unified database path
-    unified_db_path = emr_config.get_database_path()
-    print(f"Unified Database Path: {unified_db_path}")
+    finally:
+        conn.close()
     
-    # Create migrator
-    migrator = EMRDataMigrator(unified_db_path)
-    
-    # Show patient counts
-    if adult_db:
-        adult_count = migrator.count_patients(adult_db)
-        print(f"Adult EMR patients: {adult_count}")
-    
-    if pediatric_db:
-        pediatric_count = migrator.count_patients(pediatric_db)
-        print(f"Pediatric EMR patients: {pediatric_count}")
-    
-    # Confirm migration
-    print("\n" + "=" * 60)
-    print("MIGRATION CONFIRMATION")
-    print("=" * 60)
-    print("This will:")
-    print("1. Create backups of existing databases")
-    print("2. Initialize unified EMR schema")
-    print("3. Migrate all patient and visit data")
-    print("4. Maintain data integrity and relationships")
-    print("=" * 60)
-    
-    confirm = input("Proceed with migration? (yes/no): ").lower().strip()
-    
-    if confirm != 'yes':
-        print("Migration cancelled.")
-        return
-    
-    # Perform migration
-    print("\nStarting migration process...")
-    results = migrator.perform_migration(adult_db, pediatric_db)
-    
-    # Display results
-    print("\n" + "=" * 60)
-    print("MIGRATION RESULTS")
-    print("=" * 60)
-    print(f"Total patients migrated: {results['total_patients_migrated']}")
-    print(f"Total visits migrated: {results['total_visits_migrated']}")
-    print(f"Errors encountered: {len(results['errors'])}")
-    
-    if results['errors']:
-        print("\nErrors:")
-        for error in results['errors']:
-            print(f"  - {error}")
-    
-    print(f"\nBackups created: {len(results['backups_created'])}")
-    for backup in results['backups_created']:
-        print(f"  - {backup}")
-    
-    print(f"\nMigration {'completed successfully' if results['success'] else 'completed with errors'}!")
-    
-    # Set active profile based on migrated data
-    if results['adult_migration']['success'] and results['pediatric_migration']['success']:
-        emr_config.set_active_profile('family_practice_profile')
-        print("\nActive profile set to Family Practice (both adult and pediatric)")
-    elif results['adult_migration']['success']:
-        emr_config.set_active_profile('adult_profile')
-        print("\nActive profile set to Adult EMR")
-    elif results['pediatric_migration']['success']:
-        emr_config.set_active_profile('pediatric_profile')
-        print("\nActive profile set to Pediatric EMR")
+    return stats
+
 
 if __name__ == "__main__":
-    main() 
+    import sys
+    
+    # Use the unified EMR database path
+    db_path = os.path.expanduser("~/Documents/UnifiedEMR/unified_emr.db")
+    
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "verify":
+            print("Verifying field consistency...")
+            stats = verify_field_consistency(db_path)
+            print("\nVerification Results:")
+            for key, value in stats.items():
+                print(f"- {key}: {value}")
+        elif sys.argv[1] == "migrate":
+            print("Starting migration...")
+            stats = migrate_patient_field_standardization(db_path)
+        else:
+            print("Usage: python migration_utility.py [verify|migrate]")
+    else:
+        print("Usage: python migration_utility.py [verify|migrate]")
+        print("  verify  - Check field consistency without making changes")
+        print("  migrate - Fix field mapping issues") 

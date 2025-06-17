@@ -418,6 +418,12 @@ def vaccine_schedule_timeline(patient_id):
         # Get summary statistics
         summary_stats = vaccine_schedule_engine.get_summary_stats(timeline)
         
+        # Apply vaccine grouping if enabled
+        if emr_config.is_vaccine_grouping_enabled():
+            from utils.vaccine_grouping import VaccineGrouper
+            grouper = VaccineGrouper()
+            timeline = grouper.get_grouped_timeline_data(timeline, patient_dob)
+        
         # Convert dataclasses to dicts for JSON serialization in template
         timeline_data = []
         for vaccine_item in timeline:

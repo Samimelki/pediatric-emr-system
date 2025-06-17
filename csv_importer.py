@@ -6,6 +6,8 @@ import os
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 import logging
+# Import the standardization function
+from unified_database import standardize_patient_fields
 
 class CSVImporter:
     """
@@ -232,6 +234,36 @@ class CSVImporter:
         except ValueError:
             return None
     
+    def _parse_numeric(self, value):
+        """Parse numeric value, handling various formats and returning appropriate type."""
+        if not value or value == '':
+            return None
+        
+        # Clean the value
+        value = str(value).strip()
+        if not value or value.lower() in ['null', 'none', 'n/a', 'na', '']:
+            return None
+            
+        # Remove common units and formatting
+        value = value.lower()
+        value = value.replace('g', '').replace('kg', '').replace('cm', '').replace('mm', '')
+        value = value.replace('grams', '').replace('centimeters', '').replace('millimeters', '')
+        value = value.strip()
+        
+        if not value:
+            return None
+            
+        try:
+            # Try to parse as integer first
+            if '.' not in value:
+                return int(float(value))  # Handle cases like "3500.0"
+            else:
+                return float(value)
+        except (ValueError, TypeError):
+            # Log the problematic value for debugging
+            logging.warning(f"Could not parse numeric value: '{value}' (original: '{str(value).strip()}')")
+            return None
+    
     def import_patients_csv(self, csv_file_path: str, update_existing: bool = False) -> Dict[str, int]:
         """
         Import patients from CSV file.
@@ -255,6 +287,8 @@ class CSVImporter:
         
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
+        
+        processed_count = 0  # Initialize counter for debug logging
         
         try:
             with open(csv_file_path, 'r', encoding='utf-8-sig') as csvfile:
@@ -286,6 +320,8 @@ class CSVImporter:
                             'mrn': mrn_value,
                             'first_name': row.get('prenom', row.get('first_name', '')).strip(),
                             'last_name': row.get('nom', row.get('last_name', '')).strip(),
+                            'prenom': row.get('prenom', row.get('first_name', '')).strip(),
+                            'nom': row.get('nom', row.get('last_name', '')).strip(),
                             'date_of_birth': self._parse_date(row.get('naissance_date', row.get('date_of_birth'))),
                             'naissance_date': self._parse_date(row.get('naissance_date', row.get('date_of_birth'))),
                             'sex': row.get('sexe', row.get('sex', '')).strip(),
@@ -307,8 +343,31 @@ class CSVImporter:
                             'smoker_details': row.get('smoker_details', '').strip(),
                             'alcohol': row.get('alcohol', '').strip(),
                             'alcohol_details': row.get('alcohol_details', '').strip(),
-                            'raw_dossier_text': row.get('raw_dossier_text', '').strip()
+                            'raw_dossier_text': row.get('raw_dossier_text', '').strip(),
+                            'birth_weight_g': self._parse_numeric(
+                                row.get('birth_weight', row.get('birth_weight_g', row.get('poids_naissance', '')))
+                            ),
+                            'birth_height_cm': self._parse_numeric(
+                                row.get('birth_height', row.get('birth_height_cm', row.get('taille_naissance', '')))
+                            ),
+                            'birth_head_circumference_cm': self._parse_numeric(
+                                row.get('birth_head', row.get('birth_head_circumference_cm', row.get('pc_naissance', '')))
+                            ),
+                            'birth_notes': row.get('birth_notes', row.get('notes_naissance', '')).strip(),
+                            'mere_nom': row.get('mere_nom', '').strip(),
+                            'pere_nom': row.get('pere_nom', '').strip(),
+                            'third_party_payer': row.get('third_party_payer', row.get('tiers_payant', '')).strip(),
+                            'hopital': row.get('hopital', row.get('hospital', '')).strip(),
+                            'diag1': row.get('diag1', '').strip(),
+                            'diag2': row.get('diag2', '').strip(),
+                            'obstetrical_history': row.get('obstetrical_history', row.get('antecedents_obstetricaux', '')).strip(),
+                            'notes': row.get('notes', '').strip()
                         }
+                        
+                        # APPLY STANDARDIZATION: This ensures proper French/English field mapping
+                        patient_data = standardize_patient_fields(patient_data)
+                        
+                        processed_count += 1  # Increment counter
                         
                         # Validate required fields - allow patients with at least one name
                         if not patient_data['first_name'] and not patient_data['last_name']:
@@ -344,14 +403,20 @@ class CSVImporter:
                                 # Update existing patient
                                 cursor.execute("""
                                     UPDATE Patients SET
-                                        mrn = ?, first_name = ?, last_name = ?, date_of_birth = ?, naissance_date = ?,
+                                        mrn = ?, first_name = ?, last_name = ?, prenom = ?, nom = ?,
+                                        date_of_birth = ?, naissance_date = ?,
                                         sex = ?, sexe = ?, phone = ?, telephone = ?, address = ?, domicile = ?, 
                                         email = ?, insurance = ?, primary_physician = ?, pediatre_initiales = ?,
                                         pmh = ?, psh = ?, family_history = ?, medications = ?, allergies = ?, 
-                                        smoker = ?, smoker_details = ?, alcohol = ?, alcohol_details = ?, raw_dossier_text = ?
+                                        smoker = ?, smoker_details = ?, alcohol = ?, alcohol_details = ?, 
+                                        raw_dossier_text = ?, birth_weight_g = ?, birth_height_cm = ?, 
+                                        birth_head_circumference_cm = ?, birth_notes = ?, mere_nom = ?, 
+                                        pere_nom = ?, third_party_payer = ?, hopital = ?, diag1 = ?, diag2 = ?, 
+                                        obstetrical_history = ?, notes = ?
                                     WHERE id = ?
                                 """, (
                                     patient_data['mrn'], patient_data['first_name'], patient_data['last_name'],
+                                    patient_data['prenom'], patient_data['nom'],
                                     patient_data['date_of_birth'], patient_data['naissance_date'], 
                                     patient_data['sex'], patient_data['sexe'], patient_data['phone'], patient_data['telephone'],
                                     patient_data['address'], patient_data['domicile'], patient_data['email'], patient_data['insurance'],
@@ -359,6 +424,11 @@ class CSVImporter:
                                     patient_data['family_history'], patient_data['medications'], patient_data['allergies'],
                                     patient_data['smoker'], patient_data['smoker_details'], patient_data['alcohol'],
                                     patient_data['alcohol_details'], patient_data['raw_dossier_text'],
+                                    patient_data['birth_weight_g'], patient_data['birth_height_cm'], 
+                                    patient_data['birth_head_circumference_cm'], patient_data['birth_notes'],
+                                    patient_data['mere_nom'], patient_data['pere_nom'], patient_data['third_party_payer'],
+                                    patient_data['hopital'], patient_data['diag1'], patient_data['diag2'],
+                                    patient_data['obstetrical_history'], patient_data['notes'],
                                     existing_patient_id
                                 ))
                                 stats['updated'] += 1
@@ -374,19 +444,27 @@ class CSVImporter:
                             # Insert new patient (let database auto-generate ID)
                             cursor.execute("""
                                 INSERT INTO Patients (
-                                    mrn, first_name, last_name, date_of_birth, naissance_date, sex, sexe, 
-                                    phone, telephone, address, domicile, email, insurance, primary_physician, pediatre_initiales,
-                                    pmh, psh, family_history, medications, allergies, smoker, smoker_details, 
-                                    alcohol, alcohol_details, raw_dossier_text
-                                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                    mrn, first_name, last_name, prenom, nom, date_of_birth, naissance_date, 
+                                    sex, sexe, phone, telephone, address, domicile, email, insurance, 
+                                    primary_physician, pediatre_initiales, pmh, psh, family_history, 
+                                    medications, allergies, smoker, smoker_details, alcohol, alcohol_details, 
+                                    raw_dossier_text, birth_weight_g, birth_height_cm, birth_head_circumference_cm, 
+                                    birth_notes, mere_nom, pere_nom, third_party_payer, hopital, diag1, diag2, 
+                                    obstetrical_history, notes
+                                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                             """, (
                                 patient_data['mrn'], patient_data['first_name'], patient_data['last_name'],
+                                patient_data['prenom'], patient_data['nom'],
                                 patient_data['date_of_birth'], patient_data['naissance_date'], patient_data['sex'], patient_data['sexe'],
                                 patient_data['phone'], patient_data['telephone'], patient_data['address'], patient_data['domicile'],
                                 patient_data['email'], patient_data['insurance'], patient_data['primary_physician'], patient_data['pediatre_initiales'],
                                 patient_data['pmh'], patient_data['psh'], patient_data['family_history'], patient_data['medications'], 
                                 patient_data['allergies'], patient_data['smoker'], patient_data['smoker_details'], 
-                                patient_data['alcohol'], patient_data['alcohol_details'], patient_data['raw_dossier_text']
+                                patient_data['alcohol'], patient_data['alcohol_details'], patient_data['raw_dossier_text'],
+                                patient_data['birth_weight_g'], patient_data['birth_height_cm'], patient_data['birth_head_circumference_cm'],
+                                patient_data['birth_notes'], patient_data['mere_nom'], patient_data['pere_nom'], 
+                                patient_data['third_party_payer'], patient_data['hopital'], patient_data['diag1'], patient_data['diag2'],
+                                patient_data['obstetrical_history'], patient_data['notes']
                             ))
                             
                             # Get the new patient ID
@@ -760,6 +838,54 @@ class CSVImporter:
     def clear_errors(self):
         """Clear the detailed errors list."""
         self.detailed_errors = []
+    
+    def analyze_csv_headers(self, csv_file_path: str) -> Dict[str, List[str]]:
+        """
+        Analyze CSV file headers to help with field mapping.
+        
+        Returns:
+            Dictionary with header analysis
+        """
+        if not os.path.exists(csv_file_path):
+            raise FileNotFoundError(f"CSV file not found: {csv_file_path}")
+        
+        analysis = {
+            'all_headers': [],
+            'birth_related': [],
+            'name_related': [],
+            'date_related': [],
+            'parent_related': []
+        }
+        
+        with open(csv_file_path, 'r', encoding='utf-8-sig') as csvfile:
+            reader = csv.DictReader(csvfile)
+            
+            # Clean BOM from fieldnames if present
+            if reader.fieldnames:
+                headers = [self._clean_utf8_bom(field) for field in reader.fieldnames]
+                analysis['all_headers'] = headers
+                
+                # Categorize headers
+                for header in headers:
+                    header_lower = header.lower()
+                    
+                    # Birth-related fields
+                    if any(keyword in header_lower for keyword in ['birth', 'naissance', 'poids', 'taille', 'pc', 'weight', 'height', 'circumference']):
+                        analysis['birth_related'].append(header)
+                    
+                    # Name-related fields
+                    if any(keyword in header_lower for keyword in ['nom', 'prenom', 'name', 'first', 'last']):
+                        analysis['name_related'].append(header)
+                    
+                    # Date-related fields
+                    if any(keyword in header_lower for keyword in ['date', 'naissance', 'birth']):
+                        analysis['date_related'].append(header)
+                    
+                    # Parent-related fields
+                    if any(keyword in header_lower for keyword in ['mere', 'pere', 'mother', 'father', 'parent']):
+                        analysis['parent_related'].append(header)
+        
+        return analysis
 
 
 if __name__ == "__main__":

@@ -137,12 +137,17 @@ def _get_pdf_stylesheets():
     return stylesheets
 
 # --- HELPER FUNCTION FOR VACCINE DATA PREPARATION ---
-def _prepare_vaccine_table_data_unified(patient_id, language='en'):
+def _prepare_vaccine_table_data_unified(patient_id, language='en', apply_grouping=False):
     """
     Prepare vaccine table data using ONLY the Immunizations table
     Categories are determined by the vaccine configuration
+    
+    Args:
+        patient_id: Patient ID
+        language: Language for display (en/fr)
+        apply_grouping: Whether to apply vaccine combination grouping (for timeline consistency)
     """
-    print(f"DEBUG PDF: Starting vaccine preparation for patient {patient_id}")
+    print(f"DEBUG PDF: Starting vaccine preparation for patient {patient_id}, grouping={apply_grouping}")
     db = get_db()
     
     # Get ALL immunizations for this patient from the Immunizations table (single source of truth)
@@ -379,14 +384,51 @@ def get_vaccine_display_info(vaccine_name, language='en'):
         'description': ''
     })
 
+def _normalize_patient_data(patient):
+    """Ensure patient data has both French and English name fields populated"""
+    patient_dict = dict(patient)
+    
+    # Ensure French fields are populated
+    if not patient_dict.get('prenom') and patient_dict.get('first_name'):
+        patient_dict['prenom'] = patient_dict['first_name']
+    if not patient_dict.get('nom') and patient_dict.get('last_name'):
+        patient_dict['nom'] = patient_dict['last_name']
+    if not patient_dict.get('naissance_date') and patient_dict.get('date_of_birth'):
+        patient_dict['naissance_date'] = patient_dict['date_of_birth']
+    if not patient_dict.get('sexe') and patient_dict.get('sex'):
+        patient_dict['sexe'] = patient_dict['sex']
+    if not patient_dict.get('telephone') and patient_dict.get('phone'):
+        patient_dict['telephone'] = patient_dict['phone']
+    if not patient_dict.get('domicile') and patient_dict.get('address'):
+        patient_dict['domicile'] = patient_dict['address']
+    
+    # Ensure English fields are populated  
+    if not patient_dict.get('first_name') and patient_dict.get('prenom'):
+        patient_dict['first_name'] = patient_dict['prenom']
+    if not patient_dict.get('last_name') and patient_dict.get('nom'):
+        patient_dict['last_name'] = patient_dict['nom']
+    if not patient_dict.get('date_of_birth') and patient_dict.get('naissance_date'):
+        patient_dict['date_of_birth'] = patient_dict['naissance_date']
+    if not patient_dict.get('sex') and patient_dict.get('sexe'):
+        patient_dict['sex'] = patient_dict['sexe']
+    if not patient_dict.get('phone') and patient_dict.get('telephone'):
+        patient_dict['phone'] = patient_dict['telephone']
+    if not patient_dict.get('address') and patient_dict.get('domicile'):
+        patient_dict['address'] = patient_dict['domicile']
+    
+    return patient_dict
+
 # --- PDF EXPORT ROUTES ---
 
 @pdf_export_bp.route('/vaccination_record_fr/<int:patient_id>')
 def export_vaccination_record_fr(patient_id):
     db = get_db()
     config = load_pdf_config()
-    patient = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,)).fetchone()
-    if not patient: return "Patient not found", 404
+    patient_raw = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,)).fetchone()
+    if not patient_raw: return "Patient not found", 404
+    
+    # Normalize patient data to ensure both French and English fields are populated
+    patient = _normalize_patient_data(patient_raw)
 
     physician_details = config.get('physician_details_fr', {})
     footer_note = config.get('footer_note_fr', '')
@@ -425,8 +467,11 @@ def export_vaccination_record_fr(patient_id):
 def export_vaccination_record_en(patient_id):
     db = get_db()
     config = load_pdf_config()
-    patient = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,)).fetchone()
-    if not patient: return "Patient not found", 404
+    patient_raw = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,)).fetchone()
+    if not patient_raw: return "Patient not found", 404
+    
+    # Normalize patient data to ensure both French and English fields are populated
+    patient = _normalize_patient_data(patient_raw)
 
     physician_details = config.get('physician_details_en', {})
     footer_note = config.get('footer_note_en', '')
@@ -465,9 +510,12 @@ def export_vaccination_record_en(patient_id):
 def export_total_history_fr(patient_id):
     db = get_db()
     config = load_pdf_config()
-    patient = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,)).fetchone()
+    patient_raw = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,)).fetchone()
     visites = db.execute("SELECT * FROM Visits WHERE patient_id = ? ORDER BY visit_date DESC", (patient_id,)).fetchall()
-    if not patient: return "Patient not found", 404
+    if not patient_raw: return "Patient not found", 404
+    
+    # Normalize patient data to ensure both French and English fields are populated
+    patient = _normalize_patient_data(patient_raw)
 
     physician_details = config.get('physician_details_fr', {})
     footer_note = config.get('footer_note_fr', '')
@@ -503,9 +551,12 @@ def export_total_history_fr(patient_id):
 def export_total_history_en(patient_id):
     db = get_db()
     config = load_pdf_config()
-    patient = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,)).fetchone()
+    patient_raw = db.execute("SELECT * FROM Patients WHERE id = ?", (patient_id,)).fetchone()
     visites = db.execute("SELECT * FROM Visits WHERE patient_id = ? ORDER BY visit_date DESC", (patient_id,)).fetchall()
-    if not patient: return "Patient not found", 404
+    if not patient_raw: return "Patient not found", 404
+    
+    # Normalize patient data to ensure both French and English fields are populated
+    patient = _normalize_patient_data(patient_raw)
 
     physician_details = config.get('physician_details_en', {})
     footer_note = config.get('footer_note_en', '')
@@ -540,14 +591,17 @@ def export_total_history_en(patient_id):
 @pdf_export_bp.route('/complete_report/<int:patient_id>')
 def export_complete_report(patient_id):
     db = get_db()
-    patient = db.execute(
+    patient_raw = db.execute(
         "SELECT p.*, strftime('%Y-%m-%d', p.date_of_birth) as dob "
         'FROM Patients p WHERE p.id = ?',
         (patient_id,)
     ).fetchone()
 
-    if not patient:
+    if not patient_raw:
         return "Patient not found", 404
+    
+    # Normalize patient data to ensure both French and English fields are populated
+    patient = _normalize_patient_data(patient_raw)
 
     visites_raw = db.execute(
         "SELECT v.*, strftime('%Y-%m-%d %H:%M:%S', v.visit_date) as visit_date, "

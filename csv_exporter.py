@@ -17,12 +17,12 @@ def generate_patient_csvs(patients_data, active_custom_fields_metadata):
     # --- Generate patients.csv ---
     patients_output = io.StringIO()
     # Define standard patient headers (order can be adjusted)
-    # Exclude complex nested data like 'visits', 'non_standard_vaccines', 'custom_fields' dict itself
-    # Also exclude raw text fields if they are too large or not typically needed in a summary CSV
+    # Use English field names as primary headers for consistency
+    # The importer can handle both French and English field names
     standard_patient_headers = [
-        'id', 'mrn', 'mrn_agg', 'nom', 'prenom', 'naissance_date', 'sexe', 
+        'id', 'mrn', 'mrn_agg', 'first_name', 'last_name', 'date_of_birth', 'sex', 
         'birth_weight_g', 'birth_height_cm', 'birth_head_circumference_cm', 'birth_notes',
-        'mere_nom', 'pere_nom', 'pediatre_initiales', 'domicile', 'telephone', 
+        'mere_nom', 'pere_nom', 'pediatre_initiales', 'address', 'phone', 
         'third_party_payer', 'hopital', 'diag1', 'diag2', 'obstetrical_history',
         'monotest1', 'monotest2', 'monotest3', 'rougeole_seule_date',
         'dtcp1_date', 'dtcp2_date', 'dtcp3_date', 'dtcp_rappel1_date', 'dtcp_rappel2_date', 
