@@ -3,8 +3,13 @@ import sqlite3
 import datetime
 import json # Added for loading config
 import os # Added for path joining
+
+# Import WeasyPrint normally (for macOS compatibility)
 from weasyprint import HTML, CSS
-# from weasyprint.fonts import FontConfiguration # Still commented out
+
+# Import fallback wrapper for cross-platform support
+from utils.pdf_generator import generate_pdf_with_fallback
+
 import io
 import inspect # ADDED for debugging
 
@@ -441,7 +446,7 @@ def export_vaccination_record_fr(patient_id):
     
     pdf_stylesheets = _get_pdf_stylesheets()
     
-    pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
+    pdf = generate_pdf_with_fallback(html_out, pdf_stylesheets)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = f'attachment; filename=vaccination_record_{patient["prenom"]}_{patient["nom"]}_{patient["id"]}_fr.pdf'
@@ -484,7 +489,7 @@ def export_vaccination_record_en(patient_id):
     
     pdf_stylesheets = _get_pdf_stylesheets()
     
-    pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
+    pdf = generate_pdf_with_fallback(html_out, pdf_stylesheets)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = f'attachment; filename=vaccination_record_{patient["prenom"]}_{patient["nom"]}_{patient["id"]}_en.pdf'
@@ -525,7 +530,7 @@ def export_total_history_fr(patient_id):
     
     pdf_stylesheets = _get_pdf_stylesheets()
     
-    pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
+    pdf = generate_pdf_with_fallback(html_out, pdf_stylesheets)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = f'attachment; filename=total_history_{patient["prenom"]}_{patient["nom"]}_{patient["id"]}_fr.pdf'
@@ -566,7 +571,7 @@ def export_total_history_en(patient_id):
     
     pdf_stylesheets = _get_pdf_stylesheets()
     
-    pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
+    pdf = generate_pdf_with_fallback(html_out, pdf_stylesheets)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = f'attachment; filename=total_history_{patient["prenom"]}_{patient["nom"]}_{patient["id"]}_en.pdf'
@@ -648,7 +653,7 @@ def export_complete_report(patient_id):
 
     pdf_stylesheets = _get_pdf_stylesheets()
 
-    pdf = HTML(string=html_out).write_pdf(stylesheets=pdf_stylesheets)
+    pdf = generate_pdf_with_fallback(html_out, pdf_stylesheets)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = f'attachment; filename=complete_report_{patient["prenom"]}_{patient["nom"]}_{patient["id"]}_en.pdf'

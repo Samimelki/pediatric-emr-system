@@ -26,24 +26,29 @@ jobs:
       run: |
         # Install Microsoft Visual C++ Redistributable (often needed for compiled packages)
         choco install vcredist-all -y
-        # Install GTK3 runtime for WeasyPrint (PDF generation)
-        choco install gtk-runtime -y
 
     - name: Create requirements-windows.txt
       run: |
-        # Create a Windows-specific requirements file excluding macOS-specific packages
+        # Create a Windows-specific requirements file excluding problematic packages
         python -c "
         with open('requirements.txt', 'r') as f:
             lines = f.readlines()
         
-        # Filter out macOS-specific packages
+        # Filter out problematic packages for Windows builds
         filtered_lines = []
+        skip_packages = ['pyobjc', 'weasyprint', 'pyphen', 'pydyf', 'tinyhtml5', 'cssselect2', 'tinycss2']
+        
         for line in lines:
             line = line.strip()
             if line and not line.startswith('#'):
-                # Skip pyobjc packages (macOS-specific)
-                if not line.startswith('pyobjc'):
+                # Skip problematic packages
+                should_skip = any(line.startswith(pkg) for pkg in skip_packages)
+                if not should_skip:
                     filtered_lines.append(line)
+        
+        # Add alternative PDF library
+        filtered_lines.append('reportlab==4.0.4')
+        filtered_lines.append('xhtml2pdf==0.2.11')
         
         with open('requirements-windows.txt', 'w') as f:
             f.write('\n'.join(filtered_lines))
